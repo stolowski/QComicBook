@@ -3,3 +3,4 @@
 - QImage::load test
 - cbb, cbg archives support
 - image zooming and rotating
+- drag & drop support

@@ -12,7 +12,6 @@
 
 #include <qapplication.h>
 #include <qmessagebox.h>
-#include <iostream>
 #include "imgarchivesink.h"
 #include "icons.h"
 #include "comicmain.h"
@@ -21,12 +20,15 @@
 int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
+	const QString errcaption = ComicMainWindow::tr("QComicBook error");
 
 	if (!Icons::init(DATADIR))
-		std::cerr << "can't initialize icons path:" << DATADIR << std::endl;
+		QMessageBox::critical(NULL, errcaption, ComicMainWindow::tr("Can't initialize icons path") + ":\n" DATADIR,
+				QMessageBox::Ok, QMessageBox::NoButton);
 
 	if (!ComicBookSettings::checkDirs())
-		std::cerr << "can't initialize qcomicbook directories" << std::endl;
+		QMessageBox::critical(NULL, errcaption, ComicMainWindow::tr("Can't initialize QComicBook directories"),
+				QMessageBox::Ok, QMessageBox::NoButton);
 	
 	//
 	// initialize unpackers
@@ -35,18 +37,16 @@ int main(int argc, char *argv[])
 	QString msg;
 
 	if (!rar)
-		msg = "RAR packer/unpacker not found";
+		msg = ComicMainWindow::tr("RAR packer/unpacker not found");
 	if (!zip)
 	{
 		if (!rar)
 			msg += "\n";
-		msg += "ZIP packer/unpacker not found";
+		msg += ComicMainWindow::tr("ZIP packer/unpacker not found");
 	}
 
 	if (!(rar && zip))
-	{
-		QMessageBox::critical(NULL, "QComicBook error", msg, QMessageBox::Ok, QMessageBox::NoButton);
-	}
+		QMessageBox::critical(NULL, errcaption, msg, QMessageBox::Ok, QMessageBox::NoButton);
 	
 	ComicMainWindow *win = new ComicMainWindow(NULL);
 	app.setMainWidget(win);
