@@ -22,6 +22,7 @@
 
 ThumbnailsView::ThumbnailsView(QWidget *parent): QIconView(parent), selected(NULL)/*{{{*/
 {
+	setFocusPolicy(QWidget::NoFocus);
 	setItemsMovable(false);
 	arrangeItemsInGrid(true);
 	setAutoArrange(true);
