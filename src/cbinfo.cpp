@@ -17,7 +17,7 @@
 #include <qfont.h>
 #include <imgsink.h>
 
-ComicBookInfo::ComicBookInfo(QWidget *parent, ImgSink &sink, int fontsize): QTabDialog(parent), font("Courier", fontsize)/*{{{*/
+ComicBookInfo::ComicBookInfo(QWidget *parent, ImgSink &sink, const QFont &f): QTabDialog(parent), font(f)/*{{{*/
 {
 	setModal(true);
 	setCaption("QComicBook info");

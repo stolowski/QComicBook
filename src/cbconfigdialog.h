@@ -20,6 +20,7 @@ class QCheckBox;
 class QPushButton;
 class QRadioButton;
 class QSpinBox;
+class QLabel;
 
 class ComicBookCfgDialog: public QTabDialog
 {
@@ -41,14 +42,18 @@ class ComicBookCfgDialog: public QTabDialog
 		QSpinBox *sb_fontsize;
 		QRadioButton *rb_smooth;
 		QRadioButton *rb_fast;
+		QLabel *fontname;
+		QFont font;
 
 		void setupDisplayTab();
 		void setupMiscTab();
+		void updateFontPreview();
 
 	protected slots:
 		void apply();
 		void cancel();
 		void showBackgroundDialog();
+		void showFontDialog();
 
 	public:
 		ComicBookCfgDialog(QWidget *parent, ComicBookSettings *cfg);

@@ -16,6 +16,7 @@
 #include "imgview.h"
 #include "history.h"
 #include <qobject.h>
+#include <qfont.h>
 
 class QSettings;
 class QRect;
@@ -43,12 +44,12 @@ class ComicBookSettings: public QObject
 		History recent;
 		int cachesize;
 		int thumbsage;
-		int fontsize;
 		bool cachethumbs;
 		bool autoinfo;
 		bool confirmexit;
 		bool statusbar;
 		QString docklayout;
+		QFont font;
 		
 		static QString bkpath; //bookmarks path
 		static QString thpath; //thumbnails cache path
@@ -94,7 +95,7 @@ class ComicBookSettings: public QObject
 		bool getAutoInfo() const;
 		bool getFullScreenHideMenu() const;
 		bool getShowStatusbar() const;
-		int getFontSize() const;
+		const QFont& getFont() const;
 		void restoreDockLayout(QMainWindow *w);
 
 		void setTwoPagesMode(bool f);
@@ -114,7 +115,7 @@ class ComicBookSettings: public QObject
 		void setAutoInfo(bool f);
 		void setFullScreenHideMenu(bool f);
 		void setShowStatusbar(bool f);
-		void setFontSize(int s);
+		void setFont(const QFont &f);
 		void saveDockLayout(QMainWindow *w);
 		
 		static ComicBookSettings& instance();

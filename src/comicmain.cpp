@@ -656,7 +656,7 @@ void ComicMainWindow::showInfo()/*{{{*/
 {
 	if (sink)
 	{
-		ComicBookInfo *i = new ComicBookInfo(this, *sink, cfg->getFontSize());
+		ComicBookInfo *i = new ComicBookInfo(this, *sink, cfg->getFont());
 		i->show();
 	}
 }/*}}}*/

@@ -28,7 +28,7 @@ class ComicBookInfo: public QTabDialog
 		void setupDescriptionTabs(const ImgSink &sink);
 
 	public:
-		ComicBookInfo(QWidget *parent, ImgSink &sink, int fontsize=10);
+		ComicBookInfo(QWidget *parent, ImgSink &sink, const QFont& f);
 		virtual ~ComicBookInfo();
 };
 

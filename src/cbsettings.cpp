@@ -28,7 +28,7 @@
 #define OPT_BACKGROUND               "/Background"
 #define OPT_FULLSCREENHIDEMENU       "/FullScreenHideMenu"
 #define OPT_STATUSBAR                "/Statusbar"
-#define OPT_FONTSIZE                 "/FontSize"
+#define OPT_FONT                     "/InfoFont"
 
 #define GRP_NAVI        "/Navigation"
 #define OPT_CONTSCROLL  "/ContinuousScroll"
@@ -155,7 +155,7 @@ ComicImageView::Scaling ComicBookSettings::convertToScaling(const QString &s)/*{
 
 void ComicBookSettings::load()/*{{{*/
 {
-	QString str_scaling;
+	QString fontdesc;
 	
 	cfg->beginGroup(GRP_WINDOW);
 		x = cfg->readNumEntry(OPT_X, 0);
@@ -172,7 +172,12 @@ void ComicBookSettings::load()/*{{{*/
 		bgcolor.setNamedColor(cfg->readEntry(OPT_BACKGROUND, "#000000"));
 		fscrhidemenu = cfg->readBoolEntry(OPT_FULLSCREENHIDEMENU, true);
 		statusbar = cfg->readBoolEntry(OPT_STATUSBAR, true);
-		fontsize = cfg->readNumEntry(OPT_FONTSIZE, 10);
+		fontdesc = cfg->readEntry(OPT_FONT, QString::null);
+		if (fontdesc.isNull() || !font.fromString(fontdesc))
+		{
+			font.setFamily("Courier");
+			font.setPointSize(10);
+		}
 	cfg->endGroup();
 	cfg->beginGroup(GRP_NAVI);
 		contscroll = cfg->readBoolEntry(OPT_CONTSCROLL, true);
@@ -274,9 +279,9 @@ bool ComicBookSettings::getShowStatusbar() const/*{{{*/
 	return statusbar;
 }/*}}}*/
 
-int ComicBookSettings::getFontSize() const/*{{{*/
+const QFont& ComicBookSettings::getFont() const/*{{{*/
 {
-	return fontsize;
+	return font;
 }/*}}}*/
 
 void ComicBookSettings::restoreDockLayout(QMainWindow *w)/*{{{*/
@@ -401,10 +406,13 @@ void ComicBookSettings::setShowStatusbar(bool f)/*{{{*/
 		cfg->writeEntry(GRP_VIEW OPT_STATUSBAR, statusbar = f);
 }/*}}}*/
 
-void ComicBookSettings::setFontSize(int s)/*{{{*/
+void ComicBookSettings::setFont(const QFont &s)/*{{{*/
 {
-	if (s != fontsize)
-		cfg->writeEntry(GRP_VIEW OPT_FONTSIZE, fontsize = s);
+	if (s != font)
+	{
+		font = s;
+		cfg->writeEntry(GRP_VIEW OPT_FONT, font.toString());
+	}
 }/*}}}*/
 
 void ComicBookSettings::saveDockLayout(QMainWindow *w)/*{{{*/
