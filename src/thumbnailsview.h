@@ -44,6 +44,7 @@ class ThumbnailsView: public QIconView
 	public:
 		ThumbnailsView(QWidget *parent);
 		virtual ~ThumbnailsView();
+		virtual bool isLoaded(int n) const;
 		
 	public slots:
 		void setPages(int pages);

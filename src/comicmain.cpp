@@ -20,7 +20,6 @@
 #include "imgarchivesink.h"
 #include "imgdirsink.h"
 #include "aboutdialog.h"
-#include "waitdialog.h"
 #include "cbsettings.h"
 #include "history.h"
 #include "helpbrowser.h"
@@ -38,7 +37,9 @@
 #include <qframe.h>
 #include <jumptopagewin.h>
 #include <qdockwindow.h>
+#include <qprogressdialog.h>
 #include "thumbnailswin.h"
+#include "thumbnailsview.h"
 #include "thumbnailloader.h"
 
 ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WType_TopLevel|WDestructiveClose), sink(NULL), currpage(0)/*{{{*/
@@ -134,7 +135,6 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	
 	toggleThumbnailsAction = new QAction(Icons::get(ICON_THUMBNAILS), tr("Thumbnails"), ALT+Key_T, this);
 	toggleThumbnailsAction->setToggleAction(true);
-	//toggleThumbnailsAction->setOn(true);
 	connect(toggleThumbnailsAction, SIGNAL(toggled(bool)), this, SLOT(toggleThumbnails(bool)));
 
 	toggleToolbarAction = new QAction(tr("Toolbar"), QKeySequence(), this);
@@ -340,6 +340,13 @@ void ComicMainWindow::toggleThumbnails(bool f)/*{{{*/
 void ComicMainWindow::thumbnailsVisibilityChanged(bool f)/*{{{*/
 {
 	toggleThumbnailsAction->setOn(f);
+	if (f && sink)
+	{
+		int max = sink->numOfImages();
+		for (int i=0; i<max; i++)
+			if (!thumbswin->view().isLoaded(i))
+				sink->requestThumbnail(i);
+	}
 }/*}}}*/
 
 void ComicMainWindow::toolbarVisibilityChanged(bool f)/*{{{*/
@@ -434,8 +441,8 @@ void ComicMainWindow::sinkReady(const QString &path)/*{{{*/
 
 	//
 	// request thumbnails for all pages
-	const int max = sink->numOfImages();
-	sink->requestThumbnails(0, sink->numOfImages());
+	if (thumbswin->isVisible())
+		sink->requestThumbnails(0, sink->numOfImages());
 
 	jumpToPage(currpage, true);
 	if (cfg->getAutoInfo())
@@ -498,15 +505,24 @@ void ComicMainWindow::openDir(const QString &name)/*{{{*/
 		return;
 	
 	closeSink();
-	WaitDialog *win = new WaitDialog(this, "QComicBook", tr("Please wait. Reading directory"));
-	win->show();
+
 	ImgDirSink *dsink = new ImgDirSink(cfg->getCacheSize());
-	dsink->thumbnailLoader().setReciever(thumbswin);
 	sink = dsink;
-	connect(sink, SIGNAL(sinkReady(const QString&)), win, SLOT(close()));
-	connect(sink, SIGNAL(sinkError(int)), win, SLOT(close()));
+	dsink->thumbnailLoader().setReciever(thumbswin);
+	dsink->thumbnailLoader().setUseCache(cfg->getCacheThumbnails());
 	connect(sink, SIGNAL(sinkReady(const QString&)), this, SLOT(sinkReady(const QString&)));
 	connect(sink, SIGNAL(sinkError(int)), this, SLOT(sinkError(int)));
+	
+	QProgressDialog *win = new QProgressDialog(tr("Please wait. Reading directory"), 0, 1, this, 0, true);
+	win->setAutoClose(false);
+	win->setAutoReset(false);
+	win->setCaption(caption());
+	win->show();
+
+	connect(sink, SIGNAL(sinkReady(const QString&)), win, SLOT(close()));
+	connect(sink, SIGNAL(sinkError(int)), win, SLOT(close()));
+	connect(sink, SIGNAL(progress(int, int)), win, SLOT(setProgress(int, int)));
+
 	sink->open(name);
 }/*}}}*/
 
@@ -522,15 +538,24 @@ void ComicMainWindow::openArchive(const QString &name)/*{{{*/
 	lastdir = f.dirPath(true);
 
 	closeSink();
-	WaitDialog *win = new WaitDialog(this, "QComicBook", tr("Please wait. Decompressing"));
-	win->show();
+
 	ImgArchiveSink *asink = new ImgArchiveSink(cfg->getCacheSize());
-	asink->thumbnailLoader().setReciever(thumbswin);
 	sink = asink;
-	connect(sink, SIGNAL(sinkReady(const QString&)), win, SLOT(close()));
-	connect(sink, SIGNAL(sinkError(int)), win, SLOT(close()));
+	asink->thumbnailLoader().setReciever(thumbswin);
+	asink->thumbnailLoader().setUseCache(cfg->getCacheThumbnails());
 	connect(sink, SIGNAL(sinkReady(const QString&)), this, SLOT(sinkReady(const QString&)));
 	connect(sink, SIGNAL(sinkError(int)), this, SLOT(sinkError(int)));
+	
+	QProgressDialog *win = new QProgressDialog(tr("Please wait. Decompressing archive"), 0, 1, this, 0, true);
+	win->setCaption(caption());
+	win->setAutoClose(false);
+	win->setAutoReset(false);
+	win->show();
+
+	connect(sink, SIGNAL(sinkReady(const QString&)), win, SLOT(close()));
+	connect(sink, SIGNAL(sinkError(int)), win, SLOT(close()));
+	connect(sink, SIGNAL(progress(int, int)), win, SLOT(setProgress(int, int)));
+
 	sink->open(name);
 }/*}}}*/
 
@@ -683,10 +708,10 @@ void ComicMainWindow::showJumpToPage(const QString &number)/*{{{*/
 void ComicMainWindow::closeSink()/*{{{*/
 {
 	view->clear();
-	thumbswin->clear();
 	if (sink)
 		sink->deleteLater();
 	sink = NULL;
+	thumbswin->clear();
 	updateCaption();
 }/*}}}*/
 

@@ -12,13 +12,13 @@
 
 #include "thumbnailsview.h"
 #include "thumbnailitem.h"
+#include "thumbnail.h"
 #include <qiconview.h>
 #include <qpixmap.h>
 #include <qstring.h>
 #include <qpainter.h>
 #include <qptrvector.h>
 #include <qpopupmenu.h>
-#include "thumbnail.h"
 
 ThumbnailsView::ThumbnailsView(QWidget *parent): QIconView(parent), selected(NULL)/*{{{*/
 {
@@ -70,10 +70,12 @@ void ThumbnailsView::setPages(int pages)/*{{{*/
 
 void ThumbnailsView::setPage(int n, const QImage &img)/*{{{*/
 {
-	ThumbnailItem *th = icons[n];
-	th->setPixmap(img);
-	th->setLoaded(true);
-	//repaint(th);
+	if (n < icons.count())
+	{
+		ThumbnailItem *th = icons[n];
+		th->setPixmap(img);
+		th->setLoaded(true);
+	}
 }/*}}}*/
 
 void ThumbnailsView::setPage(const Thumbnail &t)/*{{{*/
@@ -113,5 +115,10 @@ void ThumbnailsView::goToPageAction()/*{{{*/
 {
 	if (selected)
 		onDoubleClick(selected);
+}/*}}}*/
+
+bool ThumbnailsView::isLoaded(int n) const/*{{{*/
+{
+	return (n < icons.count()) ? icons[n]->isLoaded() : false;
 }/*}}}*/
 

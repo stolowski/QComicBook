@@ -21,9 +21,9 @@ ThumbnailsWindow::ThumbnailsWindow(Place p, QWidget *parent): QDockWindow(p, par
 	setResizeEnabled(true);
 	setCloseMode(QDockWindow::Always);
 
-	view = new ThumbnailsView(this);
-	setWidget(view);
-	connect(view, SIGNAL(requestedPage(int, bool)), this, SIGNAL(requestedPage(int, bool)));
+	tview = new ThumbnailsView(this);
+	setWidget(tview);
+	connect(tview, SIGNAL(requestedPage(int, bool)), this, SIGNAL(requestedPage(int, bool)));
 	connect(this, SIGNAL(orientationChanged(Orientation)), this, SLOT(onOrientationChanged(Orientation)));
 }/*}}}*/
 
@@ -43,26 +43,31 @@ void ThumbnailsWindow::customEvent(QCustomEvent *e)/*{{{*/
 
 void ThumbnailsWindow::setPages(int pages)/*{{{*/
 {
-	view->setPages(pages);
+	tview->setPages(pages);
 }/*}}}*/
 
 void ThumbnailsWindow::setPage(int n, const QImage &img)/*{{{*/
 {
-	view->setPage(n, img);
+	tview->setPage(n, img);
 }/*}}}*/
 
 void ThumbnailsWindow::clear()/*{{{*/
 {
-	view->clear();
+	tview->clear();
 }/*}}}*/
 
 void ThumbnailsWindow::scrollToPage(int n)/*{{{*/
 {
-	view->scrollToPage(n);
+	tview->scrollToPage(n);
 }/*}}}*/
 
 void ThumbnailsWindow::onOrientationChanged(Orientation o)/*{{{*/
 {
-	view->setArrangement(o == Qt::Horizontal ? QIconView::TopToBottom : QIconView::LeftToRight);
+	tview->setArrangement(o == Qt::Horizontal ? QIconView::TopToBottom : QIconView::LeftToRight);
+}/*}}}*/
+
+const ThumbnailsView& ThumbnailsWindow::view() const/*{{{*/
+{
+	return *tview;
 }/*}}}*/
 

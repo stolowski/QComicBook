@@ -36,9 +36,6 @@ ImgDirSink::ImgDirSink(const QString &path, int cachesize): cachemtx(true), dirp
 
 ImgDirSink::~ImgDirSink()/*{{{*/
 {
-	thloader.stop();
-	wait(); //wait for preload thread
-	thloader.wait(); //wait for thumbnail loader thread
 	close();
 	delete cache;
 }/*}}}*/
@@ -120,7 +117,10 @@ int ImgDirSink::open(const QString &path)/*{{{*/
 	}
 	setComicBookName(path);
 	if (status == 0)
+	{
+		emit progress(1, 1);
 		emit sinkReady(path);
+	}
 	else
 		emit sinkError(status);
 	return status;
@@ -128,11 +128,17 @@ int ImgDirSink::open(const QString &path)/*{{{*/
 
 void ImgDirSink::close()/*{{{*/
 {
+	thloader.stop();
+	wait(); //wait for preload thread
+	thloader.wait(); //wait for thumbnail loader thread
+
+	listmtx.lock();
 	dirpath = QString::null;
 	imgfiles.clear();
 	txtfiles.clear();
 	otherfiles.clear();
 	dirs.clear();
+	listmtx.unlock();
 }/*}}}*/
 
 QString ImgDirSink::getName(int maxlen)/*{{{*/
@@ -217,30 +223,36 @@ QImage ImgDirSink::getImage(unsigned int num, int &result, int preload)/*{{{*/
 	
 	result = SINKERR_LOADERROR;
 
-	if (num < imgfiles.count())
+	listmtx.lock();
+	const int imgcnt = imgfiles.count();
+	if (num < imgcnt)
 	{
+		const QString fname = imgfiles[num];
+		listmtx.unlock();
 		QImage *img = NULL; //cached image pointer
 
 		cachemtx.lock();
 
 		//
 		// try to find in cache first
-		if (img = cache->find(imgfiles[num]))
+		if (img = cache->find(fname))
 		{
 			result = 0;
 			rimg = *img;
 		}
 		else		
 		{
-			if (rimg.load(imgfiles[num]))
+			if (rimg.load(fname))
 			{
 				result = 0;
 				if (cache->maxCost() > 0)
-					cache->insert(imgfiles[num], &rimg);
+					cache->insert(fname, &rimg);
 			}
 		}
 		cachemtx.unlock();
 	}
+	else
+		listmtx.unlock();
 
 	cachemtx.lock();
 	//
@@ -248,7 +260,7 @@ QImage ImgDirSink::getImage(unsigned int num, int &result, int preload)/*{{{*/
 	if (preload>0 && cache->maxCost()> 2 && result == 0)
 	{
 		pre = num + 1; //page to preload
-		if (pre < imgfiles.count()) // && (!cache->find(imgfiles[pre])))
+		if (pre < imgcnt) // && (!cache->find(imgfiles[pre])))
 		{
 			precnt = preload;
 			cachemtx.unlock();
@@ -268,6 +280,17 @@ Thumbnail* ImgDirSink::getThumbnail(int num, bool thumbcache)/*{{{*/
 	QString thname;
 	Thumbnail *t = new Thumbnail(num);
 
+	listmtx.lock();
+	QString fname;
+	if (num < imgfiles.count())
+		fname = imgfiles[num];
+	else
+	{
+		listmtx.unlock();
+		return NULL;
+	}
+	listmtx.unlock();
+
 	//
 	// try to load cached thumbnail
 	if (thumbcache)
@@ -275,15 +298,13 @@ Thumbnail* ImgDirSink::getThumbnail(int num, bool thumbcache)/*{{{*/
 		thname = ComicBookSettings::thumbnailsDir() + "/" + cbname.remove('/') + QString::number(num) + ".jpg";
 		if (t->tryLoad(thname))
 		{
-			//
-			// "touch" the file
 			t->touch(thname);
 			return t;
 		}
 	}
 	
 	cachemtx.lock();
-	if (QImage *img = cache->find(imgfiles[num]))
+	if (QImage *img = cache->find(fname))
 	{
 		t->setImage(*img);
 		cachemtx.unlock();
@@ -291,7 +312,7 @@ Thumbnail* ImgDirSink::getThumbnail(int num, bool thumbcache)/*{{{*/
 	else
 	{
 		cachemtx.unlock();
-		if (!t->tryLoad(imgfiles[num]))
+		if (!t->tryLoad(fname))
 		{
 			delete t;
 			return NULL;
@@ -319,12 +340,18 @@ void ImgDirSink::requestThumbnails(int first, int n)/*{{{*/
 
 int ImgDirSink::numOfImages() const/*{{{*/
 {
-	return imgfiles.count();
+	listmtx.lock();
+	const int n = imgfiles.count();
+	listmtx.unlock();
+	return n;
 }/*}}}*/
 
 QStringList ImgDirSink::getAllfiles() const/*{{{*/
 {
-	return imgfiles + txtfiles + otherfiles;
+	listmtx.lock();
+	QStringList l = imgfiles + txtfiles + otherfiles;
+	listmtx.unlock();
+	return l;
 }/*}}}*/
 
 QStringList ImgDirSink::getAlldirs() const/*{{{*/
@@ -334,7 +361,10 @@ QStringList ImgDirSink::getAlldirs() const/*{{{*/
 
 QStringList ImgDirSink::getAllimgfiles() const/*{{{*/
 {
-	return imgfiles;
+	listmtx.lock();
+	const QStringList l = imgfiles;
+	listmtx.unlock();
+	return l;
 }/*}}}*/
 
 void ImgDirSink::run()/*{{{*/
@@ -342,15 +372,19 @@ void ImgDirSink::run()/*{{{*/
 	cachemtx.lock();
 	for (int i=0; i<precnt; i++)
 	{
+		listmtx.lock();
 		if (pre + i >= imgfiles.count())
+		{
+			listmtx.unlock();
 			break;
+		}
 		if (!cache->find(imgfiles[pre+i]))
 		{
 			QImage img;
-			//std::cout << "preloading: " << imgfiles[pre+i] << std::endl;
 			if (img.load(imgfiles[pre+i]))
 				cache->insert(imgfiles[pre+i], &img);
 		}
+		listmtx.unlock();
 	}
 	cachemtx.unlock();
 }/*}}}*/

@@ -30,14 +30,19 @@ class ImgArchiveSink: public ImgDirSink
 		enum ArchiveType { RAR_ARCHIVE = 0, ZIP_ARCHIVE, UNKNOWN_ARCHIVE };
 
 		QProcess *pext; //extracting process
+		QProcess *pinf; //file list extracing process
 		QString archivename; //archive file name, without path
 		QString archivepath; //full path, including archive name
 		QString tmppath; //path to extracted archive
 		QStringList archfiles; //list of archive files
 		QStringList archdirs; //list of archive dirs
+		int filesnum; //number of files gathered from parsing archiver output, used for progress bar
+		int extcnt; //extracted files counter for progress bar
 		
-		static QStringList zip; //unzip executable and options
-		static QStringList rar; //rar/unrar executbale and options
+		static QStringList zip; //unzip executable and extract options
+		static QStringList rar; //rar/unrar executbale and extract options
+		static QStringList zipi; //unzip executable and list options
+		static QStringList rari; //rar/unrar executable and list options
 		static bool havezip;
 		static bool haverar;
 
@@ -46,6 +51,9 @@ class ImgArchiveSink: public ImgDirSink
 		
 	private slots:
 		void extractExited();
+		void extractStdoutReady();
+		void infoStdoutReady();
+		void infoExited();
 
 	public:
 		ImgArchiveSink(int cachesize=1);

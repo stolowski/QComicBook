@@ -16,7 +16,6 @@
 #include <qapplication.h>
 #include <qimage.h>
 #include <qevent.h>
-#include <utime.h>
 
 ThumbnailLoader::ThumbnailLoader(): QThread(), stopped(false), sink(NULL), rcvobj(NULL), usecache(true)/*{{{*/
 {
@@ -56,9 +55,9 @@ void ThumbnailLoader::requestThumbnail(int num)/*{{{*/
 		return;
 	}
 	requests.append(num);
-	mtx.unlock();
 	if (!running())
 		start();
+	mtx.unlock();
 }/*}}}*/
 
 void ThumbnailLoader::requestThumbnails(int first, int n)/*{{{*/
@@ -67,9 +66,9 @@ void ThumbnailLoader::requestThumbnails(int first, int n)/*{{{*/
 	for (int i=first; i<n; i++)
 		if (requests.contains(i) == 0)
 			requests.append(i);
-	mtx.unlock();
-	if (!requests.isEmpty() && !running())
+	if (!running())
 		start();
+	mtx.unlock();
 }/*}}}*/
 
 void ThumbnailLoader::stop()/*{{{*/
@@ -86,7 +85,6 @@ void ThumbnailLoader::run()/*{{{*/
 		mtx.lock();
 		if (stopped || requests.empty())
 		{
-			stopped = false;
 			mtx.unlock();
 			break;
 		}
@@ -95,6 +93,7 @@ void ThumbnailLoader::run()/*{{{*/
 		if (sink && rcvobj)
 		{
 			Thumbnail *t = sink->getThumbnail(n, usecache);
+			mtx.unlock();
 			if (t)
 			{
 				QCustomEvent *evt = new QCustomEvent(ThumbnailReady);
@@ -102,7 +101,8 @@ void ThumbnailLoader::run()/*{{{*/
 				QApplication::postEvent(rcvobj, evt);
 			}
 		}
-		mtx.unlock();
+		else
+			mtx.unlock();
 	}
 }/*}}}*/
 

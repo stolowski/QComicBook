@@ -49,10 +49,10 @@ class ImgDirSink: public ImgSink, protected QThread
 		
 	protected:
 		mutable QMutex cachemtx; //mutex for cache, pre, precnt
+		mutable QMutex listmtx; //mutex for imgfiles
 		ImgCache *cache;
 		int pre; //number of first page to preload
 		int precnt; //number of pages to preload starting from pre
-		
 		QString dirpath; //path to directory
 		QString cbname; //comic book name (directory path by default)
 		QStringList imgfiles; //list of images files in directory

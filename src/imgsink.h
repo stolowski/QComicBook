@@ -26,6 +26,7 @@ class ImgSink: public QObject
 	signals:
 		void sinkReady(const QString &path);
 		void sinkError(int code);
+		void progress(int current, int total);
 
 	public slots:
 		virtual void setThumbnailReciever(QObject *rcv) = 0;

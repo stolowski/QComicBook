@@ -22,11 +22,14 @@ class ThumbnailsWindow: public QDockWindow
 	Q_OBJECT
 
 	private:
-		ThumbnailsView *view;
+		ThumbnailsView *tview;
 
 	signals:
 		void requestedThumbnail(int n);
 		void requestedPage(int n, bool force);
+
+	protected:
+		void customEvent(QCustomEvent *e);
 
 	protected slots:
 		void onOrientationChanged(Orientation o);
@@ -34,8 +37,7 @@ class ThumbnailsWindow: public QDockWindow
 	public:
 		ThumbnailsWindow(Place p=InDock, QWidget *parent=0);
 		virtual ~ThumbnailsWindow();
-
-		void customEvent(QCustomEvent *e);
+		const ThumbnailsView& view() const;
 	
 	public slots:
 		void setPages(int pages);

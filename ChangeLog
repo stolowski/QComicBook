@@ -1,4 +1,5 @@
 2005-04-xx:  0.1.7       -- thread-based thumbnail loading
+                         -- added progress bar for archives decompression
 
 2005-03-30:  0.1.6       -- thumbnails view
                          -- page contents scrolling with mouse (LMB + move)
