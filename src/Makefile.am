@@ -10,6 +10,7 @@ BUILT_SOURCES = moc_cbconfigdialog.cpp \
 		moc_imgview.cpp \
 		moc_jumptopagewin.cpp \
 		moc_pagenumberedit.cpp \
+		moc_statusbar.cpp \
 		moc_thumbnailswin.cpp \
 		moc_thumbnailsview.cpp \
 		moc_waitdialog.cpp 
@@ -32,6 +33,7 @@ dist_qcomicbook_SOURCES = aboutdialog.cpp \
 		      main.cpp \
 		      miscutil.cpp \
 		      pagenumberedit.cpp \
+		      statusbar.cpp \
 		      thumbnail.cpp \
 		      thumbnailitem.cpp \
 		      thumbnailloader.cpp \
@@ -59,6 +61,7 @@ noinst_HEADERS = aboutdialog.h \
 		 jumptopagewin.h \
 		 miscutil.h \
 		 pagenumberedit.h \
+		 statusbar.h \
 		 thumbnail.h \
 		 thumbnailitem.h \
 		 thumbnailloader.h \

@@ -41,6 +41,7 @@
 #include "thumbnailswin.h"
 #include "thumbnailsview.h"
 #include "thumbnailloader.h"
+#include "statusbar.h"
 
 ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WType_TopLevel|WDestructiveClose), sink(NULL), currpage(0)/*{{{*/
 {
@@ -280,7 +281,9 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	lastdir = cfg->getLastDir();
 	*recentfiles = cfg->getRecentlyOpened();
 	setRecentFilesMenu(*recentfiles);
-	
+
+	statusbar = new StatusBar(this);
+
 	cfg->restoreDockLayout(this);
 }/*}}}*/
 
@@ -436,6 +439,7 @@ void ComicMainWindow::sinkReady(const QString &path)/*{{{*/
 	setRecentFilesMenu(*recentfiles);
 
 	updateCaption();
+	statusbar->setName(sink->getFullName());
 
 	thumbswin->view()->setPages(sink->numOfImages());
 
@@ -658,7 +662,9 @@ void ComicMainWindow::jumpToPage(int n, bool force)/*{{{*/
 			QImage img(sink->getImage(currpage = n, result1, preload)); //preload next image
 			view->setImage(img);
 		}
-		pageinfo->setText("Page " + QString::number(currpage + 1) + "/" + QString::number(sink->numOfImages()));
+		const QString page = tr("Page") + " " + QString::number(currpage + 1) + "/" + QString::number(sink->numOfImages());
+		pageinfo->setText(page);
+		statusbar->setPage(currpage + 1, sink->numOfImages());
 		thumbswin->view()->scrollToPage(currpage);
 	}
 }/*}}}*/
@@ -713,6 +719,7 @@ void ComicMainWindow::closeSink()/*{{{*/
 	sink = NULL;
 	thumbswin->view()->clear();
 	updateCaption();
+	statusbar->clear();
 }/*}}}*/
 
 void ComicMainWindow::setBookmark()/*{{{*/

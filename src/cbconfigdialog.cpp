@@ -48,35 +48,38 @@ void ComicBookCfgDialog::setupDisplayTab()/*{{{*/
 	QWidget *w = new QWidget(this);
 	QVBoxLayout *lay = new QVBoxLayout(w, 5, 5);
 
-	QVBox *box0 = new QVBox(w);
-	lay->addWidget(box0);
-
 	//
 	// background color
-	QHBox *box1 = new QHBox(box0);
-	new QLabel(tr("Background color"), box1);
-	pb_color = new QPushButton(box1);
+	QHBoxLayout *lay1 = new QHBoxLayout;
+	lay1->addWidget(new QLabel(tr("Background color"), w));
+	lay1->addWidget(pb_color = new QPushButton(w));
 	pb_color->setFixedWidth(32);
 	pb_color->setPaletteBackgroundColor(bgcolor = cfg->getBackground());
 	connect(pb_color, SIGNAL(clicked()), this, SLOT(showBackgroundDialog()));
+	lay->addLayout(lay1);
 
-	//QVGroupBox *gr_fullscr = new QVGroupBox(tr("Fullscreen mode"), box0);
-	cb_hidemenu = new QCheckBox(tr("Hide menubar in fullscreen mode"),box0);
+	cb_hidemenu = new QCheckBox(tr("Hide menubar in fullscreen mode"), w);
 	cb_hidemenu->setChecked(cfg->getFullScreenHideMenu());
-	/*cb_hidetoolbar = new QCheckBox(tr("Hide toolbar"), gr_fullscr);
-	cb_hidetoolbar->setChecked(cfg->getFullScreenHideToolbar());
-	cb_hidescrollbar = new QCheckBox(tr("Hide scrollbars"), gr_fullscr);
-	cb_hidescrollbar->setChecked(cfg->getFullScreenHideScrollbars());*/
-	
+	lay->addWidget(cb_hidemenu);
+		
 	//
 	// scaling method
-	QButtonGroup *gr_scaling = new QButtonGroup(2, Qt::Horizontal, tr("Scaling method"), box0);
+	QButtonGroup *gr_scaling = new QButtonGroup(2, Qt::Horizontal, tr("Scaling method"), w);
 	rb_smooth = new QRadioButton(tr("Smooth"), gr_scaling);
 	rb_fast = new QRadioButton(tr("Fast"), gr_scaling);
 	if (cfg->getScaling() == ComicImageView::Fast)
 		rb_fast->setChecked(true);
 	else
 		rb_smooth->setChecked(true);
+	lay->addWidget(gr_scaling);
+
+	//
+	// font size
+	QHBoxLayout *lay3 = new QHBoxLayout;
+	lay3->addWidget(new QLabel(tr("Font size for comic book info"), w));
+	lay3->addStretch();
+	lay3->addWidget(sb_fontsize = new QSpinBox(8, 32, 1, w));
+	lay->addLayout(lay3);
 	
 	lay->addStretch();
 	
@@ -88,29 +91,31 @@ void ComicBookCfgDialog::setupMiscTab()/*{{{*/
 	QWidget *w = new QWidget(this);
 	QVBoxLayout *lay = new QVBoxLayout(w, 5, 5);
 
-	QVBox *box0 = new QVBox(w);
-	lay->addWidget(box0);
-
-	QVGroupBox *grp0 = new QVGroupBox(tr("Cache"), box0);
+	QVGroupBox *grp0 = new QVGroupBox(tr("Cache"), w);
 	QHBox *box1 = new QHBox(grp0);
 	new QLabel(tr("Cache size"), box1);
 	sb_cachesize = new QSpinBox(0, 99, 1, box1);
 	sb_cachesize->setValue(cfg->getCacheSize());
 	cb_preload = new QCheckBox(tr("Preload next page"), grp0);
 	cb_preload->setChecked(cfg->getPreload());
+	lay->addWidget(grp0);
 
-	QVGroupBox *grp1 = new QVGroupBox(tr("Thumbnails"), box0);
+	QVGroupBox *grp1 = new QVGroupBox(tr("Thumbnails"), w);
 	cb_thumbs = new QCheckBox(tr("Use disk cache for thumbnails"), grp1);
 	cb_thumbs->setChecked(cfg->getCacheThumbnails());
 	QHBox *box2 = new QHBox(grp1);
 	new QLabel(tr("Number of days to keep thumbnails"), box2);
 	sb_thumbsage = new QSpinBox(0, 365, 1, box2);
 	sb_thumbsage->setValue(cfg->getThumbnailsAge());
+	lay->addWidget(grp1);
 	
-	cb_autoinfo = new QCheckBox(tr("Open info dialog after opening comic book"), box0);
+	cb_autoinfo = new QCheckBox(tr("Open info dialog after opening comic book"), w);
 	cb_autoinfo->setChecked(cfg->getAutoInfo());
-	cb_confirmexit = new QCheckBox(tr("Confirm exit"), box0);
+	lay->addWidget(cb_autoinfo);
+
+	cb_confirmexit = new QCheckBox(tr("Confirm exit"), w);
 	cb_confirmexit->setChecked(cfg->getConfirmExit());
+	lay->addWidget(cb_confirmexit);
 
 	lay->addStretch();
 	addTab(w, tr("Misc"));

@@ -26,6 +26,7 @@ class ThumbnailsWindow;
 class ComicBookSettings;
 class History;
 class Bookmarks;
+class StatusBar;
 
 class ComicMainWindow: public QMainWindow
 {
@@ -50,6 +51,7 @@ class ComicMainWindow: public QMainWindow
 		QString lastdir;
 		History *recentfiles;
 		Bookmarks *bookmarks;
+		StatusBar *statusbar;
 		QAction *toggleThumbnailsAction;
 		QAction *toggleToolbarAction;
 		

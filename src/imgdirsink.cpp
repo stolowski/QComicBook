@@ -303,21 +303,16 @@ Thumbnail* ImgDirSink::getThumbnail(int num, bool thumbcache)/*{{{*/
 		}
 	}
 	
-	cachemtx.lock();
-	if (QImage *img = cache->find(fname))
+	//
+	// try to load image
+	if (!t->tryLoad(fname))
 	{
-		t->setImage(*img);
-		cachemtx.unlock();
+		delete t;
+		return NULL;
 	}
-	else
-	{
-		cachemtx.unlock();
-		if (!t->tryLoad(fname))
-		{
-			delete t;
-			return NULL;
-		}
-	}
+
+	//
+	// save thumbnail if caching enabled
 	if (thumbcache)
 		t->save(thname);
 	return t;

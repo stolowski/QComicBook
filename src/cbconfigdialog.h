@@ -38,6 +38,7 @@ class ComicBookCfgDialog: public QTabDialog
 		QCheckBox *cb_thumbs;
 		QSpinBox *sb_thumbsage;
 		QColor bgcolor;
+		QSpinBox *sb_fontsize;
 		QRadioButton *rb_smooth;
 		QRadioButton *rb_fast;
 
