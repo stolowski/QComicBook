@@ -28,6 +28,7 @@
 #define OPT_BACKGROUND               "/Background"
 #define OPT_FULLSCREENHIDEMENU       "/FullScreenHideMenu"
 #define OPT_STATUSBAR                "/Statusbar"
+#define OPT_FONTSIZE                 "/FontSize"
 
 #define GRP_NAVI        "/Navigation"
 #define OPT_CONTSCROLL  "/ContinuousScroll"
@@ -75,10 +76,10 @@ ComicBookSettings& ComicBookSettings::instance()/*{{{*/
 ComicBookSettings::ComicBookSettings(): QObject()/*{{{*/
 {
 	cfg = new QSettings();
-	char *login = getenv("HOME");
-	if (login)
+	char *home = getenv("HOME");
+	if (home)
 	{
-		QString path = QString(login) + "/.qcomicbook";
+		QString path = QString(home) + "/.qcomicbook";
 		cfg->insertSearchPath(QSettings::Unix, path);
 	}
 	cfg->beginGroup("/QComicBook");
@@ -171,6 +172,7 @@ void ComicBookSettings::load()/*{{{*/
 		bgcolor.setNamedColor(cfg->readEntry(OPT_BACKGROUND, "#000000"));
 		fscrhidemenu = cfg->readBoolEntry(OPT_FULLSCREENHIDEMENU, true);
 		statusbar = cfg->readBoolEntry(OPT_STATUSBAR, true);
+		fontsize = cfg->readNumEntry(OPT_FONTSIZE, 10);
 	cfg->endGroup();
 	cfg->beginGroup(GRP_NAVI);
 		contscroll = cfg->readBoolEntry(OPT_CONTSCROLL, true);
@@ -270,6 +272,11 @@ bool ComicBookSettings::getFullScreenHideMenu() const/*{{{*/
 bool ComicBookSettings::getShowStatusbar() const/*{{{*/
 {
 	return statusbar;
+}/*}}}*/
+
+int ComicBookSettings::getFontSize() const/*{{{*/
+{
+	return fontsize;
 }/*}}}*/
 
 void ComicBookSettings::restoreDockLayout(QMainWindow *w)/*{{{*/
@@ -392,6 +399,12 @@ void ComicBookSettings::setShowStatusbar(bool f)/*{{{*/
 {
 	if (f != statusbar)
 		cfg->writeEntry(GRP_VIEW OPT_STATUSBAR, statusbar = f);
+}/*}}}*/
+
+void ComicBookSettings::setFontSize(int s)/*{{{*/
+{
+	if (s != fontsize)
+		cfg->writeEntry(GRP_VIEW OPT_FONTSIZE, fontsize = s);
 }/*}}}*/
 
 void ComicBookSettings::saveDockLayout(QMainWindow *w)/*{{{*/

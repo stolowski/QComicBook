@@ -53,15 +53,20 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 
 	recentfiles = new History(10);
 	cfg = &ComicBookSettings::instance();
-	cfg->load();
 
 	setGeometry(cfg->getGeometry());
 
 	statusbar = new StatusBar(this);
+	toggleStatusbarAction = new QAction(tr("Statusbar"), QKeySequence(), this);
+	toggleStatusbarAction->setToggleAction(true);
+	connect(toggleStatusbarAction, SIGNAL(toggled(bool)), statusbar, SLOT(setShown(bool)));
+	toggleStatusbarAction->setOn(cfg->getShowStatusbar());
 	
 	//
 	// comic view
 	view = new ComicImageView(this, cfg->getPageSize(), cfg->getScaling(), cfg->getBackground());
+	setCentralWidget(view);
+	view->setFocus();
 	connect(cfg, SIGNAL(backgroundChanged(const QColor&)), view, SLOT(setBackground(const QColor&)));
 	connect(cfg, SIGNAL(scalingMethodChanged(ComicImageView::Scaling)), view, SLOT(setScaling(ComicImageView::Scaling)));
 
@@ -140,17 +145,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	QAction *exitFullscreenAction = new QAction(QString::null, Key_Escape, this);
 	connect(exitFullscreenAction, SIGNAL(activated()), this, SLOT(exitFullscreen()));
 	
-	toolbar = new QToolBar(tr("Toolbar"), this);
-	toggleToolbarAction = new QAction(tr("Toolbar"), QKeySequence(), this);
-	toggleToolbarAction->setToggleAction(true);
-	connect(toggleToolbarAction, SIGNAL(toggled(bool)), toolbar, SLOT(setShown(bool)));
-	connect(toolbar, SIGNAL(visibilityChanged(bool)), this, SLOT(toolbarVisibilityChanged(bool)));
-	
-	toggleStatusbarAction = new QAction(tr("Statusbar"), QKeySequence(), this);
-	toggleStatusbarAction->setToggleAction(true);
-	connect(toggleStatusbarAction, SIGNAL(toggled(bool)), statusbar, SLOT(setShown(bool)));
-	toggleStatusbarAction->setOn(cfg->getShowStatusbar());
-	
+		
 	QAction *which = originalSizeAction;
 	switch (cfg->getPageSize())
 	{
@@ -162,6 +157,29 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	}
 	which->setOn(true);
 	
+	//
+	// Toolbar
+	toolbar = new QToolBar(tr("Toolbar"), this);
+	toggleToolbarAction = new QAction(tr("Toolbar"), QKeySequence(), this);
+	toggleToolbarAction->setToggleAction(true);
+	showInfoAction->addTo(toolbar);
+	toggleThumbnailsAction->addTo(toolbar);
+	toolbar->addSeparator();
+	prevPageAction->addTo(toolbar);
+	nextPageAction->addTo(toolbar);
+	backwardPageAction->addTo(toolbar);
+	forwardPageAction->addTo(toolbar);
+	pageTopAction->addTo(toolbar);
+	pageBottomAction->addTo(toolbar);
+	toolbar->addSeparator();
+	originalSizeAction->addTo(toolbar);
+	fitWidthAction->addTo(toolbar);
+	fitHeightAction->addTo(toolbar);
+	wholePageAction->addTo(toolbar);
+	bestFitAction->addTo(toolbar);
+	connect(toggleToolbarAction, SIGNAL(toggled(bool)), toolbar, SLOT(setShown(bool)));
+	connect(toolbar, SIGNAL(visibilityChanged(bool)), this, SLOT(toolbarVisibilityChanged(bool)));
+
 	//
 	// Context menu
 	pageinfo = new QLabel(view->contextMenu());
@@ -264,32 +282,10 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	help_menu->insertItem(tr("Index"), this, SLOT(showHelp()));
 	help_menu->insertItem(tr("About"), this, SLOT(showAbout()));
 	menuBar()->insertItem(tr("&Help"), help_menu);
-
-	//
-	// Toolbar
-	showInfoAction->addTo(toolbar);
-	toggleThumbnailsAction->addTo(toolbar);
-	toolbar->addSeparator();
-	prevPageAction->addTo(toolbar);
-	nextPageAction->addTo(toolbar);
-	backwardPageAction->addTo(toolbar);
-	forwardPageAction->addTo(toolbar);
-	pageTopAction->addTo(toolbar);
-	pageBottomAction->addTo(toolbar);
-	toolbar->addSeparator();
-	originalSizeAction->addTo(toolbar);
-	fitWidthAction->addTo(toolbar);
-	fitHeightAction->addTo(toolbar);
-	wholePageAction->addTo(toolbar);
-	bestFitAction->addTo(toolbar);
-
-	setCentralWidget(view);
-	view->setFocus();
-
+	
 	lastdir = cfg->getLastDir();
 	*recentfiles = cfg->getRecentlyOpened();
 	setRecentFilesMenu(*recentfiles);
-
 
 	cfg->restoreDockLayout(this);
 }/*}}}*/
@@ -660,7 +656,7 @@ void ComicMainWindow::showInfo()/*{{{*/
 {
 	if (sink)
 	{
-		ComicBookInfo *i = new ComicBookInfo(this, *sink);
+		ComicBookInfo *i = new ComicBookInfo(this, *sink, cfg->getFontSize());
 		i->show();
 	}
 }/*}}}*/

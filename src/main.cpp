@@ -22,6 +22,8 @@ int main(int argc, char *argv[])
 	QApplication app(argc, argv);
 	const QString errcaption = ComicMainWindow::tr("QComicBook error");
 
+	ComicBookSettings::instance().load();
+	
 	if (!Icons::init(DATADIR))
 		QMessageBox::critical(NULL, errcaption, ComicMainWindow::tr("Can't initialize icons path") + ":\n" DATADIR,
 				QMessageBox::Ok, QMessageBox::NoButton);

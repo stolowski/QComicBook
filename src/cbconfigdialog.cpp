@@ -79,6 +79,7 @@ void ComicBookCfgDialog::setupDisplayTab()/*{{{*/
 	lay3->addWidget(new QLabel(tr("Font size for comic book info"), w));
 	lay3->addStretch();
 	lay3->addWidget(sb_fontsize = new QSpinBox(8, 32, 1, w));
+	sb_fontsize->setValue(cfg->getFontSize());
 	lay->addLayout(lay3);
 	
 	lay->addStretch();
@@ -131,6 +132,7 @@ void ComicBookCfgDialog::apply()/*{{{*/
 	else
 		if (rb_fast->isChecked())
 			cfg->setScaling(ComicImageView::Fast);
+	cfg->setFontSize(sb_fontsize->value());
 
 	//
 	// misc
