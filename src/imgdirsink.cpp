@@ -13,14 +13,13 @@
 #include "imgdirsink.h"
 #include "imgcache.h"
 #include "cbsettings.h"
+#include "thumbnail.h"
 #include <qimage.h>
 #include <qstringlist.h>
-#include <qprocess.h>
 #include <qdir.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qtextstream.h>
-#include <utime.h>
 
 ImgDirSink::ImgDirSink(int cachesize): ImgSink(), cachemtx(true)/*{{{*/
 {
@@ -264,43 +263,43 @@ QImage ImgDirSink::getImage(unsigned int num, int &result, int preload)/*{{{*/
 	return rimg;
 }/*}}}*/
 
-QImage ImgDirSink::getThumbnail(unsigned int num, int w, int h, int &result, bool thumbcache)/*{{{*/
+Thumbnail* ImgDirSink::getThumbnail(int num, bool thumbcache)/*{{{*/
 {
-	QImage rimg;
 	QString thname;
+	Thumbnail *t = new Thumbnail(num);
 
 	//
 	// try to load cached thumbnail
 	if (thumbcache)
 	{
 		thname = ComicBookSettings::thumbnailsDir() + "/" + cbname.remove('/') + QString::number(num) + ".jpg";
-		if (rimg.load(thname) && rimg.width()<=w && rimg.height()>=h)
+		if (t->tryLoad(thname))
 		{
-			result = 1;
 			//
 			// "touch" the file
-			utime(thname.local8Bit(), NULL);
-			return rimg;
+			t->touch(thname);
+			return t;
 		}
 	}
 	
-	result = 0;
 	cachemtx.lock();
 	if (QImage *img = cache->find(imgfiles[num]))
 	{
-		rimg = *img;
+		t->setImage(*img);
 		cachemtx.unlock();
-		result = 1;
 	}
 	else
 	{
 		cachemtx.unlock();
-		result = rimg.load(imgfiles[num]);
+		if (!t->tryLoad(imgfiles[num]))
+		{
+			delete t;
+			return NULL;
+		}
 	}
-	const QImage tmp(rimg.smoothScale(w, h, QImage::ScaleMin));
 	if (thumbcache)
-		tmp.save(thname, "JPEG", 75);
-	return tmp;
+		t->save(thname);
+	return t;
 }/*}}}*/
 
 void ImgDirSink::setThumbnailReciever(QObject *rcv)/*{{{*/

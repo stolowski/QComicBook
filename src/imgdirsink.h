@@ -80,7 +80,7 @@ class ImgDirSink: public ImgSink, protected QThread
 		virtual int open(const QString &path);
 		virtual void close();
 		virtual QImage getImage(unsigned int num, int &result, int preload=0);
-		virtual QImage getThumbnail(unsigned int num, int w, int h, int &result, bool thumbcache=true);
+		virtual Thumbnail* getThumbnail(int num, bool thumbcache=true);
 		virtual int numOfImages() const;
 		virtual QString getName(int maxlen = 50);
 		virtual QString getFullName();    

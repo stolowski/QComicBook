@@ -17,6 +17,7 @@
 #include <qobject.h>
 
 class QImage;
+class Thumbnail;
 
 class ImgSink: public QObject
 {
@@ -38,7 +39,7 @@ class ImgSink: public QObject
 		virtual int open(const QString &path) = 0;
 		virtual void close() = 0;
 		virtual QImage getImage(unsigned int num, int &result, int preload=0) = 0;
-		virtual QImage getThumbnail(unsigned int num, int w, int h, int &result, bool thumcache=true) = 0;
+		virtual Thumbnail* getThumbnail(int num, bool thumcache=true) = 0;
 		virtual int numOfImages() const = 0;
 
 		//

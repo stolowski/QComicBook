@@ -94,11 +94,9 @@ void ThumbnailLoader::run()/*{{{*/
 		requests.pop_front();
 		if (sink && rcvobj)
 		{
-			int result;
-			QImage img = sink->getThumbnail(n, Thumbnail::maxWidth(), Thumbnail::maxHeight(), result, usecache);
-			if (result)
+			Thumbnail *t = sink->getThumbnail(n, usecache);
+			if (t)
 			{
-				Thumbnail *t = new Thumbnail(n, img);
 				QCustomEvent *evt = new QCustomEvent(ThumbnailReady);
 				evt->setData(t);
 				QApplication::postEvent(rcvobj, evt);
