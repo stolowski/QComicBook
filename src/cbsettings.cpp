@@ -20,27 +20,26 @@
 #include <qmainwindow.h>
 #include <stdlib.h>
 
-#define OPT_VIEW                     "/View"
+#define GRP_VIEW                     "/View"
 #define OPT_TWOPAGES                 "/TwoPages"
 #define OPT_SCROLLBARS               "/Scrollbars"
 #define OPT_SCALING                  "/Scaling"
 #define OPT_PAGESIZE                 "/PageSize"
 #define OPT_BACKGROUND               "/Background"
 #define OPT_FULLSCREENHIDEMENU       "/FullScreenHideMenu"
-#define OPT_FULLSCREENHIDETOOLBAR    "/FullScreenHideToolbar"
-#define OPT_FULLSCREENHIDESCROLLBARS "/FullScreenHideScrollbars"
+#define OPT_STATUSBAR                "/Statusbar"
 
-#define OPT_NAVI        "/Navigation"
+#define GRP_NAVI        "/Navigation"
 #define OPT_CONTSCROLL  "/ContinuousScroll"
 
-#define OPT_WINDOW      "/Window"
+#define GRP_WINDOW      "/Window"
 #define OPT_X           "/X"
 #define OPT_Y           "/Y"
 #define OPT_WIDTH       "/Width"
 #define OPT_HEIGHT      "/Height"
 #define OPT_DOCKLAYOUT  "/DockLayout"
 
-#define OPT_MISC        "/Misc"
+#define GRP_MISC        "/Misc"
 #define OPT_AUTOINFO    "/InfoDialog"
 #define OPT_LASTDIR     "/LastDir"
 #define OPT_RECENT      "/RecentlyOpened"
@@ -59,15 +58,19 @@ const ComicBookSettings::int2qstring ComicBookSettings::size2string[] = {
 	{ComicImageView::FitWidth,  "fitwidth"},
 	{ComicImageView::FitHeight, "fitheight"},
 	{ComicImageView::WholePage, "wholepage"},
-	{ComicImageView::BestFit,   "bestfit"},
-	{-1, QString::null}
+	{ComicImageView::BestFit,   "bestfit"}
 };
 
 const ComicBookSettings::int2qstring ComicBookSettings::scaling2string[] = {
 	{ComicImageView::Smooth, "smooth"},
-	{ComicImageView::Fast,   "fast"},
-	{-1, QString::null}
+	{ComicImageView::Fast,   "fast"}
 };
+
+ComicBookSettings& ComicBookSettings::instance()/*{{{*/
+{
+	static ComicBookSettings cfg;
+	return cfg;
+}/*}}}*/
 
 ComicBookSettings::ComicBookSettings(): QObject()/*{{{*/
 {
@@ -119,7 +122,7 @@ const QString& ComicBookSettings::thumbnailsDir()/*{{{*/
 
 const QString& ComicBookSettings::convert(ComicImageView::Size s)/*{{{*/
 {
-	for (int i=0; !size2string[i].str.isNull(); i++)
+	for (int i=0; i<sizeof(size2string)/sizeof(int2qstring); i++)
 		if (size2string[i].v == s)
 			return size2string[i].str;
 	return size2string[0].str;
@@ -127,7 +130,7 @@ const QString& ComicBookSettings::convert(ComicImageView::Size s)/*{{{*/
 
 ComicImageView::Size ComicBookSettings::convertToSize(const QString &s)/*{{{*/
 {
-	for (int i=0; !size2string[i].str.isNull(); i++)
+	for (int i=0; i<sizeof(size2string)/sizeof(int2qstring); i++)
 		if (size2string[i].str == s)
 			return static_cast<ComicImageView::Size>(size2string[i].v);
 	return ComicImageView::Original;
@@ -135,7 +138,7 @@ ComicImageView::Size ComicBookSettings::convertToSize(const QString &s)/*{{{*/
 
 const QString& ComicBookSettings::convert(ComicImageView::Scaling s)/*{{{*/
 {
-	for (int i=0; !scaling2string[i].str.isNull(); i++)
+	for (int i=0; i<sizeof(scaling2string)/sizeof(int2qstring); i++)
 		if (scaling2string[i].v == s)
 			return scaling2string[i].str;
 	return scaling2string[0].str;
@@ -143,7 +146,7 @@ const QString& ComicBookSettings::convert(ComicImageView::Scaling s)/*{{{*/
 
 ComicImageView::Scaling ComicBookSettings::convertToScaling(const QString &s)/*{{{*/
 {
-	for (int i=0; !scaling2string[i].str.isNull(); i++)
+	for (int i=0; i<sizeof(scaling2string)/sizeof(int2qstring); i++)
 		if (scaling2string[i].str == s)
 			return static_cast<ComicImageView::Scaling>(scaling2string[i].v);
 	return ComicImageView::Smooth;
@@ -153,27 +156,26 @@ void ComicBookSettings::load()/*{{{*/
 {
 	QString str_scaling;
 	
-	cfg->beginGroup(OPT_WINDOW);
+	cfg->beginGroup(GRP_WINDOW);
 		x = cfg->readNumEntry(OPT_X, 0);
 		y = cfg->readNumEntry(OPT_Y, 0);
 		w = cfg->readNumEntry(OPT_WIDTH, 640);
 		h = cfg->readNumEntry(OPT_HEIGHT, 400);
 		docklayout = cfg->readEntry(OPT_DOCKLAYOUT, QString::null);
 	cfg->endGroup();
-	cfg->beginGroup(OPT_VIEW);
+	cfg->beginGroup(GRP_VIEW);
 		twopages = cfg->readBoolEntry(OPT_TWOPAGES, false);
 		scrollbars = cfg->readBoolEntry(OPT_SCROLLBARS, false);
 		scaling = convertToScaling(cfg->readEntry(OPT_SCALING, size2string[0].str));
 		pagesize = convertToSize(cfg->readEntry(OPT_PAGESIZE, size2string[0].str));
 		bgcolor.setNamedColor(cfg->readEntry(OPT_BACKGROUND, "#000000"));
-		fscrhidetoolbar = cfg->readBoolEntry(OPT_FULLSCREENHIDETOOLBAR, true);
 		fscrhidemenu = cfg->readBoolEntry(OPT_FULLSCREENHIDEMENU, true);
-		fscrhidescroll = cfg->readBoolEntry(OPT_FULLSCREENHIDESCROLLBARS, true);
+		statusbar = cfg->readBoolEntry(OPT_STATUSBAR, true);
 	cfg->endGroup();
-	cfg->beginGroup(OPT_NAVI);
+	cfg->beginGroup(GRP_NAVI);
 		contscroll = cfg->readBoolEntry(OPT_CONTSCROLL, true);
 	cfg->endGroup();
-	cfg->beginGroup(OPT_MISC);
+	cfg->beginGroup(GRP_MISC);
 		lastdir = cfg->readEntry(OPT_LASTDIR, QString::null);
 		recent = cfg->readListEntry(OPT_RECENT);
 		cachesize = cfg->readNumEntry(OPT_CACHESIZE, 3);
@@ -260,19 +262,14 @@ bool ComicBookSettings::getAutoInfo() const/*{{{*/
 	return autoinfo;
 }/*}}}*/
 
-bool ComicBookSettings::getFullScreenHideToolbar() const/*{{{*/
-{
-	return fscrhidetoolbar;
-}/*}}}*/
-
 bool ComicBookSettings::getFullScreenHideMenu() const/*{{{*/
 {
 	return fscrhidemenu;
 }/*}}}*/
 
-bool ComicBookSettings::getFullScreenHideScrollbars() const/*{{{*/
+bool ComicBookSettings::getShowStatusbar() const/*{{{*/
 {
-	return fscrhidescroll;
+	return statusbar;
 }/*}}}*/
 
 void ComicBookSettings::restoreDockLayout(QMainWindow *w)/*{{{*/
@@ -284,26 +281,26 @@ void ComicBookSettings::restoreDockLayout(QMainWindow *w)/*{{{*/
 void ComicBookSettings::setTwoPagesMode(bool f)/*{{{*/
 {
 	if (f != twopages)
-		cfg->writeEntry(OPT_VIEW OPT_TWOPAGES, twopages = f);
+		cfg->writeEntry(GRP_VIEW OPT_TWOPAGES, twopages = f);
 }/*}}}*/
 
 void ComicBookSettings::setContinuousScrolling(bool f)/*{{{*/
 {
 	if (f != contscroll)
-		cfg->writeEntry(OPT_NAVI OPT_CONTSCROLL, contscroll = f);
+		cfg->writeEntry(GRP_NAVI OPT_CONTSCROLL, contscroll = f);
 }/*}}}*/
 
 void ComicBookSettings::setScrollbarsVisible(bool f)/*{{{*/
 {
 	if (f != scrollbars)
-		cfg->writeEntry(OPT_VIEW OPT_SCROLLBARS, scrollbars = f);
+		cfg->writeEntry(GRP_VIEW OPT_SCROLLBARS, scrollbars = f);
 }/*}}}*/
 
 void ComicBookSettings::setGeometry(const QRect g)/*{{{*/
 {
 	if (x != g.x() || y != g.y() || w != g.width() || h != g.height())
 	{
-		cfg->beginGroup(OPT_WINDOW);
+		cfg->beginGroup(GRP_WINDOW);
 		cfg->writeEntry(OPT_X, x = g.x());
 		cfg->writeEntry(OPT_Y, y = g.y());
 		cfg->writeEntry(OPT_WIDTH, w = g.width());
@@ -315,14 +312,14 @@ void ComicBookSettings::setGeometry(const QRect g)/*{{{*/
 void ComicBookSettings::setPageSize(ComicImageView::Size s)/*{{{*/
 {
 	if (s != pagesize)
-		cfg->writeEntry(OPT_VIEW OPT_PAGESIZE, convert(pagesize = s));
+		cfg->writeEntry(GRP_VIEW OPT_PAGESIZE, convert(pagesize = s));
 }/*}}}*/
 
 void ComicBookSettings::setScaling(ComicImageView::Scaling s)/*{{{*/
 {
 	if (s != scaling)
 	{
-		cfg->writeEntry(OPT_VIEW OPT_SCALING, convert(scaling = s));
+		cfg->writeEntry(GRP_VIEW OPT_SCALING, convert(scaling = s));
 		emit scalingMethodChanged(scaling);
 	}
 }/*}}}*/
@@ -330,13 +327,13 @@ void ComicBookSettings::setScaling(ComicImageView::Scaling s)/*{{{*/
 void ComicBookSettings::setLastDir(const QString &d)/*{{{*/
 {
 	if (lastdir != d)
-		cfg->writeEntry(OPT_MISC OPT_LASTDIR, lastdir = d);
+		cfg->writeEntry(GRP_MISC OPT_LASTDIR, lastdir = d);
 }/*}}}*/
 
 void ComicBookSettings::setRecentlyOpened(const History &hist)/*{{{*/
 {
 	recent = hist;
-	cfg->writeEntry(OPT_MISC OPT_RECENT, recent.getAll());
+	cfg->writeEntry(GRP_MISC OPT_RECENT, recent.getAll());
 }/*}}}*/
 
 void ComicBookSettings::setBackground(const QColor &color)/*{{{*/
@@ -344,7 +341,7 @@ void ComicBookSettings::setBackground(const QColor &color)/*{{{*/
 	if (color != bgcolor)
 	{
 		bgcolor = color;
-		cfg->writeEntry(OPT_VIEW OPT_BACKGROUND, bgcolor.name());
+		cfg->writeEntry(GRP_VIEW OPT_BACKGROUND, bgcolor.name());
 		emit backgroundChanged(bgcolor);
 	}
 }/*}}}*/
@@ -352,55 +349,49 @@ void ComicBookSettings::setBackground(const QColor &color)/*{{{*/
 void ComicBookSettings::setCacheSize(int s)/*{{{*/
 {
 	if (s != cachesize)
-		cfg->writeEntry(OPT_MISC OPT_CACHESIZE, cachesize = s);
+		cfg->writeEntry(GRP_MISC OPT_CACHESIZE, cachesize = s);
 }/*}}}*/
 
 void ComicBookSettings::setCacheThumbnails(bool f)/*{{{*/
 {
 	if (f != cachethumbs)
-		cfg->writeEntry(OPT_MISC OPT_CACHETHUMBS, cachethumbs = f);
+		cfg->writeEntry(GRP_MISC OPT_CACHETHUMBS, cachethumbs = f);
 }/*}}}*/
 
 void ComicBookSettings::setThumbnailsAge(int n)/*{{{*/
 {
 	if (n != thumbsage)
-		cfg->writeEntry(OPT_MISC OPT_THUMBSAGE, thumbsage = n);
+		cfg->writeEntry(GRP_MISC OPT_THUMBSAGE, thumbsage = n);
 }/*}}}*/
 
 void ComicBookSettings::setPreload(bool f)/*{{{*/
 {
 	if (f != preload)
-		cfg->writeEntry(OPT_MISC OPT_PRELOAD, preload = f);
+		cfg->writeEntry(GRP_MISC OPT_PRELOAD, preload = f);
 }/*}}}*/
 
 void ComicBookSettings::setConfirmExit(bool f)/*{{{*/
 {
 	if (f != confirmexit)
-		cfg->writeEntry(OPT_MISC OPT_CONFIRMEXIT, confirmexit = f);
+		cfg->writeEntry(GRP_MISC OPT_CONFIRMEXIT, confirmexit = f);
 }/*}}}*/
 
 void ComicBookSettings::setAutoInfo(bool f)/*{{{*/
 {
 	if (f != autoinfo)
-		cfg->writeEntry(OPT_MISC OPT_AUTOINFO, autoinfo = f);
-}/*}}}*/
-
-void ComicBookSettings::setFullScreenHideToolbar(bool f)/*{{{*/
-{
-	if (f != fscrhidetoolbar)
-		cfg->writeEntry(OPT_VIEW OPT_FULLSCREENHIDETOOLBAR, fscrhidetoolbar = f);
+		cfg->writeEntry(GRP_MISC OPT_AUTOINFO, autoinfo = f);
 }/*}}}*/
 
 void ComicBookSettings::setFullScreenHideMenu(bool f)/*{{{*/
 {
 	if (f != fscrhidemenu)
-		cfg->writeEntry(OPT_VIEW OPT_FULLSCREENHIDEMENU, fscrhidemenu = f);
+		cfg->writeEntry(GRP_VIEW OPT_FULLSCREENHIDEMENU, fscrhidemenu = f);
 }/*}}}*/
 
-void ComicBookSettings::setFullScreenHideScrollbars(bool f)/*{{{*/
+void ComicBookSettings::setShowStatusbar(bool f)/*{{{*/
 {
-	if (f != fscrhidescroll)
-		cfg->writeEntry(OPT_VIEW OPT_FULLSCREENHIDESCROLLBARS, fscrhidescroll = f);
+	if (f != statusbar)
+		cfg->writeEntry(GRP_VIEW OPT_STATUSBAR, statusbar = f);
 }/*}}}*/
 
 void ComicBookSettings::saveDockLayout(QMainWindow *w)/*{{{*/
@@ -408,6 +399,6 @@ void ComicBookSettings::saveDockLayout(QMainWindow *w)/*{{{*/
 	QString tmp;
 	QTextStream str(&tmp, IO_WriteOnly);
 	str << *w;
-	cfg->writeEntry(OPT_WINDOW OPT_DOCKLAYOUT, tmp);
+	cfg->writeEntry(GRP_WINDOW OPT_DOCKLAYOUT, tmp);
 }/*}}}*/
 

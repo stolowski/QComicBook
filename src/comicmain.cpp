@@ -52,10 +52,12 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	setMinimumSize(320, 200);
 
 	recentfiles = new History(10);
-	cfg = new ComicBookSettings();
+	cfg = &ComicBookSettings::instance();
 	cfg->load();
 
 	setGeometry(cfg->getGeometry());
+
+	statusbar = new StatusBar(this);
 
 	//
 	// comic view
@@ -142,6 +144,11 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	toggleToolbarAction->setToggleAction(true);
 	connect(toggleToolbarAction, SIGNAL(toggled(bool)), this, SLOT(toggleToolbar(bool)));
 	
+	toggleStatusbarAction = new QAction(tr("Statusbar"), QKeySequence(), this);
+	toggleStatusbarAction->setToggleAction(true);
+	connect(toggleStatusbarAction, SIGNAL(toggled(bool)), statusbar, SLOT(setShown(bool)));
+	toggleStatusbarAction->setOn(cfg->getShowStatusbar());
+	
 	QAction *which = originalSizeAction;
 	switch (cfg->getPageSize())
 	{
@@ -209,6 +216,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	view_menu->setItemChecked(twopages_id, cfg->getTwoPagesMode());
 	view_menu->setItemChecked(scrv_id, f = cfg->getScrollbarsVisible());
 	view->enableScrollbars(f);
+	toggleStatusbarAction->addTo(view_menu);
 	menuBar()->insertItem(tr("&View"), view_menu);
 	
 	//
@@ -282,7 +290,6 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	*recentfiles = cfg->getRecentlyOpened();
 	setRecentFilesMenu(*recentfiles);
 
-	statusbar = new StatusBar(this);
 
 	cfg->restoreDockLayout(this);
 }/*}}}*/
@@ -300,10 +307,10 @@ ComicMainWindow::~ComicMainWindow()/*{{{*/
 	cfg->setLastDir(lastdir);
 	cfg->setRecentlyOpened(*recentfiles);
 	cfg->setPageSize(view->getSize());
+	cfg->setShowStatusbar(toggleStatusbarAction->isOn());
 	
 	bookmarks->save();
 
-	delete cfg;
 	delete recentfiles;
 	delete bookmarks;
 

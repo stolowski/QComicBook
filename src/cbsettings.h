@@ -46,6 +46,7 @@ class ComicBookSettings: public QObject
 		bool cachethumbs;
 		bool autoinfo;
 		bool confirmexit;
+		bool statusbar;
 		QString docklayout;
 		
 		static QString bkpath; //bookmarks path
@@ -69,12 +70,12 @@ class ComicBookSettings: public QObject
 		void backgroundChanged(const QColor &color);
 		void scalingMethodChanged(ComicImageView::Scaling s);
 
-	public:
+	private:
 		ComicBookSettings();
 		~ComicBookSettings();
 
+	public:
 		void load();
-
 		bool getTwoPagesMode() const;
 		bool getContinuousScrolling() const;
 		bool getScrollbarsVisible() const;
@@ -90,9 +91,8 @@ class ComicBookSettings: public QObject
 		bool getPreload() const;
 		bool getConfirmExit() const;
 		bool getAutoInfo() const;
-		bool getFullScreenHideToolbar() const;
 		bool getFullScreenHideMenu() const;
-		bool getFullScreenHideScrollbars() const;
+		bool getShowStatusbar() const;
 		void restoreDockLayout(QMainWindow *w);
 
 		void setTwoPagesMode(bool f);
@@ -110,11 +110,12 @@ class ComicBookSettings: public QObject
 		void setPreload(bool f);
 		void setConfirmExit(bool f);
 		void setAutoInfo(bool f);
-		void setFullScreenHideToolbar(bool f);
 		void setFullScreenHideMenu(bool f);
-		void setFullScreenHideScrollbars(bool f);
+		void setShowStatusbar(bool f);
 		void saveDockLayout(QMainWindow *w);
 		
+		static ComicBookSettings& instance();
+
 		//
 		// checks and creates .qcomicbook/ and cache subdirectories if
 		// necessary

@@ -54,6 +54,7 @@ class ComicMainWindow: public QMainWindow
 		StatusBar *statusbar;
 		QAction *toggleThumbnailsAction;
 		QAction *toggleToolbarAction;
+		QAction *toggleStatusbarAction;
 		
 	protected:
 		void keyPressEvent(QKeyEvent *e);
