@@ -17,13 +17,8 @@
 #include <qstring.h>
 #include <qpainter.h>
 #include <qptrvector.h>
-#include <qtimer.h>
 #include <qpopupmenu.h>
-
-#define THUMBNAILS_TMR_DELAY 300
-
-int ThumbnailsView::thwidth = 100;
-int ThumbnailsView::thheight = 120;
+#include "thumbnail.h"
 
 ThumbnailsView::ThumbnailsView(QWidget *parent): QIconView(parent), selected(NULL)/*{{{*/
 {
@@ -32,7 +27,7 @@ ThumbnailsView::ThumbnailsView(QWidget *parent): QIconView(parent), selected(NUL
 	arrangeItemsInGrid(true);
 	setAutoArrange(true);
 	setResizeMode(QIconView::Adjust);
-	setMaxItemWidth(thwidth);
+	setMaxItemWidth(Thumbnail::maxWidth());
 
 	//
 	// context menu
@@ -41,43 +36,20 @@ ThumbnailsView::ThumbnailsView(QWidget *parent): QIconView(parent), selected(NUL
 	
 	//
 	// create "empty page" image
-	emptypage = new QPixmap(thwidth, thheight);
+	emptypage = new QPixmap(Thumbnail::maxWidth(), Thumbnail::maxHeight());
 	emptypage->fill(Qt::white);
 	QPainter paint(emptypage);
 	QPen pen(Qt::black, 3);
 	paint.setPen(pen);
-	paint.drawRect(0, 0, thwidth, thheight);
+	paint.drawRect(0, 0, Thumbnail::maxWidth(), Thumbnail::maxHeight());
 
-	connect(this, SIGNAL(contentsMoving(int, int)), this, SLOT(onContentsMoving(int, int)));
 	connect(this, SIGNAL(doubleClicked(QIconViewItem *)), this, SLOT(onDoubleClick(QIconViewItem *)));
 	connect(this, SIGNAL(contextMenuRequested(QIconViewItem *, const QPoint&)), this, SLOT(showContextMenu(QIconViewItem *, const QPoint&)));
-
-	timer = new QTimer();
-	connect(timer, SIGNAL(timeout()), this, SLOT(updateVisibleThumbnails()));
 }/*}}}*/
 
 ThumbnailsView::~ThumbnailsView()/*{{{*/
 {
-	delete timer;
 	delete emptypage;
-}/*}}}*/
-
-void ThumbnailsView::onContentsMoving(int x, int y)/*{{{*/
-{
-	//
-	// find all visible thumbnails
-	const QRect rect(x, y, visibleWidth(), visibleHeight());
-
-	ThumbnailItem *it = dynamic_cast<ThumbnailItem *>(findFirstVisibleItem(rect)); 
-	const ThumbnailItem *last = dynamic_cast<ThumbnailItem *>(findLastVisibleItem(rect));
-	while (it)
-	{
-		if (!it->isLoaded())
-			emit requestedThumbnail(it->page());
-		if (it == last)
-			break;
-		it = dynamic_cast<ThumbnailItem *>(it->nextItem());
-	}
 }/*}}}*/
 
 void ThumbnailsView::onDoubleClick(QIconViewItem *item)/*{{{*/
@@ -94,8 +66,6 @@ void ThumbnailsView::setPages(int pages)/*{{{*/
 		icons.insert(i, new ThumbnailItem(this, i, *emptypage));
 
 	setArrangement(visibleWidth() > visibleHeight() ? QIconView::TopToBottom : QIconView::LeftToRight);
-
-	timer->start(THUMBNAILS_TMR_DELAY, true);
 }/*}}}*/
 
 void ThumbnailsView::setPage(int n, const QImage &img)/*{{{*/
@@ -103,7 +73,12 @@ void ThumbnailsView::setPage(int n, const QImage &img)/*{{{*/
 	ThumbnailItem *th = icons[n];
 	th->setPixmap(img);
 	th->setLoaded(true);
-	repaint(th);
+	//repaint(th);
+}/*}}}*/
+
+void ThumbnailsView::setPage(const Thumbnail &t)/*{{{*/
+{
+	setPage(t.page(), t.image());
 }/*}}}*/
 
 void ThumbnailsView::clear()/*{{{*/
@@ -125,22 +100,6 @@ void ThumbnailsView::scrollToPage(int n)/*{{{*/
 	}
 }/*}}}*/
 
-int ThumbnailsView::thumbnailWidth()/*{{{*/
-{
-	return thwidth;
-}/*}}}*/
-
-int ThumbnailsView::thumbnailHeight()/*{{{*/
-{
-	return thheight;
-}/*}}}*/
-
-void ThumbnailsView::updateVisibleThumbnails()/*{{{*/
-{
-	if (isVisible())
-		onContentsMoving(0, 0);
-}/*}}}*/
-
 void ThumbnailsView::showContextMenu(QIconViewItem *item, const QPoint &p)/*{{{*/
 {
 	if (item)
@@ -154,11 +113,5 @@ void ThumbnailsView::goToPageAction()/*{{{*/
 {
 	if (selected)
 		onDoubleClick(selected);
-}/*}}}*/
-
-void ThumbnailsView::adjustItems()/*{{{*/
-{
-	QIconView::adjustItems();
-	updateVisibleThumbnails();
 }/*}}}*/
 

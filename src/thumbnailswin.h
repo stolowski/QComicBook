@@ -29,12 +29,13 @@ class ThumbnailsWindow: public QDockWindow
 		void requestedPage(int n, bool force);
 
 	protected slots:
-		void onVisibilityChanged(bool);
 		void onOrientationChanged(Orientation o);
 
 	public:
 		ThumbnailsWindow(Place p=InDock, QWidget *parent=0);
 		virtual ~ThumbnailsWindow();
+
+		void customEvent(QCustomEvent *e);
 	
 	public slots:
 		void setPages(int pages);

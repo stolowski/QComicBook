@@ -73,7 +73,6 @@ class ComicMainWindow: public QMainWindow
 		void toggleContinousScroll();
 		void thumbnailsVisibilityChanged(bool f);
 		void toolbarVisibilityChanged(bool f);
-		void updateThumbnail(int n);
 
 	public slots:
 		void firstPage();

@@ -20,24 +20,26 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qtextstream.h>
-//#include <iostream>
-
 #include <utime.h>
 
 ImgDirSink::ImgDirSink(int cachesize): ImgSink(), cachemtx(true)/*{{{*/
 {
+	thloader.setSink(this);
 	cache = new ImgCache(cachesize);
 }/*}}}*/
 
 ImgDirSink::ImgDirSink(const QString &path, int cachesize): cachemtx(true), dirpath(QString::null)/*{{{*/
 {
+	thloader.setSink(this);
 	cache = new ImgCache(cachesize);
 	open(path);
 }/*}}}*/
 
 ImgDirSink::~ImgDirSink()/*{{{*/
 {
+	thloader.stop();
 	wait(); //wait for preload thread
+	thloader.wait(); //wait for thumbnail loader thread
 	close();
 	delete cache;
 }/*}}}*/
@@ -227,7 +229,6 @@ QImage ImgDirSink::getImage(unsigned int num, int &result, int preload)/*{{{*/
 		if (img = cache->find(imgfiles[num]))
 		{
 			result = 0;
-			//std::cout << "found in cache: " << imgfiles[num] << std::endl;
 			rimg = *img;
 		}
 		else		
@@ -235,7 +236,6 @@ QImage ImgDirSink::getImage(unsigned int num, int &result, int preload)/*{{{*/
 			if (rimg.load(imgfiles[num]))
 			{
 				result = 0;
-				//std::cout << "not in cache: " << imgfiles[num] << std::endl;
 				if (cache->maxCost() > 0)
 					cache->insert(imgfiles[num], &rimg);
 			}
@@ -274,10 +274,8 @@ QImage ImgDirSink::getThumbnail(unsigned int num, int w, int h, int &result, boo
 	if (thumbcache)
 	{
 		thname = ComicBookSettings::thumbnailsDir() + "/" + cbname.remove('/') + QString::number(num) + ".jpg";
-		//std::cout << thname << std::endl;
 		if (rimg.load(thname) && rimg.width()<=w && rimg.height()>=h)
 		{
-			//std::cout << "thumbnail from cache\n";
 			result = 1;
 			//
 			// "touch" the file
@@ -299,10 +297,25 @@ QImage ImgDirSink::getThumbnail(unsigned int num, int w, int h, int &result, boo
 		cachemtx.unlock();
 		result = rimg.load(imgfiles[num]);
 	}
-	const QImage tmp(rimg.scale(w, h, QImage::ScaleMin));
+	const QImage tmp(rimg.smoothScale(w, h, QImage::ScaleMin));
 	if (thumbcache)
 		tmp.save(thname, "JPEG", 75);
 	return tmp;
+}/*}}}*/
+
+void ImgDirSink::setThumbnailReciever(QObject *rcv)/*{{{*/
+{
+	thloader.setReciever(rcv);
+}/*}}}*/
+
+void ImgDirSink::requestThumbnail(int num)/*{{{*/
+{
+	thloader.requestThumbnail(num);
+}/*}}}*/
+
+void ImgDirSink::requestThumbnails(int first, int n)/*{{{*/
+{
+	thloader.requestThumbnails(first, n);
 }/*}}}*/
 
 int ImgDirSink::numOfImages() const/*{{{*/
@@ -318,6 +331,11 @@ QStringList ImgDirSink::getAllfiles() const/*{{{*/
 QStringList ImgDirSink::getAlldirs() const/*{{{*/
 {
 	return dirs;
+}/*}}}*/
+
+QStringList ImgDirSink::getAllimgfiles() const/*{{{*/
+{
+	return imgfiles;
 }/*}}}*/
 
 void ImgDirSink::run()/*{{{*/
@@ -353,5 +371,10 @@ void ImgDirSink::removeThumbnails(int days)/*{{{*/
 		if (finfo.lastModified().daysTo(currdate) > days)
 			dir.remove(*it);
 	}
+}/*}}}*/
+
+ThumbnailLoader& ImgDirSink::thumbnailLoader()/*{{{*/
+{
+	return thloader;
 }/*}}}*/
 

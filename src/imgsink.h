@@ -26,6 +26,11 @@ class ImgSink: public QObject
 		void sinkReady(const QString &path);
 		void sinkError(int code);
 
+	public slots:
+		virtual void setThumbnailReciever(QObject *rcv) = 0;
+		virtual void requestThumbnail(int num) = 0;
+		virtual void requestThumbnails(int first, int n) = 0;
+
 	public:
 		ImgSink();
 		virtual ~ImgSink();

@@ -39,7 +39,7 @@
 #include <jumptopagewin.h>
 #include <qdockwindow.h>
 #include "thumbnailswin.h"
-#include "thumbnailsview.h"
+#include "thumbnailloader.h"
 
 ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WType_TopLevel|WDestructiveClose), sink(NULL), currpage(0)/*{{{*/
 {
@@ -64,7 +64,6 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	//
 	// thumbnails view
 	thumbswin = new ThumbnailsWindow(QDockWindow::InDock, this);
-	connect(thumbswin, SIGNAL(requestedThumbnail(int)), this, SLOT(updateThumbnail(int)));
 	connect(thumbswin, SIGNAL(requestedPage(int, bool)), this, SLOT(jumpToPage(int, bool)));
 	connect(thumbswin, SIGNAL(visibilityChanged(bool)), this, SLOT(thumbnailsVisibilityChanged(bool)));
 	
@@ -433,11 +432,15 @@ void ComicMainWindow::sinkReady(const QString &path)/*{{{*/
 
 	thumbswin->setPages(sink->numOfImages());
 
-	//currpage = 0;
+	//
+	// request thumbnails for all pages
+	const int max = sink->numOfImages();
+	sink->requestThumbnails(0, sink->numOfImages());
+
 	jumpToPage(currpage, true);
 	if (cfg->getAutoInfo())
 		showInfo();
-	}/*}}}*/
+}/*}}}*/
 
 void ComicMainWindow::sinkError(int code)/*{{{*/
 {
@@ -497,7 +500,9 @@ void ComicMainWindow::openDir(const QString &name)/*{{{*/
 	closeSink();
 	WaitDialog *win = new WaitDialog(this, "QComicBook", tr("Please wait. Reading directory"));
 	win->show();
-	sink = new ImgDirSink(cfg->getCacheSize());
+	ImgDirSink *dsink = new ImgDirSink(cfg->getCacheSize());
+	dsink->thumbnailLoader().setReciever(thumbswin);
+	sink = dsink;
 	connect(sink, SIGNAL(sinkReady(const QString&)), win, SLOT(close()));
 	connect(sink, SIGNAL(sinkError(int)), win, SLOT(close()));
 	connect(sink, SIGNAL(sinkReady(const QString&)), this, SLOT(sinkReady(const QString&)));
@@ -519,7 +524,9 @@ void ComicMainWindow::openArchive(const QString &name)/*{{{*/
 	closeSink();
 	WaitDialog *win = new WaitDialog(this, "QComicBook", tr("Please wait. Decompressing"));
 	win->show();
-	sink = new ImgArchiveSink(cfg->getCacheSize());
+	ImgArchiveSink *asink = new ImgArchiveSink(cfg->getCacheSize());
+	asink->thumbnailLoader().setReciever(thumbswin);
+	sink = asink;
 	connect(sink, SIGNAL(sinkReady(const QString&)), win, SLOT(close()));
 	connect(sink, SIGNAL(sinkError(int)), win, SLOT(close()));
 	connect(sink, SIGNAL(sinkReady(const QString&)), this, SLOT(sinkReady(const QString&)));
@@ -732,16 +739,5 @@ void ComicMainWindow::bookmarkSelected(int id)/*{{{*/
 bool ComicMainWindow::isTwoPagesModeEnabled() const/*{{{*/
 {
 	return view_menu->isItemChecked(twopages_id);
-}/*}}}*/
-
-void ComicMainWindow::updateThumbnail(int n)/*{{{*/
-{
-	if (sink)
-	{
-		int result;
-		QImage img = sink->getThumbnail(n, ThumbnailsView::thumbnailWidth(), ThumbnailsView::thumbnailHeight(), result, cfg->getCacheThumbnails());
-		if (result)
-			thumbswin->setPage(n, img);
-	}
 }/*}}}*/
 

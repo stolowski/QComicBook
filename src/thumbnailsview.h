@@ -19,8 +19,8 @@
 
 class QPixmap;
 class QIconViewItem;
-class QTimer;
 class QPopupMenu;
+class Thumbnail;
 
 class ThumbnailsView: public QIconView
 {
@@ -30,35 +30,27 @@ class ThumbnailsView: public QIconView
 		int numpages;
 		QPixmap *emptypage;
 		QPtrVector<ThumbnailItem> icons;
-		QTimer *timer;
 		QPopupMenu *menu;
 		QIconViewItem *selected;
-		static int thwidth, thheight; //default thumbnail width and height
 
 	signals:
-		void requestedThumbnail(int n);
 		void requestedPage(int n, bool force);
 
 	protected slots:
-		void onContentsMoving(int x, int y);
 		void onDoubleClick(QIconViewItem *item);
 		void showContextMenu(QIconViewItem *item, const QPoint &p);
 		void goToPageAction();
-		void adjustItems();
 
 	public:
 		ThumbnailsView(QWidget *parent);
 		virtual ~ThumbnailsView();
-
-		static int thumbnailWidth();
-		static int thumbnailHeight();
-
+		
 	public slots:
 		void setPages(int pages);
 		void setPage(int n, const QImage &img);
+		void setPage(const Thumbnail &t);
 		void clear();
 		void scrollToPage(int n);
-		void updateVisibleThumbnails();
 };
 
 #endif

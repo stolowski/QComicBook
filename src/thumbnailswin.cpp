@@ -12,6 +12,8 @@
 
 #include "thumbnailswin.h"
 #include "thumbnailsview.h"
+#include "thumbnailloader.h"
+#include "thumbnail.h"
 
 ThumbnailsWindow::ThumbnailsWindow(Place p, QWidget *parent): QDockWindow(p, parent)/*{{{*/
 {
@@ -21,14 +23,22 @@ ThumbnailsWindow::ThumbnailsWindow(Place p, QWidget *parent): QDockWindow(p, par
 
 	view = new ThumbnailsView(this);
 	setWidget(view);
-	connect(view, SIGNAL(requestedThumbnail(int)), this, SIGNAL(requestedThumbnail(int)));
 	connect(view, SIGNAL(requestedPage(int, bool)), this, SIGNAL(requestedPage(int, bool)));
-	connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(onVisibilityChanged(bool)));
 	connect(this, SIGNAL(orientationChanged(Orientation)), this, SLOT(onOrientationChanged(Orientation)));
 }/*}}}*/
 
 ThumbnailsWindow::~ThumbnailsWindow()/*{{{*/
 {
+}/*}}}*/
+
+void ThumbnailsWindow::customEvent(QCustomEvent *e)/*{{{*/
+{
+	if (e->type() == ThumbnailReady)
+	{
+		Thumbnail *t = static_cast<Thumbnail *>(e->data());
+		setPage(t->page(), t->image());
+		delete t;
+	}
 }/*}}}*/
 
 void ThumbnailsWindow::setPages(int pages)/*{{{*/
@@ -49,12 +59,6 @@ void ThumbnailsWindow::clear()/*{{{*/
 void ThumbnailsWindow::scrollToPage(int n)/*{{{*/
 {
 	view->scrollToPage(n);
-}/*}}}*/
-
-void ThumbnailsWindow::onVisibilityChanged(bool f)/*{{{*/
-{
-	if (f)
-		view->updateVisibleThumbnails();
 }/*}}}*/
 
 void ThumbnailsWindow::onOrientationChanged(Orientation o)/*{{{*/

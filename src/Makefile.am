@@ -32,7 +32,9 @@ dist_qcomicbook_SOURCES = aboutdialog.cpp \
 		      main.cpp \
 		      miscutil.cpp \
 		      pagenumberedit.cpp \
+		      thumbnail.cpp \
 		      thumbnailitem.cpp \
+		      thumbnailloader.cpp \
 		      thumbnailswin.cpp \
 		      thumbnailsview.cpp \
 		      waitdialog.cpp
@@ -57,7 +59,9 @@ noinst_HEADERS = aboutdialog.h \
 		 jumptopagewin.h \
 		 miscutil.h \
 		 pagenumberedit.h \
+		 thumbnail.h \
 		 thumbnailitem.h \
+		 thumbnailloader.h \
 		 thumbnailswin.h \
 		 thumbnailsview.h \
 		 waitdialog.h

@@ -18,6 +18,7 @@
 #include <qstringlist.h>
 #include <qmutex.h>
 #include <qthread.h>
+#include "thumbnailloader.h"
 #include "imgsink.h"
 
 //
@@ -43,6 +44,9 @@ class ImgDirSink: public ImgSink, protected QThread
 {
 	Q_OBJECT
 		
+	private:
+		ThumbnailLoader thloader;
+		
 	protected:
 		mutable QMutex cachemtx; //mutex for cache, pre, precnt
 		ImgCache *cache;
@@ -61,9 +65,13 @@ class ImgDirSink: public ImgSink, protected QThread
 
 		virtual void run();
 
-	protected:
 		void setComicBookName(const QString &name);
 		
+	public slots:
+		virtual void setThumbnailReciever(QObject *rcv);
+		virtual void requestThumbnail(int num);
+		virtual void requestThumbnails(int first, int n);
+
 	public:
 		ImgDirSink(int cachesize=1);
 		ImgDirSink(const QString &path, int cachesize=1);
@@ -81,6 +89,9 @@ class ImgDirSink: public ImgSink, protected QThread
 
 		virtual QStringList getAllfiles() const;
 		virtual QStringList getAlldirs() const;
+		virtual QStringList getAllimgfiles() const;
+
+		virtual ThumbnailLoader& thumbnailLoader();
 
 		//
 		// removes old thumbnails
