@@ -37,13 +37,7 @@ class ThumbnailsWindow: public QDockWindow
 	public:
 		ThumbnailsWindow(Place p=InDock, QWidget *parent=0);
 		virtual ~ThumbnailsWindow();
-		const ThumbnailsView& view() const;
-	
-	public slots:
-		void setPages(int pages);
-		void setPage(int n, const QImage &img);
-		void clear();
-		void scrollToPage(int n);
+		ThumbnailsView* view() const;
 };
 
 #endif

@@ -36,29 +36,9 @@ void ThumbnailsWindow::customEvent(QCustomEvent *e)/*{{{*/
 	if (e->type() == ThumbnailReady)
 	{
 		Thumbnail *t = static_cast<Thumbnail *>(e->data());
-		setPage(t->page(), t->image());
+		tview->setPage(t->page(), t->image());
 		delete t;
 	}
-}/*}}}*/
-
-void ThumbnailsWindow::setPages(int pages)/*{{{*/
-{
-	tview->setPages(pages);
-}/*}}}*/
-
-void ThumbnailsWindow::setPage(int n, const QImage &img)/*{{{*/
-{
-	tview->setPage(n, img);
-}/*}}}*/
-
-void ThumbnailsWindow::clear()/*{{{*/
-{
-	tview->clear();
-}/*}}}*/
-
-void ThumbnailsWindow::scrollToPage(int n)/*{{{*/
-{
-	tview->scrollToPage(n);
 }/*}}}*/
 
 void ThumbnailsWindow::onOrientationChanged(Orientation o)/*{{{*/
@@ -66,8 +46,8 @@ void ThumbnailsWindow::onOrientationChanged(Orientation o)/*{{{*/
 	tview->setArrangement(o == Qt::Horizontal ? QIconView::TopToBottom : QIconView::LeftToRight);
 }/*}}}*/
 
-const ThumbnailsView& ThumbnailsWindow::view() const/*{{{*/
+ThumbnailsView* ThumbnailsWindow::view() const/*{{{*/
 {
-	return *tview;
+	return tview;
 }/*}}}*/
 

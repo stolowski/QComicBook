@@ -35,7 +35,6 @@ JumpToPageWindow::JumpToPageWindow(QWidget *parent, int value, int max): QDialog
 	connect(b_ok, SIGNAL(clicked()), this, SLOT(close()));
 	b_ok->setDefault(true);
 	connect(pedit, SIGNAL(pageSelected(int)), this, SIGNAL(pageSelected(int)));
-	//connect(pedit, SIGNAL(pageSelected(int)), this, SLOT(close()));
 	pedit->setFocusPolicy(QWidget::StrongFocus);
 	pedit->setFocus();
 	pedit->deselect();

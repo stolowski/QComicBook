@@ -344,7 +344,7 @@ void ComicMainWindow::thumbnailsVisibilityChanged(bool f)/*{{{*/
 	{
 		int max = sink->numOfImages();
 		for (int i=0; i<max; i++)
-			if (!thumbswin->view().isLoaded(i))
+			if (!thumbswin->view()->isLoaded(i))
 				sink->requestThumbnail(i);
 	}
 }/*}}}*/
@@ -437,7 +437,7 @@ void ComicMainWindow::sinkReady(const QString &path)/*{{{*/
 
 	updateCaption();
 
-	thumbswin->setPages(sink->numOfImages());
+	thumbswin->view()->setPages(sink->numOfImages());
 
 	//
 	// request thumbnails for all pages
@@ -659,7 +659,7 @@ void ComicMainWindow::jumpToPage(int n, bool force)/*{{{*/
 			view->setImage(img);
 		}
 		pageinfo->setText("Page " + QString::number(currpage + 1) + "/" + QString::number(sink->numOfImages()));
-		thumbswin->scrollToPage(currpage);
+		thumbswin->view()->scrollToPage(currpage);
 	}
 }/*}}}*/
 
@@ -711,7 +711,7 @@ void ComicMainWindow::closeSink()/*{{{*/
 	if (sink)
 		sink->deleteLater();
 	sink = NULL;
-	thumbswin->clear();
+	thumbswin->view()->clear();
 	updateCaption();
 }/*}}}*/
 

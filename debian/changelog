@@ -1,3 +1,10 @@
+qcomicbook (0.1.7-0) unstable; urgency=low
+
+  * New Upstream Release.
+  * Changing package revision to -0 since it's not official
+
+ -- Michal Pena (Cyb.org) <mp@horisone.com>  Wed, 2 May 2005 21:11:02 +0100
+
 qcomicbook (0.1.6-1) unstable; urgency=low
 
   * New Upstream Release.
