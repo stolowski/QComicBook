@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=QComicBook
+Comment=Comic Book archives viewer
+Exec=qcomicbook
+Icon=qcomicbook.png
+Terminal=0
+Type=Application
+Encoding=UTF-8
+Categories=Application;Graphics;X-Red-Hat-Base;X-Red-Hat-Base-Only

@@ -1,0 +1,114 @@
+.TH "QCOMICBOOK" "1" "march 25, 2005" "Michal Pena (Cyb.org)" ""
+.SH "NAME"
+QComicBook \- QT viewer for comic book archives (cbr/cbz)
+.SH "SYNOPSIS"
+.B qcomicbook
+.RI [archive]
+[dir] ...
+.br 
+.SH "DESCRIPTION"
+QComicBook is a viewer for comic book archives containing jpeg/png/xpm/gif images, which aims at convenience and simplicity.
+.PP 
+Features include:
+ \- automatic decompression of zip, rar, cbz and cbr archives
+ \- full\-screen mode
+ \- two\-pages viewing
+ \- page scaling
+ \- mouse or keyboard navigation
+ \- bookmarks
+ \- thumbnails
+ \- page caching and page preloading
+ \- ... and more
+.PP 
+QComicBook software requirements:
+ \- rar/unrar (one of them) and zip/unzip available somewhere in the PATH (e.g. in /usr/bin)
+ \- a lot of disk space available in /tmp directory, for handling decompression of archives
+.SH "MENU"
+\fBFile\fR
+
+File menu provies basic operations for loading comic books:
+ \- Open directory \- open directory containg images
+ \- Open archive \- open archived images
+ \- Recently opened \- list of ten recently opened archives / directories (most recently opened on the top)
+ \- Info \- displays information about currenly opened comic book. This includes contents of file_id.diz *.nf o files (if any) as well as memory usage info
+ \- Settings \- allows you to fine\-tune some options
+ \- Close \- closes currently opened comic book
+ \- Quit \- quits QComicBook
+
+QComicBook offers some tunable options, available via Settings menu option. These options include:
+ \- Background color \- the color of the empty area around displayed image
+ \- Hide menubar in fullscreen mode \- menubar may be hidded in fullscreen mode if desired; together with toolbar hiding option, it may give you the whole screen for displaying page contents.
+ \- Scaling method \- the algorithm used for image scaling; either Smooth or Fast. Smooth scaling provides best quality, but is slower; it is recommened method unless you have really slow machine.
+ \- Cache size \- the number of pages kept in memory. Value of 0 disables caching; 1 has no effect on performance; 2 or more may improve your experience. Keep in mind, that caching may consume a lot of memory \- for example, an 1280x1984 image may take as much as 9Mb of memory!
+ \- Image preloading \- enables page preloading in the background. This setting takes effect only for cache size of 3 and greater. It is recommended to enable this option, as it may really improve overall experience.
+ \- Open info dialog after opening comic book \- when enabled, info dialog is opened after opening comic book. You may still open this dialog manually with File/Info menu option.
+ \- Confirm exit
+
+\fINote: changing cache size takes effect on new comic book.\fR
+
+\fBView\fR		
+
+View submenu provides some basic settings for page view.
+
+You can select one of the following scaling modes:
+ \- Original size \- no scaling is done and original image size is preserved
+ \- Fit width \- image is scaled to fit window width
+ \- Fit height \- image is scaled to fit window height
+ \- Whole page \- image is scaled to fit window
+ \- Best fit \- depending on image dimensions, QComicBook chooses the best method to scale image
+
+Other options in this menu:
+ \- Fullscreen \- toggles beetween fullscreen and windowed mode; please note, that depending on you settings, menubar may be hidden in fullscreen mode, so to back to windowed mode you need to press F11 or ESC key
+ \- Two pages \- display two pages, side by side, just like when reading normal book
+ \- Scrollbars \- toggles displaying of scrollbars for large pages; please note that scrollbars will be shown only if necessary
+ \- Toolbar \- toggles displaying of toolbar
+
+Settings in this menu are saved when quitting QComicBook (except for "fullscreen" option).
+
+\fBBookmarks\fR
+
+Bookmarks menu allows you to bookmark pages in comic books. These bookmarks are however somewhat different than, for example, in any webbrowser and are more similiar to real bookmarks. Each bookmark keeps bookmarked page number (as well as file name), so you can easily start with your comic book from the point, where you last stopped reading.
+
+Two options are available in this menu:
+ \- Set bookmark for this comicbook \- creates bookmark for current comic book; existing bookmark for this comic book is deleted
+ \- Remove bookmark for this comicbook \- removes existing bookmark for current comic book
+
+Below these options you can see the list of currently saved bookmarks. Just click on one of them to go to bookmarked comic book and page.
+.SH "KEYBOARD"
+Keyboard reference:
+ \- Ctrl+O    \- Open archive
+ \- Ctrl+D    \- Open directory
+ \- Alt+I     \- Show comicbook info
+ \- Arrows    \- Scroll page contents
+ \- PageDown  \- Go to next page
+ \- PageUp    \- Go to previous page
+ \- Home      \- Scroll to page top
+ \- End       \- Scroll to page bottom
+ \- Space     \- Scroll down by visible width (hint: enable \fBcontinuous scrolling\fR to jump to next page after reaching bottom)
+ \- Backspace \- Scroll up by visible width (hint: enable \fBcontinuous scrolling\fR)
+ \- Alt+O     \- Original image size
+ \- Alt+W     \- Fit page width
+ \- Alt+H     \- Fit page height
+ \- Alt+A     \- Show whole page
+ \- Alt+B     \- Best fit
+ \- Alt+T     \- Toggle thumbnails window
+ \- F11       \- Toggle fullscreen mode
+ \- ESC       \- Exit fullscreen mode
+.SH "INTERNALS"
+Here is some information for people interested in QComicBook internals.
+.PP 
+1. Settings handling
+
+QComicBook keeps settings in ~/.qcomicbook directory within these two files:
+ \- qcomicbookrc \- main configuration file
+ \- bookmarks \- bookmarks file
+
+Both files are plain text files and may be edited manually (with caution!), if needed.
+
+2. Archives handling
+
+Archived comic books are decompressed to temporary directory (/tmp/qcomicbook\-XXXXX, with XXXXX being some random number). This directory is purged when closing current comic book, opening a new one or quitting QComicBook.
+.SH "AUTHOR"
+QComicBook was written by Pawel Stolowski <pawel.stolowski@wp.pl>.
+.PP 
+This manual page was written by Michal Pena (Cyb.org) <mp@horisone.com>, for the Debian project (but may be used by others).

@@ -1,0 +1,31 @@
+# Process this file with autoconf to produce a configure script.
+AC_INIT(QComicBook, 0.1.6, yogin@linux.bydg.org)
+AM_INIT_AUTOMAKE(qcomicbook, 0.1.6)
+AC_CONFIG_HEADERS([src/config.h])
+AC_PREFIX_DEFAULT([/usr/local])
+
+# Checks for programs.
+AC_PROG_CXX
+AC_PROG_CC
+
+# Checks for libraries.
+
+# Checks for header files.
+AC_HEADER_STDC
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+
+# Checks for library functions.
+AC_PROG_GCC_TRADITIONAL
+AC_FUNC_VPRINTF
+
+BNV_HAVE_QT
+if test "x$have_qt" = "xno"
+then
+	AC_MSG_ERROR("Qt library is required to compile QComicBook!", 1)
+fi
+
+AC_CONFIG_FILES([Makefile src/Makefile icons/Makefile help/Makefile help/en/Makefile])
+AC_OUTPUT
+

@@ -1,0 +1,89 @@
+<h1>Menu</h1>
+
+<h2><a name="file">File</a></h2>
+<p>
+<b>File</b> menu provies basic operations for loading comic books:
+<ul>
+	<li>Open directory - open directory containg images
+	<li>Open archive - open archived images
+	<li>Recently opened - list of ten recently opened archives / directories (most
+	    recently opened on the top)
+	<li>Info - displays information about currenly opened comic book. This includes
+	contents of file_id.diz *.nfo files (if any) as well as memory usage info
+	<li>Settings - allows you to <a href="#settings">fine-tune some options</a>
+	<li>Close - closes currently opened comic book
+	<li>Quit - quits QComicBook
+</ul>
+</p>
+<p>
+QComicBook offers some tunable options, available via <a name="settings"><b>Settings</b></a>
+menu option. These options include:
+<ul>
+	<li>Background color - the color of the empty area around displayed image
+	<li>Hide menubar in fullscreen mode - menubar may be hidded in fullscreen mode if desired; together with
+	    <a href="#view">toolbar hiding option</a>, it may give you the whole screen for displaying page contents.
+	<li>Scaling method - the algorithm used for image scaling; either <i>Smooth</i> or
+	    <i>Fast</i>. Smooth scaling provides best quality, but is slower; it is recommened method
+	    unless you have really slow machine.
+	 <li>Cache size - the number of pages kept in memory. Value of 0 disables caching; 1 has no effect
+	    on performance; 2 or more may improve your experience. Keep in mind, that caching may consume a lot
+	    of memory - for example, an 1280x1984 image may take as much as 9Mb of memory!
+    	 <li>Image preloading - enables page preloading in the background. This setting takes effect only for
+	 cache size of 3 and greater. It is recommended to enable this option, as it may really improve overall
+	 experience.
+	 <li>Use disk cache for thumbnails - thumbnails are saved to disk, which speeds up things when loading them
+	 later. Set this option on if you tend to open comic books more then once.
+	 <li>Number of days to keep thumbnails - defines, for how long to keep thumbnails on disk; old thumbnails are
+	 deleted when exiting QComicBook. Value of 0 disables purging.
+	 <li>Open info dialog after opening comic book - when enabled, info dialog is opened after opening comic
+	 book. You may still open this dialog manually with File/Info menu option.
+	 <li>Confirm exit
+ </ul>
+Note: changing cache size takes effect on new comic book.
+</p>
+
+<h2><a name="view">View</a></h2>
+<p>
+<b>View</b> submenu provides some basic settings for page view.</p>
+You can select one of the following scaling modes:
+<ul>
+	<li>Original size - no scaling is done and original image size is preserved
+	<li>Fit width - image is scaled to fit window width
+	<li>Fit height - image is scaled to fit window height
+	<li>Whole page - image is scaled to fit window
+	<li>Best fit - depending on image dimensions, QComicBook chooses the best method
+	to scale image
+</ul>
+Other options in this menu:
+<ul>
+	<li>Fullscreen - toggles beetween fullscreen and windowed mode; please note, that
+	depending on you <a href="#file">settings</a>, menubar may be hidden in fullscreen mode, so to back to
+	windowed mode you need to press F11 or ESC key
+	<li>Two pages - display two pages, side by side, just like when reading normal book
+	<li>Scrollbars - toggles displaying of scrollbars for large pages; please note that scrollbars will be shown
+	only if necessary
+	<li>Toolbar - toggles displaying of toolbar
+</ul>
+
+<p>
+Settings in this menu are saved when quitting QComicBook (except for "fullscreen" option).
+</p>
+
+<h2><a name="bookmarks">Bookmarks</a></h2>
+<p>
+<b>Bookmarks</b> menu allows you to bookmark pages in comic books.
+These bookmarks are however somewhat different than, for example, in any
+webbrowser and are more similiar to real bookmarks. Each bookmark keeps
+bookmarked page number (as well as file name), so you can easily start with
+your comic book from the point, where you last stopped reading.
+</p>
+Two options are available in this menu:
+<ul>
+	<li>Set bookmark for this comicbook - creates bookmark for current
+	  comic book; existing bookmark for this comic book is deleted
+	<li>Remove bookmark for this comicbook - removes existing bookmark
+	  for current comic book
+</ul>
+<p>
+Below these options you can see the list of currently saved bookmarks. Just
+click on one of them to go to bookmarked comic book and page.

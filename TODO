@@ -1,0 +1,4 @@
+- docbook help/docs
+- QImage::load test
+- cbb, cbg archives support
+- image zooming and rotating

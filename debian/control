@@ -1,0 +1,16 @@
+Source: qcomicbook
+Section: graphics
+Priority: optional
+Maintainer: Michal Pena (Cyb.org) <mp@horisone.com>
+Build-Depends: debhelper (>= 4.0.0)
+Standards-Version: 3.6.1
+
+Package: qcomicbook
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: rar | unrar, zip | unzip
+Description: qt viewer for comic book archives (cbr/cbz)
+ QComicBook is a viewer for comic book archives containing
+ jpeg/png images, which aims at convenience and simplicity.
+ Features include: automatic decompression, full-screen mode,
+ page scaling, mouse or keyboard navigation etc.

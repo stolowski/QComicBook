@@ -1,0 +1,26 @@
+qcomicbook (0.1.6-1) unstable; urgency=low
+
+  * New Upstream Release.
+
+ -- Michal Pena (Cyb.org) <mp@horisone.com>  Mon, 25 Mar 2005 23:29:28 +0100
+
+qcomicbook (0.1.5-1) unstable; urgency=low
+
+  * New Upstream Release.
+  * Man updated with text from help.
+
+ -- Michal Pena (Cyb.org) <mp@horisone.com>  Mon, 27 Feb 2005 17:02:36 +0100
+
+qcomicbook (0.1.4-1) unstable; urgency=low
+
+  * New Upstream Release.
+  * Changed build scripts because of name changes from qcomic to qcomicbook.
+
+ -- Michal Pena (Cyb.org) <mp@horisone.com>  Mon, 01 Feb 2005 03:07:24 +0100
+
+qcomicbook (0.1.3-1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Michal Pena (Cyb.org) <mp@horisone.com>  Mon, 24 Jan 2005 23:57:45 +0100
+

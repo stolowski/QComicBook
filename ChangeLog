@@ -1,0 +1,79 @@
+2005-03-xx:  0.1.6       -- thumbnails view
+                         -- page contents scrolling with mouse (LMB + move)
+			 -- PageUp/PageDown keys reversed
+			 -- scrolling up/down with mouse wheel now requires
+			    an extra wheel move to flip page
+			 -- scaling page buttons are toggle-buttons now to
+			    indicate active scaling
+			 -- toolbar position is saved now
+                         -- cleanups in directory and archive handling code
+			 -- fixed possible crash on errors when opening
+			    comic book
+
+2005-03-07:  0.1.5       -- image caching
+                         -- page preloading
+			 -- built-in help browser
+			 -- new scaling option - best fit
+			 -- man page added (from debian project subdirectory)
+			 -- page scaling setting is saved/restored
+			 -- fixed bug with recently opened files - most
+			    recently opened file is on the top
+			 -- fixed crash on empty archive/directory
+			 -- internal improvements and small bugfixes
+
+2005-02-03:  0.1.4       -- fixed bug with command line arguments parsing
+                         -- fixed drawing bugs
+                         -- real fullscreen mode - menu may be hidden if desired
+			    (see config dialog)
+			 -- ESC key quits fullscreen mode
+                         -- space / backspace keys jump by visible
+			    contents height now, instead of whole page;
+			    improved continuous scrolling
+                         -- jump to page... window is now modal
+			 -- basic errors handling
+                         -- binary name and default icons directory changed
+			    from qcomic to qcomicbook
+                         -- debian subdirectory added
+
+2005-01-23:  0.1.3       -- new option, 'jump to page' - just press 1..9 key
+                         -- archive/directory to open may be given as argument
+                            to qcomicbook
+			 -- fixed bug with loading bookmarks containg spaces
+                         -- fixed bug with 'unrar' not working (when no 'rar'
+                            command found)
+			 -- fixed keyboard focus bug
+			 -- internal function for searching rar/unrar/unzip
+			    executables used instead of system('which ..')
+			 -- other minor bugfixes
+
+2005-01-20:  0.1.2       -- 'recently opened' submenu added
+                         -- bookmarks added
+			 -- configurable background color
+                         -- page is centered horizontally/vertically if it is
+                            smaller than window
+                         -- previously opened directory is preserved in open
+                            archive/directory file dialogs
+			 -- optional toolbar with essential actions added
+			 -- gif and xpm files are accepted now
+			 -- added 'All files' filter for 'open archive' dialog
+			 -- settings dialog added
+			 -- settings are kept in ~/.qcomicbook directory instead of
+			    ~/.qt
+			 -- comicbook info dialog; reading of .nfo and
+			    file_id.diz files
+			 
+2005-01-10:  0.1.1       -- 'two pages' mode
+                         -- continuous scrolling option added (affects
+                            keyboard and mouse wheel scrolling)
+			 -- menu icons added
+			 -- keyboard shortcuts for archive/dir open added
+			 -- fixed image scaling bug
+			 -- fixed crash on 'last page' when no comicbook
+			    opened
+			 -- PageUp/PageDown keys for next/previous page added
+			 -- window geometry and preferences saving
+			 -- opened archive/directory name is shown on window border
+			 -- some internal improvements
+			 
+2005-01-07:  0.1.0       -- initial release
+
