@@ -58,7 +58,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	setGeometry(cfg->getGeometry());
 
 	statusbar = new StatusBar(this);
-
+	
 	//
 	// comic view
 	view = new ComicImageView(this, cfg->getPageSize(), cfg->getScaling(), cfg->getBackground());
@@ -68,8 +68,12 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	//
 	// thumbnails view
 	thumbswin = new ThumbnailsWindow(QDockWindow::InDock, this);
+	toggleThumbnailsAction = new QAction(Icons::get(ICON_THUMBNAILS), tr("Thumbnails"), ALT+Key_T, this);
+	toggleThumbnailsAction->setToggleAction(true);
 	connect(thumbswin, SIGNAL(requestedPage(int, bool)), this, SLOT(jumpToPage(int, bool)));
 	connect(thumbswin, SIGNAL(visibilityChanged(bool)), this, SLOT(thumbnailsVisibilityChanged(bool)));
+	connect(thumbswin, SIGNAL(visibilityChanged(bool)), toggleThumbnailsAction, SLOT(setOn(bool)));
+	connect(toggleThumbnailsAction, SIGNAL(toggled(bool)), thumbswin, SLOT(setShown(bool)));
 	
 	//
 	// global keyboard accelerators
@@ -136,13 +140,11 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	QAction *exitFullscreenAction = new QAction(QString::null, Key_Escape, this);
 	connect(exitFullscreenAction, SIGNAL(activated()), this, SLOT(exitFullscreen()));
 	
-	toggleThumbnailsAction = new QAction(Icons::get(ICON_THUMBNAILS), tr("Thumbnails"), ALT+Key_T, this);
-	toggleThumbnailsAction->setToggleAction(true);
-	connect(toggleThumbnailsAction, SIGNAL(toggled(bool)), this, SLOT(toggleThumbnails(bool)));
-
+	toolbar = new QToolBar(tr("Toolbar"), this);
 	toggleToolbarAction = new QAction(tr("Toolbar"), QKeySequence(), this);
 	toggleToolbarAction->setToggleAction(true);
-	connect(toggleToolbarAction, SIGNAL(toggled(bool)), this, SLOT(toggleToolbar(bool)));
+	connect(toggleToolbarAction, SIGNAL(toggled(bool)), toolbar, SLOT(setShown(bool)));
+	connect(toolbar, SIGNAL(visibilityChanged(bool)), this, SLOT(toolbarVisibilityChanged(bool)));
 	
 	toggleStatusbarAction = new QAction(tr("Statusbar"), QKeySequence(), this);
 	toggleStatusbarAction->setToggleAction(true);
@@ -265,7 +267,6 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 
 	//
 	// Toolbar
-	toolbar = new QToolBar(tr("Toolbar"), this);
 	showInfoAction->addTo(toolbar);
 	toggleThumbnailsAction->addTo(toolbar);
 	toolbar->addSeparator();
@@ -281,7 +282,6 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	fitHeightAction->addTo(toolbar);
 	wholePageAction->addTo(toolbar);
 	bestFitAction->addTo(toolbar);
-	connect(toolbar, SIGNAL(visibilityChanged(bool)), this, SLOT(toolbarVisibilityChanged(bool)));
 
 	setCentralWidget(view);
 	view->setFocus();
@@ -339,17 +339,9 @@ bool ComicMainWindow::confirmExit()/*{{{*/
 	return QMessageBox::question(this, "Leave QComicBook?", "Do you really want to quit QComicBook?", QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes;
 }/*}}}*/
 
-void ComicMainWindow::toggleThumbnails(bool f)/*{{{*/
-{
-	if (f)
-		thumbswin->show();
-	else
-		thumbswin->hide();
-}/*}}}*/
-
 void ComicMainWindow::thumbnailsVisibilityChanged(bool f)/*{{{*/
 {
-	toggleThumbnailsAction->setOn(f);
+	//toggleThumbnailsAction->setOn(f);
 	if (f && sink)
 	{
 		int max = sink->numOfImages();
@@ -384,18 +376,6 @@ void ComicMainWindow::toggleContinousScroll()/*{{{*/
 	{	connect(view, SIGNAL(bottomReached()), this, SLOT(nextPage()));
 		connect(view, SIGNAL(topReached()), this, SLOT(prevPageBottom()));
 	}
-}/*}}}*/
-
-void ComicMainWindow::toggleToolbar(bool f)/*{{{*/
-{
-	if (f)
-		toolbar->show();
-	else
-		toolbar->hide();
-	/*
-	bool f = view_menu->isItemChecked(toolbar_id);
-	view_menu->setItemChecked(toolbar_id, !f);
-	toolbar->setShown(!f);*/
 }/*}}}*/
 
 void ComicMainWindow::toggleTwoPages()/*{{{*/

@@ -68,9 +68,7 @@ class ComicMainWindow: public QMainWindow
 		void setRecentFilesMenu(const History &hist);
 		void recentSelected(int id);
 		void bookmarkSelected(int id);
-		void toggleThumbnails(bool f);
 		void toggleScrollbars();
-		void toggleToolbar(bool f);
 		void toggleTwoPages();
 		void toggleFullScreen();
 		void toggleContinousScroll();
