@@ -32,6 +32,7 @@ class ThumbnailLoader: public QThread
 		volatile bool stopped;
 		volatile bool usecache;
 		QValueList<int> requests;
+		volatile QThread::Priority prio;
 		
 	protected:
 		virtual void run();
@@ -40,6 +41,7 @@ class ThumbnailLoader: public QThread
 		ThumbnailLoader();
 		~ThumbnailLoader();
 
+		void setPriority(QThread::Priority p);
 		void setSink(ImgSink *sink);
 		void setReciever(QObject *rcv);
 		void setUseCache(bool f);

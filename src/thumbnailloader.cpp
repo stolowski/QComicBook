@@ -17,12 +17,19 @@
 #include <qimage.h>
 #include <qevent.h>
 
-ThumbnailLoader::ThumbnailLoader(): QThread(), stopped(false), sink(NULL), rcvobj(NULL), usecache(true)/*{{{*/
+ThumbnailLoader::ThumbnailLoader(): QThread(), prio(QThread::LowPriority), stopped(false), sink(NULL), rcvobj(NULL), usecache(true)/*{{{*/
 {
 }/*}}}*/
 
 ThumbnailLoader::~ThumbnailLoader()/*{{{*/
 {
+}/*}}}*/
+
+void ThumbnailLoader::setPriority(QThread::Priority p)/*{{{*/
+{
+	mtx.lock();
+	prio = p;
+	mtx.unlock();
 }/*}}}*/
 
 void ThumbnailLoader::setSink(ImgSink *sink)/*{{{*/
@@ -56,7 +63,7 @@ void ThumbnailLoader::requestThumbnail(int num)/*{{{*/
 	}
 	requests.append(num);
 	if (!running())
-		start();
+		start(prio);
 	mtx.unlock();
 }/*}}}*/
 
@@ -67,7 +74,7 @@ void ThumbnailLoader::requestThumbnails(int first, int n)/*{{{*/
 		if (requests.contains(i) == 0)
 			requests.append(i);
 	if (!running())
-		start();
+		start(prio);
 	mtx.unlock();
 }/*}}}*/
 

@@ -1,5 +1,4 @@
 - docbook help/docs
-- thread-based thumbnails loading
 - doxygen docs
 - QImage::load test
 - cbb, cbg archives support
