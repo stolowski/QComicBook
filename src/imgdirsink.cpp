@@ -22,7 +22,6 @@
 #include <qtextstream.h>
 //#include <iostream>
 
-//only on linux
 #include <utime.h>
 
 ImgDirSink::ImgDirSink(int cachesize): ImgSink(), cachemtx(true)/*{{{*/

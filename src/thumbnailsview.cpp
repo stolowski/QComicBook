@@ -19,7 +19,6 @@
 #include <qptrvector.h>
 #include <qtimer.h>
 #include <qpopupmenu.h>
-#include <iostream>
 
 #define THUMBNAILS_TMR_DELAY 300
 
@@ -28,6 +27,7 @@ int ThumbnailsView::thheight = 120;
 
 ThumbnailsView::ThumbnailsView(QWidget *parent): QIconView(parent), selected(NULL)/*{{{*/
 {
+	setSpacing(3);
 	setItemsMovable(false);
 	arrangeItemsInGrid(true);
 	setAutoArrange(true);
@@ -72,14 +72,12 @@ void ThumbnailsView::onContentsMoving(int x, int y)/*{{{*/
 	const ThumbnailItem *last = dynamic_cast<ThumbnailItem *>(findLastVisibleItem(rect));
 	while (it)
 	{
-		std::cout << it->page() << " ";
 		if (!it->isLoaded())
 			emit requestedThumbnail(it->page());
 		if (it == last)
 			break;
 		it = dynamic_cast<ThumbnailItem *>(it->nextItem());
 	}
-	std::cout << std::endl;
 }/*}}}*/
 
 void ThumbnailsView::onDoubleClick(QIconViewItem *item)/*{{{*/
@@ -95,7 +93,7 @@ void ThumbnailsView::setPages(int pages)/*{{{*/
 	for (int i=0; i<numpages; i++)
 		icons.insert(i, new ThumbnailItem(this, i, *emptypage));
 
-	setArrangement(width() > height() ? QIconView::TopToBottom : QIconView::LeftToRight);
+	setArrangement(visibleWidth() > visibleHeight() ? QIconView::TopToBottom : QIconView::LeftToRight);
 
 	timer->start(THUMBNAILS_TMR_DELAY, true);
 }/*}}}*/

@@ -1,4 +1,4 @@
-.TH "QCOMICBOOK" "1" "march 25, 2005" "Michal Pena (Cyb.org)" ""
+.TH "QCOMICBOOK" "1" "march 29, 2005" "Michal Pena (Cyb.org)" ""
 .SH "NAME"
 QComicBook \- QT viewer for comic book archives (cbr/cbz)
 .SH "SYNOPSIS"
@@ -21,7 +21,7 @@ Features include:
  \- ... and more
 .PP 
 QComicBook software requirements:
- \- rar/unrar (one of them) and zip/unzip available somewhere in the PATH (e.g. in /usr/bin)
+ \- rar/unrar (one of them) and unzip available somewhere in the PATH (e.g. in /usr/bin)
  \- a lot of disk space available in /tmp directory, for handling decompression of archives
 .SH "MENU"
 \fBFile\fR
@@ -41,6 +41,8 @@ QComicBook offers some tunable options, available via Settings menu option. Thes
  \- Scaling method \- the algorithm used for image scaling; either Smooth or Fast. Smooth scaling provides best quality, but is slower; it is recommened method unless you have really slow machine.
  \- Cache size \- the number of pages kept in memory. Value of 0 disables caching; 1 has no effect on performance; 2 or more may improve your experience. Keep in mind, that caching may consume a lot of memory \- for example, an 1280x1984 image may take as much as 9Mb of memory!
  \- Image preloading \- enables page preloading in the background. This setting takes effect only for cache size of 3 and greater. It is recommended to enable this option, as it may really improve overall experience.
+ \- Use disk cache for thumbnails \- thumbnails are saved to disk, which speeds up things when loading them later. Set this option on if you tend to open comic books more then once.
+ \- Number of days to keep thumbnails \- defines, for how long to keep thumbnails on disk; old thumbnails are deleted when exiting QComicBook. Value of 0 disables purging.
  \- Open info dialog after opening comic book \- when enabled, info dialog is opened after opening comic book. You may still open this dialog manually with File/Info menu option.
  \- Confirm exit
 
@@ -105,7 +107,11 @@ QComicBook keeps settings in ~/.qcomicbook directory within these two files:
 
 Both files are plain text files and may be edited manually (with caution!), if needed.
 
-2. Archives handling
+2. Thumbnails handling
+
+Thumbnails are stored (if thumbnails disk caching is enabled) in ~/.qcomicbook/cache directory.
+
+3. Archives handling
 
 Archived comic books are decompressed to temporary directory (/tmp/qcomicbook\-XXXXX, with XXXXX being some random number). This directory is purged when closing current comic book, opening a new one or quitting QComicBook.
 .SH "AUTHOR"
