@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=QComicBook
+Name[pl]=Przeglądarka plików CBR/CBZ (QComicBook)
 Comment=Comic Book archives viewer
+Comment[pl]=Przeglądarka do archiwów z komiksami
 Exec=qcomicbook
 Icon=qcomicbook.png
 Terminal=0

@@ -1,5 +1,11 @@
-2005-04-xx:  0.1.7       -- thread-based thumbnail loading
+2005-04-05:  0.1.7       -- thread-based thumbnail loading
+                         -- thumbnails are smooth-scaled now
+			 -- added option to set font for comic book info
+			    dialog
                          -- added progress bar for archives decompression
+			 -- added statusbar
+			 -- fixed bug with thumbnails view taking keyboard
+			    focus
 
 2005-03-30:  0.1.6       -- thumbnails view
                          -- page contents scrolling with mouse (LMB + move)

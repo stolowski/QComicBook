@@ -1,6 +1,6 @@
 Summary: A viewer for comic book archives (rar, cbr, cbz, zip)
 Name: qcomicbook
-Version: 0.1.6
+Version: 0.1.7
 Release: 1.FC3
 License: GPL
 Group: Amusements/Graphics

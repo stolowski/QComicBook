@@ -1,9 +1,12 @@
 qcomicbook (0.1.7-0) unstable; urgency=low
 
   * New Upstream Release.
-  * Changing package revision to -0 since it's not official
+  * Changing package revision to -0 since it's not official.
+  * Start of debian/rules cleaning.
+  * Added qcomicbook.desktop (with Polish Name and Comment)
+    and qcomicbook.png to KDE menu.
 
- -- Michal Pena (Cyb.org) <mp@horisone.com>  Wed, 2 May 2005 21:11:02 +0100
+ -- Michal Pena (Cyb.org) <mp@horisone.com>  Tue, 05 Apr 2005 22:34:59 +0200
 
 qcomicbook (0.1.6-1) unstable; urgency=low
 

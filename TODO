@@ -4,3 +4,6 @@
 - cbb, cbg archives support
 - image zooming and rotating
 - drag & drop support
+- disabling inactive options
+- save Info window geometry
+- right-to-left reading (for manga comics)
