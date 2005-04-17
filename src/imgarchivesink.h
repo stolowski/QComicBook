@@ -27,7 +27,14 @@ class ImgArchiveSink: public ImgDirSink
 
 	protected:
 	
-		enum ArchiveType { RAR_ARCHIVE = 0, ZIP_ARCHIVE, UNKNOWN_ARCHIVE };
+		enum ArchiveType {
+			RAR_ARCHIVE = 0,
+			ZIP_ARCHIVE,
+			ACE_ARCHIVE,
+			TARGZ_ARCHIVE,
+			TARBZ2_ARCHIVE,
+			UNKNOWN_ARCHIVE
+		};
 
 		QProcess *pext; //extracting process
 		QProcess *pinf; //file list extracing process
@@ -41,10 +48,19 @@ class ImgArchiveSink: public ImgDirSink
 		
 		static QStringList zip; //unzip executable and extract options
 		static QStringList rar; //rar/unrar executbale and extract options
-		static QStringList zipi; //unzip executable and list options
-		static QStringList rari; //rar/unrar executable and list options
+		static QStringList ace; //unace executbale and extract options
+		static QStringList targz;
+		static QStringList tarbz2;
+		static QStringList zip_i; //unzip executable and list options
+		static QStringList rar_i; //rar/unrar executable and list options
+		static QStringList ace_i; //unace executable and list options
+		static QStringList targz_i;
+		static QStringList tarbz2_i;
 		static bool havezip;
 		static bool haverar;
+		static bool haveace;
+		static bool havetargz;
+		static bool havetarbz2;
 
 		static ArchiveType archiveType(const QString &filename);
 		int extract(const QString &filename, const QString &destdir);
@@ -67,8 +83,14 @@ class ImgArchiveSink: public ImgDirSink
 
 		static bool autoconfRAR();
 		static bool autoconfZIP();
+		static bool autoconfACE();
+		static bool autoconfTARGZ();
+		static bool autoconfTARBZ2();
 		static bool haveRAR();
 		static bool haveZIP();
+		static bool haveACE();
+		static bool haveTARGZ();
+		static bool haveTARBZ2();
 };
 
 #endif

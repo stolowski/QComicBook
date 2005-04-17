@@ -32,6 +32,7 @@ enum
 {
 	SINKERR_ACCESS = 1, //can't access file or directory
 	SINKERR_UNKNOWNFILE, //unknown archive format
+	SINKERR_NOTSUPPORTED, //known archive type, but not supported
 	SINKERR_LOADERROR,  //can't load image file
 	SINKERR_NOTFOUND,
 	SINKERR_NOTFILE,   //not a regular file

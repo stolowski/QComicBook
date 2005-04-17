@@ -1,3 +1,5 @@
+2005-04-xx:  0.1.8       -- support for ace (cba), tar.gz and tar.bz2 archives
+
 2005-04-05:  0.1.7       -- thread-based thumbnail loading
                          -- thumbnails are smooth-scaled now
 			 -- added option to set font for comic book info

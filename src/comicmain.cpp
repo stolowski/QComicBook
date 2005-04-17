@@ -446,6 +446,7 @@ void ComicMainWindow::sinkError(int code)/*{{{*/
 		case SINKERR_UNKNOWNFILE: msg = tr("unknown archive"); break;
 		case SINKERR_ACCESS: msg = tr("can't access directory"); break;
 		case SINKERR_NOTFOUND: msg = tr("file/directory not found"); break;
+		case SINKERR_NOTSUPPORTED: msg = tr("archive not supported"); break;
 		default: break;
 	}
 	QMessageBox::critical(this, "QComicBook error", "Error opening comicbook: " + msg, 
@@ -466,8 +467,9 @@ void ComicMainWindow::browseDirectory()/*{{{*/
 
 void ComicMainWindow::browseArchive()/*{{{*/
 {
-	const QString file = QFileDialog::getOpenFileName(lastdir, "Archives (*.rar *.cbr *.zip *.cbz);;All files (*)", this,
-			NULL, tr("Choose a file") );
+	const QString file = QFileDialog::getOpenFileName(lastdir,
+			"Archives (*.rar *.cbr *.zip *.cbz *.ace *.cba *.tar.gz *.tgz *.tar.bz2);;All files (*)",
+			this, NULL, tr("Choose a file") );
 	if (!file.isEmpty())
 	{
 		currpage = 0;

@@ -34,21 +34,11 @@ int main(int argc, char *argv[])
 	
 	//
 	// initialize unpackers
-	bool rar = ImgArchiveSink::autoconfRAR();
-	bool zip = ImgArchiveSink::autoconfZIP();
-	QString msg;
-
-	if (!rar)
-		msg = ComicMainWindow::tr("RAR packer/unpacker not found");
-	if (!zip)
-	{
-		if (!rar)
-			msg += "\n";
-		msg += ComicMainWindow::tr("ZIP packer/unpacker not found");
-	}
-
-	if (!(rar && zip))
-		QMessageBox::critical(NULL, errcaption, msg, QMessageBox::Ok, QMessageBox::NoButton);
+	ImgArchiveSink::autoconfRAR();
+	ImgArchiveSink::autoconfZIP();
+	ImgArchiveSink::autoconfACE();
+	ImgArchiveSink::autoconfTARGZ();
+	ImgArchiveSink::autoconfTARBZ2();
 	
 	ComicMainWindow *win = new ComicMainWindow(NULL);
 	app.setMainWidget(win);
