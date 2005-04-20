@@ -43,6 +43,10 @@
 #include "thumbnailloader.h"
 #include "statusbar.h"
 
+//
+// archives extensions used for Open File dialog and filtering out files in OpenNext() function
+const QString ComicMainWindow::ARCH_EXTENSIONS = "*.rar *.cbr *.zip *.cbz *.ace *.cba *.tar.gz *.tgz *.tar.bz2";
+
 ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WType_TopLevel|WDestructiveClose), sink(NULL), currpage(0)/*{{{*/
 {
 	bool f; 
@@ -56,11 +60,14 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 
 	setGeometry(cfg->getGeometry());
 
+	//
+	// statusbar
 	statusbar = new StatusBar(this);
 	toggleStatusbarAction = new QAction(tr("Statusbar"), QKeySequence(), this);
 	toggleStatusbarAction->setToggleAction(true);
 	connect(toggleStatusbarAction, SIGNAL(toggled(bool)), statusbar, SLOT(setShown(bool)));
 	toggleStatusbarAction->setOn(cfg->getShowStatusbar());
+	statusbar->setShown(cfg->getShowStatusbar());
 	
 	//
 	// comic view
@@ -144,7 +151,6 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	connect(showInfoAction, SIGNAL(activated()), this, SLOT(showInfo()));
 	QAction *exitFullscreenAction = new QAction(QString::null, Key_Escape, this);
 	connect(exitFullscreenAction, SIGNAL(activated()), this, SLOT(exitFullscreen()));
-	
 		
 	QAction *which = originalSizeAction;
 	switch (cfg->getPageSize())
@@ -204,8 +210,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	QPopupMenu *file_menu = new QPopupMenu(this);
 	openDirAction->addTo(file_menu);
 	openArchiveAction->addTo(file_menu);
-	if (!(ImgArchiveSink::haveRAR() && ImgArchiveSink::haveZIP()))
-		openArchiveAction->setDisabled(true);
+	file_menu->insertItem(tr("Open next"), this, SLOT(openNext()));
 	recent_menu = new QPopupMenu(this);
 	file_menu->insertItem(tr("Recently opened"), recent_menu);
 	connect(recent_menu, SIGNAL(activated(int)), this, SLOT(recentSelected(int)));
@@ -337,7 +342,6 @@ bool ComicMainWindow::confirmExit()/*{{{*/
 
 void ComicMainWindow::thumbnailsVisibilityChanged(bool f)/*{{{*/
 {
-	//toggleThumbnailsAction->setOn(f);
 	if (f && sink)
 	{
 		int max = sink->numOfImages();
@@ -468,7 +472,7 @@ void ComicMainWindow::browseDirectory()/*{{{*/
 void ComicMainWindow::browseArchive()/*{{{*/
 {
 	const QString file = QFileDialog::getOpenFileName(lastdir,
-			"Archives (*.rar *.cbr *.zip *.cbz *.ace *.cba *.tar.gz *.tgz *.tar.bz2);;All files (*)",
+			"Archives (" + ARCH_EXTENSIONS + ");;All files (*)",
 			this, NULL, tr("Choose a file") );
 	if (!file.isEmpty())
 	{
@@ -517,9 +521,6 @@ void ComicMainWindow::openDir(const QString &name)/*{{{*/
 
 void ComicMainWindow::openArchive(const QString &name)/*{{{*/
 {
-	if (!(ImgArchiveSink::haveRAR() && ImgArchiveSink::haveZIP()))
-		return;
-
 	if (sink && sink->getFullName() == name) //trying to open same dir?
 		return;
 
@@ -546,6 +547,20 @@ void ComicMainWindow::openArchive(const QString &name)/*{{{*/
 	connect(sink, SIGNAL(progress(int, int)), win, SLOT(setProgress(int, int)));
 
 	sink->open(name);
+}/*}}}*/
+
+void ComicMainWindow::openNext()/*{{{*/
+{
+	ImgArchiveSink *archive;
+	if ((archive = dynamic_cast<ImgArchiveSink *>(sink)))
+	{
+		QFileInfo finfo(sink->getFullName());
+		QDir dir(finfo.dirPath(true)); //get the full path of current cb
+		QStringList files = dir.entryList(ARCH_EXTENSIONS, QDir::Files|QDir::Readable, QDir::Name);
+		QStringList::iterator it = files.find(finfo.fileName()); //find current cb
+		if (++it != files.end()) //get next file name
+			openArchive(dir.filePath(*it, true));
+	}
 }/*}}}*/
 
 void ComicMainWindow::toggleFullScreen()/*{{{*/

@@ -55,6 +55,7 @@ class ComicMainWindow: public QMainWindow
 		QAction *toggleThumbnailsAction;
 		QAction *toggleToolbarAction;
 		QAction *toggleStatusbarAction;
+		static const QString ARCH_EXTENSIONS;
 		
 	protected:
 		void keyPressEvent(QKeyEvent *e);
@@ -90,6 +91,7 @@ class ComicMainWindow: public QMainWindow
 		void open(const QString &path);
 		void openDir(const QString &name);
 		void openArchive(const QString &name);
+		void openNext();
 		void showAbout();
 		void showHelp();
 		void showInfo();
