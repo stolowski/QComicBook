@@ -18,6 +18,8 @@
 #include <qpainter.h>
 #include <qcursor.h>
 
+const int ComicImageView::EXTRA_WHEEL_SPIN = 2;
+
 ComicImageView::ComicImageView(QWidget *parent, ComicImageView::Size size, ComicImageView::Scaling scaling, const QColor &color): QScrollView(parent), isize(size), iscaling(scaling), xoff(0), yoff(0), lx(-1), wheelupcnt(0), wheeldowncnt(0)/*{{{*/
 {
 	orgimage = new QImage();
@@ -108,7 +110,7 @@ void ComicImageView::contentsWheelEvent(QWheelEvent *e)/*{{{*/
 	e->accept();
 	if (e->delta() > 0) //scrolling up
 	{
-		if (contentsHeight()<=viewport()->height() || (onTop() && ++wheelupcnt>1))
+		if (contentsHeight()<=viewport()->height() || (onTop() && ++wheelupcnt > EXTRA_WHEEL_SPIN))
 		{
 			emit topReached();
 			wheelupcnt = 0;
@@ -121,7 +123,7 @@ void ComicImageView::contentsWheelEvent(QWheelEvent *e)/*{{{*/
 	}
 	else //scrolling down
 	{
-		if (contentsHeight()<=viewport()->height() || (onBottom() && ++wheeldowncnt>1))
+		if (contentsHeight()<=viewport()->height() || (onBottom() && ++wheeldowncnt > EXTRA_WHEEL_SPIN))
 		{
 			emit bottomReached();
 			wheeldowncnt = 0;

@@ -38,6 +38,7 @@ class ComicImageView: public QScrollView
 		int xoff, yoff;
 		int lx, ly; //last mouse position when tracking mouse moves
 		int wheelupcnt, wheeldowncnt;
+		static const int EXTRA_WHEEL_SPIN; //number of extra wheel spins to flip the page
 		
 	signals:
 		void bottomReached();
