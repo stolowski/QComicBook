@@ -138,12 +138,17 @@ void ComicImageView::contentsMouseMoveEvent(QMouseEvent *e)/*{{{*/
 {
 	if (lx >= 0)
 	{
-		const int dx = static_cast<int>((lx - e->x()) / 1.2f); //arbitrary numbers to slow down mouse movements
-		const int dy = static_cast<int>((ly - e->y()) / 1.2f);
+		const int dx = lx - e->x();
+		const int dy = ly - e->y();
 		scrollBy(dx, dy);
+		lx = e->x() + dx; //need to add delta because e->x() is the old position
+		ly = e->y() + dy;
 	}
-	lx = e->x();
-	ly = e->y();
+	else 
+	{
+		lx = e->x();
+		ly = e->y();
+	}
 }/*}}}*/
 
 void ComicImageView::contentsMousePressEvent(QMouseEvent *e)/*{{{*/

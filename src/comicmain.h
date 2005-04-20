@@ -41,7 +41,15 @@ class ComicMainWindow: public QMainWindow
 		int scrv_id;
 		int contscr_id;
 		int twopages_id;
+		int opennext_id;
+		int firstpage_id;
+		int lastpage_id;
+		int jumpto_id;
+		int setbookmark_id;
+		int rmvbookmark_id;
+		int close_id;
 		QToolBar *toolbar;
+		QPopupMenu *file_menu;
 		QPopupMenu *context_menu;
 		QPopupMenu *view_menu;
 		QPopupMenu *navi_menu;
@@ -55,12 +63,20 @@ class ComicMainWindow: public QMainWindow
 		QAction *toggleThumbnailsAction;
 		QAction *toggleToolbarAction;
 		QAction *toggleStatusbarAction;
+		QAction *showInfoAction;
+		QAction *nextPageAction;
+		QAction *prevPageAction;
+		QAction *forwardPageAction;
+		QAction *backwardPageAction;
+		QAction *pageTopAction;
+		QAction *pageBottomAction;
 		static const QString ARCH_EXTENSIONS;
 		
 	protected:
 		void keyPressEvent(QKeyEvent *e);
 		void closeEvent(QCloseEvent *e);
 		bool confirmExit();
+		void enableComicBookActions(bool f=true);
 		
 	protected slots:
 		void sinkReady(const QString &path);

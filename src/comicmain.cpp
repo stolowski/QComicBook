@@ -95,11 +95,11 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	connect(openDirAction, SIGNAL(activated()), this, SLOT(browseDirectory()));
 	QAction *fullScreenAction = new QAction(tr("&Fullscreen"), Key_F11, this);
 	connect(fullScreenAction, SIGNAL(activated()), this, SLOT(toggleFullScreen()));
-	QAction *nextPageAction = new QAction(Icons::get(ICON_NEXTPAGE), tr("Next page"), Key_PageDown, this);
+	nextPageAction = new QAction(Icons::get(ICON_NEXTPAGE), tr("Next page"), Key_PageDown, this);
 	connect(nextPageAction, SIGNAL(activated()), this, SLOT(nextPage()));
-	QAction *forwardPageAction = new QAction(Icons::get(ICON_FORWARD), tr("5 pages forward"), QKeySequence(), this);
+	forwardPageAction = new QAction(Icons::get(ICON_FORWARD), tr("5 pages forward"), QKeySequence(), this);
 	connect(forwardPageAction, SIGNAL(activated()), this, SLOT(forwardPages()));
-	QAction *backwardPageAction = new QAction(Icons::get (ICON_BACKWARD), tr("5 pages backward"), QKeySequence(), this);
+	backwardPageAction = new QAction(Icons::get (ICON_BACKWARD), tr("5 pages backward"), QKeySequence(), this);
 	connect(backwardPageAction, SIGNAL(activated()), this, SLOT(backwardPages()));
 	
 	QAction *jumpDownAction = new QAction(QString::null, Key_Space, this);
@@ -107,12 +107,12 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	QAction *jumpUpAction = new QAction(QString::null, Key_Backspace, this);
 	connect(jumpUpAction, SIGNAL(activated()), view, SLOT(jumpUp()));
 
-	QAction *prevPageAction = new QAction(Icons::get(ICON_PREVPAGE), tr("&Previous page"), Key_PageUp, this);
+	prevPageAction = new QAction(Icons::get(ICON_PREVPAGE), tr("&Previous page"), Key_PageUp, this);
 	connect(prevPageAction, SIGNAL(activated()), this, SLOT(prevPage()));
 
-	QAction *pageTopAction = new QAction(Icons::get(ICON_PAGETOP), tr("Page top"), Key_Home, this);
+	pageTopAction = new QAction(Icons::get(ICON_PAGETOP), tr("Page top"), Key_Home, this);
 	connect(pageTopAction, SIGNAL(activated()), view, SLOT(scrollToTop()));
-	QAction *pageBottomAction = new QAction(Icons::get(ICON_PAGEBOTTOM), tr("Page bottom"), Key_End, this);
+	pageBottomAction = new QAction(Icons::get(ICON_PAGEBOTTOM), tr("Page bottom"), Key_End, this);
 	connect(pageBottomAction, SIGNAL(activated()), view, SLOT(scrollToBottom()));
 	QAction *scrollRightAction = new QAction(tr("Scroll right"), Key_Right, this);
 	connect(scrollRightAction, SIGNAL(activated()), view, SLOT(scrollRight()));
@@ -147,7 +147,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	QAction *bestFitAction = new QAction(Icons::get(ICON_BESTFIT), tr("Best fit"), ALT+Key_B, scaleActions);
 	bestFitAction->setToggleAction(true);
 	connect(bestFitAction, SIGNAL(activated()), view, SLOT(setSizeBestFit()));
-	QAction *showInfoAction = new QAction(Icons::get(ICON_INFO), tr("Info"), ALT+Key_I, this);
+	showInfoAction = new QAction(Icons::get(ICON_INFO), tr("Info"), ALT+Key_I, this);
 	connect(showInfoAction, SIGNAL(activated()), this, SLOT(showInfo()));
 	QAction *exitFullscreenAction = new QAction(QString::null, Key_Escape, this);
 	connect(exitFullscreenAction, SIGNAL(activated()), this, SLOT(exitFullscreen()));
@@ -207,17 +207,17 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	
 	//
 	// File menu
-	QPopupMenu *file_menu = new QPopupMenu(this);
+	file_menu = new QPopupMenu(this);
 	openDirAction->addTo(file_menu);
 	openArchiveAction->addTo(file_menu);
-	file_menu->insertItem(tr("Open next"), this, SLOT(openNext()));
+	opennext_id = file_menu->insertItem(tr("Open next"), this, SLOT(openNext()));
 	recent_menu = new QPopupMenu(this);
 	file_menu->insertItem(tr("Recently opened"), recent_menu);
 	connect(recent_menu, SIGNAL(activated(int)), this, SLOT(recentSelected(int)));
 	showInfoAction->addTo(file_menu);
 	file_menu->insertItem(tr("Settings"), this, SLOT(showConfigDialog()));
 	file_menu->insertSeparator();
-	file_menu->insertItem(tr("Close"), this, SLOT(closeSink()));
+	close_id = file_menu->insertItem(tr("Close"), this, SLOT(closeSink()));
 	file_menu->insertSeparator();
 	file_menu->insertItem(tr("&Quit"), this, SLOT(close()));
 	menuBar()->insertItem(tr("&File"), file_menu);
@@ -253,9 +253,9 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	forwardPageAction->addTo(navi_menu);
 	backwardPageAction->addTo(navi_menu);
 	navi_menu->insertSeparator();
-	navi_menu->insertItem(tr("Jump to page..."), this, SLOT(showJumpToPage()));
-	navi_menu->insertItem(tr("First page"), this, SLOT(firstPage()));
-	navi_menu->insertItem(tr("Last page"), this, SLOT(lastPage()));
+	jumpto_id = navi_menu->insertItem(tr("Jump to page..."), this, SLOT(showJumpToPage()));
+	firstpage_id = navi_menu->insertItem(tr("First page"), this, SLOT(firstPage()));
+	lastpage_id = navi_menu->insertItem(tr("Last page"), this, SLOT(lastPage()));
 	navi_menu->insertSeparator();
 	pageTopAction->addTo(navi_menu);
 	pageBottomAction->addTo(navi_menu);
@@ -275,8 +275,8 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	bookmarks_menu = new QPopupMenu(this);
 	bookmarks = new Bookmarks(bookmarks_menu);
 	menuBar()->insertItem(tr("&Bookmarks"), bookmarks_menu);
-	bookmarks_menu->insertItem(tr("Set bookmark for this comicbook"), this, SLOT(setBookmark()));
-	bookmarks_menu->insertItem(tr("Remove bookmark for this comicbook"), this, SLOT(removeBookmark()));
+	setbookmark_id = bookmarks_menu->insertItem(tr("Set bookmark for this comicbook"), this, SLOT(setBookmark()));
+	rmvbookmark_id = bookmarks_menu->insertItem(tr("Remove bookmark for this comicbook"), this, SLOT(removeBookmark()));
 	bookmarks_menu->insertSeparator();
 	bookmarks->load();
 	connect(bookmarks_menu, SIGNAL(activated(int)), this, SLOT(bookmarkSelected(int)));
@@ -293,6 +293,8 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	setRecentFilesMenu(*recentfiles);
 
 	cfg->restoreDockLayout(this);
+
+	enableComicBookActions(false);
 }/*}}}*/
 
 ComicMainWindow::~ComicMainWindow()/*{{{*/
@@ -317,6 +319,32 @@ ComicMainWindow::~ComicMainWindow()/*{{{*/
 
 	if (sink)
 		delete sink;
+}/*}}}*/
+
+void ComicMainWindow::enableComicBookActions(bool f)/*{{{*/
+{
+	//
+	// file menu
+	file_menu->setItemEnabled(opennext_id, f && sink && typeid(*sink) == typeid(ImgArchiveSink));
+	file_menu->setItemEnabled(close_id, f);
+	showInfoAction->setEnabled(f);
+	
+	//
+	// navigation menu
+	navi_menu->setItemEnabled(firstpage_id, f);
+	navi_menu->setItemEnabled(lastpage_id, f);
+	navi_menu->setItemEnabled(jumpto_id, f);
+	nextPageAction->setEnabled(f);
+	prevPageAction->setEnabled(f);
+	backwardPageAction->setEnabled(f);
+	forwardPageAction->setEnabled(f);
+	pageTopAction->setEnabled(f);
+	pageBottomAction->setEnabled(f);
+	
+	//
+	// bookmarks menu
+	bookmarks_menu->setItemEnabled(setbookmark_id, f);
+	bookmarks_menu->setItemEnabled(rmvbookmark_id, f);
 }/*}}}*/
 
 void ComicMainWindow::keyPressEvent(QKeyEvent *e)/*{{{*/
@@ -517,6 +545,8 @@ void ComicMainWindow::openDir(const QString &name)/*{{{*/
 	connect(sink, SIGNAL(progress(int, int)), win, SLOT(setProgress(int, int)));
 
 	sink->open(name);
+	
+	enableComicBookActions(true);
 }/*}}}*/
 
 void ComicMainWindow::openArchive(const QString &name)/*{{{*/
@@ -547,6 +577,8 @@ void ComicMainWindow::openArchive(const QString &name)/*{{{*/
 	connect(sink, SIGNAL(progress(int, int)), win, SLOT(setProgress(int, int)));
 
 	sink->open(name);
+	
+	enableComicBookActions(true);
 }/*}}}*/
 
 void ComicMainWindow::openNext()/*{{{*/
@@ -713,6 +745,8 @@ void ComicMainWindow::showJumpToPage(const QString &number)/*{{{*/
 
 void ComicMainWindow::closeSink()/*{{{*/
 {
+	enableComicBookActions(false);
+
 	view->clear();
 	if (sink)
 		sink->deleteLater();
