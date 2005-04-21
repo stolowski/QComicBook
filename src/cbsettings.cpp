@@ -22,6 +22,7 @@
 
 #define GRP_VIEW                     "/View"
 #define OPT_TWOPAGES                 "/TwoPages"
+#define OPT_JAPANESEMODE             "/JapaneseMode"
 #define OPT_SCROLLBARS               "/Scrollbars"
 #define OPT_SCALING                  "/Scaling"
 #define OPT_PAGESIZE                 "/PageSize"
@@ -29,6 +30,7 @@
 #define OPT_FULLSCREENHIDEMENU       "/FullScreenHideMenu"
 #define OPT_STATUSBAR                "/Statusbar"
 #define OPT_FONT                     "/InfoFont"
+#define OPT_SMALLCURSOR              "/SmallCursor"
 
 #define GRP_NAVI        "/Navigation"
 #define OPT_CONTSCROLL  "/ContinuousScroll"
@@ -165,7 +167,9 @@ void ComicBookSettings::load()/*{{{*/
 		docklayout = cfg->readEntry(OPT_DOCKLAYOUT, QString::null);
 	cfg->endGroup();
 	cfg->beginGroup(GRP_VIEW);
+		smallcursor = cfg->readBoolEntry(OPT_SMALLCURSOR, false);
 		twopages = cfg->readBoolEntry(OPT_TWOPAGES, false);
+		japanese = cfg->readBoolEntry(OPT_JAPANESEMODE, false);
 		scrollbars = cfg->readBoolEntry(OPT_SCROLLBARS, false);
 		scaling = convertToScaling(cfg->readEntry(OPT_SCALING, size2string[0].str));
 		pagesize = convertToSize(cfg->readEntry(OPT_PAGESIZE, size2string[0].str));
@@ -194,9 +198,19 @@ void ComicBookSettings::load()/*{{{*/
 	cfg->endGroup();
 }/*}}}*/
 
+bool ComicBookSettings::getUseSmallCursor() const/*{{{*/
+{
+	return smallcursor;
+}/*}}}*/
+
 bool ComicBookSettings::getTwoPagesMode() const/*{{{*/
 {
 	return twopages;
+}/*}}}*/
+
+bool ComicBookSettings::getJapaneseMode() const/*{{{*/
+{
+	return japanese;
 }/*}}}*/
 
 bool ComicBookSettings::getContinuousScrolling() const/*{{{*/
@@ -290,10 +304,22 @@ void ComicBookSettings::restoreDockLayout(QMainWindow *w)/*{{{*/
 	str >> *w;
 }/*}}}*/
 
+void ComicBookSettings::setUseSmallCursor(bool f)/*{{{*/
+{
+	if (f != smallcursor)
+		cfg->writeEntry(GRP_VIEW OPT_SMALLCURSOR, smallcursor = f);
+}/*}}}*/
+
 void ComicBookSettings::setTwoPagesMode(bool f)/*{{{*/
 {
 	if (f != twopages)
 		cfg->writeEntry(GRP_VIEW OPT_TWOPAGES, twopages = f);
+}/*}}}*/
+
+void ComicBookSettings::setJapaneseMode(bool f)/*{{{*/
+{
+	if (f != japanese)
+		cfg->writeEntry(GRP_VIEW OPT_JAPANESEMODE, japanese = f);
 }/*}}}*/
 
 void ComicBookSettings::setContinuousScrolling(bool f)/*{{{*/

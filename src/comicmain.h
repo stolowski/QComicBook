@@ -40,8 +40,8 @@ class ComicMainWindow: public QMainWindow
 		int currpage;
 		int scrv_id;
 		int contscr_id;
-		int twopages_id;
 		int opennext_id;
+		int openprv_id;
 		int firstpage_id;
 		int lastpage_id;
 		int jumpto_id;
@@ -70,6 +70,8 @@ class ComicMainWindow: public QMainWindow
 		QAction *backwardPageAction;
 		QAction *pageTopAction;
 		QAction *pageBottomAction;
+		QAction *mangaModeAction;
+		QAction *twoPagesAction;
 		static const QString ARCH_EXTENSIONS;
 		
 	protected:
@@ -86,9 +88,10 @@ class ComicMainWindow: public QMainWindow
 		void recentSelected(int id);
 		void bookmarkSelected(int id);
 		void toggleScrollbars();
-		void toggleTwoPages();
+		void toggleTwoPages(bool f);
 		void toggleFullScreen();
 		void toggleContinousScroll();
+		void toggleJapaneseMode(bool f);
 		void thumbnailsVisibilityChanged(bool f);
 		void toolbarVisibilityChanged(bool f);
 
@@ -108,6 +111,7 @@ class ComicMainWindow: public QMainWindow
 		void openDir(const QString &name);
 		void openArchive(const QString &name);
 		void openNext();
+		void openPrevious();
 		void showAbout();
 		void showHelp();
 		void showInfo();
@@ -120,7 +124,6 @@ class ComicMainWindow: public QMainWindow
 	public:
 		ComicMainWindow(QWidget *parent);
 		virtual ~ComicMainWindow();
-		bool isTwoPagesModeEnabled() const;
 };
 
 #endif

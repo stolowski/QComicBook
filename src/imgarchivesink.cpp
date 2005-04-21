@@ -18,6 +18,8 @@
 #include <qfileinfo.h>
 #include <qfile.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 QStringList ImgArchiveSink::zip;
 QStringList ImgArchiveSink::rar;
@@ -68,9 +70,9 @@ ImgArchiveSink::ArchiveType ImgArchiveSink::archiveType(const QString &filename)
 		return ZIP_ARCHIVE;
 	if (filename.endsWith(".ace", false) || filename.endsWith(".cba", false))
 		return ACE_ARCHIVE;
-	if (filename.endsWith(".tar.gz", false) || filename.endsWith(".tgz", false))
+	if (filename.endsWith(".tar.gz", false) || filename.endsWith(".tgz", false) || filename.endsWith(".cbg", false))
 		return TARGZ_ARCHIVE;
-	if (filename.endsWith(".tar.bz2", false))
+	if (filename.endsWith(".tar.bz2", false) || filename.endsWith(".cbb", false))
 		return TARBZ2_ARCHIVE;
 
 	QFile file(filename);
@@ -99,7 +101,7 @@ ImgArchiveSink::ArchiveType ImgArchiveSink::archiveType(const QString &filename)
 
 int ImgArchiveSink::extract(const QString &filename, const QString &destdir)/*{{{*/
 {
-	ArchiveType archivetype = archiveType(filename);
+	archivetype = archiveType(filename);
 	filesnum = 0;
 	
 	if (archivetype == UNKNOWN_ARCHIVE)
@@ -251,7 +253,18 @@ void ImgArchiveSink::extractExited()/*{{{*/
 		close();
 	}
 	else
+	{
+		//
+		// fix permissions of files; this is needed for ace archives as unace
+		// is buggy and sets empty permissions.
+		for (QStringList::const_iterator it = archfiles.begin(); it!=archfiles.end(); ++it)
+		{
+			QFileInfo finfo(*it);
+			if (!finfo.isReadable())
+				chmod(*it, S_IRUSR|S_IWUSR);
+		}
 		emit sinkReady(archivepath);
+	}
 }/*}}}*/
 
 void ImgArchiveSink::infoStdoutReady()/*{{{*/

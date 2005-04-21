@@ -29,7 +29,9 @@ class ComicBookSettings: public QObject
 		
 	private:
 		QSettings *cfg;
+		bool smallcursor;
 		bool twopages;
+		bool japanese;
 		bool contscroll;
 		bool scrollbars;
 		bool preload;
@@ -78,7 +80,9 @@ class ComicBookSettings: public QObject
 
 	public:
 		void load();
+		bool getUseSmallCursor() const;
 		bool getTwoPagesMode() const;
+		bool getJapaneseMode() const;
 		bool getContinuousScrolling() const;
 		bool getScrollbarsVisible() const;
 		QRect getGeometry() const;
@@ -97,8 +101,10 @@ class ComicBookSettings: public QObject
 		bool getShowStatusbar() const;
 		const QFont& getFont() const;
 		void restoreDockLayout(QMainWindow *w);
-
+		
+		void setUseSmallCursor(bool f);
 		void setTwoPagesMode(bool f);
+		void setJapaneseMode(bool f);
 		void setContinuousScrolling(bool f);
 		void setScrollbarsVisible(bool f);
 		void setGeometry(const QRect g);

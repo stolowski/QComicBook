@@ -19,6 +19,7 @@ class QPopupMenu;
 class QImage;
 class QPixmap;
 class QColor;
+class QCursor;
 
 class ComicImageView: public QScrollView
 {
@@ -38,6 +39,7 @@ class ComicImageView: public QScrollView
 		int xoff, yoff;
 		int lx, ly; //last mouse position when tracking mouse moves
 		int wheelupcnt, wheeldowncnt;
+		QCursor *smallcursor;
 		static const int EXTRA_WHEEL_SPIN; //number of extra wheel spins to flip the page
 		
 	signals:
@@ -79,6 +81,7 @@ class ComicImageView: public QScrollView
 		void clear();
 		void enableScrollbars(bool f);
 		void setBackground(const QColor &color);
+		void setSmallCursor(bool f);
 
 	public:
 		ComicImageView(QWidget *parent, ComicImageView::Size size=Original, ComicImageView::Scaling scaling=Smooth, const QColor &color=Qt::black);

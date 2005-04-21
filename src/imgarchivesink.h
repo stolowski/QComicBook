@@ -36,6 +36,7 @@ class ImgArchiveSink: public ImgDirSink
 			UNKNOWN_ARCHIVE
 		};
 
+		ArchiveType archivetype;
 		QProcess *pext; //extracting process
 		QProcess *pinf; //file list extracing process
 		QString archivename; //archive file name, without path

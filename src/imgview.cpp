@@ -16,11 +16,12 @@
 #include <qpixmap.h>
 #include <qpopupmenu.h>
 #include <qpainter.h>
+#include <qbitmap.h>
 #include <qcursor.h>
 
 const int ComicImageView::EXTRA_WHEEL_SPIN = 2;
 
-ComicImageView::ComicImageView(QWidget *parent, ComicImageView::Size size, ComicImageView::Scaling scaling, const QColor &color): QScrollView(parent), isize(size), iscaling(scaling), xoff(0), yoff(0), lx(-1), wheelupcnt(0), wheeldowncnt(0)/*{{{*/
+ComicImageView::ComicImageView(QWidget *parent, ComicImageView::Size size, ComicImageView::Scaling scaling, const QColor &color): QScrollView(parent), isize(size), iscaling(scaling), xoff(0), yoff(0), lx(-1), wheelupcnt(0), wheeldowncnt(0), smallcursor(NULL)/*{{{*/
 {
 	orgimage = new QImage();
 	pixmap = new QPixmap();
@@ -155,13 +156,15 @@ void ComicImageView::contentsMouseMoveEvent(QMouseEvent *e)/*{{{*/
 
 void ComicImageView::contentsMousePressEvent(QMouseEvent *e)/*{{{*/
 {
-	setCursor(Qt::PointingHandCursor);
+	if (!smallcursor)
+		setCursor(Qt::PointingHandCursor);
 }/*}}}*/
 
 void ComicImageView::contentsMouseReleaseEvent(QMouseEvent *e)/*{{{*/
 {
 	lx = -1;
-	setCursor(Qt::ArrowCursor);
+	if (!smallcursor)
+		setCursor(Qt::ArrowCursor);
 }/*}}}*/
 
 void ComicImageView::updateImageSize()/*{{{*/
@@ -349,6 +352,32 @@ void ComicImageView::enableScrollbars(bool f)/*{{{*/
 void ComicImageView::setBackground(const QColor &color)/*{{{*/
 {
 	viewport()->setPaletteBackgroundColor(color);
+}/*}}}*/
+
+void ComicImageView::setSmallCursor(bool f)/*{{{*/
+{
+	if (f)
+	{
+		static unsigned char bmp_bits[4*32];
+		static unsigned char msk_bits[4*32];
+		for (int i=0; i<4*32; i++)
+			bmp_bits[i] = msk_bits[i] = 0;
+		bmp_bits[0] = msk_bits[0] = 0xe0;
+		bmp_bits[4] = 0xa0;
+		msk_bits[4] = 0xe0;
+		bmp_bits[8] = msk_bits[8] = 0xe0;
+		const QBitmap bmp(32, 32, bmp_bits, false);
+		const QBitmap msk(32, 32, msk_bits, false);
+		smallcursor = new QCursor(bmp, msk, 0, 0);
+		setCursor(*smallcursor);
+	}
+	else
+	{
+		if (smallcursor)
+			delete smallcursor;
+		smallcursor = NULL;
+		setCursor(Qt::ArrowCursor);
+	}
 }/*}}}*/
 
 void ComicImageView::clear()/*{{{*/

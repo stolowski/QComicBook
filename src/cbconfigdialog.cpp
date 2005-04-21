@@ -65,6 +65,10 @@ void ComicBookCfgDialog::setupDisplayTab()/*{{{*/
 	cb_hidemenu = new QCheckBox(tr("Hide menubar in fullscreen mode"), w);
 	cb_hidemenu->setChecked(cfg->getFullScreenHideMenu());
 	lay->addWidget(cb_hidemenu);
+
+	cb_smallcursor = new QCheckBox(tr("Small mouse cursor"), w);
+	cb_smallcursor->setChecked(cfg->getUseSmallCursor());
+	lay->addWidget(cb_smallcursor);
 		
 	//
 	// scaling method
@@ -136,6 +140,7 @@ void ComicBookCfgDialog::apply()/*{{{*/
 	// display
 	cfg->setBackground(bgcolor);
 	cfg->setFullScreenHideMenu(cb_hidemenu->isChecked());
+	cfg->setUseSmallCursor(cb_smallcursor->isChecked());
 	if (rb_smooth->isChecked())
 		cfg->setScaling(ComicImageView::Smooth);
 	else
