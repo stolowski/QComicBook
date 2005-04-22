@@ -605,20 +605,36 @@ void ComicMainWindow::openArchive(const QString &name)/*{{{*/
 
 void ComicMainWindow::openNext()/*{{{*/
 {
-	ImgArchiveSink *archive;
-	if ((archive = dynamic_cast<ImgArchiveSink *>(sink)))
+	if (ImgArchiveSink *archive = dynamic_cast<ImgArchiveSink *>(sink))
 	{
 		QFileInfo finfo(sink->getFullName());
 		QDir dir(finfo.dirPath(true)); //get the full path of current cb
 		QStringList files = dir.entryList(ARCH_EXTENSIONS, QDir::Files|QDir::Readable, QDir::Name);
 		QStringList::iterator it = files.find(finfo.fileName()); //find current cb
-		if (++it != files.end()) //get next file name
-			openArchive(dir.filePath(*it, true));
+		if (it != files.end())
+			if (++it != files.end()) //get next file name
+			{
+				currpage = 0;
+				openArchive(dir.filePath(*it, true));
+			}
 	}
 }/*}}}*/
 
 void ComicMainWindow::openPrevious()/*{{{*/
 {
+	if (ImgArchiveSink *archive = dynamic_cast<ImgArchiveSink *>(sink))
+	{
+		QFileInfo finfo(sink->getFullName());
+		QDir dir(finfo.dirPath(true)); //get the full path of current cb
+		QStringList files = dir.entryList(ARCH_EXTENSIONS, QDir::Files|QDir::Readable, QDir::Name);
+		QStringList::iterator it = files.find(finfo.fileName()); //find current cb
+		if (it != files.end() && it != files.begin())
+		{
+			currpage = 0;
+			openArchive(dir.filePath(*(--it), true));
+		}
+	}
+
 }/*}}}*/
 
 void ComicMainWindow::toggleFullScreen()/*{{{*/
@@ -654,19 +670,19 @@ void ComicMainWindow::exitFullscreen()/*{{{*/
 
 void ComicMainWindow::nextPage()/*{{{*/
 {
-	jumpToPage(currpage + (twoPagesAction->isOn() ? 2 : 1));
+	jumpToPage(currpage + (twoPagesAction->isOn() && cfg->getTwoPagesStep() ? 2 : 1));
 }/*}}}*/
 
 void ComicMainWindow::prevPage()/*{{{*/
 {
-	jumpToPage(currpage - (twoPagesAction->isOn() ? 2 : 1));
+	jumpToPage(currpage - (twoPagesAction->isOn() && cfg->getTwoPagesStep() ? 2 : 1));
 }/*}}}*/
 
 void ComicMainWindow::prevPageBottom()/*{{{*/
 {
 	if (currpage > 0)
 	{
-		jumpToPage(currpage - (twoPagesAction->isOn() ? 2 : 1));
+		jumpToPage(currpage - (twoPagesAction->isOn() && cfg->getTwoPagesStep() ? 2 : 1));
 		view->scrollToBottom();
 	}
 }/*}}}*/
@@ -684,12 +700,12 @@ void ComicMainWindow::lastPage()/*{{{*/
 
 void ComicMainWindow::forwardPages()/*{{{*/
 {
-	jumpToPage(currpage + (twoPagesAction->isOn() ? 10 : 5));
+	jumpToPage(currpage + (twoPagesAction->isOn() && cfg->getTwoPagesStep() ? 10 : 5));
 }/*}}}*/
 
 void ComicMainWindow::backwardPages()/*{{{*/
 {
-	jumpToPage(currpage - (twoPagesAction->isOn() ? 10 : 5));
+	jumpToPage(currpage - (twoPagesAction->isOn() && cfg->getTwoPagesStep() ? 10 : 5));
 }/*}}}*/
 
 void ComicMainWindow::jumpToPage(int n, bool force)/*{{{*/
@@ -708,7 +724,7 @@ void ComicMainWindow::jumpToPage(int n, bool force)/*{{{*/
 		if (twoPagesAction->isOn())
 		{
 			QImage img1(sink->getImage(currpage = n, result1, 0)); //get 1st image, don't preload next one
-			QImage img2(sink->getImage(currpage + 1, result2, 2*preload)); //preload next 2 images
+			QImage img2(sink->getImage(currpage + 1, result2, cfg->getTwoPagesStep() ? 2*preload : preload)); //preload next 2 images
 			if (result2 == 0)
 			{
 				if (mangaModeAction->isOn())

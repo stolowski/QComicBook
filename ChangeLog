@@ -2,6 +2,8 @@
                          -- improved mouse-dragging, reversed mouse-dragging directions
 			 -- 'Open next' and 'Open previous' options added
 			 -- Japanese mode for two pages added
+			 -- Option for 1- or 2- pages step in two pages mode
+			    added
 			 -- 'Small mouse cursor' option added
 			 -- most menu/toolbar functions are inactive now if no comic book is
 			    opened

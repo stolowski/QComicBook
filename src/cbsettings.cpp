@@ -32,8 +32,9 @@
 #define OPT_FONT                     "/InfoFont"
 #define OPT_SMALLCURSOR              "/SmallCursor"
 
-#define GRP_NAVI        "/Navigation"
-#define OPT_CONTSCROLL  "/ContinuousScroll"
+#define GRP_NAVI                     "/Navigation"
+#define OPT_CONTSCROLL               "/ContinuousScroll"
+#define OPT_TWOPAGESSTEP             "/TwoPagesStep"
 
 #define GRP_WINDOW      "/Window"
 #define OPT_X           "/X"
@@ -185,6 +186,7 @@ void ComicBookSettings::load()/*{{{*/
 	cfg->endGroup();
 	cfg->beginGroup(GRP_NAVI);
 		contscroll = cfg->readBoolEntry(OPT_CONTSCROLL, true);
+		twopagesstep = cfg->readBoolEntry(OPT_TWOPAGESSTEP, true);
 	cfg->endGroup();
 	cfg->beginGroup(GRP_MISC);
 		lastdir = cfg->readEntry(OPT_LASTDIR, QString::null);
@@ -206,6 +208,11 @@ bool ComicBookSettings::getUseSmallCursor() const/*{{{*/
 bool ComicBookSettings::getTwoPagesMode() const/*{{{*/
 {
 	return twopages;
+}/*}}}*/
+
+bool ComicBookSettings::getTwoPagesStep() const/*{{{*/
+{
+	return twopagesstep;
 }/*}}}*/
 
 bool ComicBookSettings::getJapaneseMode() const/*{{{*/
@@ -314,6 +321,12 @@ void ComicBookSettings::setTwoPagesMode(bool f)/*{{{*/
 {
 	if (f != twopages)
 		cfg->writeEntry(GRP_VIEW OPT_TWOPAGES, twopages = f);
+}/*}}}*/
+
+void ComicBookSettings::setTwoPagesStep(bool f)/*{{{*/
+{
+	if (f != twopagesstep)
+		cfg->writeEntry(GRP_NAVI OPT_TWOPAGESSTEP, twopagesstep = f);
 }/*}}}*/
 
 void ComicBookSettings::setJapaneseMode(bool f)/*{{{*/

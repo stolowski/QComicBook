@@ -31,6 +31,7 @@ class ComicBookSettings: public QObject
 		QSettings *cfg;
 		bool smallcursor;
 		bool twopages;
+		bool twopagesstep;
 		bool japanese;
 		bool contscroll;
 		bool scrollbars;
@@ -82,6 +83,7 @@ class ComicBookSettings: public QObject
 		void load();
 		bool getUseSmallCursor() const;
 		bool getTwoPagesMode() const;
+		bool getTwoPagesStep() const;
 		bool getJapaneseMode() const;
 		bool getContinuousScrolling() const;
 		bool getScrollbarsVisible() const;
@@ -104,6 +106,7 @@ class ComicBookSettings: public QObject
 		
 		void setUseSmallCursor(bool f);
 		void setTwoPagesMode(bool f);
+		void setTwoPagesStep(bool f);
 		void setJapaneseMode(bool f);
 		void setContinuousScrolling(bool f);
 		void setScrollbarsVisible(bool f);

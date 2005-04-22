@@ -123,6 +123,10 @@ void ComicBookCfgDialog::setupMiscTab()/*{{{*/
 	sb_thumbsage->setValue(cfg->getThumbnailsAge());
 	lay->addWidget(grp1);
 	
+	cb_twopagesstep = new QCheckBox(tr("Forward and backward two pages in two-pages mode"), w);
+	cb_twopagesstep->setChecked(cfg->getTwoPagesStep());
+	lay->addWidget(cb_twopagesstep);
+	
 	cb_autoinfo = new QCheckBox(tr("Open info dialog after opening comic book"), w);
 	cb_autoinfo->setChecked(cfg->getAutoInfo());
 	lay->addWidget(cb_autoinfo);
@@ -154,8 +158,9 @@ void ComicBookCfgDialog::apply()/*{{{*/
 	cfg->setPreload(cb_preload->isChecked());
 	cfg->setCacheThumbnails(cb_thumbs->isChecked());
 	cfg->setThumbnailsAge(sb_thumbsage->value());
-	cfg->setConfirmExit(cb_confirmexit->isChecked());
+	cfg->setTwoPagesStep(cb_twopagesstep->isChecked());
 	cfg->setAutoInfo(cb_autoinfo->isChecked());
+	cfg->setConfirmExit(cb_confirmexit->isChecked());
 }/*}}}*/
 
 void ComicBookCfgDialog::cancel()/*{{{*/

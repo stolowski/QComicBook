@@ -28,6 +28,7 @@ class ComicBookCfgDialog: public QTabDialog
 
 	private:
 		ComicBookSettings *cfg;
+		QCheckBox *cb_twopagesstep;
 		QCheckBox *cb_smallcursor;
 		QCheckBox *cb_hidemenu;
 		QPushButton *pb_color;
