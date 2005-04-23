@@ -7,6 +7,7 @@
 			 -- 'Small mouse cursor' option added
 			 -- most menu/toolbar functions are inactive now if no comic book is
 			    opened
+			 -- size of the current page(s) is shown in statusbar
 			 -- fixed bug with not restoring initial status of statusbar
 
 2005-04-05:  0.1.7       -- thread-based thumbnail loading

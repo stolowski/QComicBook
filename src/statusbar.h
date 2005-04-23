@@ -16,6 +16,7 @@
 #include <qstatusbar.h>
 
 class QLabel;
+class QImage;
 
 class StatusBar: public QStatusBar
 {
@@ -23,11 +24,13 @@ class StatusBar: public QStatusBar
 	
 	private:
 		QLabel *page;
+		QLabel *imginfo;
 		QLabel *name;
 
 	public slots:
 		void setPage(int n, int total);
 		void setName(const QString &n);
+		void setImageInfo(const QImage *img1, const QImage *img2=NULL);
 		void clear();
 
 	public:

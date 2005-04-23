@@ -695,7 +695,7 @@ void ComicMainWindow::firstPage()/*{{{*/
 void ComicMainWindow::lastPage()/*{{{*/
 {
 	if (sink)
-		jumpToPage(sink->numOfImages()-1);
+		jumpToPage(sink->numOfImages() - (twoPagesAction->isOn() && cfg->getTwoPagesStep() ? 2 : 1));
 }/*}}}*/
 
 void ComicMainWindow::forwardPages()/*{{{*/
@@ -728,17 +728,27 @@ void ComicMainWindow::jumpToPage(int n, bool force)/*{{{*/
 			if (result2 == 0)
 			{
 				if (mangaModeAction->isOn())
+				{
 					view->setImage(img2, img1);
+					statusbar->setImageInfo(&img2, &img1);
+				}
 				else
+				{
 					view->setImage(img1, img2);
+					statusbar->setImageInfo(&img1, &img2);
+				}
 			}
 			else
+			{
 				view->setImage(img1);
+				statusbar->setImageInfo(&img1);
+			}
 		}
 		else
 		{
 			QImage img(sink->getImage(currpage = n, result1, preload)); //preload next image
 			view->setImage(img);
+			statusbar->setImageInfo(&img);
 		}
 		const QString page = tr("Page") + " " + QString::number(currpage + 1) + "/" + QString::number(sink->numOfImages());
 		pageinfo->setText(page);
