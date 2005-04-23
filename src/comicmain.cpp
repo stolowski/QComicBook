@@ -45,7 +45,7 @@
 
 //
 // archives extensions used for Open File dialog and filtering out files in OpenNext() function
-const QString ComicMainWindow::ARCH_EXTENSIONS = "*.rar *.cbr *.zip *.cbz *.ace *.cba *.tar.gz *.tgz *.cbg *.tar.bz2 *.cbb";
+const QString ComicMainWindow::ARCH_EXTENSIONS = "*.rar *.cbr *.zip *.cbz *.ace *.cba *.tar.gz *.tgz *.tar.bz2";
 
 ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WType_TopLevel|WDestructiveClose), sink(NULL), currpage(0)/*{{{*/
 {
@@ -149,10 +149,10 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	QAction *bestFitAction = new QAction(Icons::get(ICON_BESTFIT), tr("Best fit"), ALT+Key_B, scaleActions);
 	bestFitAction->setToggleAction(true);
 	connect(bestFitAction, SIGNAL(activated()), view, SLOT(setSizeBestFit()));
-	mangaModeAction = new QAction(tr("Japanese mode"), CTRL+Key_J, this);
+	mangaModeAction = new QAction(Icons::get(ICON_JAPANESE), tr("Japanese mode"), CTRL+Key_J, this);
 	mangaModeAction->setToggleAction(true);
 	connect(mangaModeAction, SIGNAL(toggled(bool)), this, SLOT(toggleJapaneseMode(bool)));
-	twoPagesAction = new QAction(tr("Two pages"), CTRL+Key_T, this);
+	twoPagesAction = new QAction(Icons::get(ICON_TWOPAGES), tr("Two pages"), CTRL+Key_T, this);
 	twoPagesAction->setToggleAction(true);
 	connect(twoPagesAction, SIGNAL(toggled(bool)), this, SLOT(toggleTwoPages(bool)));
 	
@@ -179,6 +179,9 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	toggleToolbarAction->setToggleAction(true);
 	showInfoAction->addTo(toolbar);
 	toggleThumbnailsAction->addTo(toolbar);
+	toolbar->addSeparator();
+	twoPagesAction->addTo(toolbar);
+	mangaModeAction->addTo(toolbar);
 	toolbar->addSeparator();
 	prevPageAction->addTo(toolbar);
 	nextPageAction->addTo(toolbar);
@@ -209,6 +212,9 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	wholePageAction->addTo(view->contextMenu());
 	originalSizeAction->addTo(view->contextMenu());
 	bestFitAction->addTo(view->contextMenu());
+	view->contextMenu()->insertSeparator();
+	twoPagesAction->addTo(view->contextMenu());
+	mangaModeAction->addTo(view->contextMenu());
 	view->contextMenu()->insertSeparator();
 	fullScreenAction->addTo(view->contextMenu());
 	view->contextMenu()->insertSeparator();
@@ -432,7 +438,8 @@ void ComicMainWindow::toggleTwoPages(bool f)/*{{{*/
 void ComicMainWindow::toggleJapaneseMode(bool f)/*{{{*/
 {
 	mangaModeAction->setOn(f);
-	jumpToPage(currpage, true);
+	if (twoPagesAction->isOn())
+		jumpToPage(currpage, true);
 }/*}}}*/
 
 void ComicMainWindow::updateCaption()/*{{{*/
@@ -647,10 +654,6 @@ void ComicMainWindow::toggleFullScreen()/*{{{*/
 	{
 		if (cfg->getFullScreenHideMenu())
 			menuBar()->hide();
-		/*if (cfg->getFullScreenHideToolbar())
-			toolbar->hide();
-		if (cfg->getFullScreenHideScrollbars())
-			view->enableScrollbars(false);*/
 		showFullScreen();
 	}
 }/*}}}*/
@@ -660,17 +663,24 @@ void ComicMainWindow::exitFullscreen()/*{{{*/
 	if (isFullScreen())
 	{
 		menuBar()->show();
-		/*if (view_menu->isItemChecked(toolbar_id))
-			toolbar->show();
-		if (view_menu->isItemChecked(scrv_id))
-			view->enableScrollbars(true);*/
 		showNormal();
 	}
 }/*}}}*/
 
 void ComicMainWindow::nextPage()/*{{{*/
 {
-	jumpToPage(currpage + (twoPagesAction->isOn() && cfg->getTwoPagesStep() ? 2 : 1));
+	if (sink)
+	{
+		if (twoPagesAction->isOn() && cfg->getTwoPagesMode())
+		{
+			if (currpage < sink->numOfImages() - 2) //do not change pages if last two pages are visible
+				jumpToPage(currpage + 2);
+		}
+		else
+		{
+			jumpToPage(currpage + 1);
+		}
+	}
 }/*}}}*/
 
 void ComicMainWindow::prevPage()/*{{{*/

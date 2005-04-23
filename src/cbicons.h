@@ -27,6 +27,8 @@
 #define ICON_BACKWARD   "fbackward.png"
 #define ICON_INFO       "info.png"
 #define ICON_THUMBNAILS "thumbnails.png"
+#define ICON_TWOPAGES   "twopages.png"
+#define ICON_JAPANESE   "japanese.png"
 
 #endif
 

@@ -5,6 +5,7 @@ icons_DATA = bestfit.png \
 	     fforward.png \
 	     fbackward.png \
 	     info.png \
+	     japanese.png \
 	     nextpage.png \
 	     orgsize.png \
 	     pagebottom.png \

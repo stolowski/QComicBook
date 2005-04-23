@@ -1,4 +1,4 @@
-QComicBook v0.1.7
+QComicBook v0.1.8
 (c)by Pawel Stolowski 2005
 released under terms of GNU General Public License v2
 
@@ -7,13 +7,16 @@ released under terms of GNU General Public License v2
 QComicBook is a viewer for comic book archives containing
 jpeg/png/xpm/gif images, which aims at convenience and simplicity.
 Features include: automatic decompression, full-screen mode, two-pages
-viewing, page scaling, mouse or keyboard navigation etc.
+viewing, japanese mode, thumbnails view, page scaling, mouse or keyboard
+navigation etc.
 
 2. Requirements
 ---------------
-QComicBook requires Qt library version 3.3.3. It *may* work with earlier
+QComicBook requires Qt library version >=3.3.3. It *may* work with earlier
 versions (from 3.x family), but it was not tested. You will also need
-unzip and rar (or unrar) somewhere in your path to handle archives.
+unzip, rar (or unrar), unace and tar (with gzip and bzip2 support compiled in)
+somewhere in your path to handle archives. If one of these tools is missing
+you can still use QComicBook, but you won't be able to open some archives.
 
 3. Installation
 ---------------

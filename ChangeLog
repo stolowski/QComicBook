@@ -1,13 +1,14 @@
-2005-04-xx:  0.1.8       -- support for ace (cba), tar.gz (cbg) and tar.bz2 (cbb) archives
-                         -- improved mouse-dragging, reversed mouse-dragging directions
-			 -- 'Open next' and 'Open previous' options added
-			 -- Japanese mode for two pages added
+2005-04-23:  0.1.8       -- support for ace (cba), tar.gz and tar.bz2 archives
+                         -- improved mouse-dragging, reversed mouse-dragging
+			    directions
+			 -- 'Open next' and 'Open previous' actions added
+			 -- Japanese mode for two pages mode added
 			 -- Option for 1- or 2- pages step in two pages mode
 			    added
 			 -- 'Small mouse cursor' option added
-			 -- most menu/toolbar functions are inactive now if no comic book is
-			    opened
 			 -- size of the current page(s) is shown in statusbar
+			 -- most menu/toolbar functions are inactive now if no comic
+			    book is opened
 			 -- fixed bug with not restoring initial status of statusbar
 
 2005-04-05:  0.1.7       -- thread-based thumbnail loading

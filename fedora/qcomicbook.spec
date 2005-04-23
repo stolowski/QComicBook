@@ -1,6 +1,6 @@
-Summary: A viewer for comic book archives (rar, cbr, cbz, zip)
+Summary: A viewer for comic book archives (rar, cbr, cbz, zip, ace, cba, tar.gz, tar.bz2)
 Name: qcomicbook
-Version: 0.1.7
+Version: 0.1.8
 Release: 1.FC3
 License: GPL
 Group: Amusements/Graphics
@@ -15,7 +15,8 @@ BuildArch: i386
 %description
 QComicBook is a viewer for comic book archives containing jpeg/png images, which aims at
 convenience and simplicity. Features include: automatic decompression, full-screen mode,
-page scaling, page preloading and caching, mouse or keyboard navigation etc.
+two pages mode, japanese mode, thumbnails view, page scaling, page preloading and caching,
+mouse or keyboard navigation etc.
 
 %prep
 %setup
