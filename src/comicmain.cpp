@@ -469,11 +469,10 @@ void ComicMainWindow::recentSelected(int id)/*{{{*/
 			recentfiles->remove(fname);
 			recent_menu->removeItem(id);
 		}
-		currpage = 0;
 		if (finfo.isDir())
-			openDir(fname);
+			openDir(fname, 0);
 		else
-			openArchive(fname);
+			openArchive(fname, 0);
 	}
 }/*}}}*/
 
@@ -520,10 +519,7 @@ void ComicMainWindow::browseDirectory()/*{{{*/
 	const QString dir = QFileDialog::getExistingDirectory(lastdir, this, 
 			NULL, tr("Choose a directory") );
 	if (!dir.isEmpty())
-	{
-		currpage = 0;
-		openDir(dir);
-	}
+		openDir(dir, 0);
 }/*}}}*/
 
 void ComicMainWindow::browseArchive()/*{{{*/
@@ -532,28 +528,27 @@ void ComicMainWindow::browseArchive()/*{{{*/
 			"Archives (" + ARCH_EXTENSIONS + ");;All files (*)",
 			this, NULL, tr("Choose a file") );
 	if (!file.isEmpty())
-	{
-		currpage = 0;
-		openArchive(file);
-	}
+		openArchive(file, 0);
 }/*}}}*/
 
 void ComicMainWindow::open(const QString &path)/*{{{*/
 {
 	QFileInfo finfo(path);
 	if (finfo.isDir())
-		openDir(path);
+		openDir(path, 0);
 	else
-		openArchive(path);
+		openArchive(path, 0);
 }/*}}}*/
 
-void ComicMainWindow::openDir(const QString &name)/*{{{*/
+void ComicMainWindow::openDir(const QString &name, int page)/*{{{*/
 {
 	lastdir = name;
 	
 	if (sink && sink->getFullName() == name) //trying to open same dir?
 		return;
 	
+	currpage = page;
+
 	closeSink();
 
 	ImgDirSink *dsink = new ImgDirSink(cfg->cacheSize());
@@ -578,13 +573,15 @@ void ComicMainWindow::openDir(const QString &name)/*{{{*/
 	enableComicBookActions(true);
 }/*}}}*/
 
-void ComicMainWindow::openArchive(const QString &name)/*{{{*/
+void ComicMainWindow::openArchive(const QString &name, int page)/*{{{*/
 {
 	if (sink && sink->getFullName() == name) //trying to open same dir?
 		return;
 
 	QFileInfo f(name);
 	lastdir = f.dirPath(true);
+
+	currpage = page;
 
 	closeSink();
 
@@ -622,7 +619,7 @@ void ComicMainWindow::openNext()/*{{{*/
 			if (++it != files.end()) //get next file name
 			{
 				currpage = 0;
-				openArchive(dir.filePath(*it, true));
+				openArchive(dir.filePath(*it, true), 0);
 			}
 	}
 }/*}}}*/
@@ -638,7 +635,7 @@ void ComicMainWindow::openPrevious()/*{{{*/
 		if (it != files.end() && it != files.begin())
 		{
 			currpage = 0;
-			openArchive(dir.filePath(*(--it), true));
+			openArchive(dir.filePath(*(--it), true), 0);
 		}
 	}
 
@@ -863,11 +860,10 @@ void ComicMainWindow::bookmarkSelected(int id)/*{{{*/
 					bookmarks->remove(id);
 				return;
 			}
-			currpage = b.getPage();
 			if (finfo.isDir())
-				openDir(fname);
+				openDir(fname, b.getPage());
 			else
-				openArchive(fname);
+				openArchive(fname, b.getPage());
 		}
 	}
 }/*}}}*/
