@@ -58,7 +58,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	recentfiles = new History(10);
 	cfg = &ComicBookSettings::instance();
 
-	setGeometry(cfg->getGeometry());
+	setGeometry(cfg->geometry());
 
 	//
 	// statusbar
@@ -66,15 +66,15 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	toggleStatusbarAction = new QAction(tr("Statusbar"), QKeySequence(), this);
 	toggleStatusbarAction->setToggleAction(true);
 	connect(toggleStatusbarAction, SIGNAL(toggled(bool)), statusbar, SLOT(setShown(bool)));
-	toggleStatusbarAction->setOn(cfg->getShowStatusbar());
-	statusbar->setShown(cfg->getShowStatusbar());
+	toggleStatusbarAction->setOn(cfg->showStatusbar());
+	statusbar->setShown(cfg->showStatusbar());
 	
 	//
 	// comic view
-	view = new ComicImageView(this, cfg->getPageSize(), cfg->getScaling(), cfg->getBackground());
+	view = new ComicImageView(this, cfg->pageSize(), cfg->pageScaling(), cfg->background());
 	setCentralWidget(view);
 	view->setFocus();
-	view->setSmallCursor(cfg->getUseSmallCursor());
+	view->setSmallCursor(cfg->smallCursor());
 	connect(cfg, SIGNAL(backgroundChanged(const QColor&)), view, SLOT(setBackground(const QColor&)));
 	connect(cfg, SIGNAL(scalingMethodChanged(ComicImageView::Scaling)), view, SLOT(setScaling(ComicImageView::Scaling)));
 
@@ -162,7 +162,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	connect(exitFullscreenAction, SIGNAL(activated()), this, SLOT(exitFullscreen()));
 		
 	QAction *which = originalSizeAction;
-	switch (cfg->getPageSize())
+	switch (cfg->pageSize())
 	{
 		case ComicImageView::FitWidth:  which = fitWidthAction; break;
 		case ComicImageView::FitHeight: which = fitHeightAction; break;
@@ -278,12 +278,12 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	navi_menu->insertSeparator();
 	contscr_id = navi_menu->insertItem(tr("Continuous scrolling"), this, SLOT(toggleContinousScroll()));
 	
-	view_menu->setItemChecked(scrv_id, f = cfg->getScrollbarsVisible());
-	twoPagesAction->setOn(cfg->getTwoPagesMode());
-	mangaModeAction->setOn(cfg->getJapaneseMode());
-	navi_menu->setItemChecked(contscr_id, cfg->getContinuousScrolling());
+	view_menu->setItemChecked(scrv_id, f = cfg->scrollbarsVisible());
+	twoPagesAction->setOn(cfg->twoPagesMode());
+	mangaModeAction->setOn(cfg->japaneseMode());
+	navi_menu->setItemChecked(contscr_id, cfg->continuousScrolling());
 
-	if (cfg->getContinuousScrolling())
+	if (cfg->continuousScrolling())
 	{
 		connect(view, SIGNAL(bottomReached()), this, SLOT(nextPage()));
 		connect(view, SIGNAL(topReached()), this, SLOT(prevPageBottom()));
@@ -308,8 +308,8 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	help_menu->insertItem(tr("About"), this, SLOT(showAbout()));
 	menuBar()->insertItem(tr("&Help"), help_menu);
 	
-	lastdir = cfg->getLastDir();
-	*recentfiles = cfg->getRecentlyOpened();
+	lastdir = cfg->lastDir();
+	*recentfiles = cfg->recentlyOpened();
 	setRecentFilesMenu(*recentfiles);
 
 	cfg->restoreDockLayout(this);
@@ -319,19 +319,19 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 
 ComicMainWindow::~ComicMainWindow()/*{{{*/
 {
-	if (cfg->getCacheThumbnails())
-		ImgDirSink::removeThumbnails(cfg->getThumbnailsAge());
+	if (cfg->cacheThumbnails())
+		ImgDirSink::removeThumbnails(cfg->thumbnailsAge());
 
-	cfg->setGeometry(frameGeometry());
+	cfg->geometry(frameGeometry());
 	cfg->saveDockLayout(this);
-	cfg->setScrollbarsVisible(view_menu->isItemChecked(scrv_id));
-	cfg->setTwoPagesMode(twoPagesAction->isOn());
-	cfg->setJapaneseMode(mangaModeAction->isOn());
-	cfg->setContinuousScrolling(navi_menu->isItemChecked(contscr_id));
-	cfg->setLastDir(lastdir);
-	cfg->setRecentlyOpened(*recentfiles);
-	cfg->setPageSize(view->getSize());
-	cfg->setShowStatusbar(toggleStatusbarAction->isOn());
+	cfg->scrollbarsVisible(view_menu->isItemChecked(scrv_id));
+	cfg->twoPagesMode(twoPagesAction->isOn());
+	cfg->japaneseMode(mangaModeAction->isOn());
+	cfg->continuousScrolling(navi_menu->isItemChecked(contscr_id));
+	cfg->lastDir(lastdir);
+	cfg->recentlyOpened(*recentfiles);
+	cfg->pageSize(view->getSize());
+	cfg->showStatusbar(toggleStatusbarAction->isOn());
 	
 	bookmarks->save();
 
@@ -383,7 +383,7 @@ void ComicMainWindow::keyPressEvent(QKeyEvent *e)/*{{{*/
 
 void ComicMainWindow::closeEvent(QCloseEvent *e)/*{{{*/
 {
-	return (!cfg->getConfirmExit() || confirmExit()) ? e->accept() : e->ignore();
+	return (!cfg->confirmExit() || confirmExit()) ? e->accept() : e->ignore();
 }/*}}}*/
 
 bool ComicMainWindow::confirmExit()/*{{{*/
@@ -493,7 +493,7 @@ void ComicMainWindow::sinkReady(const QString &path)/*{{{*/
 		sink->requestThumbnails(0, sink->numOfImages());
 
 	jumpToPage(currpage, true);
-	if (cfg->getAutoInfo())
+	if (cfg->autoInfo())
 		showInfo();
 }/*}}}*/
 
@@ -556,10 +556,10 @@ void ComicMainWindow::openDir(const QString &name)/*{{{*/
 	
 	closeSink();
 
-	ImgDirSink *dsink = new ImgDirSink(cfg->getCacheSize());
+	ImgDirSink *dsink = new ImgDirSink(cfg->cacheSize());
 	sink = dsink;
 	dsink->thumbnailLoader().setReciever(thumbswin);
-	dsink->thumbnailLoader().setUseCache(cfg->getCacheThumbnails());
+	dsink->thumbnailLoader().setUseCache(cfg->cacheThumbnails());
 	connect(sink, SIGNAL(sinkReady(const QString&)), this, SLOT(sinkReady(const QString&)));
 	connect(sink, SIGNAL(sinkError(int)), this, SLOT(sinkError(int)));
 	
@@ -588,10 +588,10 @@ void ComicMainWindow::openArchive(const QString &name)/*{{{*/
 
 	closeSink();
 
-	ImgArchiveSink *asink = new ImgArchiveSink(cfg->getCacheSize());
+	ImgArchiveSink *asink = new ImgArchiveSink(cfg->cacheSize());
 	sink = asink;
 	asink->thumbnailLoader().setReciever(thumbswin);
-	asink->thumbnailLoader().setUseCache(cfg->getCacheThumbnails());
+	asink->thumbnailLoader().setUseCache(cfg->cacheThumbnails());
 	connect(sink, SIGNAL(sinkReady(const QString&)), this, SLOT(sinkReady(const QString&)));
 	connect(sink, SIGNAL(sinkError(int)), this, SLOT(sinkError(int)));
 	
@@ -652,8 +652,10 @@ void ComicMainWindow::toggleFullScreen()/*{{{*/
 	}
 	else
 	{
-		if (cfg->getFullScreenHideMenu())
+		if (cfg->fullScreenHideMenu())
 			menuBar()->hide();
+		if (cfg->fullScreenHideStatusbar())
+			statusbar->hide();
 		showFullScreen();
 	}
 }/*}}}*/
@@ -663,6 +665,8 @@ void ComicMainWindow::exitFullscreen()/*{{{*/
 	if (isFullScreen())
 	{
 		menuBar()->show();
+		if (toggleStatusbarAction->isOn())
+			statusbar->show();
 		showNormal();
 	}
 }/*}}}*/
@@ -671,7 +675,7 @@ void ComicMainWindow::nextPage()/*{{{*/
 {
 	if (sink)
 	{
-		if (twoPagesAction->isOn() && cfg->getTwoPagesMode())
+		if (twoPagesAction->isOn() && cfg->twoPagesMode())
 		{
 			if (currpage < sink->numOfImages() - 2) //do not change pages if last two pages are visible
 				jumpToPage(currpage + 2);
@@ -685,14 +689,14 @@ void ComicMainWindow::nextPage()/*{{{*/
 
 void ComicMainWindow::prevPage()/*{{{*/
 {
-	jumpToPage(currpage - (twoPagesAction->isOn() && cfg->getTwoPagesStep() ? 2 : 1));
+	jumpToPage(currpage - (twoPagesAction->isOn() && cfg->twoPagesStep() ? 2 : 1));
 }/*}}}*/
 
 void ComicMainWindow::prevPageBottom()/*{{{*/
 {
 	if (currpage > 0)
 	{
-		jumpToPage(currpage - (twoPagesAction->isOn() && cfg->getTwoPagesStep() ? 2 : 1));
+		jumpToPage(currpage - (twoPagesAction->isOn() && cfg->twoPagesStep() ? 2 : 1));
 		view->scrollToBottom();
 	}
 }/*}}}*/
@@ -705,17 +709,17 @@ void ComicMainWindow::firstPage()/*{{{*/
 void ComicMainWindow::lastPage()/*{{{*/
 {
 	if (sink)
-		jumpToPage(sink->numOfImages() - (twoPagesAction->isOn() && cfg->getTwoPagesStep() ? 2 : 1));
+		jumpToPage(sink->numOfImages() - (twoPagesAction->isOn() && cfg->twoPagesStep() ? 2 : 1));
 }/*}}}*/
 
 void ComicMainWindow::forwardPages()/*{{{*/
 {
-	jumpToPage(currpage + (twoPagesAction->isOn() && cfg->getTwoPagesStep() ? 10 : 5));
+	jumpToPage(currpage + (twoPagesAction->isOn() && cfg->twoPagesStep() ? 10 : 5));
 }/*}}}*/
 
 void ComicMainWindow::backwardPages()/*{{{*/
 {
-	jumpToPage(currpage - (twoPagesAction->isOn() && cfg->getTwoPagesStep() ? 10 : 5));
+	jumpToPage(currpage - (twoPagesAction->isOn() && cfg->twoPagesStep() ? 10 : 5));
 }/*}}}*/
 
 void ComicMainWindow::jumpToPage(int n, bool force)/*{{{*/
@@ -729,12 +733,12 @@ void ComicMainWindow::jumpToPage(int n, bool force)/*{{{*/
 	if ((n != currpage) || force)
 	{
 		int result1, result2;
-		int preload = cfg->getPreload() ? 1 : 0;
+		int preload = cfg->preloadPages() ? 1 : 0;
 		
 		if (twoPagesAction->isOn())
 		{
 			QImage img1(sink->getImage(currpage = n, result1, 0)); //get 1st image, don't preload next one
-			QImage img2(sink->getImage(currpage + 1, result2, cfg->getTwoPagesStep() ? 2*preload : preload)); //preload next 2 images
+			QImage img2(sink->getImage(currpage + 1, result2, cfg->twoPagesStep() ? 2*preload : preload)); //preload next 2 images
 			if (result2 == 0)
 			{
 				if (mangaModeAction->isOn())
@@ -771,7 +775,7 @@ void ComicMainWindow::showInfo()/*{{{*/
 {
 	if (sink)
 	{
-		ComicBookInfo *i = new ComicBookInfo(this, *sink, cfg->getFont());
+		ComicBookInfo *i = new ComicBookInfo(this, *sink, cfg->infoFont());
 		i->show();
 	}
 }/*}}}*/

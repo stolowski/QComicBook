@@ -31,6 +31,7 @@ class ComicBookCfgDialog: public QTabDialog
 		QCheckBox *cb_twopagesstep;
 		QCheckBox *cb_smallcursor;
 		QCheckBox *cb_hidemenu;
+		QCheckBox *cb_hidestatus;
 		QPushButton *pb_color;
 		QCheckBox *cb_preload;
 		QCheckBox *cb_confirmexit;

@@ -28,6 +28,7 @@
 #define OPT_PAGESIZE                 "/PageSize"
 #define OPT_BACKGROUND               "/Background"
 #define OPT_FULLSCREENHIDEMENU       "/FullScreenHideMenu"
+#define OPT_FULLSCREENHIDESTATUS     "/FullScreenHideStatusbar"
 #define OPT_STATUSBAR                "/Statusbar"
 #define OPT_FONT                     "/InfoFont"
 #define OPT_SMALLCURSOR              "/SmallCursor"
@@ -176,6 +177,7 @@ void ComicBookSettings::load()/*{{{*/
 		pagesize = convertToSize(cfg->readEntry(OPT_PAGESIZE, size2string[0].str));
 		bgcolor.setNamedColor(cfg->readEntry(OPT_BACKGROUND, "#000000"));
 		fscrhidemenu = cfg->readBoolEntry(OPT_FULLSCREENHIDEMENU, true);
+		fscrhidestatus = cfg->readBoolEntry(OPT_FULLSCREENHIDESTATUS, true);
 		statusbar = cfg->readBoolEntry(OPT_STATUSBAR, true);
 		fontdesc = cfg->readEntry(OPT_FONT, QString::null);
 		if (fontdesc.isNull() || !font.fromString(fontdesc))
@@ -200,107 +202,112 @@ void ComicBookSettings::load()/*{{{*/
 	cfg->endGroup();
 }/*}}}*/
 
-bool ComicBookSettings::getUseSmallCursor() const/*{{{*/
+bool ComicBookSettings::smallCursor() const/*{{{*/
 {
 	return smallcursor;
 }/*}}}*/
 
-bool ComicBookSettings::getTwoPagesMode() const/*{{{*/
+bool ComicBookSettings::twoPagesMode() const/*{{{*/
 {
 	return twopages;
 }/*}}}*/
 
-bool ComicBookSettings::getTwoPagesStep() const/*{{{*/
+bool ComicBookSettings::twoPagesStep() const/*{{{*/
 {
 	return twopagesstep;
 }/*}}}*/
 
-bool ComicBookSettings::getJapaneseMode() const/*{{{*/
+bool ComicBookSettings::japaneseMode() const/*{{{*/
 {
 	return japanese;
 }/*}}}*/
 
-bool ComicBookSettings::getContinuousScrolling() const/*{{{*/
+bool ComicBookSettings::continuousScrolling() const/*{{{*/
 {
 	return contscroll;
 }/*}}}*/
 
-bool ComicBookSettings::getScrollbarsVisible() const/*{{{*/
+bool ComicBookSettings::scrollbarsVisible() const/*{{{*/
 {
 	return scrollbars;
 }/*}}}*/
 
-QRect ComicBookSettings::getGeometry() const/*{{{*/
+QRect ComicBookSettings::geometry() const/*{{{*/
 {
 	return QRect(x, y, w, h);
 }/*}}}*/
 
-ComicImageView::Size ComicBookSettings::getPageSize() const/*{{{*/
+ComicImageView::Size ComicBookSettings::pageSize() const/*{{{*/
 {
 	return pagesize;
 }/*}}}*/
 
-ComicImageView::Scaling ComicBookSettings::getScaling() const/*{{{*/
+ComicImageView::Scaling ComicBookSettings::pageScaling() const/*{{{*/
 {
 	return scaling;
 }/*}}}*/
 
-QString ComicBookSettings::getLastDir() const/*{{{*/
+QString ComicBookSettings::lastDir() const/*{{{*/
 {
 	return lastdir;
 }/*}}}*/
 
-const History& ComicBookSettings::getRecentlyOpened() const/*{{{*/
+const History& ComicBookSettings::recentlyOpened() const/*{{{*/
 {
 	return recent;
 }/*}}}*/
 
-QColor ComicBookSettings::getBackground() const/*{{{*/
+QColor ComicBookSettings::background() const/*{{{*/
 {
 	return bgcolor;
 }/*}}}*/
 
-int ComicBookSettings::getCacheSize() const/*{{{*/
+int ComicBookSettings::cacheSize() const/*{{{*/
 {
 	return cachesize;
 }/*}}}*/
 
-bool ComicBookSettings::getCacheThumbnails() const/*{{{*/
+bool ComicBookSettings::cacheThumbnails() const/*{{{*/
 {
 	return cachethumbs;
 }/*}}}*/
 
-int ComicBookSettings::getThumbnailsAge() const/*{{{*/
+int ComicBookSettings::thumbnailsAge() const/*{{{*/
 {
 	return thumbsage;
 }/*}}}*/
 
-bool ComicBookSettings::getPreload() const/*{{{*/
+bool ComicBookSettings::preloadPages() const/*{{{*/
 {
 	return preload;
 }/*}}}*/
 
-bool ComicBookSettings::getConfirmExit() const/*{{{*/
+bool ComicBookSettings::confirmExit() const/*{{{*/
 {
 	return confirmexit;
 }/*}}}*/
 
-bool ComicBookSettings::getAutoInfo() const/*{{{*/
+bool ComicBookSettings::autoInfo() const/*{{{*/
 {
 	return autoinfo;
 }/*}}}*/
 
-bool ComicBookSettings::getFullScreenHideMenu() const/*{{{*/
+bool ComicBookSettings::fullScreenHideMenu() const/*{{{*/
 {
 	return fscrhidemenu;
 }/*}}}*/
 
-bool ComicBookSettings::getShowStatusbar() const/*{{{*/
+bool ComicBookSettings::fullScreenHideStatusbar() const/*{{{*/
+{
+	return fscrhidestatus;
+}/*}}}*/
+
+bool ComicBookSettings::showStatusbar() const/*{{{*/
 {
 	return statusbar;
 }/*}}}*/
 
-const QFont& ComicBookSettings::getFont() const/*{{{*/
+const QFont& ComicBookSettings::infoFont() const/*{{{*/
 {
 	return font;
 }/*}}}*/
@@ -311,43 +318,43 @@ void ComicBookSettings::restoreDockLayout(QMainWindow *w)/*{{{*/
 	str >> *w;
 }/*}}}*/
 
-void ComicBookSettings::setUseSmallCursor(bool f)/*{{{*/
+void ComicBookSettings::smallCursor(bool f)/*{{{*/
 {
 	if (f != smallcursor)
 		cfg->writeEntry(GRP_VIEW OPT_SMALLCURSOR, smallcursor = f);
 }/*}}}*/
 
-void ComicBookSettings::setTwoPagesMode(bool f)/*{{{*/
+void ComicBookSettings::twoPagesMode(bool f)/*{{{*/
 {
 	if (f != twopages)
 		cfg->writeEntry(GRP_VIEW OPT_TWOPAGES, twopages = f);
 }/*}}}*/
 
-void ComicBookSettings::setTwoPagesStep(bool f)/*{{{*/
+void ComicBookSettings::twoPagesStep(bool f)/*{{{*/
 {
 	if (f != twopagesstep)
 		cfg->writeEntry(GRP_NAVI OPT_TWOPAGESSTEP, twopagesstep = f);
 }/*}}}*/
 
-void ComicBookSettings::setJapaneseMode(bool f)/*{{{*/
+void ComicBookSettings::japaneseMode(bool f)/*{{{*/
 {
 	if (f != japanese)
 		cfg->writeEntry(GRP_VIEW OPT_JAPANESEMODE, japanese = f);
 }/*}}}*/
 
-void ComicBookSettings::setContinuousScrolling(bool f)/*{{{*/
+void ComicBookSettings::continuousScrolling(bool f)/*{{{*/
 {
 	if (f != contscroll)
 		cfg->writeEntry(GRP_NAVI OPT_CONTSCROLL, contscroll = f);
 }/*}}}*/
 
-void ComicBookSettings::setScrollbarsVisible(bool f)/*{{{*/
+void ComicBookSettings::scrollbarsVisible(bool f)/*{{{*/
 {
 	if (f != scrollbars)
 		cfg->writeEntry(GRP_VIEW OPT_SCROLLBARS, scrollbars = f);
 }/*}}}*/
 
-void ComicBookSettings::setGeometry(const QRect g)/*{{{*/
+void ComicBookSettings::geometry(const QRect g)/*{{{*/
 {
 	if (x != g.x() || y != g.y() || w != g.width() || h != g.height())
 	{
@@ -360,13 +367,13 @@ void ComicBookSettings::setGeometry(const QRect g)/*{{{*/
 	}
 }/*}}}*/
 
-void ComicBookSettings::setPageSize(ComicImageView::Size s)/*{{{*/
+void ComicBookSettings::pageSize(ComicImageView::Size s)/*{{{*/
 {
 	if (s != pagesize)
 		cfg->writeEntry(GRP_VIEW OPT_PAGESIZE, convert(pagesize = s));
 }/*}}}*/
 
-void ComicBookSettings::setScaling(ComicImageView::Scaling s)/*{{{*/
+void ComicBookSettings::pageScaling(ComicImageView::Scaling s)/*{{{*/
 {
 	if (s != scaling)
 	{
@@ -375,19 +382,19 @@ void ComicBookSettings::setScaling(ComicImageView::Scaling s)/*{{{*/
 	}
 }/*}}}*/
 
-void ComicBookSettings::setLastDir(const QString &d)/*{{{*/
+void ComicBookSettings::lastDir(const QString &d)/*{{{*/
 {
 	if (lastdir != d)
 		cfg->writeEntry(GRP_MISC OPT_LASTDIR, lastdir = d);
 }/*}}}*/
 
-void ComicBookSettings::setRecentlyOpened(const History &hist)/*{{{*/
+void ComicBookSettings::recentlyOpened(const History &hist)/*{{{*/
 {
 	recent = hist;
 	cfg->writeEntry(GRP_MISC OPT_RECENT, recent.getAll());
 }/*}}}*/
 
-void ComicBookSettings::setBackground(const QColor &color)/*{{{*/
+void ComicBookSettings::background(const QColor &color)/*{{{*/
 {
 	if (color != bgcolor)
 	{
@@ -397,55 +404,61 @@ void ComicBookSettings::setBackground(const QColor &color)/*{{{*/
 	}
 }/*}}}*/
 
-void ComicBookSettings::setCacheSize(int s)/*{{{*/
+void ComicBookSettings::cacheSize(int s)/*{{{*/
 {
 	if (s != cachesize)
 		cfg->writeEntry(GRP_MISC OPT_CACHESIZE, cachesize = s);
 }/*}}}*/
 
-void ComicBookSettings::setCacheThumbnails(bool f)/*{{{*/
+void ComicBookSettings::cacheThumbnails(bool f)/*{{{*/
 {
 	if (f != cachethumbs)
 		cfg->writeEntry(GRP_MISC OPT_CACHETHUMBS, cachethumbs = f);
 }/*}}}*/
 
-void ComicBookSettings::setThumbnailsAge(int n)/*{{{*/
+void ComicBookSettings::thumbnailsAge(int n)/*{{{*/
 {
 	if (n != thumbsage)
 		cfg->writeEntry(GRP_MISC OPT_THUMBSAGE, thumbsage = n);
 }/*}}}*/
 
-void ComicBookSettings::setPreload(bool f)/*{{{*/
+void ComicBookSettings::preloadPages(bool f)/*{{{*/
 {
 	if (f != preload)
 		cfg->writeEntry(GRP_MISC OPT_PRELOAD, preload = f);
 }/*}}}*/
 
-void ComicBookSettings::setConfirmExit(bool f)/*{{{*/
+void ComicBookSettings::confirmExit(bool f)/*{{{*/
 {
 	if (f != confirmexit)
 		cfg->writeEntry(GRP_MISC OPT_CONFIRMEXIT, confirmexit = f);
 }/*}}}*/
 
-void ComicBookSettings::setAutoInfo(bool f)/*{{{*/
+void ComicBookSettings::autoInfo(bool f)/*{{{*/
 {
 	if (f != autoinfo)
 		cfg->writeEntry(GRP_MISC OPT_AUTOINFO, autoinfo = f);
 }/*}}}*/
 
-void ComicBookSettings::setFullScreenHideMenu(bool f)/*{{{*/
+void ComicBookSettings::fullScreenHideMenu(bool f)/*{{{*/
 {
 	if (f != fscrhidemenu)
 		cfg->writeEntry(GRP_VIEW OPT_FULLSCREENHIDEMENU, fscrhidemenu = f);
 }/*}}}*/
 
-void ComicBookSettings::setShowStatusbar(bool f)/*{{{*/
+void ComicBookSettings::fullScreenHideStatusbar(bool f)/*{{{*/
+{
+	if (f != fscrhidestatus)
+		cfg->writeEntry(GRP_VIEW OPT_FULLSCREENHIDESTATUS, fscrhidestatus = f);
+}/*}}}*/
+
+void ComicBookSettings::showStatusbar(bool f)/*{{{*/
 {
 	if (f != statusbar)
 		cfg->writeEntry(GRP_VIEW OPT_STATUSBAR, statusbar = f);
 }/*}}}*/
 
-void ComicBookSettings::setFont(const QFont &s)/*{{{*/
+void ComicBookSettings::infoFont(const QFont &s)/*{{{*/
 {
 	if (s != font)
 	{
