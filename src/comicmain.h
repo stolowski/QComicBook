@@ -46,8 +46,6 @@ class ComicMainWindow: public QMainWindow
 		int currpage; //!<current page number
 		int scrv_id; //!<identifier of "Scrollbars visible" menu option
 		int contscr_id; //!<identifier of "Continous scrolling" menu option
-		int opennext_id; //!<identifier of "Open next" menu option
-		int openprv_id; //!<identifier of "Open previous" menu option
 		int firstpage_id; //!<identifier of "First page" menu option
 		int lastpage_id; //!<identifier of "Last page" menu option
 		int jumpto_id; //!<identifier of "Jump to" menu option
@@ -75,6 +73,8 @@ class ComicMainWindow: public QMainWindow
 		QAction *pageBottomAction;
 		QAction *mangaModeAction;
 		QAction *twoPagesAction;
+		QAction *openNextAction;
+		QAction *openPrevAction;
 		static const QString ARCH_EXTENSIONS; //!<space-separated list of archives extensions
 		
 	protected:

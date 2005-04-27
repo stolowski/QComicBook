@@ -1,4 +1,6 @@
 2005-05-xx:  0.1.9       -- option to hide statusbar in fullscreen mode added
+                         -- keyboard shortcuts for 'Open next' and 'Open
+			    previous' added
 
 2005-04-23:  0.1.8       -- support for ace (cba), tar.gz and tar.bz2 archives
                          -- improved mouse-dragging, reversed mouse-dragging

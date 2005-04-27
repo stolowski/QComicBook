@@ -95,6 +95,10 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	connect(openArchiveAction, SIGNAL(activated()), this, SLOT(browseArchive()));
 	QAction *openDirAction = new QAction(tr("Open directory"), CTRL+Key_D, this);
 	connect(openDirAction, SIGNAL(activated()), this, SLOT(browseDirectory()));
+	openNextAction = new QAction(tr("Open next"), CTRL+Key_N, this);
+	connect(openNextAction, SIGNAL(activated()), this, SLOT(openNext()));
+	openPrevAction = new QAction(tr("Open previous"), CTRL+Key_P, this);
+	connect(openPrevAction, SIGNAL(activated()), this, SLOT(openPrevious()));
 	QAction *fullScreenAction = new QAction(tr("&Fullscreen"), Key_F11, this);
 	connect(fullScreenAction, SIGNAL(activated()), this, SLOT(toggleFullScreen()));
 	nextPageAction = new QAction(Icons::get(ICON_NEXTPAGE), tr("Next page"), Key_PageDown, this);
@@ -225,8 +229,8 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	file_menu = new QPopupMenu(this);
 	openDirAction->addTo(file_menu);
 	openArchiveAction->addTo(file_menu);
-	opennext_id = file_menu->insertItem(tr("Open next"), this, SLOT(openNext()));
-	openprv_id = file_menu->insertItem(tr("Open previous"), this, SLOT(openPrevious()));
+	openNextAction->addTo(file_menu);
+	openPrevAction->addTo(file_menu);
 	recent_menu = new QPopupMenu(this);
 	file_menu->insertItem(tr("Recently opened"), recent_menu);
 	connect(recent_menu, SIGNAL(activated(int)), this, SLOT(recentSelected(int)));
@@ -347,10 +351,10 @@ void ComicMainWindow::enableComicBookActions(bool f)/*{{{*/
 	//
 	// file menu
 	const bool x = f && sink && typeid(*sink) == typeid(ImgArchiveSink);
-	file_menu->setItemEnabled(opennext_id, x);
-	file_menu->setItemEnabled(openprv_id, x);
 	file_menu->setItemEnabled(close_id, f);
 	showInfoAction->setEnabled(f);
+	openNextAction->setEnabled(f);
+	openPrevAction->setEnabled(f);
 	
 	//
 	// navigation menu
