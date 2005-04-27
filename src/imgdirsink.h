@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005 Pawel Stolowski <yogin@linux.bydg.org>
+ * Copyright (C) 2005 Pawel Stolowski < yogin@linux.bydg.org>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -9,6 +9,8 @@
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
+
+/*! \file imgdirsink.h */
 
 #ifndef __IMGDIRSINK_H
 #define __IMGDIRSINK_H
@@ -28,19 +30,22 @@
 class QImage;
 class ImgCache;
 
-enum
+//! Possible errors.
+enum SinkError
 {
-	SINKERR_ACCESS = 1, //can't access file or directory
-	SINKERR_UNKNOWNFILE, //unknown archive format
-	SINKERR_NOTSUPPORTED, //known archive type, but not supported
-	SINKERR_LOADERROR,  //can't load image file
-	SINKERR_NOTFOUND,
-	SINKERR_NOTFILE,   //not a regular file
-	SINKERR_NOTDIR,    //not a directory
-	SINKERR_EMPTY,     //no images inside
-	SINKERR_OTHER
+	SINKERR_ACCESS = 1, //!< can't access file or directory
+	SINKERR_UNKNOWNFILE, //!< unknown archive format
+	SINKERR_NOTSUPPORTED, //!< known archive type, but not supported
+	SINKERR_LOADERROR,  //!< can't load image file
+	SINKERR_NOTFOUND, //!< file not found
+	SINKERR_NOTFILE,   //!< not a regular file
+	SINKERR_NOTDIR,    //!< not a directory
+	SINKERR_EMPTY,     //!< no images inside
+	SINKERR_OTHER  //!< another kind of error
 };
 
+//! Comic book directory sink.
+/*! Allows opening directories containing image files. */
 class ImgDirSink: public ImgSink, protected QThread
 {
 	Q_OBJECT
@@ -49,18 +54,27 @@ class ImgDirSink: public ImgSink, protected QThread
 		ThumbnailLoader thloader;
 		
 	protected:
-		mutable QMutex cachemtx; //mutex for cache, pre, precnt
-		mutable QMutex listmtx; //mutex for imgfiles
+		mutable QMutex cachemtx; //!< mutex for cache, pre, precnt
+		mutable QMutex listmtx; //!< mutex for imgfiles
 		ImgCache *cache;
-		int pre; //number of first page to preload
-		int precnt; //number of pages to preload starting from pre
-		QString dirpath; //path to directory
-		QString cbname; //comic book name (directory path by default)
-		QStringList imgfiles; //list of images files in directory
-		QStringList txtfiles; //text files (.nfo, file_id.diz)
-		QStringList otherfiles; //list of other files
-		QStringList dirs; //directories
+		int pre; //!< number of first page to preload
+		int precnt; //!< number of pages to preload starting from pre
+		QString dirpath; //!< path to directory
+		QString cbname; //!< comic book name (directory path by default)
+		QStringList imgfiles; //!< list of images files in directory
+		QStringList txtfiles; //!< text files (.nfo, file_id.diz)
+		QStringList otherfiles; //!< list of other files
+		QStringList dirs; //!< directories
 
+		//! Scans directories recursively for image and text files.
+		/*! Scans directories for jpg, png, gif, xpm image files and .nfo and file_id.diz text files.
+		 *  Images file names are stored in imgfiles; text file names are stored in txtfiles.
+		 *  Other files are store in otherfiles. All directories are stored in dirs.
+		 *  @param s starting directory 
+		 *  @see imgfiles
+		 *  @see txtfiles
+		 *  @see otherfiles
+		 *  @see dirs */
 		void recurseDir(const QString &s);
 		QString memPrefix(int &s) const;
 
@@ -92,10 +106,13 @@ class ImgDirSink: public ImgSink, protected QThread
 		virtual QStringList getAlldirs() const;
 		virtual QStringList getAllimgfiles() const;
 
+		//! Returns the instance of thumbnail loader.
+		/*! @return thumbnail loader instance */
 		virtual ThumbnailLoader& thumbnailLoader();
 
 		//
-		// removes old thumbnails
+		//! Removes old thumbnails.
+		/*! @param days thumbnails older than this number will be removed */
 		static void removeThumbnails(int days);
 };
 

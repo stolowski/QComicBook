@@ -10,6 +10,8 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
+/*! \file comicmain.h */
+
 #ifndef __COMIC_MAIN_H
 #define __COMIC_MAIN_H
 
@@ -28,6 +30,7 @@ class History;
 class Bookmarks;
 class StatusBar;
 
+//! The main window of QComicBook.
 class ComicMainWindow: public QMainWindow
 {
 	Q_OBJECT
@@ -36,18 +39,21 @@ class ComicMainWindow: public QMainWindow
 		ImgSink *sink;
 		ComicImageView *view;
 		ThumbnailsWindow *thumbswin;
+		History *recentfiles;
+		Bookmarks *bookmarks;
+		StatusBar *statusbar;
 		ComicBookSettings *cfg;
-		int currpage;
-		int scrv_id;
-		int contscr_id;
-		int opennext_id;
-		int openprv_id;
-		int firstpage_id;
-		int lastpage_id;
-		int jumpto_id;
-		int setbookmark_id;
-		int rmvbookmark_id;
-		int close_id;
+		int currpage; //!<current page number
+		int scrv_id; //!<identifier of "Scrollbars visible" menu option
+		int contscr_id; //!<identifier of "Continous scrolling" menu option
+		int opennext_id; //!<identifier of "Open next" menu option
+		int openprv_id; //!<identifier of "Open previous" menu option
+		int firstpage_id; //!<identifier of "First page" menu option
+		int lastpage_id; //!<identifier of "Last page" menu option
+		int jumpto_id; //!<identifier of "Jump to" menu option
+		int setbookmark_id; //!<identifier of "Set bookmark" menu option
+		int rmvbookmark_id; //!<identifier of "Remove bookmark" menu option
+		int close_id; //!<identifier of "Close" menu option
 		QToolBar *toolbar;
 		QPopupMenu *file_menu;
 		QPopupMenu *context_menu;
@@ -55,11 +61,8 @@ class ComicMainWindow: public QMainWindow
 		QPopupMenu *navi_menu;
 		QPopupMenu *recent_menu;
 		QPopupMenu *bookmarks_menu;
-		QLabel *pageinfo;
-		QString lastdir;
-		History *recentfiles;
-		Bookmarks *bookmarks;
-		StatusBar *statusbar;
+		QLabel *pageinfo; //!<page info displayed in right-click context menu
+		QString lastdir; //!<last opened directory for Open File/Directory dialog
 		QAction *toggleThumbnailsAction;
 		QAction *toggleToolbarAction;
 		QAction *toggleStatusbarAction;
@@ -72,7 +75,7 @@ class ComicMainWindow: public QMainWindow
 		QAction *pageBottomAction;
 		QAction *mangaModeAction;
 		QAction *twoPagesAction;
-		static const QString ARCH_EXTENSIONS;
+		static const QString ARCH_EXTENSIONS; //!<space-separated list of archives extensions
 		
 	protected:
 		void keyPressEvent(QKeyEvent *e);
@@ -87,11 +90,6 @@ class ComicMainWindow: public QMainWindow
 		void setRecentFilesMenu(const History &hist);
 		void recentSelected(int id);
 		void bookmarkSelected(int id);
-		void toggleScrollbars();
-		void toggleTwoPages(bool f);
-		void toggleFullScreen();
-		void toggleContinousScroll();
-		void toggleJapaneseMode(bool f);
 		void thumbnailsVisibilityChanged(bool f);
 		void toolbarVisibilityChanged(bool f);
 
@@ -120,6 +118,11 @@ class ComicMainWindow: public QMainWindow
 		void closeSink();
 		void setBookmark();
 		void removeBookmark();
+		void toggleScrollbars();
+		void toggleTwoPages(bool f);
+		void toggleFullScreen();
+		void toggleContinousScroll();
+		void toggleJapaneseMode(bool f);
 
 	public:
 		ComicMainWindow(QWidget *parent);

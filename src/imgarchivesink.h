@@ -10,6 +10,8 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
+/*! \file imgarchivesink.h */
+
 #ifndef __IMGARCHIVESINK_H
 #define __IMGARCHIVESINK_H
 
@@ -21,6 +23,8 @@
 class QImage;
 class QProcess;
 
+//! Comic book archive sink.
+/*! Allows opening different kind of archives containing image files. */
 class ImgArchiveSink: public ImgDirSink
 {
 	Q_OBJECT
@@ -36,25 +40,25 @@ class ImgArchiveSink: public ImgDirSink
 			UNKNOWN_ARCHIVE
 		};
 
-		ArchiveType archivetype;
-		QProcess *pext; //extracting process
-		QProcess *pinf; //file list extracing process
-		QString archivename; //archive file name, without path
-		QString archivepath; //full path, including archive name
-		QString tmppath; //path to extracted archive
-		QStringList archfiles; //list of archive files
-		QStringList archdirs; //list of archive dirs
-		int filesnum; //number of files gathered from parsing archiver output, used for progress bar
-		int extcnt; //extracted files counter for progress bar
+		ArchiveType archivetype; ///< the type of currently opened archive
+		QProcess *pext; ///< extracting process
+		QProcess *pinf; ///< file list extracing process
+		QString archivename; ///< archive file name, without path
+		QString archivepath; ///< full path, including archive name
+		QString tmppath; ///< path to extracted archive
+		QStringList archfiles; ///< list of archive files
+		QStringList archdirs; ///< list of archive dirs
+		int filesnum; ///< number of files gathered from parsing archiver output, used for progress bar
+		int extcnt; ///< extracted files counter for progress bar
 		
-		static QStringList zip; //unzip executable and extract options
-		static QStringList rar; //rar/unrar executbale and extract options
-		static QStringList ace; //unace executbale and extract options
+		static QStringList zip; ///< unzip executable and extract options
+		static QStringList rar; ///< rar/unrar executbale and extract options
+		static QStringList ace; ///< unace executbale and extract options
 		static QStringList targz;
 		static QStringList tarbz2;
-		static QStringList zip_i; //unzip executable and list options
-		static QStringList rar_i; //rar/unrar executable and list options
-		static QStringList ace_i; //unace executable and list options
+		static QStringList zip_i; ///< unzip executable and list options
+		static QStringList rar_i; ///< rar/unrar executable and list options
+		static QStringList ace_i; ///< unace executable and list options
 		static QStringList targz_i;
 		static QStringList tarbz2_i;
 		static bool havezip;
@@ -63,6 +67,10 @@ class ImgArchiveSink: public ImgDirSink
 		static bool havetargz;
 		static bool havetarbz2;
 
+		//! Determines archive type
+		/*! Determines archive type basing on filename extension. As a last effort, if
+		 *  the check fails, tries to guess archive type basing on well known magic bytes.
+		 *  @param filename name of the archive, with path */
 		static ArchiveType archiveType(const QString &filename);
 		int extract(const QString &filename, const QString &destdir);
 		

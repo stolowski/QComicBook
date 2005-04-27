@@ -1,10 +1,8 @@
-- cba (ace) archives support
+- temporary directory setting
+- bookmark editor
 - docbook help/docs
 - doxygen docs
 - QImage::load test
-- cbb, cbg archives support
 - image zooming and rotating
 - drag & drop support
-- disabling inactive options
 - save Info window geometry
-- right-to-left reading (for manga comics)
