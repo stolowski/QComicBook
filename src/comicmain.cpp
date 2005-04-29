@@ -24,6 +24,10 @@
 #include "history.h"
 #include "helpbrowser.h"
 #include "cbconfigdialog.h"
+#include "statusbar.h"
+#include "thumbnailswin.h"
+#include "thumbnailsview.h"
+#include "thumbnailloader.h"
 #include <qimage.h>
 #include <qmenubar.h>
 #include <qpopupmenu.h>
@@ -36,12 +40,8 @@
 #include <qlabel.h>
 #include <qframe.h>
 #include <jumptopagewin.h>
-#include <qdockwindow.h>
 #include <qprogressdialog.h>
-#include "thumbnailswin.h"
-#include "thumbnailsview.h"
-#include "thumbnailloader.h"
-#include "statusbar.h"
+#include <typeinfo>
 
 //
 // archives extensions used for Open File dialog and filtering out files in OpenNext() function
