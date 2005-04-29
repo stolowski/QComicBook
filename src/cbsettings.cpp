@@ -18,7 +18,6 @@
 #include <qdir.h>
 #include <qtextstream.h>
 #include <qmainwindow.h>
-#include <stdlib.h>
 
 #define GRP_VIEW                     "/View"
 #define OPT_TWOPAGES                 "/TwoPages"
@@ -80,12 +79,7 @@ ComicBookSettings& ComicBookSettings::instance()/*{{{*/
 ComicBookSettings::ComicBookSettings(): QObject()/*{{{*/
 {
 	cfg = new QSettings();
-	char *home = getenv("HOME");
-	if (home)
-	{
-		QString path = QString(home) + "/.qcomicbook";
-		cfg->insertSearchPath(QSettings::Unix, path);
-	}
+	cfg->insertSearchPath(QSettings::Unix, QDir::homeDirPath() + "/.qcomicbook");
 	cfg->beginGroup("/QComicBook");
 }/*}}}*/
 
@@ -98,21 +92,17 @@ ComicBookSettings::~ComicBookSettings()/*{{{*/
 bool ComicBookSettings::checkDirs()/*{{{*/
 {
 	dirsok = false;
-	if (char *login = getenv("HOME"))
-	{
-		bkpath = QString(login) + "/.qcomicbook";
-		QDir dir(bkpath);
-		if (!dir.exists())
-			if (!dir.mkdir(bkpath))
-				return false;
-		
-		dir.setPath(thpath = bkpath + "/cache");
-		if (!dir.exists())
-			if (!dir.mkdir(thpath))
-				return false;
-		return dirsok = true;
-	}
-	return false;
+	bkpath = QDir::homeDirPath() + "/.qcomicbook";
+	QDir dir(bkpath);
+	if (!dir.exists())
+		if (!dir.mkdir(bkpath))
+			return false;
+	
+	dir.setPath(thpath = bkpath + "/cache");
+	if (!dir.exists())
+		if (!dir.mkdir(thpath))
+			return false;
+	return dirsok = true;
 }/*}}}*/
 
 const QString& ComicBookSettings::bookmarksDir()/*{{{*/

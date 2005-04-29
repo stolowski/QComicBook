@@ -36,7 +36,7 @@ class Bookmark
 		void setName(const QString &cbname) { name = cbname; }
 		void setPage(int cbpage) { page = cbpage; }
 		void setId(int n) { id = n; }
-		QString menuItemName() { return name + " [" + QString::number(page) + "]"; }
+		QString menuItemName() { return name + " [" + QString::number(page + 1) + "]"; }
 };
 
 class Bookmarks
