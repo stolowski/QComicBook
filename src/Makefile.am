@@ -44,6 +44,7 @@ dist_qcomicbook_SOURCES = aboutdialog.cpp \
 nodist_qcomicbook_SOURCES = $(BUILT_SOURCES)
 
 noinst_HEADERS = aboutdialog.h \
+		 bookmark.h \
 		 bookmarks.h \
 		 cbconfigdialog.h \
 		 cbicons.h \
