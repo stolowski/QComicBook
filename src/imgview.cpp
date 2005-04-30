@@ -360,6 +360,10 @@ void ComicImageView::setSmallCursor(bool f)/*{{{*/
 	{
 		static unsigned char bmp_bits[4*32];
 		static unsigned char msk_bits[4*32];
+
+		if (smallcursor)
+			return;
+
 		for (int i=0; i<4*32; i++)
 			bmp_bits[i] = msk_bits[i] = 0;
 		bmp_bits[0] = msk_bits[0] = 0xe0;
