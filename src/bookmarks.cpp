@@ -43,6 +43,7 @@ bool Bookmarks::load()/*{{{*/
 			int page = str.readLine().toInt();
 			set(name, page);
 		}
+		f.close();
 	}
 	return false;
 }/*}}}*/

@@ -10,6 +10,8 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
+/*! \file bookmarks.h */
+
 #ifndef __BOOKMARKS_H
 #define __BOOKMARKS_H
 
@@ -23,11 +25,11 @@ class QPopupMenu;
 class Bookmarks
 {
 	private:
-		QPtrList<Bookmark> blist; //pointers to bookmark objects
-		QMap<int, Bookmark *> bmap; //for fast id->bookmark lookup
-		QPopupMenu *bmenu;
-		bool changed;
-		QString fname; //bookmarks file
+		QPtrList<Bookmark> blist; //!<pointers to bookmark objects
+		QMap<int, Bookmark *> bmap; //!<for fast id->bookmark lookup
+		QPopupMenu *bmenu; //!<popup menu containing bookmarks
+		bool changed; //!<flag indicator to decide if bookmarks should be saved
+		QString fname; //!<bookmarks file
 
 	public:
 		Bookmarks(QPopupMenu *menu);

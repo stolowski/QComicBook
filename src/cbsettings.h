@@ -73,6 +73,7 @@ class ComicBookSettings: public QObject
 	signals:
 		void backgroundChanged(const QColor &color);
 		void scalingMethodChanged(ComicImageView::Scaling s);
+		void cursorChanged(bool f);
 
 	private:
 		ComicBookSettings();

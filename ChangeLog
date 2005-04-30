@@ -1,7 +1,9 @@
-2005-05-xx:  0.1.9       -- option to hide statusbar in fullscreen mode added
+2005-04-30:  0.1.9       -- option to hide statusbar in fullscreen mode added
                          -- keyboard shortcuts for 'Open next' and 'Open
 			    previous' added
-			 -- fixed compilation error for gcc 3.3.x (<typeinfo>
+			 -- changing mouse cursor takes effect immediately now -
+			    no need to restart
+			 -- fixed compilation error for some gcc versions (<typeinfo>
 			    issue)
 			 -- fixed bug with bookmarked page numbers starting
 			    from 0

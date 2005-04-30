@@ -10,6 +10,8 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
+/*! \file bookmark.h */
+
 #ifndef __BOOKMARK_H
 #define __BOOKMARK_H
 
@@ -18,9 +20,9 @@
 class Bookmark
 {
 	private:
-		QString name;
-		int page;
-		int id;
+		QString name; //!<comic book full path
+		int page; //!<page number
+		int id; //!<item identifier in popup menu
 
 	public:
 		Bookmark() {}

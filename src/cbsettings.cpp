@@ -311,7 +311,10 @@ void ComicBookSettings::restoreDockLayout(QMainWindow *w)/*{{{*/
 void ComicBookSettings::smallCursor(bool f)/*{{{*/
 {
 	if (f != smallcursor)
+	{
 		cfg->writeEntry(GRP_VIEW OPT_SMALLCURSOR, smallcursor = f);
+		emit cursorChanged(f);
+	}
 }/*}}}*/
 
 void ComicBookSettings::twoPagesMode(bool f)/*{{{*/

@@ -77,6 +77,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	view->setSmallCursor(cfg->smallCursor());
 	connect(cfg, SIGNAL(backgroundChanged(const QColor&)), view, SLOT(setBackground(const QColor&)));
 	connect(cfg, SIGNAL(scalingMethodChanged(ComicImageView::Scaling)), view, SLOT(setScaling(ComicImageView::Scaling)));
+	connect(cfg, SIGNAL(cursorChanged(bool)), view, SLOT(setSmallCursor(bool)));
 
 	//
 	// thumbnails view
@@ -642,7 +643,6 @@ void ComicMainWindow::openPrevious()/*{{{*/
 			openArchive(dir.filePath(*(--it), true), 0);
 		}
 	}
-
 }/*}}}*/
 
 void ComicMainWindow::toggleFullScreen()/*{{{*/
