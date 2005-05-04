@@ -118,6 +118,7 @@ class ComicMainWindow: public QMainWindow
 		void closeSink();
 		void setBookmark();
 		void removeBookmark();
+		void openBookmarksManager();
 		void toggleScrollbars();
 		void toggleTwoPages(bool f);
 		void toggleFullScreen();

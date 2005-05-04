@@ -28,6 +28,7 @@
 #include "thumbnailswin.h"
 #include "thumbnailsview.h"
 #include "thumbnailloader.h"
+#include "bookmarkmanager.h"
 #include <qimage.h>
 #include <qmenubar.h>
 #include <qpopupmenu.h>
@@ -45,7 +46,7 @@
 
 //
 // archives extensions used for Open File dialog and filtering out files in OpenNext() function
-const QString ComicMainWindow::ARCH_EXTENSIONS = "*.rar *.cbr *.zip *.cbz *.ace *.cba *.tar.gz *.tgz *.tar.bz2";
+const QString ComicMainWindow::ARCH_EXTENSIONS = "*.rar *.cbr *.zip *.cbz *.ace *.cba *.tar.gz *.tgz *.cbg *.tar.bz2 *.cbb";
 
 ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WType_TopLevel|WDestructiveClose), sink(NULL), currpage(0)/*{{{*/
 {
@@ -302,6 +303,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	menuBar()->insertItem(tr("&Bookmarks"), bookmarks_menu);
 	setbookmark_id = bookmarks_menu->insertItem(tr("Set bookmark for this comicbook"), this, SLOT(setBookmark()));
 	rmvbookmark_id = bookmarks_menu->insertItem(tr("Remove bookmark for this comicbook"), this, SLOT(removeBookmark()));
+	//bookmarks_menu->insertItem(tr("Manage bookmarks"), this, SLOT(openBookmarksManager()));
 	bookmarks_menu->insertSeparator();
 	bookmarks->load();
 	connect(bookmarks_menu, SIGNAL(activated(int)), this, SLOT(bookmarkSelected(int)));
@@ -839,6 +841,12 @@ void ComicMainWindow::removeBookmark()/*{{{*/
 		    tr("Do you really want to remove bookmark\nfor this comic book?"),
 			QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
 		bookmarks->remove(sink->getFullName());
+}/*}}}*/
+
+void ComicMainWindow::openBookmarksManager()/*{{{*/
+{
+	BookmarkManager *win = new BookmarkManager(this, bookmarks);
+	win->show();
 }/*}}}*/
 
 void ComicMainWindow::bookmarkSelected(int id)/*{{{*/

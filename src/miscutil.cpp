@@ -23,7 +23,7 @@ bool which(const QString &command)/*{{{*/
 	{
 		QFileInfo finfo(*it + "/" + command);
 		if (finfo.isExecutable())
-				return true;
+			return true;
 	}
 	return false;
 }/*}}}*/

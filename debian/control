@@ -8,9 +8,16 @@ Standards-Version: 3.6.1
 Package: qcomicbook
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Recommends: rar | unrar, zip | unzip
-Description: qt viewer for comic book archives (cbr/cbz)
+Recommends: rar | unrar, zip | unzip, unace, bzip2
+Description: qt viewer for comic book archives (cbr/cbz/cba/cbg/cbb)
  QComicBook is a viewer for comic book archives containing
  jpeg/png images, which aims at convenience and simplicity.
  Features include: automatic decompression, full-screen mode,
  page scaling, mouse or keyboard navigation etc.
+ .
+ QComicBook for now supports archives:
+ - cbr - rar-compressed
+ - cbz - zip-compressed
+ - cba - ace-compressed
+ - cbg - targzipped
+ - cbb - tarbzip2ped
