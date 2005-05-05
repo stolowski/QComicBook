@@ -46,6 +46,7 @@ nodist_qcomicbook_SOURCES = $(BUILT_SOURCES)
 
 noinst_HEADERS = aboutdialog.h \
 		 bookmark.h \
+		 bookmarkmanager.h \
 		 bookmarks.h \
 		 cbconfigdialog.h \
 		 cbicons.h \
