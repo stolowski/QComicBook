@@ -19,6 +19,7 @@ QDict<QIconSet> Icons::set;
 bool Icons::init(const QString& path)/*{{{*/
 {
 	QDir dir(iconpath = path);
+	set.setAutoDelete(true); //icons in the set will be deleted on set deletion
 	return dir.exists();
 }/*}}}*/
 

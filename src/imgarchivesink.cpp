@@ -197,6 +197,7 @@ int ImgArchiveSink::open(const QString &path)/*{{{*/
 
 void ImgArchiveSink::close()/*{{{*/
 {
+	ImgDirSink::close();
 	QDir dir(tmppath);
 	//
 	// remove temporary files and dirs
@@ -206,7 +207,6 @@ void ImgArchiveSink::close()/*{{{*/
 		dir.rmdir(*it);
 	dir.rmdir(tmppath);
 	archivename = QString::null;
-	ImgDirSink::close();
 }/*}}}*/
 
 QString ImgArchiveSink::getName(int maxlen)/*{{{*/

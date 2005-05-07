@@ -21,13 +21,13 @@
 #include <qfileinfo.h>
 #include <qtextstream.h>
 
-ImgDirSink::ImgDirSink(int cachesize): ImgSink(), cachemtx(true)/*{{{*/
+ImgDirSink::ImgDirSink(int cachesize): ImgSink(), QThread(), cachemtx(true)/*{{{*/
 {
 	thloader.setSink(this);
 	cache = new ImgCache(cachesize);
 }/*}}}*/
 
-ImgDirSink::ImgDirSink(const QString &path, int cachesize): cachemtx(true), dirpath(QString::null)/*{{{*/
+ImgDirSink::ImgDirSink(const QString &path, int cachesize): ImgSink(), QThread(), cachemtx(true), dirpath(QString::null)/*{{{*/
 {
 	thloader.setSink(this);
 	cache = new ImgCache(cachesize);
@@ -129,8 +129,8 @@ int ImgDirSink::open(const QString &path)/*{{{*/
 void ImgDirSink::close()/*{{{*/
 {
 	thloader.stop();
-	wait(); //wait for preload thread
 	thloader.wait(); //wait for thumbnail loader thread
+	wait(); //wait for preload thread
 
 	listmtx.lock();
 	dirpath = QString::null;

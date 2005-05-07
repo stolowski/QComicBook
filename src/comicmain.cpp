@@ -50,8 +50,6 @@ const QString ComicMainWindow::ARCH_EXTENSIONS = "*.rar *.cbr *.zip *.cbz *.ace 
 
 ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WType_TopLevel|WDestructiveClose), sink(NULL), currpage(0)/*{{{*/
 {
-	bool f; 
-
 	updateCaption();
 	setIcon(Icons::get(ICON_APPICON).pixmap(QIconSet::Small, true));
 	setMinimumSize(320, 200);
@@ -246,6 +244,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	
 	//
 	// View menu
+	bool f;
 	view_menu = new QPopupMenu(this);
 	view_menu->setCheckable(true);
 	originalSizeAction->addTo(view_menu);
@@ -261,10 +260,11 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	toggleThumbnailsAction->addTo(view_menu);
 	view_menu->insertSeparator();
 	scrv_id = view_menu->insertItem(tr("Scrollbars"), this, SLOT(toggleScrollbars()));
+	view_menu->setItemChecked(scrv_id, f = cfg->scrollbarsVisible());
 	toggleToolbarAction->addTo(view_menu);
-	view->enableScrollbars(f);
 	toggleStatusbarAction->addTo(view_menu);
 	menuBar()->insertItem(tr("&View"), view_menu);
+	view->enableScrollbars(cfg->scrollbarsVisible());
 	
 	//
 	// Navigation menu
@@ -283,8 +283,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	pageBottomAction->addTo(navi_menu);
 	navi_menu->insertSeparator();
 	contscr_id = navi_menu->insertItem(tr("Continuous scrolling"), this, SLOT(toggleContinousScroll()));
-	
-	view_menu->setItemChecked(scrv_id, f = cfg->scrollbarsVisible());
+
 	twoPagesAction->setOn(cfg->twoPagesMode());
 	mangaModeAction->setOn(cfg->japaneseMode());
 	navi_menu->setItemChecked(contscr_id, cfg->continuousScrolling());
