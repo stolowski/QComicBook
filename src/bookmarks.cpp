@@ -130,6 +130,14 @@ bool Bookmarks::get(int id, Bookmark &b)/*{{{*/
 	return false;
 }/*}}}*/
 
+QValueList<Bookmark> Bookmarks::get()/*{{{*/
+{
+	QValueList<Bookmark> res;
+	for (Bookmark *b = blist.first(); b; b = blist.next())
+		res.push_back(*b);
+	return res;
+}/*}}}*/
+
 bool Bookmarks::exists(const QString &cbname)/*{{{*/
 {
 	for (Bookmark *b = blist.first(); b; b = blist.next())

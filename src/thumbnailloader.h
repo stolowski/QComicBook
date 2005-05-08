@@ -10,6 +10,8 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
+/*! \file imgloader.h */
+
 #ifndef __THUMBNAILLOADER_H
 #define __THUMBNAILLOADER_H
 
@@ -22,7 +24,7 @@ class QObject;
 class ThumbnailLoaderThread: public ImgLoaderThread
 {
 	private:
-		QObject *rcvobj;
+		QObject *rcvobj; //!<object that will recieve loaded thumbnails
 		volatile bool usecache;
 		
 	protected:
@@ -32,8 +34,8 @@ class ThumbnailLoaderThread: public ImgLoaderThread
 		ThumbnailLoaderThread();
 		virtual ~ThumbnailLoaderThread();
 
-		void setReciever(QObject *rcv);
-		void setUseCache(bool f);
+		virtual void setReciever(QObject *rcv);
+		virtual void setUseCache(bool f);
 };
 
 #endif

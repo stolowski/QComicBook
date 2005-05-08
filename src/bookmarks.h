@@ -16,6 +16,7 @@
 #define __BOOKMARKS_H
 
 #include <qstring.h>
+#include <qvaluelist.h>
 #include <qptrlist.h>
 #include <qmap.h>
 #include "bookmark.h"
@@ -41,6 +42,7 @@ class Bookmarks
 		bool remove(const QString &cbname);
 		bool remove(int id);
 		bool get(int id, Bookmark &b);
+		QValueList<Bookmark> get();
 		bool exists(const QString &cbname);
 };
 

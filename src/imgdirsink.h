@@ -33,16 +33,16 @@ class ImgCache;
 //! Possible errors.
 enum SinkError
 {
-	SINKERR_ACCESS = 1, //!< can't access file or directory
-	SINKERR_UNKNOWNFILE, //!< unknown archive format
-	SINKERR_NOTSUPPORTED, //!< known archive type, but not supported
-	SINKERR_LOADERROR,  //!< can't load image file
-	SINKERR_NOTFOUND, //!< file not found
-	SINKERR_NOTFILE,   //!< not a regular file
-	SINKERR_NOTDIR,    //!< not a directory
-	SINKERR_EMPTY,     //!< no images inside
-	SINKERR_ARCHEXIT, //!< archiver exited with error
-	SINKERR_OTHER  //!< another kind of error
+	SINKERR_ACCESS = 1, //!<can't access file or directory
+	SINKERR_UNKNOWNFILE, //!<unknown archive format
+	SINKERR_NOTSUPPORTED, //!<known archive type, but not supported
+	SINKERR_LOADERROR,  //!<can't load image file
+	SINKERR_NOTFOUND, //!<file not found
+	SINKERR_NOTFILE,   //!<not a regular file
+	SINKERR_NOTDIR,    //!<not a directory
+	SINKERR_EMPTY,     //!<no images inside
+	SINKERR_ARCHEXIT, //!<archiver exited with error
+	SINKERR_OTHER  //!<another kind of error
 };
 
 //! Comic book directory sink.

@@ -73,8 +73,9 @@ class ImgArchiveSink: public ImgDirSink
 		 *  @param filename name of the archive, with path */
 		static ArchiveType archiveType(const QString &filename);
 		int extract(const QString &filename, const QString &destdir);
+		void init();
 		
-	private slots:
+	protected slots:
 		void extractExited();
 		void extractStdoutReady();
 		void infoStdoutReady();

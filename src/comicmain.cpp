@@ -302,7 +302,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	menuBar()->insertItem(tr("&Bookmarks"), bookmarks_menu);
 	setbookmark_id = bookmarks_menu->insertItem(tr("Set bookmark for this comicbook"), this, SLOT(setBookmark()));
 	rmvbookmark_id = bookmarks_menu->insertItem(tr("Remove bookmark for this comicbook"), this, SLOT(removeBookmark()));
-	//bookmarks_menu->insertItem(tr("Manage bookmarks"), this, SLOT(openBookmarksManager()));
+	bookmarks_menu->insertItem(tr("Manage bookmarks"), this, SLOT(openBookmarksManager()));
 	bookmarks_menu->insertSeparator();
 	bookmarks->load();
 	connect(bookmarks_menu, SIGNAL(activated(int)), this, SLOT(bookmarkSelected(int)));

@@ -1,6 +1,7 @@
 bin_PROGRAMS = qcomicbook
 
-BUILT_SOURCES = moc_cbconfigdialog.cpp \
+BUILT_SOURCES = moc_bookmarkmanager.cpp \
+		moc_cbconfigdialog.cpp \
 		moc_cbsettings.cpp \
 		moc_comicmain.cpp \
 		moc_helpbrowser.cpp \

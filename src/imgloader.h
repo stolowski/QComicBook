@@ -10,23 +10,23 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
+/*! \file imgloader.h */
+
 #ifndef __IMGLOADERTHREAD_H
 #define __IMGLOADERTHREAD_H
-
-/*! \file imgloaderthread.h */
 
 #include <qthread.h>
 #include <qvaluelist.h>
 
 class ImgSink;
 
-//! 
+//! Thread-based image loader.
 class ImgLoaderThread: public QThread
 {
 	protected:
-		volatile QThread::Priority prio;
+		volatile QThread::Priority prio; //!<thread priority
 		QMutex mtx;
-		QValueList<int> requests;
+		QValueList<int> requests; //!<the list of requested pages
 		ImgSink *sink;
 				
 		volatile bool stopped;

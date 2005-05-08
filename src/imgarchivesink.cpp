@@ -39,25 +39,26 @@ bool ImgArchiveSink::havetarbz2 = false;
 
 ImgArchiveSink::ImgArchiveSink(int cachesize): ImgDirSink(cachesize) /*{{{*/
 {
-	connect(&pinf, SIGNAL(readyReadStdout()), this, SLOT(infoStdoutReady()));
-	connect(&pinf, SIGNAL(processExited()), this, SLOT(infoExited()));
-	connect(&pext, SIGNAL(readyReadStdout()), this, SLOT(extractStdoutReady()));
-	connect(&pext, SIGNAL(processExited()), this, SLOT(extractExited()));
+	init();
 }/*}}}*/
 
 ImgArchiveSink::ImgArchiveSink(const QString &path, int cachesize): ImgDirSink(cachesize)/*{{{*/
 {
-	connect(&pinf, SIGNAL(readyReadStdout()), this, SLOT(infoStdoutReady()));
-	connect(&pinf, SIGNAL(processExited()), this, SLOT(infoExited()));
-	connect(&pext, SIGNAL(readyReadStdout()), this, SLOT(extractStdoutReady()));
-	connect(&pext, SIGNAL(processExited()), this, SLOT(extractExited()));
-
+	init();
 	open(path);
 }/*}}}*/
 
 ImgArchiveSink::~ImgArchiveSink()/*{{{*/
 {
 	close();
+}/*}}}*/
+
+void ImgArchiveSink::init()/*{{{*/
+{
+	connect(&pinf, SIGNAL(readyReadStdout()), this, SLOT(infoStdoutReady()));
+	connect(&pinf, SIGNAL(processExited()), this, SLOT(infoExited()));
+	connect(&pext, SIGNAL(readyReadStdout()), this, SLOT(extractStdoutReady()));
+	connect(&pext, SIGNAL(processExited()), this, SLOT(extractExited()));
 }/*}}}*/
 
 ImgArchiveSink::ArchiveType ImgArchiveSink::archiveType(const QString &filename)/*{{{*/

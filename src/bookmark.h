@@ -16,6 +16,7 @@
 #define __BOOKMARK_H
 
 #include <qstring.h>
+#include <qfileinfo.h>
 
 class Bookmark
 {
@@ -34,6 +35,7 @@ class Bookmark
 		void setName(const QString &cbname) { name = cbname; }
 		void setPage(int cbpage) { page = cbpage; }
 		void setId(int n) { id = n; }
+		bool isValid() { QFileInfo inf(name); return inf.exists(); }
 		QString menuItemName() { return name + " [" + QString::number(page + 1) + "]"; }
 };
 
