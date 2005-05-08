@@ -263,13 +263,18 @@ QImage ImgDirSink::getImage(unsigned int num, int &result, int preload)/*{{{*/
 	if (preload>0 && cache->maxCost()> 2 && result == 0)
 	{
 		const int pre = num + 1; //page to preload
-		if (pre < imgcnt) // && (!cache->find(imgfiles[pre])))
+		listmtx.lock();
+		if ((pre < imgcnt) && (!cache->find(imgfiles[pre])))
 		{
+			listmtx.unlock();
 			cachemtx.unlock();
 			imgloader.request(pre, preload);
 		}
 		else
+		{
+			listmtx.unlock();
 			cachemtx.unlock();
+		}
 	}
 	else
 		cachemtx.unlock();

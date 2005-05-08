@@ -14,7 +14,7 @@
 #include <imgsink.h>
 #include <qimage.h>
 
-ImgLoaderThread::ImgLoaderThread(): QThread(), prio(QThread::LowPriority), sink(NULL)/*{{{*/
+ImgLoaderThread::ImgLoaderThread(): QThread(), prio(QThread::LowPriority), sink(NULL), stopped(false)/*{{{*/
 {
 }/*}}}*/
 
@@ -53,7 +53,8 @@ void ImgLoaderThread::request(int page)/*{{{*/
 void ImgLoaderThread::request(int first, int n)/*{{{*/
 {
 	mtx.lock();
-	for (int i=first; i<n; i++)
+	const int last = first + n;
+	for (int i=first; i<last; i++)
 		if (requests.contains(i) == 0)
 			requests.append(i);
 	if (!running())
@@ -66,7 +67,6 @@ void ImgLoaderThread::stop()/*{{{*/
 	mtx.lock();
 	stopped = true;
 	mtx.unlock();
-
 }/*}}}*/
 
 void ImgLoaderThread::run()/*{{{*/
