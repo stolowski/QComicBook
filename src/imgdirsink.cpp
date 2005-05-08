@@ -21,15 +21,17 @@
 #include <qfileinfo.h>
 #include <qtextstream.h>
 
-ImgDirSink::ImgDirSink(int cachesize): ImgSink(), QThread(), cachemtx(true)/*{{{*/
+ImgDirSink::ImgDirSink(int cachesize): ImgSink(), cachemtx(true)/*{{{*/
 {
 	thloader.setSink(this);
+	imgloader.setSink(this);
 	cache = new ImgCache(cachesize);
 }/*}}}*/
 
-ImgDirSink::ImgDirSink(const QString &path, int cachesize): ImgSink(), QThread(), cachemtx(true), dirpath(QString::null)/*{{{*/
+ImgDirSink::ImgDirSink(const QString &path, int cachesize): ImgSink(), cachemtx(true), dirpath(QString::null)/*{{{*/
 {
 	thloader.setSink(this);
+	imgloader.setSink(this);
 	cache = new ImgCache(cachesize);
 	open(path);
 }/*}}}*/
@@ -129,8 +131,9 @@ int ImgDirSink::open(const QString &path)/*{{{*/
 void ImgDirSink::close()/*{{{*/
 {
 	thloader.stop();
+	imgloader.stop();
 	thloader.wait(); //wait for thumbnail loader thread
-	wait(); //wait for preload thread
+	imgloader.wait(); //wait for preload thread
 
 	listmtx.lock();
 	dirpath = QString::null;
@@ -259,12 +262,11 @@ QImage ImgDirSink::getImage(unsigned int num, int &result, int preload)/*{{{*/
 	// optionally start preload thread; don't preload for cache size =< 2
 	if (preload>0 && cache->maxCost()> 2 && result == 0)
 	{
-		pre = num + 1; //page to preload
+		const int pre = num + 1; //page to preload
 		if (pre < imgcnt) // && (!cache->find(imgfiles[pre])))
 		{
-			precnt = preload;
 			cachemtx.unlock();
-			start();
+			imgloader.request(pre, preload);
 		}
 		else
 			cachemtx.unlock();
@@ -325,12 +327,12 @@ void ImgDirSink::setThumbnailReciever(QObject *rcv)/*{{{*/
 
 void ImgDirSink::requestThumbnail(int num)/*{{{*/
 {
-	thloader.requestThumbnail(num);
+	thloader.request(num);
 }/*}}}*/
 
 void ImgDirSink::requestThumbnails(int first, int n)/*{{{*/
 {
-	thloader.requestThumbnails(first, n);
+	thloader.request(first, n);
 }/*}}}*/
 
 int ImgDirSink::numOfImages() const/*{{{*/
@@ -360,28 +362,6 @@ QStringList ImgDirSink::getAllimgfiles() const/*{{{*/
 	const QStringList l = imgfiles;
 	listmtx.unlock();
 	return l;
-}/*}}}*/
-
-void ImgDirSink::run()/*{{{*/
-{
-	cachemtx.lock();
-	for (int i=0; i<precnt; i++)
-	{
-		listmtx.lock();
-		if (pre + i >= imgfiles.count())
-		{
-			listmtx.unlock();
-			break;
-		}
-		if (!cache->find(imgfiles[pre+i]))
-		{
-			QImage img;
-			if (img.load(imgfiles[pre+i]))
-				cache->insert(imgfiles[pre+i], &img);
-		}
-		listmtx.unlock();
-	}
-	cachemtx.unlock();
 }/*}}}*/
 
 void ImgDirSink::removeThumbnails(int days)/*{{{*/

@@ -13,41 +13,27 @@
 #ifndef __THUMBNAILLOADER_H
 #define __THUMBNAILLOADER_H
 
-#include <qthread.h>
-#include <qmutex.h>
-#include <qvaluelist.h>
+#include "imgloaderthread.h"
 
-class ImgSink;
-class QImage;
 class QObject;
 
 #define ThumbnailReady 2000
 
-class ThumbnailLoader: public QThread
+class ThumbnailLoader: public ImgLoaderThread
 {
 	private:
-		ImgSink *sink;
 		QObject *rcvobj;
-		QMutex mtx;
-		volatile bool stopped;
 		volatile bool usecache;
-		QValueList<int> requests;
-		volatile QThread::Priority prio;
 		
 	protected:
 		virtual void run();
 
 	public:
 		ThumbnailLoader();
-		~ThumbnailLoader();
+		virtual ~ThumbnailLoader();
 
-		void setPriority(QThread::Priority p);
-		void setSink(ImgSink *sink);
 		void setReciever(QObject *rcv);
 		void setUseCache(bool f);
-		void requestThumbnail(int num);
-		void requestThumbnails(int first, int n);
-		void stop();
 };
 
 #endif

@@ -19,8 +19,8 @@
 #include <qobject.h>
 #include <qstringlist.h>
 #include <qmutex.h>
-#include <qthread.h>
 #include "thumbnailloader.h"
+#include "imgloaderthread.h"
 #include "imgsink.h"
 
 //
@@ -47,19 +47,18 @@ enum SinkError
 
 //! Comic book directory sink.
 /*! Allows opening directories containing image files. */
-class ImgDirSink: public ImgSink, protected QThread
+class ImgDirSink: public ImgSink
 {
 	Q_OBJECT
 		
 	private:
 		ThumbnailLoader thloader;
+		ImgLoaderThread imgloader;
 		
 	protected:
 		mutable QMutex cachemtx; //!< mutex for cache, pre, precnt
 		mutable QMutex listmtx; //!< mutex for imgfiles
 		ImgCache *cache;
-		int pre; //!< number of first page to preload
-		int precnt; //!< number of pages to preload starting from pre
 		QString dirpath; //!< path to directory
 		QString cbname; //!< comic book name (directory path by default)
 		QStringList imgfiles; //!< list of images files in directory
@@ -78,9 +77,6 @@ class ImgDirSink: public ImgSink, protected QThread
 		 *  @see dirs */
 		void recurseDir(const QString &s);
 		QString memPrefix(int &s) const;
-
-		virtual void run();
-
 		void setComicBookName(const QString &name);
 		
 	public slots:

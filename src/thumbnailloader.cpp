@@ -14,29 +14,14 @@
 #include "imgsink.h"
 #include "thumbnail.h"
 #include <qapplication.h>
-#include <qimage.h>
 #include <qevent.h>
 
-ThumbnailLoader::ThumbnailLoader(): QThread(), prio(QThread::LowPriority), stopped(false), sink(NULL), rcvobj(NULL), usecache(true)/*{{{*/
+ThumbnailLoader::ThumbnailLoader(): ImgLoaderThread(), rcvobj(NULL), usecache(true)/*{{{*/
 {
 }/*}}}*/
 
 ThumbnailLoader::~ThumbnailLoader()/*{{{*/
 {
-}/*}}}*/
-
-void ThumbnailLoader::setPriority(QThread::Priority p)/*{{{*/
-{
-	mtx.lock();
-	prio = p;
-	mtx.unlock();
-}/*}}}*/
-
-void ThumbnailLoader::setSink(ImgSink *sink)/*{{{*/
-{
-	mtx.lock();
-	this->sink = sink;
-	mtx.unlock();
 }/*}}}*/
 
 void ThumbnailLoader::setReciever(QObject *rcv)/*{{{*/
@@ -50,38 +35,6 @@ void ThumbnailLoader::setUseCache(bool f)/*{{{*/
 {
 	mtx.lock();
 	usecache = f;
-	mtx.unlock();
-}/*}}}*/
-
-void ThumbnailLoader::requestThumbnail(int num)/*{{{*/
-{
-	mtx.lock();
-	if (requests.contains(num))
-	{
-		mtx.unlock();
-		return;
-	}
-	requests.append(num);
-	if (!running())
-		start(prio);
-	mtx.unlock();
-}/*}}}*/
-
-void ThumbnailLoader::requestThumbnails(int first, int n)/*{{{*/
-{
-	mtx.lock();
-	for (int i=first; i<n; i++)
-		if (requests.contains(i) == 0)
-			requests.append(i);
-	if (!running())
-		start(prio);
-	mtx.unlock();
-}/*}}}*/
-
-void ThumbnailLoader::stop()/*{{{*/
-{
-	mtx.lock();
-	stopped = true;
 	mtx.unlock();
 }/*}}}*/
 

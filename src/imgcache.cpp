@@ -54,9 +54,8 @@ void ImgCache::largestImage(int &w, int &h)
 	}
 }*/
 
-QPtrCollection::Item ImgCache::newItem(QPtrCollection::Item d)
+QPtrCollection::Item ImgCache::newItem(QPtrCollection::Item d)/*{{{*/
 {
-	//std::cout << "img copy" << std::endl;
 	return new QImage(*(QImage *)d);
-}
+}/*}}}*/
 
