@@ -16,29 +16,29 @@
 #include <qapplication.h>
 #include <qevent.h>
 
-ThumbnailLoader::ThumbnailLoader(): ImgLoaderThread(), rcvobj(NULL), usecache(true)/*{{{*/
+ThumbnailLoaderThread::ThumbnailLoaderThread(): ImgLoaderThread(), rcvobj(NULL), usecache(true)/*{{{*/
 {
 }/*}}}*/
 
-ThumbnailLoader::~ThumbnailLoader()/*{{{*/
+ThumbnailLoaderThread::~ThumbnailLoaderThread()/*{{{*/
 {
 }/*}}}*/
 
-void ThumbnailLoader::setReciever(QObject *rcv)/*{{{*/
+void ThumbnailLoaderThread::setReciever(QObject *rcv)/*{{{*/
 {
 	mtx.lock();
 	rcvobj = rcv;
 	mtx.unlock();
 }/*}}}*/
 
-void ThumbnailLoader::setUseCache(bool f)/*{{{*/
+void ThumbnailLoaderThread::setUseCache(bool f)/*{{{*/
 {
 	mtx.lock();
 	usecache = f;
 	mtx.unlock();
 }/*}}}*/
 
-void ThumbnailLoader::run()/*{{{*/
+void ThumbnailLoaderThread::run()/*{{{*/
 {
 	for (;;)
 	{

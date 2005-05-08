@@ -381,7 +381,7 @@ void ImgDirSink::removeThumbnails(int days)/*{{{*/
 	}
 }/*}}}*/
 
-ThumbnailLoader& ImgDirSink::thumbnailLoader()/*{{{*/
+ThumbnailLoaderThread& ImgDirSink::thumbnailLoader()/*{{{*/
 {
 	return thloader;
 }/*}}}*/

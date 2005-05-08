@@ -13,13 +13,13 @@
 #ifndef __THUMBNAILLOADER_H
 #define __THUMBNAILLOADER_H
 
-#include "imgloaderthread.h"
+#include "imgloader.h"
 
 class QObject;
 
 #define ThumbnailReady 2000
 
-class ThumbnailLoader: public ImgLoaderThread
+class ThumbnailLoaderThread: public ImgLoaderThread
 {
 	private:
 		QObject *rcvobj;
@@ -29,8 +29,8 @@ class ThumbnailLoader: public ImgLoaderThread
 		virtual void run();
 
 	public:
-		ThumbnailLoader();
-		virtual ~ThumbnailLoader();
+		ThumbnailLoaderThread();
+		virtual ~ThumbnailLoaderThread();
 
 		void setReciever(QObject *rcv);
 		void setUseCache(bool f);

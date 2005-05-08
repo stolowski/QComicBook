@@ -10,10 +10,9 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "imgloaderthread.h"
+#include "imgloader.h"
 #include <imgsink.h>
 #include <qimage.h>
-#include <iostream>
 
 ImgLoaderThread::ImgLoaderThread(): QThread(), prio(QThread::LowPriority), sink(NULL)/*{{{*/
 {

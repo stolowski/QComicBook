@@ -20,7 +20,7 @@
 #include <qstringlist.h>
 #include <qmutex.h>
 #include "thumbnailloader.h"
-#include "imgloaderthread.h"
+#include "imgloader.h"
 #include "imgsink.h"
 
 //
@@ -52,7 +52,7 @@ class ImgDirSink: public ImgSink
 	Q_OBJECT
 		
 	private:
-		ThumbnailLoader thloader;
+		ThumbnailLoaderThread thloader;
 		ImgLoaderThread imgloader;
 		
 	protected:
@@ -105,7 +105,7 @@ class ImgDirSink: public ImgSink
 
 		//! Returns the instance of thumbnail loader.
 		/*! @return thumbnail loader instance */
-		virtual ThumbnailLoader& thumbnailLoader();
+		virtual ThumbnailLoaderThread& thumbnailLoader();
 
 		//
 		//! Removes old thumbnails.
