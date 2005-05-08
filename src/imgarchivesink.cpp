@@ -39,10 +39,19 @@ bool ImgArchiveSink::havetarbz2 = false;
 
 ImgArchiveSink::ImgArchiveSink(int cachesize): ImgDirSink(cachesize) /*{{{*/
 {
+	connect(&pinf, SIGNAL(readyReadStdout()), this, SLOT(infoStdoutReady()));
+	connect(&pinf, SIGNAL(processExited()), this, SLOT(infoExited()));
+	connect(&pext, SIGNAL(readyReadStdout()), this, SLOT(extractStdoutReady()));
+	connect(&pext, SIGNAL(processExited()), this, SLOT(extractExited()));
 }/*}}}*/
 
 ImgArchiveSink::ImgArchiveSink(const QString &path, int cachesize): ImgDirSink(cachesize)/*{{{*/
 {
+	connect(&pinf, SIGNAL(readyReadStdout()), this, SLOT(infoStdoutReady()));
+	connect(&pinf, SIGNAL(processExited()), this, SLOT(infoExited()));
+	connect(&pext, SIGNAL(readyReadStdout()), this, SLOT(extractStdoutReady()));
+	connect(&pext, SIGNAL(processExited()), this, SLOT(extractExited()));
+
 	open(path);
 }/*}}}*/
 
@@ -112,51 +121,40 @@ int ImgArchiveSink::extract(const QString &filename, const QString &destdir)/*{{
 	    (archivetype == TARBZ2_ARCHIVE && !havetarbz2))
 		return SINKERR_NOTSUPPORTED;	
 		
-	pinf = new QProcess(this);
-	connect(pinf, SIGNAL(readyReadStdout()), this, SLOT(infoStdoutReady()));
-	connect(pinf, SIGNAL(processExited()), this, SLOT(infoExited()));
-	pext = new QProcess(this);
-	connect(pext, SIGNAL(readyReadStdout()), this, SLOT(extractStdoutReady()));
-	connect(pext, SIGNAL(processExited()), this, SLOT(extractExited()));
-	
 	if (archivetype == RAR_ARCHIVE)
 	{
-		pext->setArguments(rar);
-		pinf->setArguments(rar_i);
+		pext.setArguments(rar);
+		pinf.setArguments(rar_i);
 	}
 	else if (archivetype == ZIP_ARCHIVE)
 	{
-		pext->setArguments(zip);
-		pinf->setArguments(zip_i);
+		pext.setArguments(zip);
+		pinf.setArguments(zip_i);
 	}
 	else if (archivetype == ACE_ARCHIVE)
 	{
-		pext->setArguments(ace);
-		pinf->setArguments(ace_i);
+		pext.setArguments(ace);
+		pinf.setArguments(ace_i);
 	}
 	else if (archivetype == TARGZ_ARCHIVE)
 	{
-		pext->setArguments(targz);
-		pinf->setArguments(targz_i);
+		pext.setArguments(targz);
+		pinf.setArguments(targz_i);
 	}
 	else if (archivetype == TARBZ2_ARCHIVE)
 	{
-		pext->setArguments(tarbz2);
-		pinf->setArguments(tarbz2_i);
+		pext.setArguments(tarbz2);
+		pinf.setArguments(tarbz2_i);
 	}
 
-	pext->addArgument(filename);
-	pinf->addArgument(filename);
-	pext->setWorkingDirectory(destdir);
+	pext.addArgument(filename);
+	pinf.addArgument(filename);
+	pext.setWorkingDirectory(destdir);
 
 	//
 	// extract archive file list first
-	if (!pinf->start())
-	{
-		delete pinf;
-		delete pext;
+	if (!pinf.start())
 		return SINKERR_OTHER;
-	}
 	return 0;
 }/*}}}*/
 
@@ -225,18 +223,12 @@ QString ImgArchiveSink::getFullName()/*{{{*/
 void ImgArchiveSink::infoExited()/*{{{*/
 {
 	extcnt = 0;
-	pinf->deleteLater();
-	if (!pext->start())
-	{
-		delete pext;
+	if (!pext.start())
 		emit sinkError(SINKERR_OTHER);
-	}
 }/*}}}*/
 
 void ImgArchiveSink::extractExited()/*{{{*/
 {
-	pext->deleteLater();
-	
 	//
 	// open temporary directory using ImgDirSink::open()
 	ImgDirSink::blockSignals(true);
@@ -247,13 +239,19 @@ void ImgArchiveSink::extractExited()/*{{{*/
 	archdirs = ImgDirSink::getAlldirs();
 	setComicBookName(archivename);
 
-	if (status != 0)
+	if (!pext.normalExit())
+	{
+		emit sinkError(SINKERR_ARCHEXIT);
+		close();
+	}
+	else if (status != 0)
 	{
 		emit sinkError(status);
 		close();
 	}
 	else
 	{
+		emit progress(1, 1);
 		//
 		// fix permissions of files; this is needed for ace archives as unace
 		// is buggy and sets empty permissions.
@@ -269,7 +267,7 @@ void ImgArchiveSink::extractExited()/*{{{*/
 
 void ImgArchiveSink::infoStdoutReady()/*{{{*/
 {
-	QByteArray b = pinf->readStdout();
+	QByteArray b = pinf.readStdout();
 	for (int i=0; i<b.size(); i++)
 		if (b[i] == '\n')
 			++filesnum;
@@ -277,9 +275,9 @@ void ImgArchiveSink::infoStdoutReady()/*{{{*/
 
 void ImgArchiveSink::extractStdoutReady()/*{{{*/
 {
-	QByteArray b = pext->readStdout();
+	QByteArray b = pext.readStdout();
 	for (int i=0; i<b.size(); i++)
-		if (b[i] == '\n')
+		if (b[i] == '\n' && extcnt < filesnum)
 			emit progress(++extcnt, filesnum);
 }/*}}}*/
 

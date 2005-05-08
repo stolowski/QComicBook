@@ -41,6 +41,7 @@ enum SinkError
 	SINKERR_NOTFILE,   //!< not a regular file
 	SINKERR_NOTDIR,    //!< not a directory
 	SINKERR_EMPTY,     //!< no images inside
+	SINKERR_ARCHEXIT, //!< archiver exited with error
 	SINKERR_OTHER  //!< another kind of error
 };
 

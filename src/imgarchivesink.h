@@ -18,10 +18,10 @@
 #include <qstring.h>
 #include <qobject.h>
 #include <qstringlist.h>
+#include <qprocess.h>
 #include "imgdirsink.h"
 
 class QImage;
-class QProcess;
 
 //! Comic book archive sink.
 /*! Allows opening different kind of archives containing image files. */
@@ -41,8 +41,8 @@ class ImgArchiveSink: public ImgDirSink
 		};
 
 		ArchiveType archivetype; ///< the type of currently opened archive
-		QProcess *pext; ///< extracting process
-		QProcess *pinf; ///< file list extracing process
+		QProcess pext; ///< extracting process
+		QProcess pinf; ///< file list extracing process
 		QString archivename; ///< archive file name, without path
 		QString archivepath; ///< full path, including archive name
 		QString tmppath; ///< path to extracted archive

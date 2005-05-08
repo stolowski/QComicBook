@@ -355,8 +355,8 @@ void ComicMainWindow::enableComicBookActions(bool f)/*{{{*/
 	const bool x = f && sink && typeid(*sink) == typeid(ImgArchiveSink);
 	file_menu->setItemEnabled(close_id, f);
 	showInfoAction->setEnabled(f);
-	openNextAction->setEnabled(f);
-	openPrevAction->setEnabled(f);
+	openNextAction->setEnabled(x);
+	openPrevAction->setEnabled(x);
 	
 	//
 	// navigation menu
@@ -487,6 +487,7 @@ void ComicMainWindow::sinkReady(const QString &path)/*{{{*/
 	recentfiles->append(path);
 	setRecentFilesMenu(*recentfiles);
 
+	enableComicBookActions(true);
 	updateCaption();
 	statusbar->setName(sink->getFullName());
 
@@ -513,6 +514,7 @@ void ComicMainWindow::sinkError(int code)/*{{{*/
 		case SINKERR_ACCESS: msg = tr("can't access directory"); break;
 		case SINKERR_NOTFOUND: msg = tr("file/directory not found"); break;
 		case SINKERR_NOTSUPPORTED: msg = tr("archive not supported"); break;
+		case SINKERR_ARCHEXIT: msg = tr("archive extractor exited with error"); break;
 		default: break;
 	}
 	QMessageBox::critical(this, "QComicBook error", "Error opening comicbook: " + msg, 
@@ -609,8 +611,6 @@ void ComicMainWindow::openArchive(const QString &name, int page)/*{{{*/
 	connect(sink, SIGNAL(progress(int, int)), win, SLOT(setProgress(int, int)));
 
 	sink->open(name);
-	
-	enableComicBookActions(true);
 }/*}}}*/
 
 void ComicMainWindow::openNext()/*{{{*/
@@ -821,8 +821,10 @@ void ComicMainWindow::closeSink()/*{{{*/
 
 	view->clear();
 	if (sink)
+	{
 		sink->deleteLater();
-	sink = NULL;
+		sink = NULL;
+	}
 	thumbswin->view()->clear();
 	updateCaption();
 	statusbar->clear();
