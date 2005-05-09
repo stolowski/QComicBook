@@ -17,7 +17,7 @@
 #include <qlayout.h>
 #include <qmessagebox.h>
 
-BookmarkManager::BookmarkManager(QWidget *parent, Bookmarks *b): QDialog(parent), bookmarks(b)/*{{{*/
+BookmarkManager::BookmarkManager(QWidget *parent, Bookmarks *b): QWidget(parent, NULL, Qt::WType_TopLevel|Qt::WType_Dialog|Qt::WShowModal), bookmarks(b)/*{{{*/
 {
 	QVBoxLayout *box0 = new QVBoxLayout(this, 5, 5);
 	lview = new QListView(this);
@@ -44,7 +44,7 @@ BookmarkManager::BookmarkManager(QWidget *parent, Bookmarks *b): QDialog(parent)
 	box1->addWidget(b_selnone);
 	box1->addStretch(1);
 	
-	QPushButton *b_remsel = new QPushButton(tr("Remove selected"), this);
+	b_remsel = new QPushButton(tr("Remove selected"), this);
 	box1->addWidget(b_remsel);
 	box1->addStretch();
 
@@ -54,16 +54,25 @@ BookmarkManager::BookmarkManager(QWidget *parent, Bookmarks *b): QDialog(parent)
 
 	initBookmarkView();
 
+	connect(lview, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 	connect(b_remsel, SIGNAL(clicked()), this, SLOT(removeSelected()));
 	connect(b_selinv, SIGNAL(clicked()), this, SLOT(selectInvalid()));
 	connect(b_selall, SIGNAL(clicked()), this, SLOT(selectAll()));
 	connect(b_selnone, SIGNAL(clicked()), this, SLOT(selectNone()));
 	connect(b_selrev, SIGNAL(clicked()), lview, SLOT(invertSelection()));
 	connect(b_ok, SIGNAL(clicked()), this, SLOT(close()));
+
+	selectionChanged();
 }/*}}}*/
 
 BookmarkManager::~BookmarkManager()/*{{{*/
 {
+}/*}}}*/
+
+void BookmarkManager::selectionChanged()/*{{{*/
+{
+	QListViewItemIterator it(lview, QListViewItemIterator::Selected);
+	b_remsel->setDisabled(it.current() == 0);
 }/*}}}*/
 
 void BookmarkManager::initBookmarkView()/*{{{*/
@@ -99,6 +108,7 @@ void BookmarkManager::removeSelected()/*{{{*/
 			bookmarks->remove(item->text(0));
 			delete item;
 		}
+		initBookmarkView(); //recreate the view
 	}
 }/*}}}*/
 

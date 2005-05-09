@@ -10,10 +10,12 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
+/*! \file bookmarkmanager.h */
+
 #ifndef __BOOKMARKMANAGER_H
 #define __BOOKMARKMANAGER_H
 
-#include <qdialog.h>
+#include <qwidget.h>
 #include <qptrlist.h>
 
 class Bookmarks;
@@ -22,17 +24,21 @@ class QListView;
 class QListViewItem;
 class QPushButton;
 
-class BookmarkManager: public QDialog
+class BookmarkManager: public QWidget
 {
 	Q_OBJECT
 
 	private:
 		QListView *lview;
 		QPushButton *b_selinv;
+		QPushButton *b_remsel;
 		Bookmarks *bookmarks;
-		QPtrList<QListViewItem> invalid;
+		QPtrList<QListViewItem> invalid; //!<the list of invalid bookmarks
 
 		void initBookmarkView();
+
+	protected slots:
+		void selectionChanged();
 
 	public slots:
 		void removeSelected();
