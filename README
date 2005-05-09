@@ -1,4 +1,4 @@
-QComicBook v0.1.9
+QComicBook v0.2.0
 (c)by Pawel Stolowski 2005
 released under terms of GNU General Public License v2
 
@@ -30,7 +30,14 @@ make install
 Debian users should add "--with-Qt-lib-dir=/usr/lib" option to the
 first step.
 
-4. Bugs
+4. Known issues
+---------------
+rar/unrar (and unzip/unace probably too) may have problems with files/dirs in the
+archive, which names contain non-ascii characters (like special characters for you
+language). As a result they won't be decompressed and qcomicbook may show
+"No images found" error box.
+
+5. Bugs
 -------
 Please report any bugs to: yogin@linux.bydg.org. Ideas are welcome too!
 

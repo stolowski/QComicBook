@@ -1,4 +1,10 @@
-qcomicbook (0.1.9-0) unstable; urgency=low
+qcomicbook (0.2.0-0) unstable; urgency=low
+
+  * New Upstream Release.
+
+ -- Michal Pena (Cyb.org) <mp@horisone.com>  Wen, 09 May 2005 22:07:00 +0100
+
+qqcomicbook (0.1.9-0) unstable; urgency=low
 
   * New Upstream Release.
   * Updated control and manpage.
