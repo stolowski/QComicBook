@@ -277,7 +277,9 @@ QImage ImgDirSink::getImage(unsigned int num, int &result, int preload)/*{{{*/
 		}
 	}
 	else
+	{
 		cachemtx.unlock();
+	}
 	
 	return rimg;
 }/*}}}*/

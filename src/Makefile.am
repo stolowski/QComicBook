@@ -17,6 +17,7 @@ BUILT_SOURCES = moc_bookmarkmanager.cpp \
 		moc_waitdialog.cpp 
 
 dist_qcomicbook_SOURCES = aboutdialog.cpp \
+		      bookmark.cpp \
 		      bookmarks.cpp \
 		      bookmarkmanager.cpp \
 		      cbconfigdialog.cpp \

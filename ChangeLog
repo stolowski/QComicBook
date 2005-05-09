@@ -1,4 +1,7 @@
-2005-05-xx:  0.2.0       -- many internal improvements and small bugfixes
+2005-05-xx:  0.2.0       -- 'Manage bookmarks' option added
+                         -- many internal improvements and small bugfixes
+                         -- Open next/previous actions are enabled only for
+			    archives from now
 
 2005-05-04:  0.1.9       -- option to hide statusbar in fullscreen mode added
                          -- keyboard shortcuts for 'Open next' and 'Open
