@@ -25,21 +25,45 @@ class ImgLoaderThread: public QThread
 {
 	protected:
 		volatile QThread::Priority prio; //!<thread priority
-		QMutex mtx;
+		QMutex mtx; //!<mutex for serialization of class attributes
 		QValueList<int> requests; //!<the list of requested pages
 		ImgSink *sink;
 				
 		volatile bool stopped;
+
+		//! Main function of the thread.
+		/*! Preloads requested pages from requests list using sink->getImage().
+		 *  Stop if stopped flag is true.
+		 *  @see ImgSink::getImage
+		 */
 		virtual void run();
 		
 	public:
 		ImgLoaderThread();
 		virtual ~ImgLoaderThread();
 
+		//! Changes priority of the loader thread.
+		/*! @param p new priority
+		 */
 		virtual void setPriority(QThread::Priority p);
+
+		//! Sets image source sink.
+		/*! @param sink image sink used for retrieving (loading) images
+		 */
 		virtual void setSink(ImgSink *sink=NULL);
+
+		//! Appends page to the list of pages to load.
+		/*! @param page page to load
+		 */
 		virtual void request(int page);
+
+		//! Appends few pages to the list of pages to load.
+		/*! @param first starting page
+		 *  @param n number of pages to load in turn
+		 */
 		virtual void request(int first, int n);
+
+		//! Stops processing requests and exits thread execution.
 		virtual void stop();
 };
 

@@ -550,11 +550,13 @@ void ComicMainWindow::open(const QString &path)/*{{{*/
 
 void ComicMainWindow::openDir(const QString &name, int page)/*{{{*/
 {
-	lastdir = name;
+	const QFileInfo f(name);
+	const QString fullname = f.absFilePath();
 	
-	if (sink && sink->getFullName() == name) //trying to open same dir?
+	if (sink && sink->getFullName() == fullname) //trying to open same dir?
 		return;
-	
+
+	lastdir = fullname;
 	currpage = page;
 
 	closeSink();
@@ -576,19 +578,20 @@ void ComicMainWindow::openDir(const QString &name, int page)/*{{{*/
 	connect(sink, SIGNAL(sinkError(int)), win, SLOT(close()));
 	connect(sink, SIGNAL(progress(int, int)), win, SLOT(setProgress(int, int)));
 
-	sink->open(name);
+	sink->open(fullname);
 	
 	enableComicBookActions(true);
 }/*}}}*/
 
 void ComicMainWindow::openArchive(const QString &name, int page)/*{{{*/
 {
-	if (sink && sink->getFullName() == name) //trying to open same dir?
+	const QFileInfo f(name);
+	const QString fullname = f.absFilePath();
+
+	if (sink && sink->getFullName() == fullname) //trying to open same dir?
 		return;
 
-	QFileInfo f(name);
 	lastdir = f.dirPath(true);
-
 	currpage = page;
 
 	closeSink();
@@ -610,7 +613,7 @@ void ComicMainWindow::openArchive(const QString &name, int page)/*{{{*/
 	connect(sink, SIGNAL(sinkError(int)), win, SLOT(close()));
 	connect(sink, SIGNAL(progress(int, int)), win, SLOT(setProgress(int, int)));
 
-	sink->open(name);
+	sink->open(fullname);
 }/*}}}*/
 
 void ComicMainWindow::openNext()/*{{{*/

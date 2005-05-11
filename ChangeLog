@@ -1,3 +1,6 @@
+2005-05-xx:  0.2.1       -- fixed bug with handling relative comicbook paths
+                            from commandline
+
 2005-05-09:  0.2.0       -- 'Manage bookmarks' option added
                          -- many internal improvements and small bugfixes
                          -- Open next/previous actions are enabled only for

@@ -10,7 +10,7 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-/*! \file imgloader.h */
+/*! \file thumbnailloader.h */
 
 #ifndef __THUMBNAILLOADER_H
 #define __THUMBNAILLOADER_H

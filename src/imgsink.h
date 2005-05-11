@@ -84,8 +84,8 @@ class ImgSink: public QObject
 		/*! Thumbnail is loaded from disk if found and caching is enabled. Otherwise,
 		 *  the image is loaded and thumbnail is generated.
 		 *  @param num page number
-		 *  @param thumcache specifies if thumbnails disk cache should be used */
-		virtual Thumbnail* getThumbnail(int num, bool thumcache=true) = 0;
+		 *  @param thumbcache specifies if thumbnails disk cache should be used */
+		virtual Thumbnail* getThumbnail(int num, bool thumbcache=true) = 0;
 
 		/*! @return number of images for this comic book sink */
 		virtual int numOfImages() const = 0;

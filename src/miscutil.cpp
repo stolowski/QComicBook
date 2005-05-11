@@ -17,7 +17,7 @@
 
 bool which(const QString &command)/*{{{*/
 {
-	QString paths = QString(getenv("PATH"));
+	const QString paths = QString(getenv("PATH"));
 	QStringList plist = QStringList::split(":", paths, false);
 	for (QStringList::const_iterator it = plist.begin(); it != plist.end(); it++)
 	{
