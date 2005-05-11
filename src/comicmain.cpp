@@ -558,16 +558,16 @@ void ComicMainWindow::open(const QString &path, int page)/*{{{*/
 	
 	QProgressDialog *win = new QProgressDialog(tr("Please wait. Decompressing archive"), 0, 1, this, 0, true);
 	win->setCaption(caption());
-	win->setAutoClose(false);
+	win->setAutoClose(true);
 	win->setAutoReset(false);
-	win->show();
-
+	
+	connect(sink, SIGNAL(progress(int, int)), win, SLOT(setProgress(int, int)));
 	connect(sink, SIGNAL(sinkReady(const QString&)), win, SLOT(close()));
 	connect(sink, SIGNAL(sinkError(int)), win, SLOT(close()));
-	connect(sink, SIGNAL(progress(int, int)), win, SLOT(setProgress(int, int)));
 
+	win->show();
+	
 	sink->open(fullname);
-
 }/*}}}*/
 
 void ComicMainWindow::openNext()/*{{{*/
