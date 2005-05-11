@@ -28,6 +28,7 @@ dist_qcomicbook_SOURCES = aboutdialog.cpp \
 		      icons.cpp \
 		      imgcache.cpp \
 		      comicmain.cpp \
+		      imgsinkfactory.cpp \
 		      imgloader.cpp \
 		      imgsink.cpp \
 		      imgdirsink.cpp \
@@ -62,6 +63,7 @@ noinst_HEADERS = aboutdialog.h \
 		 imgcache.h \
 		 imgview.h \
 		 imgsink.h \
+		 imgsinkfactory.h \
 		 imgdirsink.h \
 		 imgarchivesink.h \
 		 imgloader.h \

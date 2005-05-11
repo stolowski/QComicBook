@@ -102,9 +102,6 @@ class ImgDirSink: public ImgSink
 		virtual QStringList getAllfiles() const;
 		virtual QStringList getAlldirs() const;
 		virtual QStringList getAllimgfiles() const;
-
-		//! Returns the instance of thumbnail loader.
-		/*! @return thumbnail loader instance */
 		virtual ThumbnailLoaderThread& thumbnailLoader();
 
 		//

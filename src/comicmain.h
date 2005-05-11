@@ -105,9 +105,7 @@ class ComicMainWindow: public QMainWindow
 		void exitFullscreen();
 		void browseDirectory();
 		void browseArchive();
-		void open(const QString &path);
-		void openDir(const QString &name, int page);
-		void openArchive(const QString &name, int page);
+		void open(const QString &path, int page=0);
 		void openNext();
 		void openPrevious();
 		void showAbout();

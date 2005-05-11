@@ -20,6 +20,7 @@
 
 class QImage;
 class Thumbnail;
+class ThumbnailLoaderThread;
 
 //! An abstract comic book image sink class.
 /*! Provides one common interface for accessing comic book resources. */
@@ -105,6 +106,10 @@ class ImgSink: public QObject
 
 		/*! @return statistics regarding number of images, memory usage etc. */
 		virtual QString getStats() const = 0;
+		
+		//! Returns the instance of thumbnail loader.
+		/*! @return thumbnail loader instance */
+		virtual ThumbnailLoaderThread& thumbnailLoader() = 0;
 };
 
 #endif

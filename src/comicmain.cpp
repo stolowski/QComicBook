@@ -18,7 +18,7 @@
 #include "cbinfo.h"
 #include "imgview.h"
 #include "imgarchivesink.h"
-#include "imgdirsink.h"
+#include "imgsinkfactory.h"
 #include "aboutdialog.h"
 #include "cbsettings.h"
 #include "history.h"
@@ -475,10 +475,7 @@ void ComicMainWindow::recentSelected(int id)/*{{{*/
 			recentfiles->remove(fname);
 			recent_menu->removeItem(id);
 		}
-		if (finfo.isDir())
-			openDir(fname, 0);
-		else
-			openArchive(fname, 0);
+		open(fname, 0);
 	}
 }/*}}}*/
 
@@ -527,7 +524,7 @@ void ComicMainWindow::browseDirectory()/*{{{*/
 	const QString dir = QFileDialog::getExistingDirectory(lastdir, this, 
 			NULL, tr("Choose a directory") );
 	if (!dir.isEmpty())
-		openDir(dir, 0);
+		open(dir, 0);
 }/*}}}*/
 
 void ComicMainWindow::browseArchive()/*{{{*/
@@ -536,56 +533,12 @@ void ComicMainWindow::browseArchive()/*{{{*/
 			"Archives (" + ARCH_EXTENSIONS + ");;All files (*)",
 			this, NULL, tr("Choose a file") );
 	if (!file.isEmpty())
-		openArchive(file, 0);
+		open(file, 0);
 }/*}}}*/
 
-void ComicMainWindow::open(const QString &path)/*{{{*/
+void ComicMainWindow::open(const QString &path, int page)/*{{{*/
 {
-	QFileInfo finfo(path);
-	if (finfo.isDir())
-		openDir(path, 0);
-	else
-		openArchive(path, 0);
-}/*}}}*/
-
-void ComicMainWindow::openDir(const QString &name, int page)/*{{{*/
-{
-	const QFileInfo f(name);
-	const QString fullname = f.absFilePath();
-	
-	if (sink && sink->getFullName() == fullname) //trying to open same dir?
-		return;
-
-	lastdir = fullname;
-	currpage = page;
-
-	closeSink();
-
-	ImgDirSink *dsink = new ImgDirSink(cfg->cacheSize());
-	sink = dsink;
-	dsink->thumbnailLoader().setReciever(thumbswin);
-	dsink->thumbnailLoader().setUseCache(cfg->cacheThumbnails());
-	connect(sink, SIGNAL(sinkReady(const QString&)), this, SLOT(sinkReady(const QString&)));
-	connect(sink, SIGNAL(sinkError(int)), this, SLOT(sinkError(int)));
-	
-	QProgressDialog *win = new QProgressDialog(tr("Please wait. Reading directory"), 0, 1, this, 0, true);
-	win->setAutoClose(false);
-	win->setAutoReset(false);
-	win->setCaption(caption());
-	win->show();
-
-	connect(sink, SIGNAL(sinkReady(const QString&)), win, SLOT(close()));
-	connect(sink, SIGNAL(sinkError(int)), win, SLOT(close()));
-	connect(sink, SIGNAL(progress(int, int)), win, SLOT(setProgress(int, int)));
-
-	sink->open(fullname);
-	
-	enableComicBookActions(true);
-}/*}}}*/
-
-void ComicMainWindow::openArchive(const QString &name, int page)/*{{{*/
-{
-	const QFileInfo f(name);
+	const QFileInfo f(path);
 	const QString fullname = f.absFilePath();
 
 	if (sink && sink->getFullName() == fullname) //trying to open same dir?
@@ -596,10 +549,10 @@ void ComicMainWindow::openArchive(const QString &name, int page)/*{{{*/
 
 	closeSink();
 
-	ImgArchiveSink *asink = new ImgArchiveSink(cfg->cacheSize());
-	sink = asink;
-	asink->thumbnailLoader().setReciever(thumbswin);
-	asink->thumbnailLoader().setUseCache(cfg->cacheThumbnails());
+	sink = ImgSinkFactory::instance().createImgSink(path);
+	sink->thumbnailLoader().setReciever(thumbswin);
+	sink->thumbnailLoader().setUseCache(cfg->cacheThumbnails());
+
 	connect(sink, SIGNAL(sinkReady(const QString&)), this, SLOT(sinkReady(const QString&)));
 	connect(sink, SIGNAL(sinkError(int)), this, SLOT(sinkError(int)));
 	
@@ -614,6 +567,7 @@ void ComicMainWindow::openArchive(const QString &name, int page)/*{{{*/
 	connect(sink, SIGNAL(progress(int, int)), win, SLOT(setProgress(int, int)));
 
 	sink->open(fullname);
+
 }/*}}}*/
 
 void ComicMainWindow::openNext()/*{{{*/
@@ -628,7 +582,7 @@ void ComicMainWindow::openNext()/*{{{*/
 			if (++it != files.end()) //get next file name
 			{
 				currpage = 0;
-				openArchive(dir.filePath(*it, true), 0);
+				open(dir.filePath(*it, true), 0);
 			}
 	}
 }/*}}}*/
@@ -644,7 +598,7 @@ void ComicMainWindow::openPrevious()/*{{{*/
 		if (it != files.end() && it != files.begin())
 		{
 			currpage = 0;
-			openArchive(dir.filePath(*(--it), true), 0);
+			open(dir.filePath(*(--it), true), 0);
 		}
 	}
 }/*}}}*/
@@ -876,10 +830,7 @@ void ComicMainWindow::bookmarkSelected(int id)/*{{{*/
 					bookmarks->remove(id);
 				return;
 			}
-			if (finfo.isDir())
-				openDir(fname, b.getPage());
-			else
-				openArchive(fname, b.getPage());
+			open(fname, b.getPage());
 		}
 	}
 }/*}}}*/
