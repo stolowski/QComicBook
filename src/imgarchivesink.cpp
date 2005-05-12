@@ -64,26 +64,15 @@ void ImgArchiveSink::init()/*{{{*/
 ImgArchiveSink::ArchiveType ImgArchiveSink::archiveType(const QString &filename)/*{{{*/
 {
 	static const struct {
-		int offset;
-		int len;
-		const char *ptrn;
-		char type;
+		int offset; //the first byte to compare
+		int len; //number of bytes in pattern
+		const char *ptrn; //pattern
+		ArchiveType type; //archive type
 	} magic[] = {
 		{0, 4, "\x52\x61\x72\x21", RAR_ARCHIVE},
 		{0, 4, "\x50\x4b\x03\x04", ZIP_ARCHIVE},
 		{8, 4, "\x2a\x41\x43\x45", ACE_ARCHIVE}
 	};
-
-	if (filename.endsWith(".rar", false) || filename.endsWith(".cbr", false))
-		return RAR_ARCHIVE;
-	if (filename.endsWith(".zip", false) || filename.endsWith(".cbz", false))
-		return ZIP_ARCHIVE;
-	if (filename.endsWith(".ace", false) || filename.endsWith(".cba", false))
-		return ACE_ARCHIVE;
-	if (filename.endsWith(".tar.gz", false) || filename.endsWith(".tgz", false) || filename.endsWith(".cbg", false))
-		return TARGZ_ARCHIVE;
-	if (filename.endsWith(".tar.bz2", false) || filename.endsWith(".cbb", false))
-		return TARBZ2_ARCHIVE;
 
 	QFile file(filename);
 	if (file.open(IO_ReadOnly))
@@ -102,10 +91,25 @@ ImgArchiveSink::ArchiveType ImgArchiveSink::archiveType(const QString &filename)
 					break;
 			}
 			if (j == magic[i].len)
-				return static_cast<ArchiveType>(magic[i].type);
+			{
+				file.close();
+				return magic[i].type;
+			}
 		}
 		file.close();
 	}
+
+	if (filename.endsWith(".tar.gz", false) || filename.endsWith(".tgz", false) || filename.endsWith(".cbg", false))
+		return TARGZ_ARCHIVE;
+	if (filename.endsWith(".tar.bz2", false) || filename.endsWith(".cbb", false))
+		return TARBZ2_ARCHIVE;
+	if (filename.endsWith(".rar", false) || filename.endsWith(".cbr", false))
+		return RAR_ARCHIVE;
+	if (filename.endsWith(".zip", false) || filename.endsWith(".cbz", false))
+		return ZIP_ARCHIVE;
+	if (filename.endsWith(".ace", false) || filename.endsWith(".cba", false))
+		return ACE_ARCHIVE;
+
 	return UNKNOWN_ARCHIVE;
 }/*}}}*/
 
@@ -151,6 +155,8 @@ int ImgArchiveSink::extract(const QString &filename, const QString &destdir)/*{{
 	pext.addArgument(filename);
 	pinf.addArgument(filename);
 	pext.setWorkingDirectory(destdir);
+
+	emit progress(0, 1);
 
 	//
 	// extract archive file list first

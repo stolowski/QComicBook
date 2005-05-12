@@ -99,6 +99,7 @@ void ImgDirSink::recurseDir(const QString &s)/*{{{*/
 int ImgDirSink::open(const QString &path)/*{{{*/
 {
 	int status;
+	emit progress(0, 1);
 	QFileInfo info(path);
 	if (!info.exists())
 		status = SINKERR_NOTFOUND;

@@ -556,7 +556,7 @@ void ComicMainWindow::open(const QString &path, int page)/*{{{*/
 	connect(sink, SIGNAL(sinkReady(const QString&)), this, SLOT(sinkReady(const QString&)));
 	connect(sink, SIGNAL(sinkError(int)), this, SLOT(sinkError(int)));
 	
-	QProgressDialog *win = new QProgressDialog(tr("Please wait. Opening comicbook"), 0, 1, this, 0, true);
+	QProgressDialog *win = new QProgressDialog(tr("Please wait. Opening comicbook"), 0, 1, this, 0, true, WDestructiveClose);
 	win->setCaption(caption());
 	win->setAutoClose(true);
 	win->setAutoReset(false);
