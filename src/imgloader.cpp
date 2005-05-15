@@ -45,9 +45,13 @@ void ImgLoaderThread::request(int page)/*{{{*/
 		return;
 	}
 	requests.append(page);
-	if (!running())
+	if (!running() && !stopped)
+	{
+		mtx.unlock();
 		start(prio);
-	mtx.unlock();
+	}
+	else
+		mtx.unlock();
 }/*}}}*/
 
 void ImgLoaderThread::request(int first, int n)/*{{{*/
@@ -57,9 +61,13 @@ void ImgLoaderThread::request(int first, int n)/*{{{*/
 	for (int i=first; i<last; i++)
 		if (requests.contains(i) == 0)
 			requests.append(i);
-	if (!running())
+	if (!running() && !stopped)
+	{
+		mtx.unlock();
 		start(prio);
-	mtx.unlock();
+	}
+	else
+		mtx.unlock();
 }/*}}}*/
 
 void ImgLoaderThread::stop()/*{{{*/
@@ -86,12 +94,8 @@ void ImgLoaderThread::run()/*{{{*/
 		{
 			int result;
 			sink->getImage(n, result, 0);
-			mtx.unlock();
 		}
-		else
-		{
-			mtx.unlock();
-		}
+		mtx.unlock();
 	}
 }/*}}}*/
 

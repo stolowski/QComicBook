@@ -15,8 +15,6 @@
 
 ImgCache::ImgCache(int size): QCache<QImage>(size)/*{{{*/
 {
-	if (size < 1)
-		setSize(1);
 	setAutoDelete(true);
 }/*}}}*/
 
@@ -26,36 +24,16 @@ ImgCache::~ImgCache()/*{{{*/
 
 void ImgCache::setSize(int size)/*{{{*/
 {
+	if (size < 0)
+		size = 0;
 	setMaxCost(size);
 }/*}}}*/
 
-/*int ImgCache::memory() const
-{
-	int mem = 0;
-	for (QCacheIterator<QImage> it(*this); it.current(); ++it)
-		mem += it.current()->numBytes();
-	return mem;	
-};
-
-void ImgCache::largestImage(int &w, int &h)
-{
-	int p;
-	p = w = h = 0;
-	for (QCacheIterator<QImage> it(*this); it.current(); ++it)
-	{
-		QImage *img = it.current();
-		int tmp = img->width() * img->height();
-		if (tmp > p)
-		{
-			p = tmp;
-			w = img->width();
-			h = img->height();
-		}
-	}
-}*/
-
 QPtrCollection::Item ImgCache::newItem(QPtrCollection::Item d)/*{{{*/
 {
-	return new QImage(*(QImage *)d);
+	//return new QImage(*(QImage *)d);
+	QImage *img = new QImage(*(QImage *)d);
+	img->detach();
+	return img;
 }/*}}}*/
 

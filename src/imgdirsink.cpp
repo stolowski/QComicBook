@@ -30,9 +30,9 @@ ImgDirSink::ImgDirSink(int cachesize): ImgSink(), cachemtx(true)/*{{{*/
 
 ImgDirSink::ImgDirSink(const QString &path, int cachesize): ImgSink(), cachemtx(true), dirpath(QString::null)/*{{{*/
 {
+	cache = new ImgCache(cachesize);
 	thloader.setSink(this);
 	imgloader.setSink(this);
-	cache = new ImgCache(cachesize);
 	open(path);
 }/*}}}*/
 
@@ -132,8 +132,8 @@ int ImgDirSink::open(const QString &path)/*{{{*/
 void ImgDirSink::close()/*{{{*/
 {
 	thloader.stop();
-	imgloader.stop();
 	thloader.wait(); //wait for thumbnail loader thread
+	imgloader.stop();
 	imgloader.wait(); //wait for preload thread
 
 	listmtx.lock();
@@ -233,13 +233,12 @@ QImage ImgDirSink::getImage(unsigned int num, int &result, int preload)/*{{{*/
 	{
 		const QString fname = imgfiles[num];
 		listmtx.unlock();
-		QImage *img = NULL; //cached image pointer
 
 		cachemtx.lock();
 
 		//
 		// try to find in cache first
-		if (img = cache->find(fname))
+		if (QImage *img = cache->find(fname))
 		{
 			result = 0;
 			rimg = *img;
@@ -287,11 +286,8 @@ QImage ImgDirSink::getImage(unsigned int num, int &result, int preload)/*{{{*/
 
 Thumbnail* ImgDirSink::getThumbnail(int num, bool thumbcache)/*{{{*/
 {
-	QString thname;
-	Thumbnail *t = new Thumbnail(num);
-
-	listmtx.lock();
 	QString fname;
+	listmtx.lock();
 	if (num < imgfiles.count())
 		fname = imgfiles[num];
 	else
@@ -300,6 +296,9 @@ Thumbnail* ImgDirSink::getThumbnail(int num, bool thumbcache)/*{{{*/
 		return NULL;
 	}
 	listmtx.unlock();
+
+	Thumbnail *t = new Thumbnail(num);
+	QString thname;
 
 	//
 	// try to load cached thumbnail
@@ -326,11 +325,6 @@ Thumbnail* ImgDirSink::getThumbnail(int num, bool thumbcache)/*{{{*/
 	if (thumbcache)
 		t->save(thname);
 	return t;
-}/*}}}*/
-
-void ImgDirSink::setThumbnailReciever(QObject *rcv)/*{{{*/
-{
-	thloader.setReciever(rcv);
 }/*}}}*/
 
 void ImgDirSink::requestThumbnail(int num)/*{{{*/

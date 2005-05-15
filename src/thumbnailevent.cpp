@@ -10,21 +10,20 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#ifndef __IMGCACHE_H
-#define __IMGCACHE_H
+#include "thumbnailevent.h"
+#include "thumbnail.h"
 
-#include <qcache.h>
-#include <qimage.h>
-
-class ImgCache: public QCache<QImage>
+ThumbnailEvent::ThumbnailEvent(Thumbnail *t): QCustomEvent(ThumbnailReady), thumbnail(t)/*{{{*/
 {
-	public:
-		ImgCache(int size=1);
-		virtual ~ImgCache();
+}/*}}}*/
 
-		virtual void setSize(int size);
-		virtual QPtrCollection::Item newItem(QPtrCollection::Item d);
-};
+ThumbnailEvent::~ThumbnailEvent()/*{{{*/
+{
+	delete thumbnail;
+}/*}}}*/
 
-#endif
+const Thumbnail *ThumbnailEvent::getThumbnail() const/*{{{*/
+{
+	return thumbnail;
+}/*}}}*/
 

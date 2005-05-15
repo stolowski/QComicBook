@@ -40,6 +40,7 @@ dist_qcomicbook_SOURCES = aboutdialog.cpp \
 		      pagenumberedit.cpp \
 		      statusbar.cpp \
 		      thumbnail.cpp \
+		      thumbnailevent.cpp \
 		      thumbnailitem.cpp \
 		      thumbnailloader.cpp \
 		      thumbnailswin.cpp \
@@ -72,6 +73,7 @@ noinst_HEADERS = aboutdialog.h \
 		 pagenumberedit.h \
 		 statusbar.h \
 		 thumbnail.h \
+		 thumbnailevent.h \
 		 thumbnailitem.h \
 		 thumbnailloader.h \
 		 thumbnailswin.h \

@@ -1,5 +1,8 @@
-2005-05-xx:  0.2.1       -- fixed bug with handling relative comicbook paths
+2005-05-xx:  0.2.1       -- rar, zip, ace archives are recognized by magic
+                            bytes first, not by extension
+                         -- fixed bug with handling relative comicbook paths
                             from commandline
+			 -- fixed bug with progress window reappearing
 
 2005-05-09:  0.2.0       -- 'Manage bookmarks' option added
                          -- many internal improvements and small bugfixes

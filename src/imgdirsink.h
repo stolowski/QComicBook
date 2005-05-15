@@ -80,7 +80,6 @@ class ImgDirSink: public ImgSink
 		void setComicBookName(const QString &name);
 		
 	public slots:
-		virtual void setThumbnailReciever(QObject *rcv);
 		virtual void requestThumbnail(int num);
 		virtual void requestThumbnails(int first, int n);
 

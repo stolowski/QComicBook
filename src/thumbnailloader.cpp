@@ -13,10 +13,10 @@
 #include "thumbnailloader.h"
 #include "imgsink.h"
 #include "thumbnail.h"
+#include "thumbnailevent.h"
 #include <qapplication.h>
-#include <qevent.h>
 
-ThumbnailLoaderThread::ThumbnailLoaderThread(): ImgLoaderThread(), rcvobj(NULL), usecache(true)/*{{{*/
+ThumbnailLoaderThread::ThumbnailLoaderThread(): ImgLoaderThread(), rcvobj(NULL), usecache(false)/*{{{*/
 {
 }/*}}}*/
 
@@ -56,8 +56,7 @@ void ThumbnailLoaderThread::run()/*{{{*/
 			mtx.unlock();
 			if (t)
 			{
-				QCustomEvent *evt = new QCustomEvent(ThumbnailReady);
-				evt->setData(t);
+				ThumbnailEvent *evt = new ThumbnailEvent(t);
 				QApplication::postEvent(rcvobj, evt);
 			}
 		}

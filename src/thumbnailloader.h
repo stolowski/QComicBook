@@ -19,8 +19,6 @@
 
 class QObject;
 
-#define ThumbnailReady 2000
-
 class ThumbnailLoaderThread: public ImgLoaderThread
 {
 	private:

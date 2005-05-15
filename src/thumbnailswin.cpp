@@ -14,6 +14,7 @@
 #include "thumbnailsview.h"
 #include "thumbnailloader.h"
 #include "thumbnail.h"
+#include "thumbnailevent.h"
 
 ThumbnailsWindow::ThumbnailsWindow(Place p, QWidget *parent): QDockWindow(p, parent)/*{{{*/
 {
@@ -35,10 +36,11 @@ void ThumbnailsWindow::customEvent(QCustomEvent *e)/*{{{*/
 {
 	if (e->type() == ThumbnailReady)
 	{
-		Thumbnail *t = static_cast<Thumbnail *>(e->data());
-		tview->setPage(t->page(), t->image());
-		delete t;
+		ThumbnailEvent *evt = dynamic_cast<ThumbnailEvent *>(e);
+		tview->setPage(*evt->getThumbnail());
 	}
+	else
+		QDockWindow::customEvent(e);
 }/*}}}*/
 
 void ThumbnailsWindow::onOrientationChanged(Orientation o)/*{{{*/

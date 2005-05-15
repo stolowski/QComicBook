@@ -45,12 +45,6 @@ class ImgSink: public QObject
 		void progress(int current, int total);
 
 	public slots:
-		//! Sets the thumbnails reciever object.
-		/*! Sets the reciever of thumbnails for thumbnails loader thread. The thumbnail images
-		 *  will be passed to this object as custom events using QCustomEvent class.
-		 *  @param rcv reciever object */
-		virtual void setThumbnailReciever(QObject *rcv) = 0;
-
 		//! Requestes thumbnail to be loaded in separate thread.
 		/*! @param num page number */
 		virtual void requestThumbnail(int num) = 0;

@@ -20,7 +20,7 @@
 #include <qptrvector.h>
 #include <qpopupmenu.h>
 
-ThumbnailsView::ThumbnailsView(QWidget *parent): QIconView(parent), selected(NULL)/*{{{*/
+ThumbnailsView::ThumbnailsView(QWidget *parent): QIconView(parent), selected(NULL), numpages(0)/*{{{*/
 {
 	setFocusPolicy(QWidget::NoFocus);
 	setItemsMovable(false);
