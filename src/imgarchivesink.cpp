@@ -50,7 +50,7 @@ ImgArchiveSink::ImgArchiveSink(const QString &path, int cachesize): ImgDirSink(c
 
 ImgArchiveSink::~ImgArchiveSink()/*{{{*/
 {
-	close();
+	ImgArchiveSink::close();
 }/*}}}*/
 
 void ImgArchiveSink::init()/*{{{*/

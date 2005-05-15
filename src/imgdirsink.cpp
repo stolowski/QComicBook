@@ -132,8 +132,8 @@ int ImgDirSink::open(const QString &path)/*{{{*/
 void ImgDirSink::close()/*{{{*/
 {
 	thloader.stop();
-	thloader.wait(); //wait for thumbnail loader thread
 	imgloader.stop();
+	thloader.wait(); //wait for thumbnail loader thread
 	imgloader.wait(); //wait for preload thread
 
 	listmtx.lock();
