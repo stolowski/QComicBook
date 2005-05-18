@@ -70,7 +70,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	
 	//
 	// comic view
-	view = new ComicImageView(this, cfg->pageSize(), cfg->pageScaling(), cfg->background());
+	view = new ComicImageView(this, cfg->pageSize(), cfg->pageScaling(), ComicImageView::Right, cfg->background());
 	setCentralWidget(view);
 	view->setFocus();
 	view->setSmallCursor(cfg->smallCursor());
@@ -634,7 +634,7 @@ void ComicMainWindow::nextPage()/*{{{*/
 {
 	if (sink)
 	{
-		if (twoPagesAction->isOn() && cfg->twoPagesMode())
+		if (twoPagesAction->isOn() && cfg->twoPagesStep())
 		{
 			if (currpage < sink->numOfImages() - 2) //do not change pages if last two pages are visible
 				jumpToPage(currpage + 2);
