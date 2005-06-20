@@ -29,6 +29,8 @@
 #define ICON_THUMBNAILS "thumbnails.png"
 #define ICON_TWOPAGES   "twopages.png"
 #define ICON_JAPANESE   "japanese.png"
+#define ICON_ROTRIGHT   "rright.png"
+#define ICON_ROTLEFT    "rleft.png"
 
 #endif
 

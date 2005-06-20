@@ -70,7 +70,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	
 	//
 	// comic view
-	view = new ComicImageView(this, cfg->pageSize(), cfg->pageScaling(), ComicImageView::Right, cfg->background());
+	view = new ComicImageView(this, cfg->pageSize(), cfg->pageScaling(), cfg->background());
 	setCentralWidget(view);
 	view->setFocus();
 	view->setSmallCursor(cfg->smallCursor());
@@ -153,12 +153,21 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	QAction *bestFitAction = new QAction(Icons::get(ICON_BESTFIT), tr("Best fit"), ALT+Key_B, scaleActions);
 	bestFitAction->setToggleAction(true);
 	connect(bestFitAction, SIGNAL(activated()), view, SLOT(setSizeBestFit()));
+
 	mangaModeAction = new QAction(Icons::get(ICON_JAPANESE), tr("Japanese mode"), CTRL+Key_J, this);
 	mangaModeAction->setToggleAction(true);
 	connect(mangaModeAction, SIGNAL(toggled(bool)), this, SLOT(toggleJapaneseMode(bool)));
 	twoPagesAction = new QAction(Icons::get(ICON_TWOPAGES), tr("Two pages"), CTRL+Key_T, this);
 	twoPagesAction->setToggleAction(true);
 	connect(twoPagesAction, SIGNAL(toggled(bool)), this, SLOT(toggleTwoPages(bool)));
+	rotateRightAction = new QAction(Icons::get(ICON_ROTRIGHT), tr("Rotate right"), QKeySequence(), this);
+	connect(rotateRightAction, SIGNAL(activated()), view, SLOT(rotateRight()));
+	rotateLeftAction = new QAction(Icons::get(ICON_ROTLEFT), tr("Rotate left"), QKeySequence(), this);
+	connect(rotateLeftAction, SIGNAL(activated()), view, SLOT(rotateLeft()));
+	rotateResetAction = new QAction(tr("No rotation"), QKeySequence(), this);
+	connect(rotateResetAction, SIGNAL(activated()), view, SLOT(resetRotation()));
+	togglePreserveRotationAction = new QAction(tr("Preserve rotation"), QKeySequence(), this);
+	togglePreserveRotationAction->setToggleAction(true);
 	
 	showInfoAction = new QAction(Icons::get(ICON_INFO), tr("Info"), ALT+Key_I, this);
 	connect(showInfoAction, SIGNAL(activated()), this, SLOT(showInfo()));
@@ -199,30 +208,38 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	fitHeightAction->addTo(toolbar);
 	wholePageAction->addTo(toolbar);
 	bestFitAction->addTo(toolbar);
+	toolbar->addSeparator();
+	rotateRightAction->addTo(toolbar);
+	rotateLeftAction->addTo(toolbar);
 	connect(toggleToolbarAction, SIGNAL(toggled(bool)), toolbar, SLOT(setShown(bool)));
 	connect(toolbar, SIGNAL(visibilityChanged(bool)), this, SLOT(toolbarVisibilityChanged(bool)));
 
 	//
 	// Context menu
-	pageinfo = new QLabel(view->contextMenu());
+	QPopupMenu *cmenu = view->contextMenu();
+	pageinfo = new QLabel(cmenu);
 	pageinfo->setMargin(3);
 	pageinfo->setAlignment(Qt::AlignHCenter);
 	pageinfo->setFrameStyle(QFrame::Box | QFrame::Raised);
-	nextPageAction->addTo(view->contextMenu());
-	prevPageAction->addTo(view->contextMenu());
-	view->contextMenu()->insertSeparator();
-	fitWidthAction->addTo(view->contextMenu());
-	fitHeightAction->addTo(view->contextMenu());
-	wholePageAction->addTo(view->contextMenu());
-	originalSizeAction->addTo(view->contextMenu());
-	bestFitAction->addTo(view->contextMenu());
-	view->contextMenu()->insertSeparator();
-	twoPagesAction->addTo(view->contextMenu());
-	mangaModeAction->addTo(view->contextMenu());
-	view->contextMenu()->insertSeparator();
-	fullScreenAction->addTo(view->contextMenu());
-	view->contextMenu()->insertSeparator();
-	view->contextMenu()->insertItem(pageinfo);
+	nextPageAction->addTo(cmenu);
+	prevPageAction->addTo(cmenu);
+	cmenu->insertSeparator();
+	fitWidthAction->addTo(cmenu);
+	fitHeightAction->addTo(cmenu);
+	wholePageAction->addTo(cmenu);
+	originalSizeAction->addTo(cmenu);
+	bestFitAction->addTo(cmenu);
+	cmenu->insertSeparator();
+	rotateRightAction->addTo(cmenu);
+	rotateLeftAction->addTo(cmenu);
+	rotateResetAction->addTo(cmenu);
+	cmenu->insertSeparator();
+	twoPagesAction->addTo(cmenu);
+	mangaModeAction->addTo(cmenu);
+	cmenu->insertSeparator();
+	fullScreenAction->addTo(cmenu);
+	cmenu->insertSeparator();
+	cmenu->insertItem(pageinfo);
 	
 	//
 	// File menu
@@ -252,6 +269,11 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	fitHeightAction->addTo(view_menu);
 	wholePageAction->addTo(view_menu);
 	bestFitAction->addTo(view_menu);
+	view_menu->insertSeparator();
+	rotateRightAction->addTo(view_menu);
+	rotateLeftAction->addTo(view_menu);
+	rotateResetAction->addTo(view_menu);
+	togglePreserveRotationAction->addTo(view_menu);
 	view_menu->insertSeparator();
 	fullScreenAction->addTo(view_menu);
 	view_menu->insertSeparator();
@@ -357,6 +379,12 @@ void ComicMainWindow::enableComicBookActions(bool f)/*{{{*/
 	showInfoAction->setEnabled(f);
 	openNextAction->setEnabled(x);
 	openPrevAction->setEnabled(x);
+
+	//
+	// view menu
+	rotateRightAction->setEnabled(f);
+	rotateLeftAction->setEnabled(f);
+	rotateResetAction->setEnabled(f);
 	
 	//
 	// navigation menu
@@ -559,7 +587,7 @@ void ComicMainWindow::open(const QString &path, int page)/*{{{*/
 	QProgressDialog *win = new QProgressDialog(tr("Please wait. Opening comicbook"), 0, 1, this, 0, true, WDestructiveClose);
 	win->setCaption(caption());
 	win->setAutoClose(true);
-	win->setAutoReset(false);
+	win->setAutoReset(true);
 	
 	connect(sink, SIGNAL(progress(int, int)), win, SLOT(setProgress(int, int)));
 	connect(sink, SIGNAL(sinkReady(const QString&)), win, SLOT(close()));
@@ -692,7 +720,8 @@ void ComicMainWindow::jumpToPage(int n, bool force)/*{{{*/
 	if ((n != currpage) || force)
 	{
 		int result1, result2;
-		int preload = cfg->preloadPages() ? 1 : 0;
+		const int preload = cfg->preloadPages() ? 1 : 0;
+		const bool preserveangle = togglePreserveRotationAction->isOn();
 		
 		if (twoPagesAction->isOn())
 		{
@@ -702,25 +731,25 @@ void ComicMainWindow::jumpToPage(int n, bool force)/*{{{*/
 			{
 				if (mangaModeAction->isOn())
 				{
-					view->setImage(img2, img1);
+					view->setImage(img2, img1, preserveangle);
 					statusbar->setImageInfo(&img2, &img1);
 				}
 				else
 				{
-					view->setImage(img1, img2);
+					view->setImage(img1, img2, preserveangle);
 					statusbar->setImageInfo(&img1, &img2);
 				}
 			}
 			else
 			{
-				view->setImage(img1);
+				view->setImage(img1, preserveangle);
 				statusbar->setImageInfo(&img1);
 			}
 		}
 		else
 		{
 			QImage img(sink->getImage(currpage = n, result1, preload)); //preload next image
-			view->setImage(img);
+			view->setImage(img, preserveangle);
 			statusbar->setImageInfo(&img);
 		}
 		const QString page = tr("Page") + " " + QString::number(currpage + 1) + "/" + QString::number(sink->numOfImages());

@@ -11,6 +11,8 @@ icons_DATA = bestfit.png \
 	     pagebottom.png \
 	     pagetop.png \
 	     prevpage.png \
+	     rright.png \
+	     rleft.png \
 	     qcomicbook.png \
 	     thumbnails.png \
 	     twopages.png \

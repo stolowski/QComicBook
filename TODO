@@ -1,9 +1,8 @@
 - temporary directory setting
-- bookmark editor
 - docbook help/docs
 - doxygen docs
-- QImage::load test
-- image zooming and rotating
+- image zooming
 - drag & drop support
 - save Info window geometry
 - character encoding option for Info window
+- built-in decompression with third-party libraries

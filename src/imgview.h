@@ -14,6 +14,7 @@
 #define __IMGVIEW_H
 
 #include <qscrollview.h>
+#include <qwmatrix.h>
 
 class QPopupMenu;
 class QImage;
@@ -26,8 +27,9 @@ class ComicImageView: public QScrollView
 	Q_OBJECT
 
 	public:
-		enum Size { Original = 0, FitWidth, FitHeight, WholePage, BestFit };
-		enum Scaling { Smooth = 0, Fast };
+		enum Size { Original, FitWidth, FitHeight, WholePage, BestFit };
+		enum Scaling { Smooth, Fast };
+		enum Rotation { None, Left, Right };
 
 	private:
 		QPopupMenu *context_menu;
@@ -35,6 +37,8 @@ class ComicImageView: public QScrollView
 		QPixmap *pixmap;
 		Size isize;
 		Scaling iscaling;
+		int iangle; //rotation angle, 0..3, multipled by 90
+		QWMatrix rmtx; //rotation matrix
 		int spdx, spdy; //scroll speed
 		int xoff, yoff;
 		int lx, ly; //last mouse position when tracking mouse moves
@@ -57,9 +61,10 @@ class ComicImageView: public QScrollView
 		virtual void drawContents(QPainter *p, int clipx, int clipy, int clipw, int cliph);
 		
 	public slots:
-		void setImage(const QImage &img);
-		void setImage(const QImage &img1, const QImage &img2);
+		void setImage(const QImage &img, bool preserveangle=false);
+		void setImage(const QImage &img1, const QImage &img2, bool preserveangle=false);
 		void setScaling(ComicImageView::Scaling s);
+		void setRotation(ComicImageView::Rotation r);
 		void setSize(Size s);
 		void setSizeOriginal();
 		void setSizeFitWidth();
@@ -76,6 +81,9 @@ class ComicImageView: public QScrollView
 		void scrollDown();
 		void scrollUpFast();
 		void scrollDownFast();
+		void rotateRight();
+		void rotateLeft();
+		void resetRotation();
 		void jumpUp();
 		void jumpDown();
 		void clear();

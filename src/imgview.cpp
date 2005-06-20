@@ -21,7 +21,7 @@
 
 const int ComicImageView::EXTRA_WHEEL_SPIN = 2;
 
-ComicImageView::ComicImageView(QWidget *parent, ComicImageView::Size size, ComicImageView::Scaling scaling, const QColor &color): QScrollView(parent), isize(size), iscaling(scaling), xoff(0), yoff(0), lx(-1), wheelupcnt(0), wheeldowncnt(0), smallcursor(NULL)/*{{{*/
+ComicImageView::ComicImageView(QWidget *parent, ComicImageView::Size size, ComicImageView::Scaling scaling, const QColor &color): QScrollView(parent), isize(size), iscaling(scaling), iangle(0), xoff(0), yoff(0), lx(-1), wheelupcnt(0), wheeldowncnt(0), smallcursor(NULL)/*{{{*/
 {
 	orgimage = new QImage();
 	pixmap = new QPixmap();
@@ -73,8 +73,11 @@ void ComicImageView::contentsContextMenuEvent(QContextMenuEvent *e)/*{{{*/
 		context_menu->popup(e->globalPos());
 }/*}}}*/
 
-void ComicImageView::setImage(const QImage &img)/*{{{*/
+void ComicImageView::setImage(const QImage &img, bool preserveangle)/*{{{*/
 {
+	if (!preserveangle)
+		iangle = 0;
+
 	*orgimage = img;
 
 	updateImageSize();
@@ -83,8 +86,10 @@ void ComicImageView::setImage(const QImage &img)/*{{{*/
 	repaintContents(0, 0 , viewport()->width(), viewport()->height());
 }/*}}}*/
 
-void ComicImageView::setImage(const QImage &img1, const QImage &img2)/*{{{*/
+void ComicImageView::setImage(const QImage &img1, const QImage &img2, bool preserveangle)/*{{{*/
 {
+	if (!preserveangle)
+		iangle = 0;
 	//
 	// we need to recreate orgimage as it may refer to original image data in cache;
 	// we dont want to work on shallow copy; it is probably also better than detach()
@@ -177,13 +182,28 @@ void ComicImageView::updateImageSize()/*{{{*/
 	if (size == BestFit)
 	{
 		if (orgimage->width() > orgimage->height())
+		{
+			if (iangle&1)
+				size = FitWidth;
+			else
 				size = FitHeight;
+		}
 		else
-			size = FitWidth;
+		{
+			if (iangle&1)
+				size = FitHeight;
+			else
+				size = FitWidth;
+		}
 	}
 		
 	if (size == Original)
-		pixmap->convertFromImage(*orgimage);
+	{
+		if (iangle == 0)
+			pixmap->convertFromImage(*orgimage);
+		else
+			pixmap->convertFromImage(orgimage->xForm(rmtx));
+	}
 	else
 	{	
 		QImage img;
@@ -195,12 +215,22 @@ void ComicImageView::updateImageSize()/*{{{*/
 		else if (size == FitHeight)
 			w = 65535;
 
+		if (iangle&1) //for 90 and 270 angles w and h must be reversed
+		{
+			int tmp = w;
+			w = h;
+			h = tmp;
+		}
+
 		if (iscaling == Smooth)
 			img = orgimage->smoothScale(w, h, QImage::ScaleMin);
 		else if (iscaling == Fast)
 			img = orgimage->scale(w, h, QImage::ScaleMin);
 	
-		pixmap->convertFromImage(img);
+		if (iangle == 0)
+			pixmap->convertFromImage(img);
+		else
+			pixmap->convertFromImage(img.xForm(rmtx));
 	}
 
 	int d;
@@ -224,6 +254,25 @@ void ComicImageView::updateImageSize()/*{{{*/
 void ComicImageView::setScaling(ComicImageView::Scaling s)/*{{{*/
 {
 	iscaling = s;
+}/*}}}*/
+
+void ComicImageView::setRotation(ComicImageView::Rotation r)/*{{{*/
+{
+	if (r == Right)
+		++iangle;
+	else if (r == Left)
+		--iangle;
+	else
+		iangle = 0; //None
+	iangle &= 3;		
+	if (iangle !=0)
+	{
+		rmtx.reset();
+		rmtx.rotate(iangle * 90.0f);
+	}
+
+	updateImageSize();
+	updateContents(0, 0, viewport()->width(), viewport()->height());
 }/*}}}*/
 
 void ComicImageView::setSize(Size s)/*{{{*/
@@ -324,6 +373,21 @@ void ComicImageView::scrollDownFast()/*{{{*/
 		emit bottomReached();
 	else
 		scrollBy(0, 3*spdy);
+}/*}}}*/
+
+void ComicImageView::rotateRight()/*{{{*/
+{
+	setRotation(Right);
+}/*}}}*/
+
+void ComicImageView::rotateLeft()/*{{{*/
+{
+	setRotation(Left);
+}/*}}}*/
+
+void ComicImageView::resetRotation()/*{{{*/
+{
+	setRotation(None);
 }/*}}}*/
 
 void ComicImageView::jumpUp()/*{{{*/

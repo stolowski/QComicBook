@@ -75,6 +75,10 @@ class ComicMainWindow: public QMainWindow
 		QAction *twoPagesAction;
 		QAction *openNextAction;
 		QAction *openPrevAction;
+		QAction *rotateRightAction;
+		QAction *rotateLeftAction;
+		QAction *rotateResetAction;
+		QAction *togglePreserveRotationAction;
 		static const QString ARCH_EXTENSIONS; //!<space-separated list of archives extensions
 		
 	protected:
