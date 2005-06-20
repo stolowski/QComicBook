@@ -460,3 +460,8 @@ ComicImageView::Size ComicImageView::getSize() const/*{{{*/
 	return isize;
 }/*}}}*/
 
+const QPixmap& ComicImageView::image() const/*{{{*/
+{
+	return *pixmap;
+}/*}}}*/
+

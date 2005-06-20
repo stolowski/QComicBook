@@ -98,6 +98,7 @@ class ComicImageView: public QScrollView
 		bool onTop();
 		QPopupMenu *contextMenu() const;
 		ComicImageView::Size getSize() const;
+		const QPixmap& image() const;
 };
 
 #endif

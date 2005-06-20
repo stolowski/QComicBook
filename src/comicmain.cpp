@@ -752,6 +752,8 @@ void ComicMainWindow::jumpToPage(int n, bool force)/*{{{*/
 			view->setImage(img, preserveangle);
 			statusbar->setImageInfo(&img);
 		}
+		if (mangaModeAction->isOn())
+			view->ensureVisible(view->image().width(), 0);
 		const QString page = tr("Page") + " " + QString::number(currpage + 1) + "/" + QString::number(sink->numOfImages());
 		pageinfo->setText(page);
 		statusbar->setPage(currpage + 1, sink->numOfImages());
