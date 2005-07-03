@@ -14,29 +14,29 @@
 #include <imgsink.h>
 #include <qimage.h>
 
-ImgLoaderThread::ImgLoaderThread(): QThread(), prio(QThread::LowPriority), sink(NULL), stopped(false)/*{{{*/
+ImgLoaderThread::ImgLoaderThread(): QThread(), prio(QThread::LowPriority), sink(NULL), stopped(false)
 {
-}/*}}}*/
+}
 
-ImgLoaderThread::~ImgLoaderThread()/*{{{*/
+ImgLoaderThread::~ImgLoaderThread()
 {
-}/*}}}*/
+}
 
-void ImgLoaderThread::setPriority(QThread::Priority p)/*{{{*/
+void ImgLoaderThread::setPriority(QThread::Priority p)
 {
 	mtx.lock();
 	prio = p;
 	mtx.unlock();
-}/*}}}*/
+}
 
-void ImgLoaderThread::setSink(ImgSink *sink)/*{{{*/
+void ImgLoaderThread::setSink(ImgSink *sink)
 {
 	mtx.lock();
 	this->sink = sink;
 	mtx.unlock();
-}/*}}}*/
+}
 
-void ImgLoaderThread::request(int page)/*{{{*/
+void ImgLoaderThread::request(int page)
 {
 	mtx.lock();
 	if (requests.contains(page))
@@ -52,9 +52,9 @@ void ImgLoaderThread::request(int page)/*{{{*/
 	}
 	else
 		mtx.unlock();
-}/*}}}*/
+}
 
-void ImgLoaderThread::request(int first, int n)/*{{{*/
+void ImgLoaderThread::request(int first, int n)
 {
 	mtx.lock();
 	const int last = first + n;
@@ -68,16 +68,16 @@ void ImgLoaderThread::request(int first, int n)/*{{{*/
 	}
 	else
 		mtx.unlock();
-}/*}}}*/
+}
 
-void ImgLoaderThread::stop()/*{{{*/
+void ImgLoaderThread::stop()
 {
 	mtx.lock();
 	stopped = true;
 	mtx.unlock();
-}/*}}}*/
+}
 
-void ImgLoaderThread::run()/*{{{*/
+void ImgLoaderThread::run()
 {
 	for (;;)
 	{
@@ -97,5 +97,5 @@ void ImgLoaderThread::run()/*{{{*/
 		}
 		mtx.unlock();
 	}
-}/*}}}*/
+}
 

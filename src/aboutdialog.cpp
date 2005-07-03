@@ -17,7 +17,7 @@
 #include <qpushbutton.h>
 #include <qsizepolicy.h>
 
-AboutDialog::AboutDialog(QWidget *parent, const QString &caption, const QString &text): QDialog(parent)/*{{{*/
+AboutDialog::AboutDialog(QWidget *parent, const QString &caption, const QString &text): QDialog(parent)
 {
 	setCaption(caption);
 	setModal(true);
@@ -36,14 +36,14 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &caption, const QString 
 	bclose->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 	box1->addWidget(bclose, 0, Qt::AlignHCenter);
 	connect(bclose, SIGNAL(clicked()), this, SLOT(accept()));
-}/*}}}*/
+}
 
-AboutDialog::~AboutDialog()/*{{{*/
+AboutDialog::~AboutDialog()
 {
-}/*}}}*/
+}
 
-void AboutDialog::setText(const QString &text)/*{{{*/
+void AboutDialog::setText(const QString &text)
 {
 	about->setText(text);
-}/*}}}*/
+}
 

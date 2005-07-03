@@ -16,35 +16,35 @@
 #include <qstring.h>
 #include <qfileinfo.h>
 
-ImgSinkFactory::ImgSinkFactory()/*{{{*/
+ImgSinkFactory::ImgSinkFactory()
 {
-}/*}}}*/
+}
 
-ImgSinkFactory::~ImgSinkFactory()/*{{{*/
+ImgSinkFactory::~ImgSinkFactory()
 {
-}/*}}}*/
+}
 
-ImgSinkFactory& ImgSinkFactory::instance()/*{{{*/
+ImgSinkFactory& ImgSinkFactory::instance()
 {
 	static ImgSinkFactory f;
 	return f;
-}/*}}}*/
+}
 
-ImgSink* ImgSinkFactory::createImgSink(SinkType s)/*{{{*/
+ImgSink* ImgSinkFactory::createImgSink(SinkType s)
 {
 	if (s == ArchiveSink)
 		return new ImgArchiveSink();
 	if (s == DirSink)
 		return new ImgDirSink();
 	return NULL;
-}/*}}}*/
+}
 
-ImgSink* ImgSinkFactory::createImgSink(const QString &path)/*{{{*/
+ImgSink* ImgSinkFactory::createImgSink(const QString &path)
 {
 	const QFileInfo finfo(path);
 	if (finfo.isDir())
 		return createImgSink(DirSink);
 	else
 		return createImgSink(ArchiveSink);
-}/*}}}*/
+}
 

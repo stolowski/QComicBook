@@ -17,7 +17,7 @@
 #include <qlayout.h>
 #include <qmessagebox.h>
 
-BookmarkManager::BookmarkManager(QWidget *parent, Bookmarks *b): QWidget(parent, NULL, Qt::WType_TopLevel|Qt::WType_Dialog|Qt::WShowModal), bookmarks(b)/*{{{*/
+BookmarkManager::BookmarkManager(QWidget *parent, Bookmarks *b): QWidget(parent, NULL, Qt::WType_TopLevel|Qt::WType_Dialog|Qt::WShowModal), bookmarks(b)
 {
 	QVBoxLayout *box0 = new QVBoxLayout(this, 5, 5);
 	lview = new QListView(this);
@@ -63,19 +63,19 @@ BookmarkManager::BookmarkManager(QWidget *parent, Bookmarks *b): QWidget(parent,
 	connect(b_ok, SIGNAL(clicked()), this, SLOT(close()));
 
 	selectionChanged();
-}/*}}}*/
+}
 
-BookmarkManager::~BookmarkManager()/*{{{*/
+BookmarkManager::~BookmarkManager()
 {
-}/*}}}*/
+}
 
-void BookmarkManager::selectionChanged()/*{{{*/
+void BookmarkManager::selectionChanged()
 {
 	QListViewItemIterator it(lview, QListViewItemIterator::Selected);
 	b_remsel->setDisabled(it.current() == 0);
-}/*}}}*/
+}
 
-void BookmarkManager::initBookmarkView()/*{{{*/
+void BookmarkManager::initBookmarkView()
 {
 	lview->clear();
 	invalid.clear();
@@ -92,9 +92,9 @@ void BookmarkManager::initBookmarkView()/*{{{*/
 
 	if (invalid.count() == 0)
 		b_selinv->setDisabled(true);
-}/*}}}*/
+}
 
-void BookmarkManager::removeSelected()/*{{{*/
+void BookmarkManager::removeSelected()
 {
 	QPtrList<QListViewItem> todel;
 	for (QListViewItemIterator it(lview, QListViewItemIterator::Selected); it.current(); ++it)
@@ -110,21 +110,21 @@ void BookmarkManager::removeSelected()/*{{{*/
 		}
 		initBookmarkView(); //recreate the view
 	}
-}/*}}}*/
+}
 
-void BookmarkManager::selectAll()/*{{{*/
+void BookmarkManager::selectAll()
 {
 	lview->selectAll(true);
-}/*}}}*/
+}
 
-void BookmarkManager::selectNone()/*{{{*/
+void BookmarkManager::selectNone()
 {
 	lview->selectAll(false);
-}/*}}}*/
+}
 
-void BookmarkManager::selectInvalid()/*{{{*/
+void BookmarkManager::selectInvalid()
 {
 	for (QListViewItem *item = invalid.first(); item; item = invalid.next())
 		item->setSelected(true);
-}/*}}}*/
+}
 

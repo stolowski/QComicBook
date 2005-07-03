@@ -12,21 +12,21 @@
 
 #include "history.h"
 
-History::History(const QStringList &l, int max): size(max)/*{{{*/
+History::History(const QStringList &l, int max): size(max)
 {
 	hlist = l;
-}/*}}}*/
+}
 
-History::History(int max)/*{{{*/
+History::History(int max)
 {
 	size = max;
-}/*}}}*/
+}
 
-History::~History()/*{{{*/
+History::~History()
 {
-}/*}}}*/
+}
 
-void History::append(const QString &txt)/*{{{*/
+void History::append(const QString &txt)
 {
 	QStringList::iterator it = hlist.find(txt);
 	//
@@ -44,25 +44,25 @@ void History::append(const QString &txt)/*{{{*/
 		hlist.remove(it);
 		hlist.push_front(txt);
 	}
-}/*}}}*/
+}
 
-void History::remove(const QString &txt)/*{{{*/
+void History::remove(const QString &txt)
 {
 	hlist.remove(txt);
-}/*}}}*/
+}
 
-void History::set(const QStringList &l)/*{{{*/
+void History::set(const QStringList &l)
 {
 	hlist = l;
-}/*}}}*/
+}
 
-QString History::first()/*{{{*/
+QString History::first()
 {
 	return hlist.first(); 
-}/*}}}*/
+}
 
-QStringList History::getAll() const/*{{{*/
+QStringList History::getAll() const
 {
 	return hlist;
-}/*}}}*/
+}
 

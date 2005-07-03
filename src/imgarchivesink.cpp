@@ -37,31 +37,31 @@ bool ImgArchiveSink::haveace = false;
 bool ImgArchiveSink::havetargz = false;
 bool ImgArchiveSink::havetarbz2 = false;
 
-ImgArchiveSink::ImgArchiveSink(int cachesize): ImgDirSink(cachesize) /*{{{*/
+ImgArchiveSink::ImgArchiveSink(int cachesize): ImgDirSink(cachesize) 
 {
 	init();
-}/*}}}*/
+}
 
-ImgArchiveSink::ImgArchiveSink(const QString &path, int cachesize): ImgDirSink(cachesize)/*{{{*/
+ImgArchiveSink::ImgArchiveSink(const QString &path, int cachesize): ImgDirSink(cachesize)
 {
 	init();
 	open(path);
-}/*}}}*/
+}
 
-ImgArchiveSink::~ImgArchiveSink()/*{{{*/
+ImgArchiveSink::~ImgArchiveSink()
 {
 	ImgArchiveSink::close();
-}/*}}}*/
+}
 
-void ImgArchiveSink::init()/*{{{*/
+void ImgArchiveSink::init()
 {
 	connect(&pinf, SIGNAL(readyReadStdout()), this, SLOT(infoStdoutReady()));
 	connect(&pinf, SIGNAL(processExited()), this, SLOT(infoExited()));
 	connect(&pext, SIGNAL(readyReadStdout()), this, SLOT(extractStdoutReady()));
 	connect(&pext, SIGNAL(processExited()), this, SLOT(extractExited()));
-}/*}}}*/
+}
 
-ImgArchiveSink::ArchiveType ImgArchiveSink::archiveType(const QString &filename)/*{{{*/
+ImgArchiveSink::ArchiveType ImgArchiveSink::archiveType(const QString &filename)
 {
 	static const struct {
 		int offset; //the first byte to compare
@@ -111,9 +111,9 @@ ImgArchiveSink::ArchiveType ImgArchiveSink::archiveType(const QString &filename)
 		return ACE_ARCHIVE;
 
 	return UNKNOWN_ARCHIVE;
-}/*}}}*/
+}
 
-int ImgArchiveSink::extract(const QString &filename, const QString &destdir)/*{{{*/
+int ImgArchiveSink::extract(const QString &filename, const QString &destdir)
 {
 	archivetype = archiveType(filename);
 	filesnum = 0;
@@ -163,9 +163,9 @@ int ImgArchiveSink::extract(const QString &filename, const QString &destdir)/*{{
 	if (!pinf.start())
 		return SINKERR_OTHER;
 	return 0;
-}/*}}}*/
+}
 
-int ImgArchiveSink::open(const QString &path)/*{{{*/
+int ImgArchiveSink::open(const QString &path)
 {
 	QFileInfo info(path);
 	archivepath = path;
@@ -198,9 +198,9 @@ int ImgArchiveSink::open(const QString &path)/*{{{*/
 	}
 	emit sinkError(SINKERR_NOTFILE);
 	return SINKERR_NOTFILE;
-}/*}}}*/
+}
 
-void ImgArchiveSink::close()/*{{{*/
+void ImgArchiveSink::close()
 {
 	ImgDirSink::close();
 	QDir dir(tmppath);
@@ -212,29 +212,29 @@ void ImgArchiveSink::close()/*{{{*/
 		dir.rmdir(*it);
 	dir.rmdir(tmppath);
 	archivename = QString::null;
-}/*}}}*/
+}
 
-QString ImgArchiveSink::getName(int maxlen)/*{{{*/
+QString ImgArchiveSink::getName(int maxlen)
 {
 	if (archivename.length() < maxlen)
 		return archivename;
 	QString tmpname = archivename.left(maxlen-3) + "...";
 	return tmpname;
-}/*}}}*/
+}
 
-QString ImgArchiveSink::getFullName()/*{{{*/
+QString ImgArchiveSink::getFullName()
 {
 	return archivepath;
-}/*}}}*/
+}
 
-void ImgArchiveSink::infoExited()/*{{{*/
+void ImgArchiveSink::infoExited()
 {
 	extcnt = 0;
 	if (!pext.start())
 		emit sinkError(SINKERR_OTHER);
-}/*}}}*/
+}
 
-void ImgArchiveSink::extractExited()/*{{{*/
+void ImgArchiveSink::extractExited()
 {
 	//
 	// open temporary directory using ImgDirSink::open()
@@ -270,25 +270,25 @@ void ImgArchiveSink::extractExited()/*{{{*/
 		}
 		emit sinkReady(archivepath);
 	}
-}/*}}}*/
+}
 
-void ImgArchiveSink::infoStdoutReady()/*{{{*/
+void ImgArchiveSink::infoStdoutReady()
 {
 	QByteArray b = pinf.readStdout();
 	for (int i=0; i<b.size(); i++)
 		if (b[i] == '\n')
 			++filesnum;
-}/*}}}*/
+}
 
-void ImgArchiveSink::extractStdoutReady()/*{{{*/
+void ImgArchiveSink::extractStdoutReady()
 {
 	QByteArray b = pext.readStdout();
 	for (int i=0; i<b.size(); i++)
 		if (b[i] == '\n' && extcnt < filesnum)
 			emit progress(++extcnt, filesnum);
-}/*}}}*/
+}
 
-bool ImgArchiveSink::autoconfRAR()/*{{{*/
+bool ImgArchiveSink::autoconfRAR()
 {
 	rar.clear();
 	rar_i.clear();
@@ -309,9 +309,9 @@ bool ImgArchiveSink::autoconfRAR()/*{{{*/
 		return haverar = true;
 	}
 	return haverar = false;
-}/*}}}*/
+}
 
-bool ImgArchiveSink::autoconfZIP()/*{{{*/
+bool ImgArchiveSink::autoconfZIP()
 {
 	zip.clear();
 	zip_i.clear();
@@ -323,9 +323,9 @@ bool ImgArchiveSink::autoconfZIP()/*{{{*/
 		return havezip = true;
 	}
 	return havezip = false;
-}/*}}}*/
+}
 
-bool ImgArchiveSink::autoconfACE()/*{{{*/
+bool ImgArchiveSink::autoconfACE()
 {
 	ace.clear();
 	ace_i.clear();
@@ -342,9 +342,9 @@ bool ImgArchiveSink::autoconfACE()/*{{{*/
 		return haveace = true;
 	}
 	return haveace = false;
-}/*}}}*/
+}
 
-bool ImgArchiveSink::autoconfTARGZ()/*{{{*/
+bool ImgArchiveSink::autoconfTARGZ()
 {
 	targz.clear();
 	targz_i.clear();
@@ -357,9 +357,9 @@ bool ImgArchiveSink::autoconfTARGZ()/*{{{*/
 		return havetargz = true;
 	}
 	return havetargz = false;
-}/*}}}*/
+}
 
-bool ImgArchiveSink::autoconfTARBZ2()/*{{{*/
+bool ImgArchiveSink::autoconfTARBZ2()
 {
 	tarbz2.clear();
 	tarbz2_i.clear();
@@ -372,30 +372,30 @@ bool ImgArchiveSink::autoconfTARBZ2()/*{{{*/
 		return havetarbz2 = true;
 	}
 	return havetarbz2 = false;
-}/*}}}*/
+}
 
-bool ImgArchiveSink::haveRAR()/*{{{*/
+bool ImgArchiveSink::haveRAR()
 {
 	return haverar;
-}/*}}}*/
+}
 
-bool ImgArchiveSink::haveZIP()/*{{{*/
+bool ImgArchiveSink::haveZIP()
 {
 	return havezip;
-}/*}}}*/
+}
 
-bool ImgArchiveSink::haveACE()/*{{{*/
+bool ImgArchiveSink::haveACE()
 {
 	return haveace;
-}/*}}}*/
+}
 
-bool ImgArchiveSink::haveTARGZ()/*{{{*/
+bool ImgArchiveSink::haveTARGZ()
 {
 	return havetargz;
-}/*}}}*/
+}
 
-bool ImgArchiveSink::haveTARBZ2()/*{{{*/
+bool ImgArchiveSink::haveTARBZ2()
 {
 	return havetarbz2;
-}/*}}}*/
+}
 

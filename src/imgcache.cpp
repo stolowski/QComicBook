@@ -13,27 +13,27 @@
 #include "imgcache.h"
 #include <qptrcollection.h>
 
-ImgCache::ImgCache(int size): QCache<QImage>(size)/*{{{*/
+ImgCache::ImgCache(int size): QCache<QImage>(size)
 {
 	setAutoDelete(true);
-}/*}}}*/
+}
 
-ImgCache::~ImgCache()/*{{{*/
+ImgCache::~ImgCache()
 {
-}/*}}}*/
+}
 
-void ImgCache::setSize(int size)/*{{{*/
+void ImgCache::setSize(int size)
 {
 	if (size < 0)
 		size = 0;
 	setMaxCost(size);
-}/*}}}*/
+}
 
-QPtrCollection::Item ImgCache::newItem(QPtrCollection::Item d)/*{{{*/
+QPtrCollection::Item ImgCache::newItem(QPtrCollection::Item d)
 {
 	//return new QImage(*(QImage *)d);
 	QImage *img = new QImage(*(QImage *)d);
 	img->detach();
 	return img;
-}/*}}}*/
+}
 

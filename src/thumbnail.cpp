@@ -16,35 +16,35 @@
 int Thumbnail::thwidth = 100;
 int Thumbnail::thheight = 120;
 
-Thumbnail::Thumbnail(int n): num(n)/*{{{*/
+Thumbnail::Thumbnail(int n): num(n)
 {
-}/*}}}*/
+}
 
-Thumbnail::Thumbnail(int n, const QImage &i): num(n)/*{{{*/
+Thumbnail::Thumbnail(int n, const QImage &i): num(n)
 {
 	setImage(i);
-}/*}}}*/
+}
 
-Thumbnail::~Thumbnail()/*{{{*/
+Thumbnail::~Thumbnail()
 {
-}/*}}}*/
+}
 
-int Thumbnail::page() const/*{{{*/
+int Thumbnail::page() const
 {
 	return num;
-}/*}}}*/
+}
 
-const QImage& Thumbnail::image() const/*{{{*/
+const QImage& Thumbnail::image() const
 {
 	return img;
-}/*}}}*/
+}
 
-void Thumbnail::touch(const QString &fname)/*{{{*/
+void Thumbnail::touch(const QString &fname)
 {
 	utime(fname.local8Bit(), NULL);
-}/*}}}*/
+}
 
-bool Thumbnail::tryLoad(const QString &fname)/*{{{*/
+bool Thumbnail::tryLoad(const QString &fname)
 {
 	QImage tmp;
 	if (tmp.load(fname))
@@ -53,28 +53,28 @@ bool Thumbnail::tryLoad(const QString &fname)/*{{{*/
 		return true;
 	}
 	return false;
-}/*}}}*/
+}
 
-bool Thumbnail::save(const QString &fname)/*{{{*/
+bool Thumbnail::save(const QString &fname)
 {
 	img.save(fname, "JPEG", 75);
-}/*}}}*/
+}
 
-void Thumbnail::setImage(const QImage &i)/*{{{*/
+void Thumbnail::setImage(const QImage &i)
 {
 	if (i.width() > thwidth || i.height() > thheight)
 		img = i.smoothScale(thwidth, thheight, QImage::ScaleMin);
 	else
 		img = i.copy();
-}/*}}}*/
+}
 
-int Thumbnail::maxWidth()/*{{{*/
+int Thumbnail::maxWidth()
 {
 	return thwidth;
-}/*}}}*/
+}
 
-int Thumbnail::maxHeight()/*{{{*/
+int Thumbnail::maxHeight()
 {
 	return thheight;
-}/*}}}*/
+}
 

@@ -70,26 +70,26 @@ const ComicBookSettings::int2qstring ComicBookSettings::scaling2string[] = {
 	{ComicImageView::Fast,   "fast"}
 };
 
-ComicBookSettings& ComicBookSettings::instance()/*{{{*/
+ComicBookSettings& ComicBookSettings::instance()
 {
 	static ComicBookSettings cfg;
 	return cfg;
-}/*}}}*/
+}
 
-ComicBookSettings::ComicBookSettings(): QObject()/*{{{*/
+ComicBookSettings::ComicBookSettings(): QObject()
 {
 	cfg = new QSettings();
 	cfg->insertSearchPath(QSettings::Unix, QDir::homeDirPath() + "/.qcomicbook");
 	cfg->beginGroup("/QComicBook");
-}/*}}}*/
+}
 
-ComicBookSettings::~ComicBookSettings()/*{{{*/
+ComicBookSettings::~ComicBookSettings()
 {
 	cfg->endGroup();
 	delete cfg;
-}/*}}}*/
+}
 
-bool ComicBookSettings::checkDirs()/*{{{*/
+bool ComicBookSettings::checkDirs()
 {
 	dirsok = false;
 	bkpath = QDir::homeDirPath() + "/.qcomicbook";
@@ -103,51 +103,51 @@ bool ComicBookSettings::checkDirs()/*{{{*/
 		if (!dir.mkdir(thpath))
 			return false;
 	return dirsok = true;
-}/*}}}*/
+}
 
-const QString& ComicBookSettings::bookmarksDir()/*{{{*/
+const QString& ComicBookSettings::bookmarksDir()
 {
 	return bkpath;
-}/*}}}*/
+}
 
-const QString& ComicBookSettings::thumbnailsDir()/*{{{*/
+const QString& ComicBookSettings::thumbnailsDir()
 {
 	return thpath;
-}/*}}}*/
+}
 
-const QString& ComicBookSettings::convert(ComicImageView::Size s)/*{{{*/
+const QString& ComicBookSettings::convert(ComicImageView::Size s)
 {
 	for (int i=0; i<sizeof(size2string)/sizeof(int2qstring); i++)
 		if (size2string[i].v == s)
 			return size2string[i].str;
 	return size2string[0].str;
-}/*}}}*/
+}
 
-ComicImageView::Size ComicBookSettings::convertToSize(const QString &s)/*{{{*/
+ComicImageView::Size ComicBookSettings::convertToSize(const QString &s)
 {
 	for (int i=0; i<sizeof(size2string)/sizeof(int2qstring); i++)
 		if (size2string[i].str == s)
 			return static_cast<ComicImageView::Size>(size2string[i].v);
 	return ComicImageView::Original;
-}/*}}}*/
+}
 
-const QString& ComicBookSettings::convert(ComicImageView::Scaling s)/*{{{*/
+const QString& ComicBookSettings::convert(ComicImageView::Scaling s)
 {
 	for (int i=0; i<sizeof(scaling2string)/sizeof(int2qstring); i++)
 		if (scaling2string[i].v == s)
 			return scaling2string[i].str;
 	return scaling2string[0].str;
-}/*}}}*/
+}
 
-ComicImageView::Scaling ComicBookSettings::convertToScaling(const QString &s)/*{{{*/
+ComicImageView::Scaling ComicBookSettings::convertToScaling(const QString &s)
 {
 	for (int i=0; i<sizeof(scaling2string)/sizeof(int2qstring); i++)
 		if (scaling2string[i].str == s)
 			return static_cast<ComicImageView::Scaling>(scaling2string[i].v);
 	return ComicImageView::Smooth;
-}/*}}}*/
+}
 
-void ComicBookSettings::load()/*{{{*/
+void ComicBookSettings::load()
 {
 	QString fontdesc;
 	
@@ -190,164 +190,164 @@ void ComicBookSettings::load()/*{{{*/
 		thumbsage = cfg->readNumEntry(OPT_THUMBSAGE, 7);
 		cachethumbs = cfg->readBoolEntry(OPT_CACHETHUMBS, true);
 	cfg->endGroup();
-}/*}}}*/
+}
 
-bool ComicBookSettings::smallCursor() const/*{{{*/
+bool ComicBookSettings::smallCursor() const
 {
 	return smallcursor;
-}/*}}}*/
+}
 
-bool ComicBookSettings::twoPagesMode() const/*{{{*/
+bool ComicBookSettings::twoPagesMode() const
 {
 	return twopages;
-}/*}}}*/
+}
 
-bool ComicBookSettings::twoPagesStep() const/*{{{*/
+bool ComicBookSettings::twoPagesStep() const
 {
 	return twopagesstep;
-}/*}}}*/
+}
 
-bool ComicBookSettings::japaneseMode() const/*{{{*/
+bool ComicBookSettings::japaneseMode() const
 {
 	return japanese;
-}/*}}}*/
+}
 
-bool ComicBookSettings::continuousScrolling() const/*{{{*/
+bool ComicBookSettings::continuousScrolling() const
 {
 	return contscroll;
-}/*}}}*/
+}
 
-bool ComicBookSettings::scrollbarsVisible() const/*{{{*/
+bool ComicBookSettings::scrollbarsVisible() const
 {
 	return scrollbars;
-}/*}}}*/
+}
 
-QRect ComicBookSettings::geometry() const/*{{{*/
+QRect ComicBookSettings::geometry() const
 {
 	return QRect(x, y, w, h);
-}/*}}}*/
+}
 
-ComicImageView::Size ComicBookSettings::pageSize() const/*{{{*/
+ComicImageView::Size ComicBookSettings::pageSize() const
 {
 	return pagesize;
-}/*}}}*/
+}
 
-ComicImageView::Scaling ComicBookSettings::pageScaling() const/*{{{*/
+ComicImageView::Scaling ComicBookSettings::pageScaling() const
 {
 	return scaling;
-}/*}}}*/
+}
 
-QString ComicBookSettings::lastDir() const/*{{{*/
+QString ComicBookSettings::lastDir() const
 {
 	return lastdir;
-}/*}}}*/
+}
 
-const History& ComicBookSettings::recentlyOpened() const/*{{{*/
+const History& ComicBookSettings::recentlyOpened() const
 {
 	return recent;
-}/*}}}*/
+}
 
-QColor ComicBookSettings::background() const/*{{{*/
+QColor ComicBookSettings::background() const
 {
 	return bgcolor;
-}/*}}}*/
+}
 
-int ComicBookSettings::cacheSize() const/*{{{*/
+int ComicBookSettings::cacheSize() const
 {
 	return cachesize;
-}/*}}}*/
+}
 
-bool ComicBookSettings::cacheThumbnails() const/*{{{*/
+bool ComicBookSettings::cacheThumbnails() const
 {
 	return cachethumbs;
-}/*}}}*/
+}
 
-int ComicBookSettings::thumbnailsAge() const/*{{{*/
+int ComicBookSettings::thumbnailsAge() const
 {
 	return thumbsage;
-}/*}}}*/
+}
 
-bool ComicBookSettings::preloadPages() const/*{{{*/
+bool ComicBookSettings::preloadPages() const
 {
 	return preload;
-}/*}}}*/
+}
 
-bool ComicBookSettings::confirmExit() const/*{{{*/
+bool ComicBookSettings::confirmExit() const
 {
 	return confirmexit;
-}/*}}}*/
+}
 
-bool ComicBookSettings::autoInfo() const/*{{{*/
+bool ComicBookSettings::autoInfo() const
 {
 	return autoinfo;
-}/*}}}*/
+}
 
-bool ComicBookSettings::fullScreenHideMenu() const/*{{{*/
+bool ComicBookSettings::fullScreenHideMenu() const
 {
 	return fscrhidemenu;
-}/*}}}*/
+}
 
-bool ComicBookSettings::fullScreenHideStatusbar() const/*{{{*/
+bool ComicBookSettings::fullScreenHideStatusbar() const
 {
 	return fscrhidestatus;
-}/*}}}*/
+}
 
-bool ComicBookSettings::showStatusbar() const/*{{{*/
+bool ComicBookSettings::showStatusbar() const
 {
 	return statusbar;
-}/*}}}*/
+}
 
-const QFont& ComicBookSettings::infoFont() const/*{{{*/
+const QFont& ComicBookSettings::infoFont() const
 {
 	return font;
-}/*}}}*/
+}
 
-void ComicBookSettings::restoreDockLayout(QMainWindow *w)/*{{{*/
+void ComicBookSettings::restoreDockLayout(QMainWindow *w)
 {
 	QTextStream str(&docklayout, IO_ReadOnly);
 	str >> *w;
-}/*}}}*/
+}
 
-void ComicBookSettings::smallCursor(bool f)/*{{{*/
+void ComicBookSettings::smallCursor(bool f)
 {
 	if (f != smallcursor)
 	{
 		cfg->writeEntry(GRP_VIEW OPT_SMALLCURSOR, smallcursor = f);
 		emit cursorChanged(f);
 	}
-}/*}}}*/
+}
 
-void ComicBookSettings::twoPagesMode(bool f)/*{{{*/
+void ComicBookSettings::twoPagesMode(bool f)
 {
 	if (f != twopages)
 		cfg->writeEntry(GRP_VIEW OPT_TWOPAGES, twopages = f);
-}/*}}}*/
+}
 
-void ComicBookSettings::twoPagesStep(bool f)/*{{{*/
+void ComicBookSettings::twoPagesStep(bool f)
 {
 	if (f != twopagesstep)
 		cfg->writeEntry(GRP_NAVI OPT_TWOPAGESSTEP, twopagesstep = f);
-}/*}}}*/
+}
 
-void ComicBookSettings::japaneseMode(bool f)/*{{{*/
+void ComicBookSettings::japaneseMode(bool f)
 {
 	if (f != japanese)
 		cfg->writeEntry(GRP_VIEW OPT_JAPANESEMODE, japanese = f);
-}/*}}}*/
+}
 
-void ComicBookSettings::continuousScrolling(bool f)/*{{{*/
+void ComicBookSettings::continuousScrolling(bool f)
 {
 	if (f != contscroll)
 		cfg->writeEntry(GRP_NAVI OPT_CONTSCROLL, contscroll = f);
-}/*}}}*/
+}
 
-void ComicBookSettings::scrollbarsVisible(bool f)/*{{{*/
+void ComicBookSettings::scrollbarsVisible(bool f)
 {
 	if (f != scrollbars)
 		cfg->writeEntry(GRP_VIEW OPT_SCROLLBARS, scrollbars = f);
-}/*}}}*/
+}
 
-void ComicBookSettings::geometry(const QRect g)/*{{{*/
+void ComicBookSettings::geometry(const QRect g)
 {
 	if (x != g.x() || y != g.y() || w != g.width() || h != g.height())
 	{
@@ -358,36 +358,36 @@ void ComicBookSettings::geometry(const QRect g)/*{{{*/
 		cfg->writeEntry(OPT_HEIGHT, h = g.height());
 		cfg->endGroup();
 	}
-}/*}}}*/
+}
 
-void ComicBookSettings::pageSize(ComicImageView::Size s)/*{{{*/
+void ComicBookSettings::pageSize(ComicImageView::Size s)
 {
 	if (s != pagesize)
 		cfg->writeEntry(GRP_VIEW OPT_PAGESIZE, convert(pagesize = s));
-}/*}}}*/
+}
 
-void ComicBookSettings::pageScaling(ComicImageView::Scaling s)/*{{{*/
+void ComicBookSettings::pageScaling(ComicImageView::Scaling s)
 {
 	if (s != scaling)
 	{
 		cfg->writeEntry(GRP_VIEW OPT_SCALING, convert(scaling = s));
 		emit scalingMethodChanged(scaling);
 	}
-}/*}}}*/
+}
 
-void ComicBookSettings::lastDir(const QString &d)/*{{{*/
+void ComicBookSettings::lastDir(const QString &d)
 {
 	if (lastdir != d)
 		cfg->writeEntry(GRP_MISC OPT_LASTDIR, lastdir = d);
-}/*}}}*/
+}
 
-void ComicBookSettings::recentlyOpened(const History &hist)/*{{{*/
+void ComicBookSettings::recentlyOpened(const History &hist)
 {
 	recent = hist;
 	cfg->writeEntry(GRP_MISC OPT_RECENT, recent.getAll());
-}/*}}}*/
+}
 
-void ComicBookSettings::background(const QColor &color)/*{{{*/
+void ComicBookSettings::background(const QColor &color)
 {
 	if (color != bgcolor)
 	{
@@ -395,76 +395,76 @@ void ComicBookSettings::background(const QColor &color)/*{{{*/
 		cfg->writeEntry(GRP_VIEW OPT_BACKGROUND, bgcolor.name());
 		emit backgroundChanged(bgcolor);
 	}
-}/*}}}*/
+}
 
-void ComicBookSettings::cacheSize(int s)/*{{{*/
+void ComicBookSettings::cacheSize(int s)
 {
 	if (s != cachesize)
 		cfg->writeEntry(GRP_MISC OPT_CACHESIZE, cachesize = s);
-}/*}}}*/
+}
 
-void ComicBookSettings::cacheThumbnails(bool f)/*{{{*/
+void ComicBookSettings::cacheThumbnails(bool f)
 {
 	if (f != cachethumbs)
 		cfg->writeEntry(GRP_MISC OPT_CACHETHUMBS, cachethumbs = f);
-}/*}}}*/
+}
 
-void ComicBookSettings::thumbnailsAge(int n)/*{{{*/
+void ComicBookSettings::thumbnailsAge(int n)
 {
 	if (n != thumbsage)
 		cfg->writeEntry(GRP_MISC OPT_THUMBSAGE, thumbsage = n);
-}/*}}}*/
+}
 
-void ComicBookSettings::preloadPages(bool f)/*{{{*/
+void ComicBookSettings::preloadPages(bool f)
 {
 	if (f != preload)
 		cfg->writeEntry(GRP_MISC OPT_PRELOAD, preload = f);
-}/*}}}*/
+}
 
-void ComicBookSettings::confirmExit(bool f)/*{{{*/
+void ComicBookSettings::confirmExit(bool f)
 {
 	if (f != confirmexit)
 		cfg->writeEntry(GRP_MISC OPT_CONFIRMEXIT, confirmexit = f);
-}/*}}}*/
+}
 
-void ComicBookSettings::autoInfo(bool f)/*{{{*/
+void ComicBookSettings::autoInfo(bool f)
 {
 	if (f != autoinfo)
 		cfg->writeEntry(GRP_MISC OPT_AUTOINFO, autoinfo = f);
-}/*}}}*/
+}
 
-void ComicBookSettings::fullScreenHideMenu(bool f)/*{{{*/
+void ComicBookSettings::fullScreenHideMenu(bool f)
 {
 	if (f != fscrhidemenu)
 		cfg->writeEntry(GRP_VIEW OPT_FULLSCREENHIDEMENU, fscrhidemenu = f);
-}/*}}}*/
+}
 
-void ComicBookSettings::fullScreenHideStatusbar(bool f)/*{{{*/
+void ComicBookSettings::fullScreenHideStatusbar(bool f)
 {
 	if (f != fscrhidestatus)
 		cfg->writeEntry(GRP_VIEW OPT_FULLSCREENHIDESTATUS, fscrhidestatus = f);
-}/*}}}*/
+}
 
-void ComicBookSettings::showStatusbar(bool f)/*{{{*/
+void ComicBookSettings::showStatusbar(bool f)
 {
 	if (f != statusbar)
 		cfg->writeEntry(GRP_VIEW OPT_STATUSBAR, statusbar = f);
-}/*}}}*/
+}
 
-void ComicBookSettings::infoFont(const QFont &s)/*{{{*/
+void ComicBookSettings::infoFont(const QFont &s)
 {
 	if (s != font)
 	{
 		font = s;
 		cfg->writeEntry(GRP_VIEW OPT_FONT, font.toString());
 	}
-}/*}}}*/
+}
 
-void ComicBookSettings::saveDockLayout(QMainWindow *w)/*{{{*/
+void ComicBookSettings::saveDockLayout(QMainWindow *w)
 {
 	QString tmp;
 	QTextStream str(&tmp, IO_WriteOnly);
 	str << *w;
 	cfg->writeEntry(GRP_WINDOW OPT_DOCKLAYOUT, tmp);
-}/*}}}*/
+}
 

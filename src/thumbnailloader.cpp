@@ -16,29 +16,29 @@
 #include "thumbnailevent.h"
 #include <qapplication.h>
 
-ThumbnailLoaderThread::ThumbnailLoaderThread(): ImgLoaderThread(), rcvobj(NULL), usecache(false)/*{{{*/
+ThumbnailLoaderThread::ThumbnailLoaderThread(): ImgLoaderThread(), rcvobj(NULL), usecache(false)
 {
-}/*}}}*/
+}
 
-ThumbnailLoaderThread::~ThumbnailLoaderThread()/*{{{*/
+ThumbnailLoaderThread::~ThumbnailLoaderThread()
 {
-}/*}}}*/
+}
 
-void ThumbnailLoaderThread::setReciever(QObject *rcv)/*{{{*/
+void ThumbnailLoaderThread::setReciever(QObject *rcv)
 {
 	mtx.lock();
 	rcvobj = rcv;
 	mtx.unlock();
-}/*}}}*/
+}
 
-void ThumbnailLoaderThread::setUseCache(bool f)/*{{{*/
+void ThumbnailLoaderThread::setUseCache(bool f)
 {
 	mtx.lock();
 	usecache = f;
 	mtx.unlock();
-}/*}}}*/
+}
 
-void ThumbnailLoaderThread::run()/*{{{*/
+void ThumbnailLoaderThread::run()
 {
 	for (;;)
 	{
@@ -63,5 +63,5 @@ void ThumbnailLoaderThread::run()/*{{{*/
 		else
 			mtx.unlock();
 	}
-}/*}}}*/
+}
 

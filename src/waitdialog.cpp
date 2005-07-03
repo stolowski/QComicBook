@@ -15,7 +15,7 @@
 #include <qlabel.h>
 #include <qcursor.h>
 
-WaitDialog::WaitDialog(QWidget *parent, const QString &caption, const QString &text): QDialog(parent)/*{{{*/
+WaitDialog::WaitDialog(QWidget *parent, const QString &caption, const QString &text): QDialog(parent)
 {
 	setModal(true);	
 	setCaption(caption);
@@ -24,14 +24,14 @@ WaitDialog::WaitDialog(QWidget *parent, const QString &caption, const QString &t
 	QHBoxLayout *box1 = new QHBoxLayout(this, 5, 5);
 	info = new QLabel(text, this);
 	box1->addWidget(info);
-}/*}}}*/
+}
 
-WaitDialog::~WaitDialog()/*{{{*/
+WaitDialog::~WaitDialog()
 {
-}/*}}}*/
+}
 
-void WaitDialog::setText(const QString &text)/*{{{*/
+void WaitDialog::setText(const QString &text)
 {
 	info->setText(text);
-}/*}}}*/
+}
 	

@@ -12,26 +12,26 @@
 
 #include "thumbnailitem.h"
 
-ThumbnailItem::ThumbnailItem(QIconView *view, int page, const QPixmap &pixmap): QIconViewItem(view, QString::number(page+1), pixmap), pnum(page), loaded(false)/*{{{*/
+ThumbnailItem::ThumbnailItem(QIconView *view, int page, const QPixmap &pixmap): QIconViewItem(view, QString::number(page+1), pixmap), pnum(page), loaded(false)
 {
-}/*}}}*/
+}
 
-ThumbnailItem::~ThumbnailItem()/*{{{*/
+ThumbnailItem::~ThumbnailItem()
 {
-}/*}}}*/
+}
 
-int ThumbnailItem::page() const/*{{{*/
+int ThumbnailItem::page() const
 {
 	return pnum;
-}/*}}}*/
+}
 
-void ThumbnailItem::setLoaded(bool f)/*{{{*/
+void ThumbnailItem::setLoaded(bool f)
 {
 	loaded = f;
-}/*}}}*/
+}
 
-bool ThumbnailItem::isLoaded() const/*{{{*/
+bool ThumbnailItem::isLoaded() const
 {
 	return loaded;
-}/*}}}*/
+}
 

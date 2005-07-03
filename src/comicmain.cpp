@@ -48,7 +48,7 @@
 // archives extensions used for Open File dialog and filtering out files in OpenNext() function
 const QString ComicMainWindow::ARCH_EXTENSIONS = "*.rar *.cbr *.zip *.cbz *.ace *.cba *.tar.gz *.tgz *.cbg *.tar.bz2 *.cbb";
 
-ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WType_TopLevel|WDestructiveClose), sink(NULL), currpage(0)/*{{{*/
+ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WType_TopLevel|WDestructiveClose), sink(NULL), currpage(0)
 {
 	updateCaption();
 	setIcon(Icons::get(ICON_APPICON).pixmap(QIconSet::Small, true));
@@ -343,9 +343,9 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
 	cfg->restoreDockLayout(this);
 
 	enableComicBookActions(false);
-}/*}}}*/
+}
 
-ComicMainWindow::~ComicMainWindow()/*{{{*/
+ComicMainWindow::~ComicMainWindow()
 {
 	if (cfg->cacheThumbnails())
 		ImgDirSink::removeThumbnails(cfg->thumbnailsAge());
@@ -368,9 +368,9 @@ ComicMainWindow::~ComicMainWindow()/*{{{*/
 
 	if (sink)
 		delete sink;
-}/*}}}*/
+}
 
-void ComicMainWindow::enableComicBookActions(bool f)/*{{{*/
+void ComicMainWindow::enableComicBookActions(bool f)
 {
 	//
 	// file menu
@@ -402,9 +402,9 @@ void ComicMainWindow::enableComicBookActions(bool f)/*{{{*/
 	// bookmarks menu
 	bookmarks_menu->setItemEnabled(setbookmark_id, f);
 	bookmarks_menu->setItemEnabled(rmvbookmark_id, f);
-}/*}}}*/
+}
 
-void ComicMainWindow::keyPressEvent(QKeyEvent *e)/*{{{*/
+void ComicMainWindow::keyPressEvent(QKeyEvent *e)
 {
 	if ((e->key()>=Qt::Key_1) && (e->key()<=Qt::Key_9))
 	{
@@ -413,19 +413,19 @@ void ComicMainWindow::keyPressEvent(QKeyEvent *e)/*{{{*/
 	}
 	else
 		QMainWindow::keyPressEvent(e);
-}/*}}}*/
+}
 
-void ComicMainWindow::closeEvent(QCloseEvent *e)/*{{{*/
+void ComicMainWindow::closeEvent(QCloseEvent *e)
 {
 	return (!cfg->confirmExit() || confirmExit()) ? e->accept() : e->ignore();
-}/*}}}*/
+}
 
-bool ComicMainWindow::confirmExit()/*{{{*/
+bool ComicMainWindow::confirmExit()
 {
 	return QMessageBox::question(this, "Leave QComicBook?", "Do you really want to quit QComicBook?", QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes;
-}/*}}}*/
+}
 
-void ComicMainWindow::thumbnailsVisibilityChanged(bool f)/*{{{*/
+void ComicMainWindow::thumbnailsVisibilityChanged(bool f)
 {
 	if (f && sink)
 	{
@@ -434,21 +434,21 @@ void ComicMainWindow::thumbnailsVisibilityChanged(bool f)/*{{{*/
 			if (!thumbswin->view()->isLoaded(i))
 				sink->requestThumbnail(i);
 	}
-}/*}}}*/
+}
 
-void ComicMainWindow::toolbarVisibilityChanged(bool f)/*{{{*/
+void ComicMainWindow::toolbarVisibilityChanged(bool f)
 {
 	toggleToolbarAction->setOn(f);
-}/*}}}*/
+}
 
-void ComicMainWindow::toggleScrollbars()/*{{{*/
+void ComicMainWindow::toggleScrollbars()
 {
 	bool f = view_menu->isItemChecked(scrv_id);
 	view_menu->setItemChecked(scrv_id, !f);
 	view->enableScrollbars(!f);
-}/*}}}*/
+}
 
-void ComicMainWindow::toggleContinousScroll()/*{{{*/
+void ComicMainWindow::toggleContinousScroll()
 {
 	bool f = navi_menu->isItemChecked(contscr_id);
 	navi_menu->setItemChecked(contscr_id, !f);
@@ -461,38 +461,38 @@ void ComicMainWindow::toggleContinousScroll()/*{{{*/
 	{	connect(view, SIGNAL(bottomReached()), this, SLOT(nextPage()));
 		connect(view, SIGNAL(topReached()), this, SLOT(prevPageBottom()));
 	}
-}/*}}}*/
+}
 
-void ComicMainWindow::toggleTwoPages(bool f)/*{{{*/
+void ComicMainWindow::toggleTwoPages(bool f)
 {
 	twoPagesAction->setOn(f);
 	jumpToPage(currpage, true);
-}/*}}}*/
+}
 
-void ComicMainWindow::toggleJapaneseMode(bool f)/*{{{*/
+void ComicMainWindow::toggleJapaneseMode(bool f)
 {
 	mangaModeAction->setOn(f);
 	if (twoPagesAction->isOn())
 		jumpToPage(currpage, true);
-}/*}}}*/
+}
 
-void ComicMainWindow::updateCaption()/*{{{*/
+void ComicMainWindow::updateCaption()
 {
 	QString c = "QComicBook";
 	if (sink)
 		c += " - " + sink->getName();
 	setCaption(c);
-}/*}}}*/
+}
 
-void ComicMainWindow::setRecentFilesMenu(const History &hist)/*{{{*/
+void ComicMainWindow::setRecentFilesMenu(const History &hist)
 {
 	QStringList list = hist.getAll();
 	recent_menu->clear();
 	for (QStringList::const_iterator it = list.begin(); it != list.end(); it++)
 		recent_menu->insertItem(*it);
-}/*}}}*/
+}
 
-void ComicMainWindow::recentSelected(int id)/*{{{*/
+void ComicMainWindow::recentSelected(int id)
 {
 	const QString &fname = recent_menu->text(id);
 	if (fname != QString::null)
@@ -505,9 +505,9 @@ void ComicMainWindow::recentSelected(int id)/*{{{*/
 		}
 		open(fname, 0);
 	}
-}/*}}}*/
+}
 
-void ComicMainWindow::sinkReady(const QString &path)/*{{{*/
+void ComicMainWindow::sinkReady(const QString &path)
 {
 	recentfiles->append(path);
 	setRecentFilesMenu(*recentfiles);
@@ -526,9 +526,9 @@ void ComicMainWindow::sinkReady(const QString &path)/*{{{*/
 	jumpToPage(currpage, true);
 	if (cfg->autoInfo())
 		showInfo();
-}/*}}}*/
+}
 
-void ComicMainWindow::sinkError(int code)/*{{{*/
+void ComicMainWindow::sinkError(int code)
 {
 	QString msg;
 
@@ -545,26 +545,26 @@ void ComicMainWindow::sinkError(int code)/*{{{*/
 	QMessageBox::critical(this, "QComicBook error", "Error opening comicbook: " + msg, 
 			QMessageBox::Ok, QMessageBox::NoButton);
 	closeSink();
-}/*}}}*/
+}
 
-void ComicMainWindow::browseDirectory()/*{{{*/
+void ComicMainWindow::browseDirectory()
 {
 	const QString dir = QFileDialog::getExistingDirectory(lastdir, this, 
 			NULL, tr("Choose a directory") );
 	if (!dir.isEmpty())
 		open(dir, 0);
-}/*}}}*/
+}
 
-void ComicMainWindow::browseArchive()/*{{{*/
+void ComicMainWindow::browseArchive()
 {
 	const QString file = QFileDialog::getOpenFileName(lastdir,
 			"Archives (" + ARCH_EXTENSIONS + ");;All files (*)",
 			this, NULL, tr("Choose a file") );
 	if (!file.isEmpty())
 		open(file, 0);
-}/*}}}*/
+}
 
-void ComicMainWindow::open(const QString &path, int page)/*{{{*/
+void ComicMainWindow::open(const QString &path, int page)
 {
 	const QFileInfo f(path);
 	const QString fullname = f.absFilePath();
@@ -596,9 +596,9 @@ void ComicMainWindow::open(const QString &path, int page)/*{{{*/
 	win->show();
 	
 	sink->open(fullname);
-}/*}}}*/
+}
 
-void ComicMainWindow::openNext()/*{{{*/
+void ComicMainWindow::openNext()
 {
 	if (ImgArchiveSink *archive = dynamic_cast<ImgArchiveSink *>(sink))
 	{
@@ -613,9 +613,9 @@ void ComicMainWindow::openNext()/*{{{*/
 				open(dir.filePath(*it, true), 0);
 			}
 	}
-}/*}}}*/
+}
 
-void ComicMainWindow::openPrevious()/*{{{*/
+void ComicMainWindow::openPrevious()
 {
 	if (ImgArchiveSink *archive = dynamic_cast<ImgArchiveSink *>(sink))
 	{
@@ -629,9 +629,9 @@ void ComicMainWindow::openPrevious()/*{{{*/
 			open(dir.filePath(*(--it), true), 0);
 		}
 	}
-}/*}}}*/
+}
 
-void ComicMainWindow::toggleFullScreen()/*{{{*/
+void ComicMainWindow::toggleFullScreen()
 {
 	if (isFullScreen())
 	{
@@ -645,9 +645,9 @@ void ComicMainWindow::toggleFullScreen()/*{{{*/
 			statusbar->hide();
 		showFullScreen();
 	}
-}/*}}}*/
+}
 
-void ComicMainWindow::exitFullscreen()/*{{{*/
+void ComicMainWindow::exitFullscreen()
 {
 	if (isFullScreen())
 	{
@@ -656,9 +656,9 @@ void ComicMainWindow::exitFullscreen()/*{{{*/
 			statusbar->show();
 		showNormal();
 	}
-}/*}}}*/
+}
 
-void ComicMainWindow::nextPage()/*{{{*/
+void ComicMainWindow::nextPage()
 {
 	if (sink)
 	{
@@ -672,44 +672,44 @@ void ComicMainWindow::nextPage()/*{{{*/
 			jumpToPage(currpage + 1);
 		}
 	}
-}/*}}}*/
+}
 
-void ComicMainWindow::prevPage()/*{{{*/
+void ComicMainWindow::prevPage()
 {
 	jumpToPage(currpage - (twoPagesAction->isOn() && cfg->twoPagesStep() ? 2 : 1));
-}/*}}}*/
+}
 
-void ComicMainWindow::prevPageBottom()/*{{{*/
+void ComicMainWindow::prevPageBottom()
 {
 	if (currpage > 0)
 	{
 		jumpToPage(currpage - (twoPagesAction->isOn() && cfg->twoPagesStep() ? 2 : 1));
 		view->scrollToBottom();
 	}
-}/*}}}*/
+}
 
-void ComicMainWindow::firstPage()/*{{{*/
+void ComicMainWindow::firstPage()
 {
 	jumpToPage(0);
-}/*}}}*/
+}
 
-void ComicMainWindow::lastPage()/*{{{*/
+void ComicMainWindow::lastPage()
 {
 	if (sink)
 		jumpToPage(sink->numOfImages() - (twoPagesAction->isOn() && cfg->twoPagesStep() ? 2 : 1));
-}/*}}}*/
+}
 
-void ComicMainWindow::forwardPages()/*{{{*/
+void ComicMainWindow::forwardPages()
 {
 	jumpToPage(currpage + (twoPagesAction->isOn() && cfg->twoPagesStep() ? 10 : 5));
-}/*}}}*/
+}
 
-void ComicMainWindow::backwardPages()/*{{{*/
+void ComicMainWindow::backwardPages()
 {
 	jumpToPage(currpage - (twoPagesAction->isOn() && cfg->twoPagesStep() ? 10 : 5));
-}/*}}}*/
+}
 
-void ComicMainWindow::jumpToPage(int n, bool force)/*{{{*/
+void ComicMainWindow::jumpToPage(int n, bool force)
 {
 	if (!sink)
 		return;
@@ -759,18 +759,18 @@ void ComicMainWindow::jumpToPage(int n, bool force)/*{{{*/
 		statusbar->setPage(currpage + 1, sink->numOfImages());
 		thumbswin->view()->scrollToPage(currpage);
 	}
-}/*}}}*/
+}
 
-void ComicMainWindow::showInfo()/*{{{*/
+void ComicMainWindow::showInfo()
 {
 	if (sink)
 	{
 		ComicBookInfo *i = new ComicBookInfo(this, *sink, cfg->infoFont());
 		i->show();
 	}
-}/*}}}*/
+}
 
-void ComicMainWindow::showAbout()/*{{{*/
+void ComicMainWindow::showAbout()
 {
 	AboutDialog *win = new AboutDialog(this, "About QComicBook",
 			"QComicBook " VERSION " - comic book viewer for GNU/Linux\n"
@@ -779,21 +779,21 @@ void ComicMainWindow::showAbout()/*{{{*/
 			"http://linux.bydg.org/~yogin\n"
 			"yogin@linux.bydg.org");
 	win->show();
-}/*}}}*/
+}
 
-void ComicMainWindow::showHelp()/*{{{*/
+void ComicMainWindow::showHelp()
 {
 	HelpBrowser *help = new HelpBrowser("QComicBook Help", DATADIR "/help");
 	help->show();
-}/*}}}*/
+}
 
-void ComicMainWindow::showConfigDialog()/*{{{*/
+void ComicMainWindow::showConfigDialog()
 {
 	ComicBookCfgDialog *d = new ComicBookCfgDialog(this, cfg);
 	d->show();
-}/*}}}*/
+}
 
-void ComicMainWindow::showJumpToPage(const QString &number)/*{{{*/
+void ComicMainWindow::showJumpToPage(const QString &number)
 {
 	if (sink)
 	{
@@ -801,9 +801,9 @@ void ComicMainWindow::showJumpToPage(const QString &number)/*{{{*/
 		connect(win, SIGNAL(pageSelected(int)), this, SLOT(jumpToPage(int)));
 		win->show();
 	}
-}/*}}}*/
+}
 
-void ComicMainWindow::closeSink()/*{{{*/
+void ComicMainWindow::closeSink()
 {
 	enableComicBookActions(false);
 
@@ -816,29 +816,29 @@ void ComicMainWindow::closeSink()/*{{{*/
 	thumbswin->view()->clear();
 	updateCaption();
 	statusbar->clear();
-}/*}}}*/
+}
 
-void ComicMainWindow::setBookmark()/*{{{*/
+void ComicMainWindow::setBookmark()
 {
 	if (sink)
 		bookmarks->set(sink->getFullName(), currpage);
-}/*}}}*/
+}
 
-void ComicMainWindow::removeBookmark()/*{{{*/
+void ComicMainWindow::removeBookmark()
 {
 	if (sink && bookmarks->exists(sink->getFullName()) && QMessageBox::question(this, tr("Removing bookmark"),
 		    tr("Do you really want to remove bookmark\nfor this comic book?"),
 			QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
 		bookmarks->remove(sink->getFullName());
-}/*}}}*/
+}
 
-void ComicMainWindow::openBookmarksManager()/*{{{*/
+void ComicMainWindow::openBookmarksManager()
 {
 	BookmarkManager *win = new BookmarkManager(this, bookmarks);
 	win->show();
-}/*}}}*/
+}
 
-void ComicMainWindow::bookmarkSelected(int id)/*{{{*/
+void ComicMainWindow::bookmarkSelected(int id)
 {
 	Bookmark b;
 	if (bookmarks->get(id, b))
@@ -864,5 +864,5 @@ void ComicMainWindow::bookmarkSelected(int id)/*{{{*/
 			open(fname, b.getPage());
 		}
 	}
-}/*}}}*/
+}
 

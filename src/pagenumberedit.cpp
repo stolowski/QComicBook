@@ -13,7 +13,7 @@
 #include "pagenumberedit.h"
 #include <qvalidator.h>
 
-PageNumberEdit::PageNumberEdit(QWidget *parent, int val, int max): QLineEdit(parent)/*{{{*/
+PageNumberEdit::PageNumberEdit(QWidget *parent, int val, int max): QLineEdit(parent)
 {
 	//setMaxLength(3);
 	//setFocusPolicy(QWidget::ClickFocus);
@@ -25,29 +25,29 @@ PageNumberEdit::PageNumberEdit(QWidget *parent, int val, int max): QLineEdit(par
 		val = max;
 	setText(QString::number(val));
 	connect(this, SIGNAL(returnPressed()), this, SLOT(onReturn()));
-}/*}}}*/
+}
 
-PageNumberEdit::~PageNumberEdit()/*{{{*/
+PageNumberEdit::~PageNumberEdit()
 {
-}/*}}}*/
+}
 
-void PageNumberEdit::setMax(int n)/*{{{*/
+void PageNumberEdit::setMax(int n)
 {
 	validator->setTop(n);
-}/*}}}*/
+}
 
-void PageNumberEdit::onReturn()/*{{{*/
+void PageNumberEdit::onReturn()
 {
 	emit pageSelected(pageNumber());
-}/*}}}*/
+}
 
-int PageNumberEdit::pageNumber() const/*{{{*/
+int PageNumberEdit::pageNumber() const
 {
 	return text().toInt() - 1;
-}/*}}}*/
+}
 
-void PageNumberEdit::selectAll()/*{{{*/
+void PageNumberEdit::selectAll()
 {
 	//do nothing - just override default QLineEdit behavior
-}/*}}}*/
+}
 

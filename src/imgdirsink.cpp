@@ -21,33 +21,33 @@
 #include <qfileinfo.h>
 #include <qtextstream.h>
 
-ImgDirSink::ImgDirSink(int cachesize): ImgSink(), cachemtx(true)/*{{{*/
+ImgDirSink::ImgDirSink(int cachesize): ImgSink(), cachemtx(true)
 {
 	thloader.setSink(this);
 	imgloader.setSink(this);
 	cache = new ImgCache(cachesize);
-}/*}}}*/
+}
 
-ImgDirSink::ImgDirSink(const QString &path, int cachesize): ImgSink(), cachemtx(true), dirpath(QString::null)/*{{{*/
+ImgDirSink::ImgDirSink(const QString &path, int cachesize): ImgSink(), cachemtx(true), dirpath(QString::null)
 {
 	cache = new ImgCache(cachesize);
 	thloader.setSink(this);
 	imgloader.setSink(this);
 	open(path);
-}/*}}}*/
+}
 
-ImgDirSink::~ImgDirSink()/*{{{*/
+ImgDirSink::~ImgDirSink()
 {
 	close();
 	delete cache;
-}/*}}}*/
+}
 
-void ImgDirSink::setComicBookName(const QString &name)/*{{{*/
+void ImgDirSink::setComicBookName(const QString &name)
 {
 	cbname = name;
-}/*}}}*/
+}
 
-QString ImgDirSink::memPrefix(int &s) const/*{{{*/
+QString ImgDirSink::memPrefix(int &s) const
 {
 	QString mempfix;
 	if (s < 1024)
@@ -65,9 +65,9 @@ QString ImgDirSink::memPrefix(int &s) const/*{{{*/
 		mempfix = tr("Mbytes");
 	}
 	return mempfix;
-}/*}}}*/
+}
 
-void ImgDirSink::recurseDir(const QString &s)/*{{{*/
+void ImgDirSink::recurseDir(const QString &s)
 {
 	QDir dir(s);
 	dir.setSorting(QDir::DirsFirst|QDir::Name);
@@ -94,9 +94,9 @@ void ImgDirSink::recurseDir(const QString &s)/*{{{*/
 			recurseDir(finf.absFilePath());
 		}
 	}
-}/*}}}*/
+}
 
-int ImgDirSink::open(const QString &path)/*{{{*/
+int ImgDirSink::open(const QString &path)
 {
 	int status;
 	emit progress(0, 1);
@@ -127,9 +127,9 @@ int ImgDirSink::open(const QString &path)/*{{{*/
 	else
 		emit sinkError(status);
 	return status;
-}/*}}}*/
+}
 
-void ImgDirSink::close()/*{{{*/
+void ImgDirSink::close()
 {
 	thloader.stop();
 	imgloader.stop();
@@ -143,22 +143,22 @@ void ImgDirSink::close()/*{{{*/
 	otherfiles.clear();
 	dirs.clear();
 	listmtx.unlock();
-}/*}}}*/
+}
 
-QString ImgDirSink::getName(int maxlen)/*{{{*/
+QString ImgDirSink::getName(int maxlen)
 {
 	if (dirpath.length() < maxlen)
 		return dirpath;
 	QString tmpname = "..." + dirpath.right(maxlen-3);
 	return tmpname;
-}/*}}}*/
+}
 
-QString ImgDirSink::getFullName()/*{{{*/
+QString ImgDirSink::getFullName()
 {
 	return dirpath;
-}/*}}}*/
+}
 
-QStringList ImgDirSink::getDescription() const/*{{{*/
+QStringList ImgDirSink::getDescription() const
 {
 	QStringList desc;
 	
@@ -178,9 +178,9 @@ QStringList ImgDirSink::getDescription() const/*{{{*/
 		}
 	}
 	return desc;
-}/*}}}*/
+}
 
-QString ImgDirSink::getStats() const/*{{{*/
+QString ImgDirSink::getStats() const
 {
 	int w, h, p;
 	int cmem = 0;
@@ -219,9 +219,9 @@ QString ImgDirSink::getStats() const/*{{{*/
 	       tr("Average page memory") << ": " << amem << " " << amempfix << endl <<
 	       tr("Largest cached image") << ": " << w << "x" << h << endl;
 	return info;
-}/*}}}*/
+}
 
-QImage ImgDirSink::getImage(unsigned int num, int &result, int preload)/*{{{*/
+QImage ImgDirSink::getImage(unsigned int num, int &result, int preload)
 {
 	QImage rimg;
 	
@@ -282,9 +282,9 @@ QImage ImgDirSink::getImage(unsigned int num, int &result, int preload)/*{{{*/
 	}
 	
 	return rimg;
-}/*}}}*/
+}
 
-Thumbnail* ImgDirSink::getThumbnail(int num, bool thumbcache)/*{{{*/
+Thumbnail* ImgDirSink::getThumbnail(int num, bool thumbcache)
 {
 	QString fname;
 	listmtx.lock();
@@ -325,48 +325,48 @@ Thumbnail* ImgDirSink::getThumbnail(int num, bool thumbcache)/*{{{*/
 	if (thumbcache)
 		t->save(thname);
 	return t;
-}/*}}}*/
+}
 
-void ImgDirSink::requestThumbnail(int num)/*{{{*/
+void ImgDirSink::requestThumbnail(int num)
 {
 	thloader.request(num);
-}/*}}}*/
+}
 
-void ImgDirSink::requestThumbnails(int first, int n)/*{{{*/
+void ImgDirSink::requestThumbnails(int first, int n)
 {
 	thloader.request(first, n);
-}/*}}}*/
+}
 
-int ImgDirSink::numOfImages() const/*{{{*/
+int ImgDirSink::numOfImages() const
 {
 	listmtx.lock();
 	const int n = imgfiles.count();
 	listmtx.unlock();
 	return n;
-}/*}}}*/
+}
 
-QStringList ImgDirSink::getAllfiles() const/*{{{*/
+QStringList ImgDirSink::getAllfiles() const
 {
 	listmtx.lock();
 	QStringList l = imgfiles + txtfiles + otherfiles;
 	listmtx.unlock();
 	return l;
-}/*}}}*/
+}
 
-QStringList ImgDirSink::getAlldirs() const/*{{{*/
+QStringList ImgDirSink::getAlldirs() const
 {
 	return dirs;
-}/*}}}*/
+}
 
-QStringList ImgDirSink::getAllimgfiles() const/*{{{*/
+QStringList ImgDirSink::getAllimgfiles() const
 {
 	listmtx.lock();
 	const QStringList l = imgfiles;
 	listmtx.unlock();
 	return l;
-}/*}}}*/
+}
 
-void ImgDirSink::removeThumbnails(int days)/*{{{*/
+void ImgDirSink::removeThumbnails(int days)
 {	
 	if (days < 1)
 		return;
@@ -381,10 +381,10 @@ void ImgDirSink::removeThumbnails(int days)/*{{{*/
 		if (finfo.lastModified().daysTo(currdate) > days)
 			dir.remove(*it);
 	}
-}/*}}}*/
+}
 
-ThumbnailLoaderThread& ImgDirSink::thumbnailLoader()/*{{{*/
+ThumbnailLoaderThread& ImgDirSink::thumbnailLoader()
 {
 	return thloader;
-}/*}}}*/
+}
 

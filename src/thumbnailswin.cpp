@@ -16,7 +16,7 @@
 #include "thumbnail.h"
 #include "thumbnailevent.h"
 
-ThumbnailsWindow::ThumbnailsWindow(Place p, QWidget *parent): QDockWindow(p, parent)/*{{{*/
+ThumbnailsWindow::ThumbnailsWindow(Place p, QWidget *parent): QDockWindow(p, parent)
 {
 	setCaption(tr("Thumbnails"));
 	setResizeEnabled(true);
@@ -26,13 +26,13 @@ ThumbnailsWindow::ThumbnailsWindow(Place p, QWidget *parent): QDockWindow(p, par
 	setWidget(tview);
 	connect(tview, SIGNAL(requestedPage(int, bool)), this, SIGNAL(requestedPage(int, bool)));
 	connect(this, SIGNAL(orientationChanged(Orientation)), this, SLOT(onOrientationChanged(Orientation)));
-}/*}}}*/
+}
 
-ThumbnailsWindow::~ThumbnailsWindow()/*{{{*/
+ThumbnailsWindow::~ThumbnailsWindow()
 {
-}/*}}}*/
+}
 
-void ThumbnailsWindow::customEvent(QCustomEvent *e)/*{{{*/
+void ThumbnailsWindow::customEvent(QCustomEvent *e)
 {
 	if (e->type() == ThumbnailReady)
 	{
@@ -41,15 +41,15 @@ void ThumbnailsWindow::customEvent(QCustomEvent *e)/*{{{*/
 	}
 	else
 		QDockWindow::customEvent(e);
-}/*}}}*/
+}
 
-void ThumbnailsWindow::onOrientationChanged(Orientation o)/*{{{*/
+void ThumbnailsWindow::onOrientationChanged(Orientation o)
 {
 	tview->setArrangement(o == Qt::Horizontal ? QIconView::TopToBottom : QIconView::LeftToRight);
-}/*}}}*/
+}
 
-ThumbnailsView* ThumbnailsWindow::view() const/*{{{*/
+ThumbnailsView* ThumbnailsWindow::view() const
 {
 	return tview;
-}/*}}}*/
+}
 

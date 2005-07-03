@@ -15,7 +15,7 @@
 #include <qfileinfo.h>
 #include <stdlib.h>
 
-bool which(const QString &command)/*{{{*/
+bool which(const QString &command)
 {
 	const QString paths = QString(getenv("PATH"));
 	QStringList plist = QStringList::split(":", paths, false);
@@ -26,5 +26,5 @@ bool which(const QString &command)/*{{{*/
 			return true;
 	}
 	return false;
-}/*}}}*/
+}
 

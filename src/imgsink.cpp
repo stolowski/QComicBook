@@ -12,11 +12,11 @@
 
 #include "imgsink.h"
 
-ImgSink::ImgSink(): QObject()/*{{{*/
+ImgSink::ImgSink(): QObject()
 {
-}/*}}}*/
+}
 
-ImgSink::~ImgSink()/*{{{*/
+ImgSink::~ImgSink()
 {
-}/*}}}*/
+}
 

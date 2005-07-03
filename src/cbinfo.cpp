@@ -17,7 +17,7 @@
 #include <qfont.h>
 #include <imgsink.h>
 
-ComicBookInfo::ComicBookInfo(QWidget *parent, ImgSink &sink, const QFont &f): QTabDialog(parent), font(f)/*{{{*/
+ComicBookInfo::ComicBookInfo(QWidget *parent, ImgSink &sink, const QFont &f): QTabDialog(parent), font(f)
 {
 	setModal(true);
 	setCaption("QComicBook info");
@@ -25,9 +25,9 @@ ComicBookInfo::ComicBookInfo(QWidget *parent, ImgSink &sink, const QFont &f): QT
 
 	setupDescriptionTabs(sink);
 	setupGeneralTab(sink);
-}/*}}}*/
+}
 
-void ComicBookInfo::setupDescriptionTabs(const ImgSink &sink)/*{{{*/
+void ComicBookInfo::setupDescriptionTabs(const ImgSink &sink)
 {
 	const QStringList desc = sink.getDescription();
 	QStringList::const_iterator it = desc.begin();
@@ -47,9 +47,9 @@ void ComicBookInfo::setupDescriptionTabs(const ImgSink &sink)/*{{{*/
 		txt->setText(*it);
 		it++;
 	}
-}/*}}}*/
+}
 
-void ComicBookInfo::setupGeneralTab(ImgSink &sink)/*{{{*/
+void ComicBookInfo::setupGeneralTab(ImgSink &sink)
 {
 	QWidget *w = new QWidget(this);
 	QVBoxLayout *l = new QVBoxLayout(w, 5, 5);
@@ -61,9 +61,9 @@ void ComicBookInfo::setupGeneralTab(ImgSink &sink)/*{{{*/
 	txt->setText(sink.getStats());
 
 	addTab(w, tr("General info"));
-}/*}}}*/
+}
 
-ComicBookInfo::~ComicBookInfo()/*{{{*/
+ComicBookInfo::~ComicBookInfo()
 {
-}/*}}}*/
+}
 

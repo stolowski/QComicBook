@@ -15,7 +15,7 @@
 #include <qstring.h>
 #include <qimage.h>
 
-StatusBar::StatusBar(QWidget *parent): QStatusBar(parent)/*{{{*/
+StatusBar::StatusBar(QWidget *parent): QStatusBar(parent)
 {
 	page = new QLabel(this);
 	page->setFixedWidth(80);
@@ -29,25 +29,25 @@ StatusBar::StatusBar(QWidget *parent): QStatusBar(parent)/*{{{*/
 	addWidget(name, 2);
 
 	setPage(0, 0);
-}/*}}}*/
+}
 
-StatusBar::~StatusBar()/*{{{*/
+StatusBar::~StatusBar()
 {
-}/*}}}*/
+}
 
-void StatusBar::clear()/*{{{*/
+void StatusBar::clear()
 {
 	setPage(0, 0);
 	setImageInfo(NULL, NULL);
 	setName(QString::null);
-}/*}}}*/
+}
 
-void StatusBar::setPage(int n, int total)/*{{{*/
+void StatusBar::setPage(int n, int total)
 {
 	page->setText(tr("Page") + " " + QString::number(n) + " / " + QString::number(total));
-}/*}}}*/
+}
 
-void StatusBar::setImageInfo(const QImage *img1, const QImage *img2)/*{{{*/
+void StatusBar::setImageInfo(const QImage *img1, const QImage *img2)
 {
 	QString txt;
 	if (img1)
@@ -55,10 +55,10 @@ void StatusBar::setImageInfo(const QImage *img1, const QImage *img2)/*{{{*/
 	if (img2)
 		txt += QString::number(img2->width()) + "x" + QString::number(img2->height());
 	imginfo->setText(txt);
-}/*}}}*/
+}
 
-void StatusBar::setName(const QString &n)/*{{{*/
+void StatusBar::setName(const QString &n)
 {
 	name->setText(n);
-}/*}}}*/
+}
 

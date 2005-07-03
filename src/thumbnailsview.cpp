@@ -20,7 +20,7 @@
 #include <qptrvector.h>
 #include <qpopupmenu.h>
 
-ThumbnailsView::ThumbnailsView(QWidget *parent): QIconView(parent), selected(NULL), numpages(0)/*{{{*/
+ThumbnailsView::ThumbnailsView(QWidget *parent): QIconView(parent), selected(NULL), numpages(0)
 {
 	setFocusPolicy(QWidget::NoFocus);
 	setItemsMovable(false);
@@ -45,19 +45,19 @@ ThumbnailsView::ThumbnailsView(QWidget *parent): QIconView(parent), selected(NUL
 
 	connect(this, SIGNAL(doubleClicked(QIconViewItem *)), this, SLOT(onDoubleClick(QIconViewItem *)));
 	connect(this, SIGNAL(contextMenuRequested(QIconViewItem *, const QPoint&)), this, SLOT(showContextMenu(QIconViewItem *, const QPoint&)));
-}/*}}}*/
+}
 
-ThumbnailsView::~ThumbnailsView()/*{{{*/
+ThumbnailsView::~ThumbnailsView()
 {
 	delete emptypage;
-}/*}}}*/
+}
 
-void ThumbnailsView::onDoubleClick(QIconViewItem *item)/*{{{*/
+void ThumbnailsView::onDoubleClick(QIconViewItem *item)
 {
 	emit requestedPage(dynamic_cast<ThumbnailItem *>(item)->page(), false);
-}/*}}}*/
+}
 
-void ThumbnailsView::setPages(int pages)/*{{{*/
+void ThumbnailsView::setPages(int pages)
 {
 	clear();
 
@@ -66,9 +66,9 @@ void ThumbnailsView::setPages(int pages)/*{{{*/
 		icons.insert(i, new ThumbnailItem(this, i, *emptypage));
 
 	setArrangement(visibleWidth() > visibleHeight() ? QIconView::TopToBottom : QIconView::LeftToRight);
-}/*}}}*/
+}
 
-void ThumbnailsView::setPage(int n, const QImage &img)/*{{{*/
+void ThumbnailsView::setPage(int n, const QImage &img)
 {
 	if (n < icons.count())
 	{
@@ -76,22 +76,22 @@ void ThumbnailsView::setPage(int n, const QImage &img)/*{{{*/
 		th->setPixmap(img);
 		th->setLoaded(true);
 	}
-}/*}}}*/
+}
 
-void ThumbnailsView::setPage(const Thumbnail &t)/*{{{*/
+void ThumbnailsView::setPage(const Thumbnail &t)
 {
 	setPage(t.page(), t.image());
-}/*}}}*/
+}
 
-void ThumbnailsView::clear()/*{{{*/
+void ThumbnailsView::clear()
 {
 	QIconView::clear();
 	icons.clear();
 	numpages = 0;
 	selected = NULL;
-}/*}}}*/
+}
 
-void ThumbnailsView::scrollToPage(int n)/*{{{*/
+void ThumbnailsView::scrollToPage(int n)
 {
 	if (n < icons.count())
 	{
@@ -100,25 +100,25 @@ void ThumbnailsView::scrollToPage(int n)/*{{{*/
 		if (isVisible())
 			ensureVisible(th->x(), th->y());
 	}
-}/*}}}*/
+}
 
-void ThumbnailsView::showContextMenu(QIconViewItem *item, const QPoint &p)/*{{{*/
+void ThumbnailsView::showContextMenu(QIconViewItem *item, const QPoint &p)
 {
 	if (item)
 	{
 		selected = item;
 		menu->popup(p);
 	}
-}/*}}}*/
+}
 
-void ThumbnailsView::goToPageAction()/*{{{*/
+void ThumbnailsView::goToPageAction()
 {
 	if (selected)
 		onDoubleClick(selected);
-}/*}}}*/
+}
 
-bool ThumbnailsView::isLoaded(int n) const/*{{{*/
+bool ThumbnailsView::isLoaded(int n) const
 {
 	return (n < icons.count()) ? icons[n]->isLoaded() : false;
-}/*}}}*/
+}
 

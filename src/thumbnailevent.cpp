@@ -13,17 +13,17 @@
 #include "thumbnailevent.h"
 #include "thumbnail.h"
 
-ThumbnailEvent::ThumbnailEvent(Thumbnail *t): QCustomEvent(ThumbnailReady), thumbnail(t)/*{{{*/
+ThumbnailEvent::ThumbnailEvent(Thumbnail *t): QCustomEvent(ThumbnailReady), thumbnail(t)
 {
-}/*}}}*/
+}
 
-ThumbnailEvent::~ThumbnailEvent()/*{{{*/
+ThumbnailEvent::~ThumbnailEvent()
 {
 	delete thumbnail;
-}/*}}}*/
+}
 
-const Thumbnail *ThumbnailEvent::getThumbnail() const/*{{{*/
+const Thumbnail *ThumbnailEvent::getThumbnail() const
 {
 	return thumbnail;
-}/*}}}*/
+}
 

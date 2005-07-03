@@ -13,55 +13,55 @@
 #include "bookmark.h"
 #include <qfileinfo.h>
 
-Bookmark::Bookmark()/*{{{*/
+Bookmark::Bookmark()
 {
-}/*}}}*/
+}
 
-Bookmark::Bookmark(const QString &cbname, int cbpage): name(cbname), page(cbpage), id(0)/*{{{*/
+Bookmark::Bookmark(const QString &cbname, int cbpage): name(cbname), page(cbpage), id(0)
 {
-}/*}}}*/
+}
 
-Bookmark::~Bookmark()/*{{{*/
+Bookmark::~Bookmark()
 {
-}/*}}}*/
+}
 		
-const QString& Bookmark::getName() const/*{{{*/
+const QString& Bookmark::getName() const
 { 
 	return name;
-}/*}}}*/
+}
 
-int Bookmark::getPage() const /*{{{*/
+int Bookmark::getPage() const 
 {
 	return page; 
-}/*}}}*/
+}
 
-int Bookmark::getId() const/*{{{*/
+int Bookmark::getId() const
 {
 	return id; 
-}/*}}}*/
+}
 
-void Bookmark::setName(const QString &cbname)/*{{{*/
+void Bookmark::setName(const QString &cbname)
 {
 	name = cbname; 
-}/*}}}*/
+}
 
-void Bookmark::setPage(int cbpage)/*{{{*/
+void Bookmark::setPage(int cbpage)
 {
 	page = cbpage;
-}/*}}}*/
+}
 
-void Bookmark::setId(int n)/*{{{*/
+void Bookmark::setId(int n)
 {
 	id = n;
-}/*}}}*/
+}
 
-bool Bookmark::isValid()/*{{{*/
+bool Bookmark::isValid()
 {
 	QFileInfo inf(name); return inf.exists();
-}/*}}}*/
+}
 
-QString Bookmark::menuItemName()/*{{{*/
+QString Bookmark::menuItemName()
 {
 	return name + " [" + QString::number(page + 1) + "]";
-}/*}}}*/
+}
 

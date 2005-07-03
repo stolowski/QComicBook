@@ -17,7 +17,7 @@
 #include <qpopupmenu.h>
 #include <qmenubar.h>
 
-HelpBrowser::HelpBrowser(const QString &caption, const QString &path, const QString &file, const QString &imgpath, QWidget *parent): QMainWindow(parent)/*{{{*/
+HelpBrowser::HelpBrowser(const QString &caption, const QString &path, const QString &file, const QString &imgpath, QWidget *parent): QMainWindow(parent)
 {
 	const QString locale = QTextCodec::locale();
 	const QString paths[] = { path + "/" + locale,
@@ -65,19 +65,19 @@ HelpBrowser::HelpBrowser(const QString &caption, const QString &path, const QStr
 	connect(txtb, SIGNAL(forwardAvailable(bool)), this, SLOT(enableForward(bool)));
 
 	resize(640, 480);
-}/*}}}*/
+}
 
-HelpBrowser::~HelpBrowser()/*{{{*/
+HelpBrowser::~HelpBrowser()
 {
-}/*}}}*/
+}
 
-void HelpBrowser::enableBackward(bool f)/*{{{*/
+void HelpBrowser::enableBackward(bool f)
 {
 	go_menu->setItemEnabled(id_back, f);
-}/*}}}*/
+}
 
-void HelpBrowser::enableForward(bool f)/*{{{*/
+void HelpBrowser::enableForward(bool f)
 {
 	go_menu->setItemEnabled(id_forward, f);
-}/*}}}*/
+}
 

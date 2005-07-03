@@ -17,17 +17,17 @@
 #include <qdir.h>
 #include <qtextstream.h>
 
-Bookmarks::Bookmarks(QPopupMenu *menu): bmenu(menu), changed(false)/*{{{*/
+Bookmarks::Bookmarks(QPopupMenu *menu): bmenu(menu), changed(false)
 {
 	blist.setAutoDelete(true);
 	fname = ComicBookSettings::bookmarksDir() + "/bookmarks";
-}/*}}}*/
+}
 
-Bookmarks::~Bookmarks()/*{{{*/
+Bookmarks::~Bookmarks()
 {
-}/*}}}*/
+}
 
-bool Bookmarks::load()/*{{{*/
+bool Bookmarks::load()
 {
 	if (fname.isEmpty())
 		return false;
@@ -46,9 +46,9 @@ bool Bookmarks::load()/*{{{*/
 		f.close();
 	}
 	return false;
-}/*}}}*/
+}
 
-bool Bookmarks::save()/*{{{*/
+bool Bookmarks::save()
 {
 	if (!changed)
 		return true;
@@ -65,9 +65,9 @@ bool Bookmarks::save()/*{{{*/
 		return true;
 	}
 	return false;
-}/*}}}*/
+}
 
-void Bookmarks::set(const QString &cbname, int page)/*{{{*/
+void Bookmarks::set(const QString &cbname, int page)
 {
 	int id;
 	for (Bookmark *b = blist.first(); b; b = blist.next())
@@ -93,9 +93,9 @@ void Bookmarks::set(const QString &cbname, int page)/*{{{*/
 	bmap.insert(id, b);
 	changed = true;
 	return;
-}/*}}}*/
+}
 
-bool Bookmarks::remove(const QString &cbname)/*{{{*/
+bool Bookmarks::remove(const QString &cbname)
 {
 	for (Bookmark *b = blist.first(); b; b = blist.next())
 		if ((b->getName() == cbname))
@@ -106,9 +106,9 @@ bool Bookmarks::remove(const QString &cbname)/*{{{*/
 			return true;
 		}
 	return false;
-}/*}}}*/
+}
 
-bool Bookmarks::remove(int id)/*{{{*/
+bool Bookmarks::remove(int id)
 {
 	if (bmap.contains(id))
 	{
@@ -118,9 +118,9 @@ bool Bookmarks::remove(int id)/*{{{*/
 		blist.remove(b);
 		changed = true;
 	}
-}/*}}}*/
+}
 
-bool Bookmarks::get(int id, Bookmark &b)/*{{{*/
+bool Bookmarks::get(int id, Bookmark &b)
 {
 	if (bmap.contains(id))
 	{
@@ -128,21 +128,21 @@ bool Bookmarks::get(int id, Bookmark &b)/*{{{*/
 		return true;
 	}
 	return false;
-}/*}}}*/
+}
 
-QValueList<Bookmark> Bookmarks::get()/*{{{*/
+QValueList<Bookmark> Bookmarks::get()
 {
 	QValueList<Bookmark> res;
 	for (Bookmark *b = blist.first(); b; b = blist.next())
 		res.push_back(*b);
 	return res;
-}/*}}}*/
+}
 
-bool Bookmarks::exists(const QString &cbname)/*{{{*/
+bool Bookmarks::exists(const QString &cbname)
 {
 	for (Bookmark *b = blist.first(); b; b = blist.next())
 		if (b->getName() == cbname)
 			return true;
 	return false;
-}/*}}}*/
+}
 

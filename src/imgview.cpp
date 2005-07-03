@@ -21,22 +21,22 @@
 
 const int ComicImageView::EXTRA_WHEEL_SPIN = 2;
 
-ComicImageView::ComicImageView(QWidget *parent, ComicImageView::Size size, ComicImageView::Scaling scaling, const QColor &color): QScrollView(parent), isize(size), iscaling(scaling), iangle(0), xoff(0), yoff(0), lx(-1), wheelupcnt(0), wheeldowncnt(0), smallcursor(NULL)/*{{{*/
+ComicImageView::ComicImageView(QWidget *parent, ComicImageView::Size size, ComicImageView::Scaling scaling, const QColor &color): QScrollView(parent), isize(size), iscaling(scaling), iangle(0), xoff(0), yoff(0), lx(-1), wheelupcnt(0), wheeldowncnt(0), smallcursor(NULL)
 {
 	orgimage = new QImage();
 	pixmap = new QPixmap();
 	context_menu = new QPopupMenu(this);
 	viewport()->setPaletteBackgroundColor(color);
 	setFocusPolicy(QWidget::StrongFocus);
-}/*}}}*/
+}
 
-ComicImageView::~ComicImageView()/*{{{*/
+ComicImageView::~ComicImageView()
 {
 	delete pixmap;
 	delete orgimage;
-}/*}}}*/
+}
 
-void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, int cliph)/*{{{*/
+void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, int cliph)
 {
 	const int px = clipx - xoff;
 	const int py = clipy - yoff;
@@ -50,30 +50,30 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 		p->fillRect(px + clipw, clipy, -px, cliph, QColor(0x40, 0x40, 0x40));*/
 	
 	p->drawPixmap(clipx, clipy, *pixmap, px, py, clipw, cliph);
-}/*}}}*/
+}
 
-QPopupMenu *ComicImageView::contextMenu() const/*{{{*/
+QPopupMenu *ComicImageView::contextMenu() const
 {
 	return context_menu;
-}/*}}}*/
+}
 
-bool ComicImageView::onTop()/*{{{*/
+bool ComicImageView::onTop()
 {
 	return contentsY() == 0;
-}/*}}}*/
+}
 
-bool ComicImageView::onBottom()/*{{{*/
+bool ComicImageView::onBottom()
 {
 	return contentsY() + viewport()->height() >= contentsHeight();
-}/*}}}*/
+}
 
-void ComicImageView::contentsContextMenuEvent(QContextMenuEvent *e)/*{{{*/
+void ComicImageView::contentsContextMenuEvent(QContextMenuEvent *e)
 {
 	if (!pixmap->isNull())
 		context_menu->popup(e->globalPos());
-}/*}}}*/
+}
 
-void ComicImageView::setImage(const QImage &img, bool preserveangle)/*{{{*/
+void ComicImageView::setImage(const QImage &img, bool preserveangle)
 {
 	if (!preserveangle)
 		iangle = 0;
@@ -84,9 +84,9 @@ void ComicImageView::setImage(const QImage &img, bool preserveangle)/*{{{*/
 	ensureVisible(1, 1);
 
 	repaintContents(0, 0 , viewport()->width(), viewport()->height());
-}/*}}}*/
+}
 
-void ComicImageView::setImage(const QImage &img1, const QImage &img2, bool preserveangle)/*{{{*/
+void ComicImageView::setImage(const QImage &img1, const QImage &img2, bool preserveangle)
 {
 	if (!preserveangle)
 		iangle = 0;
@@ -103,15 +103,15 @@ void ComicImageView::setImage(const QImage &img1, const QImage &img2, bool prese
 	ensureVisible(1, 1);
 
 	repaintContents(0, 0 , viewport()->width(), viewport()->height());
-}/*}}}*/
+}
 
-void ComicImageView::resizeEvent(QResizeEvent *e)/*{{{*/
+void ComicImageView::resizeEvent(QResizeEvent *e)
 {
 	QScrollView::resizeEvent(e);
 	updateImageSize();
-}/*}}}*/
+}
 
-void ComicImageView::contentsWheelEvent(QWheelEvent *e)/*{{{*/
+void ComicImageView::contentsWheelEvent(QWheelEvent *e)
 {
 	e->accept();
 	if (e->delta() > 0) //scrolling up
@@ -140,9 +140,9 @@ void ComicImageView::contentsWheelEvent(QWheelEvent *e)/*{{{*/
 			wheelupcnt = 0; //reset opposite direction counter
 		}
 	}
-}/*}}}*/
+}
 
-void ComicImageView::contentsMouseMoveEvent(QMouseEvent *e)/*{{{*/
+void ComicImageView::contentsMouseMoveEvent(QMouseEvent *e)
 {
 	if (lx >= 0)
 	{
@@ -157,22 +157,22 @@ void ComicImageView::contentsMouseMoveEvent(QMouseEvent *e)/*{{{*/
 		lx = e->x();
 		ly = e->y();
 	}
-}/*}}}*/
+}
 
-void ComicImageView::contentsMousePressEvent(QMouseEvent *e)/*{{{*/
+void ComicImageView::contentsMousePressEvent(QMouseEvent *e)
 {
 	if (!smallcursor)
 		setCursor(Qt::PointingHandCursor);
-}/*}}}*/
+}
 
-void ComicImageView::contentsMouseReleaseEvent(QMouseEvent *e)/*{{{*/
+void ComicImageView::contentsMouseReleaseEvent(QMouseEvent *e)
 {
 	lx = -1;
 	if (!smallcursor)
 		setCursor(Qt::ArrowCursor);
-}/*}}}*/
+}
 
-void ComicImageView::updateImageSize()/*{{{*/
+void ComicImageView::updateImageSize()
 {
 	if (orgimage->width() * orgimage->height() == 0)
 		return;
@@ -249,14 +249,14 @@ void ComicImageView::updateImageSize()/*{{{*/
 	// update scrolling speeds
 	spdx = pixmap->width() / 100;
 	spdy = pixmap->height() / 100;
-}/*}}}*/
+}
 
-void ComicImageView::setScaling(ComicImageView::Scaling s)/*{{{*/
+void ComicImageView::setScaling(ComicImageView::Scaling s)
 {
 	iscaling = s;
-}/*}}}*/
+}
 
-void ComicImageView::setRotation(ComicImageView::Rotation r)/*{{{*/
+void ComicImageView::setRotation(ComicImageView::Rotation r)
 {
 	if (r == Right)
 		++iangle;
@@ -273,71 +273,71 @@ void ComicImageView::setRotation(ComicImageView::Rotation r)/*{{{*/
 
 	updateImageSize();
 	updateContents(0, 0, viewport()->width(), viewport()->height());
-}/*}}}*/
+}
 
-void ComicImageView::setSize(Size s)/*{{{*/
+void ComicImageView::setSize(Size s)
 {
 	isize = s;
 	updateImageSize();
 	updateContents(0, 0, viewport()->width(), viewport()->height());
-}/*}}}*/
+}
 
-void ComicImageView::setSizeOriginal()/*{{{*/
+void ComicImageView::setSizeOriginal()
 {
 	setSize(Original);
-}/*}}}*/
+}
 
-void ComicImageView::setSizeFitWidth()/*{{{*/
+void ComicImageView::setSizeFitWidth()
 {
 	setSize(FitWidth);
-}/*}}}*/
+}
 
-void ComicImageView::setSizeFitHeight()/*{{{*/
+void ComicImageView::setSizeFitHeight()
 {
 	setSize(FitHeight);
-}/*}}}*/
+}
 
-void ComicImageView::setSizeWholePage()/*{{{*/
+void ComicImageView::setSizeWholePage()
 {
 	setSize(WholePage);
-}/*}}}*/
+}
 
-void ComicImageView::setSizeBestFit()/*{{{*/
+void ComicImageView::setSizeBestFit()
 {
 	setSize(BestFit);
-}/*}}}*/
+}
 
-void ComicImageView::scrollToTop()/*{{{*/
+void ComicImageView::scrollToTop()
 {
 	ensureVisible(1, 1);
-}/*}}}*/
+}
 
-void ComicImageView::scrollToBottom()/*{{{*/
+void ComicImageView::scrollToBottom()
 {
 	ensureVisible(1, contentsHeight());
-}/*}}}*/
+}
 
-void ComicImageView::scrollRight()/*{{{*/
+void ComicImageView::scrollRight()
 {
 	scrollBy(spdx, 0);
-}/*}}}*/
+}
 
-void ComicImageView::scrollLeft()/*{{{*/
+void ComicImageView::scrollLeft()
 {
 	scrollBy(-spdx, 0);
-}/*}}}*/
+}
 
-void ComicImageView::scrollRightFast()/*{{{*/
+void ComicImageView::scrollRightFast()
 {
 	scrollBy(3*spdx, 0);
-}/*}}}*/
+}
 
-void ComicImageView::scrollLeftFast()/*{{{*/
+void ComicImageView::scrollLeftFast()
 {
 	scrollBy(-3*spdx, 0);
-}/*}}}*/
+}
 
-void ComicImageView::scrollUp()/*{{{*/
+void ComicImageView::scrollUp()
 {
 	if (onTop())
 	{
@@ -346,9 +346,9 @@ void ComicImageView::scrollUp()/*{{{*/
 	}
 	else
 		scrollBy(0, -spdy);
-}/*}}}*/
+}
 
-void ComicImageView::scrollDown()/*{{{*/
+void ComicImageView::scrollDown()
 {
 	if (onBottom())
 	{
@@ -357,68 +357,68 @@ void ComicImageView::scrollDown()/*{{{*/
 	}
 	else
 		scrollBy(0, spdy);
-}/*}}}*/
+}
 
-void ComicImageView::scrollUpFast()/*{{{*/
+void ComicImageView::scrollUpFast()
 {
 	if (onTop())
 		emit topReached();
 	else
 		scrollBy(0, -3*spdy);
-}/*}}}*/
+}
 
-void ComicImageView::scrollDownFast()/*{{{*/
+void ComicImageView::scrollDownFast()
 {	
 	if (onBottom())
 		emit bottomReached();
 	else
 		scrollBy(0, 3*spdy);
-}/*}}}*/
+}
 
-void ComicImageView::rotateRight()/*{{{*/
+void ComicImageView::rotateRight()
 {
 	setRotation(Right);
-}/*}}}*/
+}
 
-void ComicImageView::rotateLeft()/*{{{*/
+void ComicImageView::rotateLeft()
 {
 	setRotation(Left);
-}/*}}}*/
+}
 
-void ComicImageView::resetRotation()/*{{{*/
+void ComicImageView::resetRotation()
 {
 	setRotation(None);
-}/*}}}*/
+}
 
-void ComicImageView::jumpUp()/*{{{*/
+void ComicImageView::jumpUp()
 {
 	if (onTop())
 		emit topReached();
 	else
 		scrollBy(0, -viewport()->height());
-}/*}}}*/
+}
 
-void ComicImageView::jumpDown()/*{{{*/
+void ComicImageView::jumpDown()
 {
 	if (onBottom())
 		emit bottomReached();
 	else
 		scrollBy(0, viewport()->height());
-}/*}}}*/
+}
 
-void ComicImageView::enableScrollbars(bool f)/*{{{*/
+void ComicImageView::enableScrollbars(bool f)
 {
 	ScrollBarMode s = f ? Auto : AlwaysOff;
 	setVScrollBarMode(s);
 	setHScrollBarMode(s);
-}/*}}}*/
+}
 
-void ComicImageView::setBackground(const QColor &color)/*{{{*/
+void ComicImageView::setBackground(const QColor &color)
 {
 	viewport()->setPaletteBackgroundColor(color);
-}/*}}}*/
+}
 
-void ComicImageView::setSmallCursor(bool f)/*{{{*/
+void ComicImageView::setSmallCursor(bool f)
 {
 	if (f)
 	{
@@ -446,22 +446,22 @@ void ComicImageView::setSmallCursor(bool f)/*{{{*/
 		smallcursor = NULL;
 		setCursor(Qt::ArrowCursor);
 	}
-}/*}}}*/
+}
 
-void ComicImageView::clear()/*{{{*/
+void ComicImageView::clear()
 {
 	orgimage->reset();
 	pixmap->resize(0, 0);
 	resizeContents(0, 0);
-}/*}}}*/
+}
 
-ComicImageView::Size ComicImageView::getSize() const/*{{{*/
+ComicImageView::Size ComicImageView::getSize() const
 {
 	return isize;
-}/*}}}*/
+}
 
-const QPixmap& ComicImageView::image() const/*{{{*/
+const QPixmap& ComicImageView::image() const
 {
 	return *pixmap;
-}/*}}}*/
+}
 

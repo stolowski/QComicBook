@@ -26,7 +26,7 @@
 #include <qspinbox.h>
 #include <qfontdialog.h>
 
-ComicBookCfgDialog::ComicBookCfgDialog(QWidget *parent, ComicBookSettings *cfg): QTabDialog(parent), cfg(cfg)/*{{{*/
+ComicBookCfgDialog::ComicBookCfgDialog(QWidget *parent, ComicBookSettings *cfg): QTabDialog(parent), cfg(cfg)
 {
 	setCaption("QComicBook Settings");
 	setModal(true);
@@ -39,13 +39,13 @@ ComicBookCfgDialog::ComicBookCfgDialog(QWidget *parent, ComicBookSettings *cfg):
 
 	connect(this, SIGNAL(applyButtonPressed()), this, SLOT(apply()));
 	connect(this, SIGNAL(cancelButtonPressed()), this, SLOT(cancel()));
-}/*}}}*/
+}
 
-ComicBookCfgDialog::~ComicBookCfgDialog()/*{{{*/
+ComicBookCfgDialog::~ComicBookCfgDialog()
 {
-}/*}}}*/
+}
 
-void ComicBookCfgDialog::setupDisplayTab()/*{{{*/
+void ComicBookCfgDialog::setupDisplayTab()
 {
 	font = cfg->infoFont();
 
@@ -102,9 +102,9 @@ void ComicBookCfgDialog::setupDisplayTab()/*{{{*/
 	updateFontPreview();
 	
 	addTab(w, tr("Display"));
-}/*}}}*/
+}
 
-void ComicBookCfgDialog::setupMiscTab()/*{{{*/
+void ComicBookCfgDialog::setupMiscTab()
 {
 	QWidget *w = new QWidget(this);
 	QVBoxLayout *lay = new QVBoxLayout(w, 5, 5);
@@ -141,9 +141,9 @@ void ComicBookCfgDialog::setupMiscTab()/*{{{*/
 
 	lay->addStretch();
 	addTab(w, tr("Misc"));
-}/*}}}*/
+}
 
-void ComicBookCfgDialog::apply()/*{{{*/
+void ComicBookCfgDialog::apply()
 {
 	// display
 	cfg->background(bgcolor);
@@ -166,30 +166,30 @@ void ComicBookCfgDialog::apply()/*{{{*/
 	cfg->twoPagesStep(cb_twopagesstep->isChecked());
 	cfg->autoInfo(cb_autoinfo->isChecked());
 	cfg->confirmExit(cb_confirmexit->isChecked());
-}/*}}}*/
+}
 
-void ComicBookCfgDialog::cancel()/*{{{*/
+void ComicBookCfgDialog::cancel()
 {
-}/*}}}*/
+}
 
-void ComicBookCfgDialog::updateFontPreview()/*{{{*/
+void ComicBookCfgDialog::updateFontPreview()
 {
 	fontname->setText(font.family() + ", " + QString::number(font.pointSize()));
 	fontname->setFont(font);
-}/*}}}*/
+}
 
-void ComicBookCfgDialog::showBackgroundDialog()/*{{{*/
+void ComicBookCfgDialog::showBackgroundDialog()
 {
 	QColor c = QColorDialog::getColor(cfg->background(), this);
 	if (c.isValid())
 		pb_color->setPaletteBackgroundColor(bgcolor = c);
-}/*}}}*/
+}
 
-void ComicBookCfgDialog::showFontDialog()/*{{{*/
+void ComicBookCfgDialog::showFontDialog()
 {
 	bool ok;
 	font = QFontDialog::getFont(&ok, font, this);
 	if (ok)
 		updateFontPreview();
-}/*}}}*/
+}
 

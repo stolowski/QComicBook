@@ -17,7 +17,7 @@
 #include "jumptopagewin.h"
 #include "pagenumberedit.h"
 
-JumpToPageWindow::JumpToPageWindow(QWidget *parent, int value, int max): QDialog(parent)/*{{{*/
+JumpToPageWindow::JumpToPageWindow(QWidget *parent, int value, int max): QDialog(parent)
 {
 	setCaption(tr("Jump to page..."));
 	setModal(true);
@@ -39,16 +39,16 @@ JumpToPageWindow::JumpToPageWindow(QWidget *parent, int value, int max): QDialog
 	pedit->setFocus();
 	pedit->deselect();
 	setFixedWidth(280);
-}/*}}}*/
+}
 
-JumpToPageWindow::~JumpToPageWindow()/*{{{*/
+JumpToPageWindow::~JumpToPageWindow()
 {
-}/*}}}*/
+}
 
-void JumpToPageWindow::jumpPressed()/*{{{*/
+void JumpToPageWindow::jumpPressed()
 {
 	int n = pedit->pageNumber();
 	setResult(n);
 	emit pageSelected(n);
-}/*}}}*/
+}
 
