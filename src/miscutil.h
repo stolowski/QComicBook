@@ -15,11 +15,6 @@
 
 class QString;
 
-template<class T> T maxOfTwo(const T &a, const T &b)/*{{{*/
-{
-	return a > b ? a : b;
-}/*}}}*/
-
 bool which(const QString &command); //similiar to shell 'which' command
 
 #endif

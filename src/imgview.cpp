@@ -18,6 +18,7 @@
 #include <qpainter.h>
 #include <qbitmap.h>
 #include <qcursor.h>
+#include <algorithm>
 
 const int ComicImageView::EXTRA_WHEEL_SPIN = 2;
 
@@ -94,7 +95,7 @@ void ComicImageView::setImage(const QImage &img1, const QImage &img2, bool prese
 	// we need to recreate orgimage as it may refer to original image data in cache;
 	// we dont want to work on shallow copy; it is probably also better than detach()
 	delete orgimage;
-	orgimage = new QImage(img1.width() + img2.width(), maxOfTwo(img1.height(), img2.height()), 32);
+	orgimage = new QImage(img1.width() + img2.width(), std::max(img1.height(), img2.height()), 32);
 
 	bitBlt(orgimage, 0, 0, &img1, 0, 0, -1, -1, 0);
 	bitBlt(orgimage, img1.width(), 0, &img2, 0, 0, -1, -1, 0);
