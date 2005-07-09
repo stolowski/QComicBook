@@ -1,4 +1,4 @@
-QComicBook v0.2.2
+QComicBook v0.2.3
 (c)by Pawel Stolowski 2005
 released under terms of GNU General Public License v2
 
@@ -28,7 +28,8 @@ make
 make install
 
 Debian users should add "--with-Qt-lib-dir=/usr/lib" option to the
-first step.
+first step. NOTE: Debian/Ubuntu users may compile this package using Debian
+methods -- see Debian guides for details.
 
 4. Known issues
 ---------------
