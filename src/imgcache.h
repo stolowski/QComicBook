@@ -10,6 +10,8 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
+/*! \file imgcache.h */
+
 #ifndef __IMGCACHE_H
 #define __IMGCACHE_H
 
@@ -18,12 +20,29 @@
 
 class ImgCache: public QCache<QImage>
 {
-	public:
-		ImgCache(int size=1);
-		virtual ~ImgCache();
+        private:
+                //! disables parent's find method
+                QImage *find(const QString & k, bool ref = TRUE);
+                
+                //! disables parent's remove method
+                bool remove(const QString & k);
+                
+                //! disables parent's take method
+                QImage *take(const QString & k);
+                               
+        public:
+                ImgCache(int size=1);
+                virtual ~ImgCache();
 
-		virtual void setSize(int size);
-		virtual QPtrCollection::Item newItem(QPtrCollection::Item d);
+                //! checks if image exists in cache
+                virtual bool exists(const QString &key);
+                
+                //! returns a deep copy of image, if found
+                virtual bool get(const QString &key, QImage &img);
+                virtual void setSize(int size);
+                
+                //! overrides parent's method; ensures that a deep copy of image is inserted
+                virtual QPtrCollection::Item newItem(QPtrCollection::Item d);
 };
 
 #endif

@@ -15,7 +15,7 @@
 
 ImgCache::ImgCache(int size): QCache<QImage>(size)
 {
-	setAutoDelete(true);
+        setAutoDelete(true);
 }
 
 ImgCache::~ImgCache()
@@ -24,16 +24,35 @@ ImgCache::~ImgCache()
 
 void ImgCache::setSize(int size)
 {
-	if (size < 0)
-		size = 0;
-	setMaxCost(size);
+        if (size < 0)
+                size = 0;
+        setMaxCost(size);
 }
 
 QPtrCollection::Item ImgCache::newItem(QPtrCollection::Item d)
 {
-	//return new QImage(*(QImage *)d);
-	QImage *img = new QImage(*(QImage *)d);
-	img->detach();
-	return img;
+        QImage *img = new QImage(*(QImage *)d);
+        img->detach();
+        return img;
+}
+
+bool ImgCache::exists(const QString & key)
+{
+        return find(key) != NULL;
+}
+
+bool ImgCache::get(const QString &key, QImage &img)
+{
+        if (QImage *tmp = find(key))
+        {
+                img = tmp->copy(); //get deep copy
+                return true;
+        }
+        return false;
+}
+
+QImage* ImgCache::find(const QString &k, bool ref)
+{
+        return QCache<QImage>::find(k, ref);
 }
 

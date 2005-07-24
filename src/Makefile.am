@@ -16,36 +16,15 @@ BUILT_SOURCES = moc_bookmarkmanager.cpp \
 		moc_thumbnailsview.cpp \
 		moc_waitdialog.cpp 
 
-dist_qcomicbook_SOURCES = aboutdialog.cpp \
-		      bookmark.cpp \
-		      bookmarks.cpp \
-		      bookmarkmanager.cpp \
-		      cbconfigdialog.cpp \
-		      cbinfo.cpp \
-		      cbsettings.cpp \
-		      helpbrowser.cpp \
-		      history.cpp \
-		      icons.cpp \
-		      imgcache.cpp \
-		      comicmain.cpp \
-		      imgsinkfactory.cpp \
-		      imgloader.cpp \
-		      imgsink.cpp \
-		      imgdirsink.cpp \
-		      imgarchivesink.cpp \
-		      imgview.cpp \
-		      jumptopagewin.cpp \
-		      main.cpp \
-		      miscutil.cpp \
-		      pagenumberedit.cpp \
-		      statusbar.cpp \
-		      thumbnail.cpp \
-		      thumbnailevent.cpp \
-		      thumbnailitem.cpp \
-		      thumbnailloader.cpp \
-		      thumbnailswin.cpp \
-		      thumbnailsview.cpp \
-		      waitdialog.cpp
+qcomicbook_SOURCES = aboutdialog.cpp bookmark.cpp bookmarkmanager.cpp\
+	bookmarks.cpp cbconfigdialog.cpp cbinfo.cpp cbsettings.cpp comicmain.cpp\
+	helpbrowser.cpp history.cpp icons.cpp imgarchivesink.cpp imgcache.cpp\
+	imgdirsink.cpp imgloader.cpp imgsink.cpp imgsinkfactory.cpp imgview.cpp\
+	jumptopagewin.cpp main.cpp miscutil.cpp pagenumberedit.cpp statusbar.cpp thumbnail.cpp\
+	thumbnailevent.cpp thumbnailitem.cpp thumbnailloader.cpp\
+	thumbnailsview.cpp thumbnailswin.cpp waitdialog.cpp
+
+#dist_qcomicbook_SOURCES = $(qcomicbook_SOURCES)
 		      
 nodist_qcomicbook_SOURCES = $(BUILT_SOURCES)
 
@@ -84,8 +63,9 @@ MOSTLYCLEANFILES =+ $(BUILT_SOURCES)
 
 qcomicbook_LDFLAGS = $(QT_LIBS)
 qcomicbook_CPPFLAGS = -DDATADIR=\"$(datadir)/qcomicbook/\" -DQT_THREAD_SUPPORT $(QT_CXXFLAGS)
-qcomicbook_CXXFLAGS = $(qcomic_CPPFLAGS)
+qcomicbook_CXXFLAGS = $(qcomicbook_CPPFLAGS)
 
 moc_%.cpp: %.h
 	$(QT_MOC) $< -o $@
+
 
