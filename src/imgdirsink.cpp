@@ -21,11 +21,11 @@
 #include <qfileinfo.h>
 #include <qtextstream.h>
 
-ImgDirSink::ImgDirSink(int cachesize): ImgSink(), cachemtx(true)
+ImgDirSink::ImgDirSink(int cachesize): ImgSink(), cachemtx(true), dirpath(QString::null)
 {
+        cache = new ImgCache(cachesize);
         thloader.setSink(this);
         imgloader.setSink(this);
-        cache = new ImgCache(cachesize);
 }
 
 ImgDirSink::ImgDirSink(const QString &path, int cachesize): ImgSink(), cachemtx(true), dirpath(QString::null)

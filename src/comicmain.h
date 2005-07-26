@@ -34,7 +34,7 @@ class StatusBar;
 class ComicMainWindow: public QMainWindow
 {
 	Q_OBJECT
-		
+                
 	private:
 		ImgSink *sink;
 		ComicImageView *view;
@@ -67,6 +67,13 @@ class ComicMainWindow: public QMainWindow
 		QAction *showInfoAction;
 		QAction *nextPageAction;
 		QAction *prevPageAction;
+		QAction *fullScreenAction;
+		QAction *exitFullScreenAction;
+		QAction *bestFitAction;
+		QAction *fitWidthAction;
+		QAction *fitHeightAction;
+		QAction *wholePageAction;
+		QAction *originalSizeAction;
 		QAction *forwardPageAction;
 		QAction *backwardPageAction;
 		QAction *pageTopAction;
@@ -78,17 +85,43 @@ class ComicMainWindow: public QMainWindow
 		QAction *rotateRightAction;
 		QAction *rotateLeftAction;
 		QAction *rotateResetAction;
+		QAction *scrollLeftFastAction;
+		QAction *scrollRightFastAction;
+		QAction *scrollUpFastAction; 
+		QAction *scrollDownFastAction;
+		QAction *scrollLeftAction;
+		QAction *scrollRightAction;   
+		QAction *scrollUpAction;
+		QAction *scrollDownAction;
+		QAction *jumpDownAction;
+		QAction *jumpUpAction;
 		QAction *togglePreserveRotationAction;
+		QAction *openArchiveAction;
+		QAction *openDirAction;
+
 		static const QString ARCH_EXTENSIONS; //!<space-separated list of archives extensions
-		
+
 	protected:
 		void keyPressEvent(QKeyEvent *e);
 		void closeEvent(QCloseEvent *e);
 		bool confirmExit();
 		void enableComicBookActions(bool f=true);
-		
-	protected slots:
-		void sinkReady(const QString &path);
+		void saveSettings();
+
+		void setupActions();
+		void setupComicImageView();
+		void setupThumbnailsWindow();
+		void setupToolbar();
+		void setupFileMenu();
+		void setupViewMenu();
+		void setupNavigationMenu();
+		void setupBookmarksMenu();
+		void setupHelpMenu();
+		void setupStatusbar();
+		void setupContextMenu();
+
+		protected slots:
+			void sinkReady(const QString &path);
 		void sinkError(int code);
 		void updateCaption();
 		void setRecentFilesMenu(const History &hist);
@@ -97,8 +130,8 @@ class ComicMainWindow: public QMainWindow
 		void thumbnailsVisibilityChanged(bool f);
 		void toolbarVisibilityChanged(bool f);
 
-	public slots:
-		void firstPage();
+		public slots:
+			void firstPage();
 		void lastPage();
 		void nextPage();
 		void prevPage();
