@@ -1,128 +1,133 @@
+2005-07-xx:  0.2.4       -- new option for setting external help browser added
+                         -- fixed redrawing bugs
+                         -- internal cleanups and small improvements
+			 -- help updated
+
 2005-07-09:  0.2.3       -- page is scrolled to top-right corner in japanese mode
                          -- autoconf script updated with newest version of bnv_have_qt
-			    macro
-			 
+                            macro
+                         
 2005-06-19:  0.2.2       -- added image rotating options
 
 2005-05-15:  0.2.1       -- rar, zip, ace archives are recognized by magic
                             bytes first, not by extension
                          -- fixed bug with handling relative comicbook paths
                             from commandline
-			 -- fixed bug with progress window reappearing
+                         -- fixed bug with progress window reappearing
 
 2005-05-09:  0.2.0       -- 'Manage bookmarks' option added
                          -- many internal improvements and small bugfixes
                          -- Open next/previous actions are enabled only for
-			    archives from now
+                            archives from now
 
 2005-05-04:  0.1.9       -- option to hide statusbar in fullscreen mode added
                          -- keyboard shortcuts for 'Open next' and 'Open
-			    previous' added
-			 -- changing mouse cursor takes effect immediately now -
-			    no need to restart
-			 -- fixed compilation error for some gcc versions (<typeinfo>
-			    issue)
-			 -- fixed bug with bookmarked page numbers starting
-			    from 0
+                            previous' added
+                         -- changing mouse cursor takes effect immediately now -
+                            no need to restart
+                         -- fixed compilation error for some gcc versions (<typeinfo>
+                            issue)
+                         -- fixed bug with bookmarked page numbers starting
+                            from 0
 
 2005-04-23:  0.1.8       -- support for ace (cba), tar.gz and tar.bz2 archives
                          -- improved mouse-dragging, reversed mouse-dragging
-			    directions
-			 -- 'Open next' and 'Open previous' actions added
-			 -- Japanese mode for two pages mode added
-			 -- Option for 1- or 2- pages step in two pages mode
-			    added
-			 -- 'Small mouse cursor' option added
-			 -- size of the current page(s) is shown in statusbar
-			 -- most menu/toolbar functions are inactive now if no comic
-			    book is opened
-			 -- fixed bug with not restoring initial status of statusbar
+                            directions
+                         -- 'Open next' and 'Open previous' actions added
+                         -- Japanese mode for two pages mode added
+                         -- Option for 1- or 2- pages step in two pages mode
+                            added
+                         -- 'Small mouse cursor' option added
+                         -- size of the current page(s) is shown in statusbar
+                         -- most menu/toolbar functions are inactive now if no comic
+                            book is opened
+                         -- fixed bug with not restoring initial status of statusbar
 
 2005-04-05:  0.1.7       -- thread-based thumbnail loading
                          -- thumbnails are smooth-scaled now
-			 -- added option to set font for comic book info
-			    dialog
+                         -- added option to set font for comic book info
+                            dialog
                          -- added progress bar for archives decompression
-			 -- added statusbar
-			 -- fixed bug with thumbnails view taking keyboard
-			    focus
+                         -- added statusbar
+                         -- fixed bug with thumbnails view taking keyboard
+                            focus
 
 2005-03-30:  0.1.6       -- thumbnails view
                          -- page contents scrolling with mouse (LMB + move)
-			 -- PageUp/PageDown keys reversed
-			 -- scrolling up/down with mouse wheel now requires
-			    an extra wheel move to flip page
-			 -- scaling page buttons are toggle-buttons now to
-			    indicate active scaling
-			 -- toolbar position is saved now
+                         -- PageUp/PageDown keys reversed
+                         -- scrolling up/down with mouse wheel now requires
+                            an extra wheel move to flip page
+                         -- scaling page buttons are toggle-buttons now to
+                            indicate active scaling
+                         -- toolbar position is saved now
                          -- cleanups in directory and archive handling code
-			 -- fixed possible crash on errors when opening
-			    comic book
+                         -- fixed possible crash on errors when opening
+                            comic book
 
 2005-03-07:  0.1.5       -- image caching
                          -- page preloading
-			 -- built-in help browser
-			 -- new scaling option - best fit
-			 -- man page added (from debian project subdirectory)
-			 -- page scaling setting is saved/restored
-			 -- fixed bug with recently opened files - most
-			    recently opened file is on the top
-			 -- fixed crash on empty archive/directory
-			 -- internal improvements and small bugfixes
+                         -- built-in help browser
+                         -- new scaling option - best fit
+                         -- man page added (from debian project subdirectory)
+                         -- page scaling setting is saved/restored
+                         -- fixed bug with recently opened files - most
+                            recently opened file is on the top
+                         -- fixed crash on empty archive/directory
+                         -- internal improvements and small bugfixes
 
 2005-02-03:  0.1.4       -- fixed bug with command line arguments parsing
                          -- fixed drawing bugs
                          -- real fullscreen mode - menu may be hidden if desired
-			    (see config dialog)
-			 -- ESC key quits fullscreen mode
+                            (see config dialog)
+                         -- ESC key quits fullscreen mode
                          -- space / backspace keys jump by visible
-			    contents height now, instead of whole page;
-			    improved continuous scrolling
+                            contents height now, instead of whole page;
+                            improved continuous scrolling
                          -- jump to page... window is now modal
-			 -- basic errors handling
+                         -- basic errors handling
                          -- binary name and default icons directory changed
-			    from qcomic to qcomicbook
+                            from qcomic to qcomicbook
                          -- debian subdirectory added
 
 2005-01-23:  0.1.3       -- new option, 'jump to page' - just press 1..9 key
                          -- archive/directory to open may be given as argument
                             to qcomicbook
-			 -- fixed bug with loading bookmarks containg spaces
+                         -- fixed bug with loading bookmarks containg spaces
                          -- fixed bug with 'unrar' not working (when no 'rar'
                             command found)
-			 -- fixed keyboard focus bug
-			 -- internal function for searching rar/unrar/unzip
-			    executables used instead of system('which ..')
-			 -- other minor bugfixes
+                         -- fixed keyboard focus bug
+                         -- internal function for searching rar/unrar/unzip
+                            executables used instead of system('which ..')
+                         -- other minor bugfixes
 
 2005-01-20:  0.1.2       -- 'recently opened' submenu added
                          -- bookmarks added
-			 -- configurable background color
+                         -- configurable background color
                          -- page is centered horizontally/vertically if it is
                             smaller than window
                          -- previously opened directory is preserved in open
                             archive/directory file dialogs
-			 -- optional toolbar with essential actions added
-			 -- gif and xpm files are accepted now
-			 -- added 'All files' filter for 'open archive' dialog
-			 -- settings dialog added
-			 -- settings are kept in ~/.qcomicbook directory instead of
-			    ~/.qt
-			 -- comicbook info dialog; reading of .nfo and
-			    file_id.diz files
-			 
+                         -- optional toolbar with essential actions added
+                         -- gif and xpm files are accepted now
+                         -- added 'All files' filter for 'open archive' dialog
+                         -- settings dialog added
+                         -- settings are kept in ~/.qcomicbook directory instead of
+                            ~/.qt
+                         -- comicbook info dialog; reading of .nfo and
+                            file_id.diz files
+                         
 2005-01-10:  0.1.1       -- 'two pages' mode
                          -- continuous scrolling option added (affects
                             keyboard and mouse wheel scrolling)
-			 -- menu icons added
-			 -- keyboard shortcuts for archive/dir open added
-			 -- fixed image scaling bug
-			 -- fixed crash on 'last page' when no comicbook
-			    opened
-			 -- PageUp/PageDown keys for next/previous page added
-			 -- window geometry and preferences saving
-			 -- opened archive/directory name is shown on window border
-			 -- some internal improvements
-			 
+                         -- menu icons added
+                         -- keyboard shortcuts for archive/dir open added
+                         -- fixed image scaling bug
+                         -- fixed crash on 'last page' when no comicbook
+                            opened
+                         -- PageUp/PageDown keys for next/previous page added
+                         -- window geometry and preferences saving
+                         -- opened archive/directory name is shown on window border
+                         -- some internal improvements
+                         
 2005-01-07:  0.1.0       -- initial release
 
