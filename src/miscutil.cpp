@@ -15,7 +15,7 @@
 #include <qfileinfo.h>
 #include <stdlib.h>
 
-bool which(const QString &command)
+QString which(const QString &command)
 {
 	const QString paths = QString(getenv("PATH"));
 	QStringList plist = QStringList::split(":", paths, false);
@@ -23,8 +23,8 @@ bool which(const QString &command)
 	{
 		QFileInfo finfo(*it + "/" + command);
 		if (finfo.isExecutable())
-			return true;
+			return finfo.absFilePath();
 	}
-	return false;
+	return QString::null;
 }
 

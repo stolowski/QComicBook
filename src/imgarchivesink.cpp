@@ -292,7 +292,7 @@ bool ImgArchiveSink::autoconfRAR()
 {
 	rar.clear();
 	rar_i.clear();
-	if (which("rar"))
+	if (which("rar") != QString::null)
 	{
 		rar.append("rar");
 		rar.append("x");
@@ -300,7 +300,7 @@ bool ImgArchiveSink::autoconfRAR()
 		rar_i.append("lb");
 		return haverar = true;
 	}
-	if (which("unrar"))
+	if (which("unrar") != QString::null)
 	{
 		rar.append("unrar");
 		rar.append("x");
@@ -315,7 +315,7 @@ bool ImgArchiveSink::autoconfZIP()
 {
 	zip.clear();
 	zip_i.clear();
-	if (which("unzip"))
+	if (which("unzip") != QString::null)
 	{
 		zip.append("unzip");
 		zip_i.append("unzip");
@@ -329,7 +329,7 @@ bool ImgArchiveSink::autoconfACE()
 {
 	ace.clear();
 	ace_i.clear();
-	if (which("unace"))
+	if (which("unace") != QString::null)
 	{
 		ace.append("unace");
 		ace.append("x");
@@ -348,7 +348,7 @@ bool ImgArchiveSink::autoconfTARGZ()
 {
 	targz.clear();
 	targz_i.clear();
-	if (which("tar"))
+	if (which("tar") != QString::null)
 	{
 		targz.append("tar");
 		targz.append("-xvzf");
@@ -363,7 +363,7 @@ bool ImgArchiveSink::autoconfTARBZ2()
 {
 	tarbz2.clear();
 	tarbz2_i.clear();
-	if (which("tar"))
+	if (which("tar") != QString::null)
 	{
 		tarbz2.append("tar");
 		tarbz2.append("-xjvf");

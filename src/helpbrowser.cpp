@@ -19,32 +19,16 @@
 
 HelpBrowser::HelpBrowser(const QString &caption, const QString &path, const QString &file, const QString &imgpath, QWidget *parent): QMainWindow(parent)
 {
-	const QString locale = QTextCodec::locale();
-	const QString paths[] = { path + "/" + locale,
-		                  path + "/" + locale.left(4),
-				  path + "/" + locale.left(2),
-				  path + "/en" };
-
 	setCaption(caption);
 	txtb = new QTextBrowser(this);
 	setCentralWidget(txtb);
 
-	//
-	// try to find translated help first according to locale setting; fallback to en
-	for (int i=0; i<4; i++)
-	{
-		QFileInfo f(paths[i] + "/" + file);
-		if (f.exists())
-		{
-			QStringList fpaths;
-			fpaths.append(paths[i]);
-			if (!imgpath.isEmpty())
-				fpaths.append(path + "/" + imgpath); //append common images subdirectory
-			txtb->mimeSourceFactory()->setFilePath(fpaths);
-			txtb->setSource(file);
-			break;
-		}
-	}
+	QStringList fpaths;
+	fpaths.append(path);
+	//if (!imgpath.isEmpty())
+	//	fpaths.append(path + "/" + imgpath); //append common images subdirectory
+	txtb->mimeSourceFactory()->setFilePath(fpaths);
+	txtb->setSource(file);
 
 	//
 	// menu
@@ -79,5 +63,23 @@ void HelpBrowser::enableBackward(bool f)
 void HelpBrowser::enableForward(bool f)
 {
 	go_menu->setItemEnabled(id_forward, f);
+}
+
+QString HelpBrowser::getLocaleHelpDir(const QString &maindir, const QString &file)
+{
+	const QString locale = QTextCodec::locale();
+	const QString paths[] = { maindir + "/" + locale,
+		                  maindir + "/" + locale.left(4),
+				  maindir + "/" + locale.left(2),
+				  maindir + "/en" };
+	//
+	// try to find translated help first according to locale setting; fallback to en
+	for (int i=0; i<4; i++)
+	{
+		QFileInfo f(paths[i] + "/" + file);
+		if (f.exists())
+			return f.absFilePath();
+	}
+	return QString::null;
 }
 

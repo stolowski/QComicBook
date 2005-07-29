@@ -29,6 +29,7 @@
 #include "thumbnailsview.h"
 #include "thumbnailloader.h"
 #include "bookmarkmanager.h"
+#include "miscutil.h"
 #include <qimage.h>
 #include <qmenubar.h>
 #include <qpopupmenu.h>
@@ -789,8 +790,24 @@ void ComicMainWindow::showAbout()
 
 void ComicMainWindow::showHelp()
 {
-	HelpBrowser *help = new HelpBrowser("QComicBook Help", DATADIR "/help");
-	help->show();
+	const QString helpdir = HelpBrowser::getLocaleHelpDir(DATADIR "/help");
+	if (!cfg->useInternalBrowser() && cfg->externalBrowser() != QString::null)
+	{
+		QProcess *proc = new QProcess(this);
+		proc->addArgument(cfg->externalBrowser());
+		proc->addArgument(helpdir + "/index.html");
+		connect(proc, SIGNAL(processExited()), proc, SLOT(deleteLater()));
+		if (!proc->start())
+		{
+			proc->deleteLater();
+			cfg->useInternalBrowser(true);
+		}
+	}
+	if (cfg->useInternalBrowser())
+	{
+		HelpBrowser *help = new HelpBrowser(tr("QComicBook Help"), helpdir);
+		help->show();
+	}
 }
 
 void ComicMainWindow::showConfigDialog()

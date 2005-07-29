@@ -12,6 +12,7 @@
 
 #include "cbsettings.h"
 #include "history.h"
+#include "miscutil.h"
 #include <qsettings.h>
 #include <qrect.h>
 #include <qcolor.h>
@@ -52,6 +53,8 @@
 #define OPT_CACHETHUMBS "/CacheThumbnails"
 #define OPT_PRELOAD     "/Preload"
 #define OPT_CONFIRMEXIT "/ConfirmExit"
+#define OPT_INTBROWSER  "/UseIntBrowser"
+#define OPT_EXTBROWSER  "/ExtBrowserCmd"
 
 QString ComicBookSettings::bkpath = QString::null;
 QString ComicBookSettings::thpath = QString::null;
@@ -149,7 +152,16 @@ ComicImageView::Scaling ComicBookSettings::convertToScaling(const QString &s)
 
 void ComicBookSettings::load()
 {
+	QString defbrowser(QString::null);
 	QString fontdesc;
+
+	const char *browsers[] = {"firefox", "mozilla", "konqueror", "opera", NULL};
+	for (int i=0; browsers[i]; i++)
+		if (QString path = which(browsers[i]))
+		{
+			defbrowser = path;
+			break;
+		}
 	
 	cfg->beginGroup(GRP_WINDOW);
 		x = cfg->readNumEntry(OPT_X, 0);
@@ -186,6 +198,8 @@ void ComicBookSettings::load()
 		cachesize = cfg->readNumEntry(OPT_CACHESIZE, 3);
 		preload = cfg->readBoolEntry(OPT_PRELOAD, true);
 		confirmexit = cfg->readBoolEntry(OPT_CONFIRMEXIT, true);
+		intbrowser = cfg->readBoolEntry(OPT_INTBROWSER, true);
+		extbrowser = cfg->readEntry(OPT_EXTBROWSER, defbrowser);
 		autoinfo = cfg->readBoolEntry(OPT_AUTOINFO, false);
 		thumbsage = cfg->readNumEntry(OPT_THUMBSAGE, 7);
 		cachethumbs = cfg->readBoolEntry(OPT_CACHETHUMBS, true);
@@ -300,6 +314,16 @@ bool ComicBookSettings::showStatusbar() const
 const QFont& ComicBookSettings::infoFont() const
 {
 	return font;
+}
+
+bool ComicBookSettings::useInternalBrowser() const
+{
+	return intbrowser;
+}
+
+QString ComicBookSettings::externalBrowser() const
+{
+	return extbrowser;
 }
 
 void ComicBookSettings::restoreDockLayout(QMainWindow *w)
@@ -458,6 +482,18 @@ void ComicBookSettings::infoFont(const QFont &s)
 		font = s;
 		cfg->writeEntry(GRP_VIEW OPT_FONT, font.toString());
 	}
+}
+
+void ComicBookSettings::useInternalBrowser(bool f)
+{
+	if (f != intbrowser)
+		cfg->writeEntry(GRP_MISC OPT_INTBROWSER, intbrowser = f);
+}
+
+void ComicBookSettings::externalBrowser(const QString& cmd)
+{
+	if (cmd != extbrowser)
+		cfg->writeEntry(GRP_MISC OPT_EXTBROWSER, extbrowser = cmd);
 }
 
 void ComicBookSettings::saveDockLayout(QMainWindow *w)

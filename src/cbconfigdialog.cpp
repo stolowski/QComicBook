@@ -25,6 +25,8 @@
 #include <qvgroupbox.h>
 #include <qspinbox.h>
 #include <qfontdialog.h>
+#include <qfiledialog.h>
+#include <qlineedit.h>
 
 ComicBookCfgDialog::ComicBookCfgDialog(QWidget *parent, ComicBookSettings *cfg): QTabDialog(parent), cfg(cfg)
 {
@@ -106,6 +108,8 @@ void ComicBookCfgDialog::setupDisplayTab()
 
 void ComicBookCfgDialog::setupMiscTab()
 {
+	bool f;
+
 	QWidget *w = new QWidget(this);
 	QVBoxLayout *lay = new QVBoxLayout(w, 5, 5);
 
@@ -127,6 +131,20 @@ void ComicBookCfgDialog::setupMiscTab()
 	sb_thumbsage->setValue(cfg->thumbnailsAge());
 	lay->addWidget(grp1);
 	
+	QVGroupBox *grp2 = new QVGroupBox(tr("Help browser"), w);
+	cb_intbrowser = new QCheckBox(tr("Use Built-in browser"), grp2);
+	QWidget *box3 = new QWidget(grp2);
+	QHBoxLayout *lay3 = new QHBoxLayout(box3, 0, 5);
+	lay3->addWidget(new QLabel(tr("External browser"), box3));
+	lay3->addWidget(le_extbrowser = new QLineEdit(box3));
+	lay3->addWidget(pb_brbrowse = new QPushButton(tr("Browse"), box3));
+	connect(pb_brbrowse, SIGNAL(clicked()), this, SLOT(browseExternalBrowser()));
+	lay->addWidget(grp2);
+	connect(cb_intbrowser, SIGNAL(toggled(bool)), this, SLOT(browserCheckboxToggled(bool)));
+	cb_intbrowser->setChecked(f = cfg->useInternalBrowser());
+	browserCheckboxToggled(f);
+	le_extbrowser->setText(cfg->externalBrowser());
+
 	cb_twopagesstep = new QCheckBox(tr("Forward and backward two pages in two-pages mode"), w);
 	cb_twopagesstep->setChecked(cfg->twoPagesStep());
 	lay->addWidget(cb_twopagesstep);
@@ -164,6 +182,8 @@ void ComicBookCfgDialog::apply()
 	cfg->cacheThumbnails(cb_thumbs->isChecked());
 	cfg->thumbnailsAge(sb_thumbsage->value());
 	cfg->twoPagesStep(cb_twopagesstep->isChecked());
+	cfg->useInternalBrowser(cb_intbrowser->isChecked());
+	cfg->externalBrowser(le_extbrowser->text());
 	cfg->autoInfo(cb_autoinfo->isChecked());
 	cfg->confirmExit(cb_confirmexit->isChecked());
 }
@@ -191,5 +211,19 @@ void ComicBookCfgDialog::showFontDialog()
 	font = QFontDialog::getFont(&ok, font, this);
 	if (ok)
 		updateFontPreview();
+}
+
+void ComicBookCfgDialog::browseExternalBrowser()
+{
+	const QString file = QFileDialog::getOpenFileName(QString::null,
+			"All files (*)", this, NULL, tr("Choose a file") );
+	if (file != QString::null)
+		le_extbrowser->setText(file);
+}
+
+void ComicBookCfgDialog::browserCheckboxToggled(bool f)
+{
+	le_extbrowser->setDisabled(f);
+	pb_brbrowse->setDisabled(f);
 }
 

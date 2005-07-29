@@ -15,7 +15,7 @@
 
 class QString;
 
-bool which(const QString &command); //similiar to shell 'which' command
+QString which(const QString &command); //similiar to shell 'which' command
 
 #endif
 

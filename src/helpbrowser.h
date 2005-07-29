@@ -35,6 +35,7 @@ class HelpBrowser: public QMainWindow
 	public:
 		HelpBrowser(const QString &caption, const QString &path, const QString &file="index.html", const QString &imgpath="img", QWidget *parent=NULL);
 		virtual ~HelpBrowser();
+		static QString getLocaleHelpDir(const QString &maindir, const QString &file=QString::null);
 };
 
 #endif

@@ -21,6 +21,7 @@ class QPushButton;
 class QRadioButton;
 class QSpinBox;
 class QLabel;
+class QLineEdit;
 
 class ComicBookCfgDialog: public QTabDialog
 {
@@ -43,6 +44,9 @@ class ComicBookCfgDialog: public QTabDialog
 		QSpinBox *sb_fontsize;
 		QRadioButton *rb_smooth;
 		QRadioButton *rb_fast;
+		QCheckBox *cb_intbrowser;
+		QLineEdit *le_extbrowser;
+		QPushButton *pb_brbrowse;
 		QLabel *fontname;
 		QFont font;
 
@@ -55,6 +59,8 @@ class ComicBookCfgDialog: public QTabDialog
 		void cancel();
 		void showBackgroundDialog();
 		void showFontDialog();
+		void browseExternalBrowser();
+		void browserCheckboxToggled(bool f);
 
 	public:
 		ComicBookCfgDialog(QWidget *parent, ComicBookSettings *cfg);
