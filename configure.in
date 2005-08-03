@@ -30,7 +30,7 @@ fi
 AC_LANG(C++)
 save_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS $QT_CXXFLAGS $QT_LIBS"
-AC_MSG_CHECKING([for correct version of Qt])
+AC_MSG_CHECKING([for correct version of Qt (>=3.3.1)])
 AC_RUN_IFELSE(
 	      [AC_LANG_PROGRAM([[#include <qglobal.h> #include <stdlib.h>]],[[exit(QT_VERSION<0x030301);]])],
 	      [AC_MSG_RESULT(yes)], [AC_MSG_ERROR(Too old!)],[])
