@@ -20,9 +20,11 @@
 #include <qcursor.h>
 #include <algorithm>
 
+using namespace QComicBook;
+
 const int ComicImageView::EXTRA_WHEEL_SPIN = 2;
 
-ComicImageView::ComicImageView(QWidget *parent, ComicImageView::Size size, ComicImageView::Scaling scaling, const QColor &color): QScrollView(parent), isize(size), iscaling(scaling), iangle(0), xoff(0), yoff(0), lx(-1), wheelupcnt(0), wheeldowncnt(0), smallcursor(NULL)
+ComicImageView::ComicImageView(QWidget *parent, Size size, Scaling scaling, const QColor &color): QScrollView(parent), isize(size), iscaling(scaling), iangle(0), xoff(0), yoff(0), lx(-1), wheelupcnt(0), wheeldowncnt(0), smallcursor(NULL)
 {
         orgimage = new QImage();
         pixmap = new QPixmap();
@@ -257,16 +259,16 @@ void ComicImageView::updateImageSize()
         spdy = pixmap->height() / 100;
 }
 
-void ComicImageView::setScaling(ComicImageView::Scaling s)
+void ComicImageView::setScaling(Scaling s)
 {
         iscaling = s;
 }
 
-void ComicImageView::setRotation(ComicImageView::Rotation r)
+void ComicImageView::setRotation(Rotation r)
 {
-        if (r == Right)
+        if (r == QComicBook::Right)
                 ++iangle;
-        else if (r == Left)
+        else if (r == QComicBook::Left)
                 --iangle;
         else
                 iangle = 0; //None
@@ -383,12 +385,12 @@ void ComicImageView::scrollDownFast()
 
 void ComicImageView::rotateRight()
 {
-        setRotation(Right);
+        setRotation(QComicBook::Right);
 }
 
 void ComicImageView::rotateLeft()
 {
-        setRotation(Left);
+        setRotation(QComicBook::Left);
 }
 
 void ComicImageView::resetRotation()
@@ -461,7 +463,7 @@ void ComicImageView::clear()
         resizeContents(0, 0);
 }
 
-ComicImageView::Size ComicImageView::getSize() const
+Size ComicImageView::getSize() const
 {
         return isize;
 }

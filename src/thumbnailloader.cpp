@@ -11,10 +11,12 @@
  */
 
 #include "thumbnailloader.h"
-#include "imgsink.h"
+#include "imgdirsink.h"
 #include "thumbnail.h"
 #include "thumbnailevent.h"
 #include <qapplication.h>
+ 
+using namespace QComicBook;
 
 ThumbnailLoaderThread::ThumbnailLoaderThread(): ImgLoaderThread(), rcvobj(NULL), usecache(false)
 {

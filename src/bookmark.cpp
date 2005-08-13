@@ -13,6 +13,8 @@
 #include "bookmark.h"
 #include <qfileinfo.h>
 
+using namespace QComicBook;
+
 Bookmark::Bookmark()
 {
 }

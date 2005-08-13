@@ -17,16 +17,18 @@
 
 class QLabel;
 
-class AboutDialog: public QDialog
+namespace QComicBook
 {
-	private:
-		QLabel *about;
-		
-	public:
-		AboutDialog(QWidget *parent, const QString &caption, const QString &text=QString::null);
-		virtual ~AboutDialog();
-		void setText(const QString &text);
-};
+    class AboutDialog: public QDialog
+    {
+        private:
+        QLabel *about;
 
+        public:
+        AboutDialog(QWidget *parent, const QString &caption, const QString &text=QString::null);
+        virtual ~AboutDialog();
+        void setText(const QString &text);
+    };
+}
 #endif
 

@@ -18,25 +18,28 @@
 class QLabel;
 class QImage;
 
-class StatusBar: public QStatusBar
+namespace QComicBook
 {
-	Q_OBJECT
-	
-	private:
-		QLabel *page;
-		QLabel *imginfo;
-		QLabel *name;
+	class StatusBar: public QStatusBar
+	{
+		Q_OBJECT
 
-	public slots:
-		void setPage(int n, int total);
-		void setName(const QString &n);
-		void setImageInfo(const QImage *img1, const QImage *img2=NULL);
-		void clear();
+		private:
+			QLabel *page;
+			QLabel *imginfo;
+			QLabel *name;
 
-	public:
-		StatusBar(QWidget *parent);
-		~StatusBar();
-};
+		public slots:
+			void setPage(int n, int total);
+			void setName(const QString &n);
+			void setImageInfo(const QImage *img1, const QImage *img2=NULL);
+			void clear();
+
+		public:
+			StatusBar(QWidget *parent);
+			~StatusBar();
+	};
+}
 
 #endif
 

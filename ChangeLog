@@ -1,3 +1,8 @@
+2005-xx-yy:  0.2.5       -- icons for Open Archive/Directory, Settings and
+                            Set Bookmark options added
+			 -- support for editing with external tools added
+			 -- fixed bug with caching not working
+
 2005-08-03:  0.2.4       -- new option for setting external help browser added
                          -- fixed redrawing bugs
                          -- internal cleanups and small improvements

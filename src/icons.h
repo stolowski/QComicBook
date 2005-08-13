@@ -16,16 +16,19 @@
 #include <qiconset.h>
 #include <qdict.h>
 
-class Icons
+namespace QComicBook
 {
-	private:
-		static QDict<QIconSet> set;
-		static QString iconpath;
-		
-	public:
-		static bool init(const QString &path);
-		static const QIconSet& get(const QString &name);
-};
+	class Icons
+	{
+		private:
+			static QDict<QIconSet> set;
+			static QString iconpath;
+
+		public:
+			static bool init(const QString &path);
+			static const QIconSet& get(const QString &name);
+	};
+}
 
 #endif
 

@@ -20,6 +20,8 @@
 #include <qptrvector.h>
 #include <qpopupmenu.h>
 
+using namespace QComicBook;
+
 ThumbnailsView::ThumbnailsView(QWidget *parent): QIconView(parent), selected(NULL), numpages(0)
 {
 	setFocusPolicy(QWidget::NoFocus);

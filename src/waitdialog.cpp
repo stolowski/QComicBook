@@ -15,6 +15,8 @@
 #include <qlabel.h>
 #include <qcursor.h>
 
+using namespace QComicBook;
+
 WaitDialog::WaitDialog(QWidget *parent, const QString &caption, const QString &text): QDialog(parent)
 {
 	setModal(true);	

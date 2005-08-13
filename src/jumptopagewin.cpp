@@ -17,6 +17,8 @@
 #include "jumptopagewin.h"
 #include "pagenumberedit.h"
 
+using namespace QComicBook;
+
 JumpToPageWindow::JumpToPageWindow(QWidget *parent, int value, int max): QDialog(parent)
 {
 	setCaption(tr("Jump to page..."));

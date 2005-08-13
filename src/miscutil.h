@@ -15,7 +15,10 @@
 
 class QString;
 
-QString which(const QString &command); //similiar to shell 'which' command
+namespace Utility
+{
+	QString which(const QString &command); //similiar to shell 'which' command
+}
 
 #endif
 

@@ -13,6 +13,7 @@
 #include "cbsettings.h"
 #include "history.h"
 #include "miscutil.h"
+#include "enummap.h"
 #include <qsettings.h>
 #include <qrect.h>
 #include <qcolor.h>
@@ -55,22 +56,27 @@
 #define OPT_CONFIRMEXIT "/ConfirmExit"
 #define OPT_INTBROWSER  "/UseIntBrowser"
 #define OPT_EXTBROWSER  "/ExtBrowserCmd"
+#define OPT_EDITING     "/Editing"
+
+using namespace QComicBook;
 
 QString ComicBookSettings::bkpath = QString::null;
 QString ComicBookSettings::thpath = QString::null;
 bool ComicBookSettings::dirsok = false;
 
-const ComicBookSettings::int2qstring ComicBookSettings::size2string[] = {
-	{ComicImageView::Original,  "original"},
-	{ComicImageView::FitWidth,  "fitwidth"},
-	{ComicImageView::FitHeight, "fitheight"},
-	{ComicImageView::WholePage, "wholepage"},
-	{ComicImageView::BestFit,   "bestfit"}
+const EnumMap<Size> ComicBookSettings::size2string[] = {
+	{"original",  Original},
+	{"fitwidth",  FitWidth},
+	{"fitheight", FitHeight},
+	{"wholepage", WholePage},
+	{"bestfit",   BestFit},
+	{QString::null}
 };
 
-const ComicBookSettings::int2qstring ComicBookSettings::scaling2string[] = {
-	{ComicImageView::Smooth, "smooth"},
-	{ComicImageView::Fast,   "fast"}
+const EnumMap<Scaling> ComicBookSettings::scaling2string[] = {
+	{"smooth", Smooth},
+	{"fast",   Fast},
+	{QString::null}
 };
 
 ComicBookSettings& ComicBookSettings::instance()
@@ -118,38 +124,6 @@ const QString& ComicBookSettings::thumbnailsDir()
 	return thpath;
 }
 
-const QString& ComicBookSettings::convert(ComicImageView::Size s)
-{
-	for (int i=0; i<sizeof(size2string)/sizeof(int2qstring); i++)
-		if (size2string[i].v == s)
-			return size2string[i].str;
-	return size2string[0].str;
-}
-
-ComicImageView::Size ComicBookSettings::convertToSize(const QString &s)
-{
-	for (int i=0; i<sizeof(size2string)/sizeof(int2qstring); i++)
-		if (size2string[i].str == s)
-			return static_cast<ComicImageView::Size>(size2string[i].v);
-	return ComicImageView::Original;
-}
-
-const QString& ComicBookSettings::convert(ComicImageView::Scaling s)
-{
-	for (int i=0; i<sizeof(scaling2string)/sizeof(int2qstring); i++)
-		if (scaling2string[i].v == s)
-			return scaling2string[i].str;
-	return scaling2string[0].str;
-}
-
-ComicImageView::Scaling ComicBookSettings::convertToScaling(const QString &s)
-{
-	for (int i=0; i<sizeof(scaling2string)/sizeof(int2qstring); i++)
-		if (scaling2string[i].str == s)
-			return static_cast<ComicImageView::Scaling>(scaling2string[i].v);
-	return ComicImageView::Smooth;
-}
-
 void ComicBookSettings::load()
 {
 	QString defbrowser(QString::null);
@@ -157,7 +131,7 @@ void ComicBookSettings::load()
 
 	const char *browsers[] = {"firefox", "mozilla", "konqueror", "opera", NULL};
 	for (int i=0; browsers[i]; i++)
-		if (QString path = which(browsers[i]))
+		if (QString path = QComicBook::which(browsers[i]))
 		{
 			defbrowser = path;
 			break;
@@ -175,8 +149,8 @@ void ComicBookSettings::load()
 		twopages = cfg->readBoolEntry(OPT_TWOPAGES, false);
 		japanese = cfg->readBoolEntry(OPT_JAPANESEMODE, false);
 		scrollbars = cfg->readBoolEntry(OPT_SCROLLBARS, false);
-		scaling = convertToScaling(cfg->readEntry(OPT_SCALING, size2string[0].str));
-		pagesize = convertToSize(cfg->readEntry(OPT_PAGESIZE, size2string[0].str));
+		scaling = convert(scaling2string, cfg->readEntry(OPT_SCALING, size2string[0].str));
+		pagesize = convert(size2string, cfg->readEntry(OPT_PAGESIZE, size2string[0].str));
 		bgcolor.setNamedColor(cfg->readEntry(OPT_BACKGROUND, "#000000"));
 		fscrhidemenu = cfg->readBoolEntry(OPT_FULLSCREENHIDEMENU, true);
 		fscrhidestatus = cfg->readBoolEntry(OPT_FULLSCREENHIDESTATUS, true);
@@ -203,6 +177,7 @@ void ComicBookSettings::load()
 		autoinfo = cfg->readBoolEntry(OPT_AUTOINFO, false);
 		thumbsage = cfg->readNumEntry(OPT_THUMBSAGE, 7);
 		cachethumbs = cfg->readBoolEntry(OPT_CACHETHUMBS, true);
+		editsupport = cfg->readBoolEntry(OPT_EDITING, false);
 	cfg->endGroup();
 }
 
@@ -241,12 +216,12 @@ QRect ComicBookSettings::geometry() const
 	return QRect(x, y, w, h);
 }
 
-ComicImageView::Size ComicBookSettings::pageSize() const
+Size ComicBookSettings::pageSize() const
 {
 	return pagesize;
 }
 
-ComicImageView::Scaling ComicBookSettings::pageScaling() const
+Scaling ComicBookSettings::pageScaling() const
 {
 	return scaling;
 }
@@ -332,6 +307,11 @@ void ComicBookSettings::restoreDockLayout(QMainWindow *w)
 	str >> *w;
 }
 
+bool ComicBookSettings::editSupport() const
+{
+	return editsupport;
+}
+
 void ComicBookSettings::smallCursor(bool f)
 {
 	if (f != smallcursor)
@@ -384,17 +364,17 @@ void ComicBookSettings::geometry(const QRect g)
 	}
 }
 
-void ComicBookSettings::pageSize(ComicImageView::Size s)
+void ComicBookSettings::pageSize(Size s)
 {
 	if (s != pagesize)
-		cfg->writeEntry(GRP_VIEW OPT_PAGESIZE, convert(pagesize = s));
+		cfg->writeEntry(GRP_VIEW OPT_PAGESIZE, convert(size2string, pagesize = s));
 }
 
-void ComicBookSettings::pageScaling(ComicImageView::Scaling s)
+void ComicBookSettings::pageScaling(Scaling s)
 {
 	if (s != scaling)
 	{
-		cfg->writeEntry(GRP_VIEW OPT_SCALING, convert(scaling = s));
+		cfg->writeEntry(GRP_VIEW OPT_SCALING, convert(scaling2string, scaling = s));
 		emit scalingMethodChanged(scaling);
 	}
 }
@@ -502,5 +482,11 @@ void ComicBookSettings::saveDockLayout(QMainWindow *w)
 	QTextStream str(&tmp, IO_WriteOnly);
 	str << *w;
 	cfg->writeEntry(GRP_WINDOW OPT_DOCKLAYOUT, tmp);
+}
+
+void ComicBookSettings::editSupport(bool f)
+{
+	if (f != editsupport)
+		cfg->writeEntry(GRP_MISC OPT_EDITING, editsupport = f);
 }
 

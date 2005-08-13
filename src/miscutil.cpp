@@ -15,7 +15,7 @@
 #include <qfileinfo.h>
 #include <stdlib.h>
 
-QString which(const QString &command)
+QString Utility::which(const QString &command)
 {
 	const QString paths = QString(getenv("PATH"));
 	QStringList plist = QStringList::split(":", paths, false);

@@ -18,38 +18,42 @@
 #include <qwidget.h>
 #include <qptrlist.h>
 
-class Bookmarks;
-class Bookmark;
 class QListView;
 class QListViewItem;
 class QPushButton;
 
-class BookmarkManager: public QWidget
+namespace QComicBook
 {
-	Q_OBJECT
+	class Bookmarks;
+	class Bookmark;
 
-	private:
-		QListView *lview;
-		QPushButton *b_selinv;
-		QPushButton *b_remsel;
-		Bookmarks *bookmarks;
-		QPtrList<QListViewItem> invalid; //!<the list of invalid bookmarks
+	class BookmarkManager: public QWidget
+	{
+		Q_OBJECT
 
-		void initBookmarkView();
+		private:
+			QListView *lview;
+			QPushButton *b_selinv;
+			QPushButton *b_remsel;
+			Bookmarks *bookmarks;
+			QPtrList<QListViewItem> invalid; //!<the list of invalid bookmarks
 
-	protected slots:
-		void selectionChanged();
+			void initBookmarkView();
 
-	public slots:
-		void removeSelected();
-		void selectInvalid();
-		void selectAll();
-		void selectNone();
+		protected slots:
+			void selectionChanged();
 
-	public:
-		BookmarkManager(QWidget *parent, Bookmarks *b);
-		~BookmarkManager();
-};
+		public slots:
+			void removeSelected();
+			void selectInvalid();
+			void selectAll();
+			void selectNone();
+
+		public:
+			BookmarkManager(QWidget *parent, Bookmarks *b);
+			~BookmarkManager();
+	};
+}
 
 #endif
 

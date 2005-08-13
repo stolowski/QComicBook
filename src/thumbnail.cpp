@@ -13,6 +13,8 @@
 #include "thumbnail.h"
 #include <utime.h>
 
+using namespace QComicBook;
+
 int Thumbnail::thwidth = 100;
 int Thumbnail::thheight = 120;
 

@@ -13,6 +13,8 @@
 #include "thumbnailevent.h"
 #include "thumbnail.h"
 
+using namespace QComicBook;
+
 ThumbnailEvent::ThumbnailEvent(Thumbnail *t): QCustomEvent(ThumbnailReady), thumbnail(t)
 {
 }

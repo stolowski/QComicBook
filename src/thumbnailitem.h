@@ -15,20 +15,23 @@
 
 #include <qiconview.h>
 
-class ThumbnailItem: public QIconViewItem
+namespace QComicBook
 {
-	private:
-		int pnum; //page number
-		bool loaded; //has image or is it empty?
+	class ThumbnailItem: public QIconViewItem
+	{
+		private:
+			int pnum; //page number
+			bool loaded; //has image or is it empty?
 
-	public:
-		ThumbnailItem(QIconView *view, int page, const QPixmap &pixmap);
-		virtual ~ThumbnailItem();
+		public:
+			ThumbnailItem(QIconView *view, int page, const QPixmap &pixmap);
+			virtual ~ThumbnailItem();
 
-		int page() const;
-		void setLoaded(bool f);
-		bool isLoaded() const;
-};
+			int page() const;
+			void setLoaded(bool f);
+			bool isLoaded() const;
+	};
+}
 
 #endif
 

@@ -17,6 +17,8 @@
 #include <qlayout.h>
 #include <qmessagebox.h>
 
+using namespace QComicBook;
+
 BookmarkManager::BookmarkManager(QWidget *parent, Bookmarks *b): QWidget(parent, NULL, Qt::WType_TopLevel|Qt::WType_Dialog|Qt::WShowModal), bookmarks(b)
 {
 	QVBoxLayout *box0 = new QVBoxLayout(this, 5, 5);

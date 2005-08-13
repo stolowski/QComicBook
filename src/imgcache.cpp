@@ -13,6 +13,8 @@
 #include "imgcache.h"
 #include <qptrcollection.h>
 
+using namespace QComicBook;
+
 ImgCache::ImgCache(int size): QCache<QImage>(size)
 {
         setAutoDelete(true);

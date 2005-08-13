@@ -15,26 +15,30 @@
 
 /*! \file imgsinkfactory.h */
 
-enum SinkType
-{
-	ArchiveSink = 1,
-	DirSink
-};
-
-class ImgSink;
 class QString;
-
-class ImgSinkFactory
+	
+namespace QComicBook
 {
-	private:
-		ImgSinkFactory();
-		~ImgSinkFactory();
+	enum SinkType
+	{
+		ArchiveSink = 1,
+		DirSink
+	};
 
-	public:
-		static ImgSinkFactory& instance();
-		ImgSink* createImgSink(SinkType s);
-		ImgSink* createImgSink(const QString &path);
-};
+	class ImgDirSink;
+
+	class ImgSinkFactory
+	{
+		private:
+			ImgSinkFactory();
+			~ImgSinkFactory();
+
+		public:
+			static ImgSinkFactory& instance();
+			ImgDirSink* createImgSink(SinkType s, int cachesize=1);
+			ImgDirSink* createImgSink(const QString &path, int cachesize=1);
+	};
+}
 
 #endif
 

@@ -15,25 +15,28 @@
 
 #include <qdialog.h>
 
-class PageNumberEdit;
-
-class JumpToPageWindow: public QDialog
+namespace QComicBook
 {
-	Q_OBJECT
+	class PageNumberEdit;
 
-	private:
-		PageNumberEdit *pedit;
-		
-	protected slots:
-		void jumpPressed();
+	class JumpToPageWindow: public QDialog
+	{
+		Q_OBJECT
 
-	signals:
-		void pageSelected(int n);
+		private:
+			PageNumberEdit *pedit;
 
-	public:
-		JumpToPageWindow(QWidget *parent, int value, int max);
-		virtual ~JumpToPageWindow();
-};
+		protected slots:
+			void jumpPressed();
+
+		signals:
+			void pageSelected(int n);
+
+		public:
+			JumpToPageWindow(QWidget *parent, int value, int max);
+			virtual ~JumpToPageWindow();
+	};
+}
 
 #endif
 

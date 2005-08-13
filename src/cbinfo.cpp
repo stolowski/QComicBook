@@ -15,9 +15,11 @@
 #include <qtextedit.h>
 #include <qlayout.h>
 #include <qfont.h>
-#include <imgsink.h>
+#include "imgdirsink.h"
 
-ComicBookInfo::ComicBookInfo(QWidget *parent, ImgSink &sink, const QFont &f): QTabDialog(parent), font(f)
+using namespace QComicBook;
+
+ComicBookInfo::ComicBookInfo(QWidget *parent, ImgDirSink &sink, const QFont &f): QTabDialog(parent), font(f)
 {
 	setModal(true);
 	setCaption("QComicBook info");
@@ -27,7 +29,7 @@ ComicBookInfo::ComicBookInfo(QWidget *parent, ImgSink &sink, const QFont &f): QT
 	setupGeneralTab(sink);
 }
 
-void ComicBookInfo::setupDescriptionTabs(const ImgSink &sink)
+void ComicBookInfo::setupDescriptionTabs(const ImgDirSink &sink)
 {
 	const QStringList desc = sink.getDescription();
 	QStringList::const_iterator it = desc.begin();
@@ -49,7 +51,7 @@ void ComicBookInfo::setupDescriptionTabs(const ImgSink &sink)
 	}
 }
 
-void ComicBookInfo::setupGeneralTab(ImgSink &sink)
+void ComicBookInfo::setupGeneralTab(ImgDirSink &sink)
 {
 	QWidget *w = new QWidget(this);
 	QVBoxLayout *l = new QVBoxLayout(w, 5, 5);

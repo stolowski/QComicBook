@@ -21,14 +21,20 @@
 #include <qfileinfo.h>
 #include <qtextstream.h>
 
-ImgDirSink::ImgDirSink(int cachesize): ImgSink(), cachemtx(true), dirpath(QString::null)
+//
+// maximum size of description file (won't load files larger than that)
+#define MAX_TEXTFILE_SIZE 65535
+
+using namespace QComicBook;
+
+ImgDirSink::ImgDirSink(int cachesize): QObject(), cachemtx(true), dirpath(QString::null)
 {
         cache = new ImgCache(cachesize);
         thloader.setSink(this);
         imgloader.setSink(this);
 }
 
-ImgDirSink::ImgDirSink(const QString &path, int cachesize): ImgSink(), cachemtx(true), dirpath(QString::null)
+ImgDirSink::ImgDirSink(const QString &path, int cachesize): QObject(), cachemtx(true), dirpath(QString::null)
 {
         cache = new ImgCache(cachesize);
         thloader.setSink(this);
@@ -87,6 +93,7 @@ void ImgDirSink::recurseDir(const QString &s)
                                 txtfiles.append(finf.absFilePath());
                         else
                                 otherfiles.append(finf.absFilePath());
+			timestamps.insert(finf.absFilePath(), FileStatus(finf.lastModified()));
                 }
                 else if (finf.isDir() && (finf.absFilePath()!=s))
                 {
@@ -156,6 +163,11 @@ QString ImgDirSink::getName(int maxlen)
 QString ImgDirSink::getFullName()
 {
         return dirpath;
+}
+
+QString ImgDirSink::getFullFileName(int page) const
+{
+	return page < numOfImages() ? imgfiles[page] : QString::null;
 }
 
 QStringList ImgDirSink::getDescription() const
@@ -234,11 +246,12 @@ QImage ImgDirSink::getImage(unsigned int num, int &result, int preload)
                 const QString fname = imgfiles[num];
                 listmtx.unlock();
 
-                cachemtx.lock();
+		const QFileInfo finf(fname);
 
+                cachemtx.lock();
                 //
                 // try to find in cache first
-                if (cache->get(fname, rimg))
+                if (timestamps[fname] != finf.lastModified() && cache->get(fname, rimg))
                 {
                         result = 0;
                 }
@@ -249,6 +262,8 @@ QImage ImgDirSink::getImage(unsigned int num, int &result, int preload)
                                 result = 0;
                                 if (cache->maxCost() > 0)
                                         cache->insert(fname, &rimg);
+				if (timestamps[fname] != finf.lastModified())
+					timestamps[fname].set(finf.lastModified(), true);
                         }
                 }
                 cachemtx.unlock();
@@ -363,6 +378,30 @@ QStringList ImgDirSink::getAllimgfiles() const
         const QStringList l = imgfiles;
         listmtx.unlock();
         return l;
+}
+
+bool ImgDirSink::timestampDiffers(int page) const
+{
+	if (page < 0 || page > numOfImages())
+		return false;
+	listmtx.lock();
+	const QString fname = imgfiles[page];
+	listmtx.unlock();
+	QFileInfo f(fname);
+	return f.lastModified() != timestamps[fname];
+}
+			
+bool ImgDirSink::hasModifiedFiles() const
+{
+	//
+	// check timestamps of all files
+	for (QMap<QString, FileStatus>::ConstIterator it = timestamps.begin(); it != timestamps.end(); ++it)
+	{
+		QFileInfo finf(it.key());
+		if (it.data().isModified() || it.data() != finf.lastModified())
+			return true;
+	}
+	return false;
 }
 
 void ImgDirSink::removeThumbnails(int days)

@@ -15,24 +15,25 @@
 
 #include <qstringlist.h>
 
-class QSettings;
-
-class History
+namespace Utility
 {
-	private:
-		QStringList hlist;
-		QString key;
-		int size;
-	public:
-		History(const QStringList &l, int max = 10);
-		History(int max = 10);
-		virtual ~History();
-		void remove(const QString &txt);
-		void append(const QString &txt);
-		void set(const QStringList &l);
-		QString first();
-		QStringList getAll() const;
-};
+	class History
+	{
+		private:
+			QStringList hlist;
+			QString key;
+			int size;
+		public:
+			History(const QStringList &l, int max = 10);
+			History(int max = 10);
+			virtual ~History();
+			void remove(const QString &txt);
+			void append(const QString &txt);
+			void set(const QStringList &l);
+			QString first();
+			QStringList getAll() const;
+	};
+}
 
 #endif
 

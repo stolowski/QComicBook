@@ -17,21 +17,24 @@
 
 #include <qevent.h>
 
-class Thumbnail;
-
 #define ThumbnailReady 65111
 
-class ThumbnailEvent: public QCustomEvent
+namespace QComicBook
 {
-	private:
-		Thumbnail *thumbnail;
 
-	public:
-		ThumbnailEvent(Thumbnail *t);
-		virtual ~ThumbnailEvent();
+	class Thumbnail;
+	class ThumbnailEvent: public QCustomEvent
+	{
+		private:
+			Thumbnail *thumbnail;
 
-		const Thumbnail *getThumbnail() const;
-};
+		public:
+			ThumbnailEvent(Thumbnail *t);
+			virtual ~ThumbnailEvent();
+
+			const Thumbnail *getThumbnail() const;
+	};
+}
 
 #endif
 

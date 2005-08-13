@@ -17,6 +17,8 @@
 #include <qdir.h>
 #include <qtextstream.h>
 
+using namespace QComicBook;
+
 Bookmarks::Bookmarks(QPopupMenu *menu): bmenu(menu), changed(false)
 {
 	blist.setAutoDelete(true);

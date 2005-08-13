@@ -19,6 +19,8 @@
 
 int main(int argc, char *argv[])
 {
+	using namespace QComicBook;
+
 	QApplication app(argc, argv);
 	const QString errcaption = ComicMainWindow::tr("QComicBook error");
 

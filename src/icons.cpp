@@ -13,6 +13,8 @@
 #include "icons.h"
 #include <qdir.h>
 
+using namespace QComicBook;
+
 QString Icons::iconpath = QString::null;
 QDict<QIconSet> Icons::set;
 

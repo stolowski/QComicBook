@@ -14,6 +14,8 @@
 #define __CBICONS_H
 
 #define ICON_APPICON    "qcomicbook.png"
+#define ICON_OPENDIR    "opendir.png"
+#define ICON_OPENARCH   "openarch.png"
 #define ICON_FITWIDTH   "fitwidth.png"
 #define ICON_FITHEIGHT  "fitheight.png"
 #define ICON_WHOLEPAGE  "wholepage.png"
@@ -31,6 +33,8 @@
 #define ICON_JAPANESE   "japanese.png"
 #define ICON_ROTRIGHT   "rright.png"
 #define ICON_ROTLEFT    "rleft.png"
+#define ICON_BOOKMARK   "bookmark.png"
+#define ICON_SETTINGS   "settings.png"
 
 #endif
 

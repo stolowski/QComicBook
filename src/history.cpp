@@ -12,6 +12,8 @@
 
 #include "history.h"
 
+using namespace Utility;
+
 History::History(const QStringList &l, int max): size(max)
 {
 	hlist = l;

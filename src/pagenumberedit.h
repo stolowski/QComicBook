@@ -17,26 +17,29 @@
 
 class QIntValidator;
 
-class PageNumberEdit: public QLineEdit
+namespace QComicBook
 {
-	Q_OBJECT
+	class PageNumberEdit: public QLineEdit
+	{
+		Q_OBJECT
 
-	private:
-		QIntValidator *validator;
+		private:
+			QIntValidator *validator;
 
-	protected slots:
-		void onReturn();
-		void selectAll();
+			protected slots:
+				void onReturn();
+			void selectAll();
 
-	signals:
-		void pageSelected(int n);
-		
-	public:
-		PageNumberEdit(QWidget *parent, int val=1, int max=99);
-		virtual ~PageNumberEdit();
-		void setMax(int n);
-		int pageNumber() const;
-};
+		signals:
+			void pageSelected(int n);
+
+		public:
+			PageNumberEdit(QWidget *parent, int val=1, int max=99);
+			virtual ~PageNumberEdit();
+			void setMax(int n);
+			int pageNumber() const;
+	};
+}
 
 #endif
 

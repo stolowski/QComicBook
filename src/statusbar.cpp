@@ -15,6 +15,8 @@
 #include <qstring.h>
 #include <qimage.h>
 
+using namespace QComicBook;
+
 StatusBar::StatusBar(QWidget *parent): QStatusBar(parent)
 {
 	page = new QLabel(this);

@@ -15,30 +15,33 @@
 
 #include <qdockwindow.h>
 
-class ThumbnailsView;
-
-class ThumbnailsWindow: public QDockWindow
+namespace QComicBook
 {
-	Q_OBJECT
+	class ThumbnailsView;
 
-	private:
-		ThumbnailsView *tview;
+	class ThumbnailsWindow: public QDockWindow
+	{
+		Q_OBJECT
 
-	signals:
-		void requestedThumbnail(int n);
-		void requestedPage(int n, bool force);
+		private:
+			ThumbnailsView *tview;
 
-	protected:
-		void customEvent(QCustomEvent *e);
+		signals:
+			void requestedThumbnail(int n);
+			void requestedPage(int n, bool force);
 
-	protected slots:
-		void onOrientationChanged(Orientation o);
+		protected:
+			void customEvent(QCustomEvent *e);
 
-	public:
-		ThumbnailsWindow(Place p=InDock, QWidget *parent=0);
-		virtual ~ThumbnailsWindow();
-		ThumbnailsView* view() const;
-};
+		protected slots:
+			void onOrientationChanged(Orientation o);
+
+		public:
+			ThumbnailsWindow(Place p=InDock, QWidget *parent=0);
+			virtual ~ThumbnailsWindow();
+			ThumbnailsView* view() const;
+	};
+}
 
 #endif
 

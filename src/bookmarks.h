@@ -23,28 +23,31 @@
 
 class QPopupMenu;
 
-class Bookmarks
+namespace QComicBook
 {
-	private:
-		QPtrList<Bookmark> blist; //!<pointers to bookmark objects
-		QMap<int, Bookmark *> bmap; //!<for fast id->bookmark lookup
-		QPopupMenu *bmenu; //!<popup menu containing bookmarks
-		bool changed; //!<flag indicator to decide if bookmarks should be saved
-		QString fname; //!<bookmarks file
+	class Bookmarks
+	{
+		private:
+			QPtrList<Bookmark> blist; //!<pointers to bookmark objects
+			QMap<int, Bookmark *> bmap; //!<for fast id->bookmark lookup
+			QPopupMenu *bmenu; //!<popup menu containing bookmarks
+			bool changed; //!<flag indicator to decide if bookmarks should be saved
+			QString fname; //!<bookmarks file
 
-	public:
-		Bookmarks(QPopupMenu *menu);
-		~Bookmarks();
-		bool load();
-		bool save();
+		public:
+			Bookmarks(QPopupMenu *menu);
+			~Bookmarks();
+			bool load();
+			bool save();
 
-		void set(const QString &cbname, int page);
-		bool remove(const QString &cbname);
-		bool remove(int id);
-		bool get(int id, Bookmark &b);
-		QValueList<Bookmark> get();
-		bool exists(const QString &cbname);
-};
+			void set(const QString &cbname, int page);
+			bool remove(const QString &cbname);
+			bool remove(int id);
+			bool get(int id, Bookmark &b);
+			QValueList<Bookmark> get();
+			bool exists(const QString &cbname);
+	};
+}
 
 #endif
 

@@ -18,54 +18,57 @@
 #include <qthread.h>
 #include <qvaluelist.h>
 
-class ImgSink;
-
-//! Thread-based image loader.
-class ImgLoaderThread: public QThread
+namespace QComicBook
 {
-	protected:
-		volatile QThread::Priority prio; //!<thread priority
-		QMutex mtx; //!<mutex for serialization of class attributes
-		QValueList<int> requests; //!<the list of requested pages
-		ImgSink *sink;
-				
-		volatile bool stopped;
+	class ImgDirSink;
 
-		//! Main function of the thread.
-		/*! Preloads requested pages from requests list using sink->getImage().
-		 *  Stop if stopped flag is true.
-		 *  @see ImgSink::getImage
-		 */
-		virtual void run();
-		
-	public:
-		ImgLoaderThread();
-		virtual ~ImgLoaderThread();
+	//! Thread-based image loader.
+	class ImgLoaderThread: public QThread
+	{
+		protected:
+			volatile QThread::Priority prio; //!<thread priority
+			QMutex mtx; //!<mutex for serialization of class attributes
+			QValueList<int> requests; //!<the list of requested pages
+			ImgDirSink *sink;
 
-		//! Changes priority of the loader thread.
-		/*! @param p new priority
-		 */
-		virtual void setPriority(QThread::Priority p);
+			volatile bool stopped;
 
-		//! Sets image source sink.
-		/*! @param sink image sink used for retrieving (loading) images
-		 */
-		virtual void setSink(ImgSink *sink=NULL);
+			//! Main function of the thread.
+			/*! Preloads requested pages from requests list using sink->getImage().
+			 *  Stop if stopped flag is true.
+			 *  @see ImgDirSink::getImage
+			 */
+			virtual void run();
 
-		//! Appends page to the list of pages to load.
-		/*! @param page page to load
-		 */
-		virtual void request(int page);
+		public:
+			ImgLoaderThread();
+			virtual ~ImgLoaderThread();
 
-		//! Appends few pages to the list of pages to load.
-		/*! @param first starting page
-		 *  @param n number of pages to load in turn
-		 */
-		virtual void request(int first, int n);
+			//! Changes priority of the loader thread.
+			/*! @param p new priority
+			 */
+			virtual void setPriority(QThread::Priority p);
 
-		//! Stops processing requests and exits thread execution.
-		virtual void stop();
-};
+			//! Sets image source sink.
+			/*! @param sink image sink used for retrieving (loading) images
+			 */
+			virtual void setSink(ImgDirSink *sink=NULL);
+
+			//! Appends page to the list of pages to load.
+			/*! @param page page to load
+			 */
+			virtual void request(int page);
+
+			//! Appends few pages to the list of pages to load.
+			/*! @param first starting page
+			 *  @param n number of pages to load in turn
+			 */
+			virtual void request(int first, int n);
+
+			//! Stops processing requests and exits thread execution.
+			virtual void stop();
+	};
+}
 
 #endif
 

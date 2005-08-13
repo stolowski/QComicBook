@@ -19,22 +19,25 @@
 
 class QObject;
 
-class ThumbnailLoaderThread: public ImgLoaderThread
+namespace QComicBook
 {
-	private:
-		QObject *rcvobj; //!<object that will recieve loaded thumbnails
-		volatile bool usecache;
-		
-	protected:
-		virtual void run();
+	class ThumbnailLoaderThread: public ImgLoaderThread
+	{
+		private:
+			QObject *rcvobj; //!<object that will recieve loaded thumbnails
+			volatile bool usecache;
 
-	public:
-		ThumbnailLoaderThread();
-		virtual ~ThumbnailLoaderThread();
+		protected:
+			virtual void run();
 
-		virtual void setReciever(QObject *rcv);
-		virtual void setUseCache(bool f);
-};
+		public:
+			ThumbnailLoaderThread();
+			virtual ~ThumbnailLoaderThread();
+
+			virtual void setReciever(QObject *rcv);
+			virtual void setUseCache(bool f);
+	};
+}
 
 #endif
 

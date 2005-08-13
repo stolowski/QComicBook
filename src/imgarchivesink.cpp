@@ -21,6 +21,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+using namespace QComicBook;
+using Utility::which;
+
 QStringList ImgArchiveSink::zip;
 QStringList ImgArchiveSink::rar;
 QStringList ImgArchiveSink::ace;
@@ -155,8 +158,6 @@ int ImgArchiveSink::extract(const QString &filename, const QString &destdir)
 	pext.addArgument(filename);
 	pinf.addArgument(filename);
 	pext.setWorkingDirectory(destdir);
-
-	emit progress(0, 1);
 
 	//
 	// extract archive file list first

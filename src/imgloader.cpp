@@ -11,8 +11,10 @@
  */
 
 #include "imgloader.h"
-#include <imgsink.h>
+#include "imgdirsink.h"
 #include <qimage.h>
+
+using namespace QComicBook;
 
 ImgLoaderThread::ImgLoaderThread(): QThread(), prio(QThread::LowPriority), sink(NULL), stopped(false)
 {
@@ -29,7 +31,7 @@ void ImgLoaderThread::setPriority(QThread::Priority p)
 	mtx.unlock();
 }
 
-void ImgLoaderThread::setSink(ImgSink *sink)
+void ImgLoaderThread::setSink(ImgDirSink *sink)
 {
 	mtx.lock();
 	this->sink = sink;

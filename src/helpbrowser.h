@@ -18,25 +18,28 @@
 class QTextBrowser;
 class QPopupMenu;
 
-class HelpBrowser: public QMainWindow
+namespace QComicBook
 {
-	Q_OBJECT
+	class HelpBrowser: public QMainWindow
+	{
+		Q_OBJECT
 
-	private:
-		QTextBrowser *txtb;
-		QPopupMenu *go_menu;
-		int id_back;
-		int id_forward;
+		private:
+			QTextBrowser *txtb;
+			QPopupMenu *go_menu;
+			int id_back;
+			int id_forward;
 
-	private slots:
-		void enableBackward(bool f);
-		void enableForward(bool f);
-		
-	public:
-		HelpBrowser(const QString &caption, const QString &path, const QString &file="index.html", const QString &imgpath="img", QWidget *parent=NULL);
-		virtual ~HelpBrowser();
-		static QString getLocaleHelpDir(const QString &maindir, const QString &file=QString::null);
-};
+		private slots:
+			void enableBackward(bool f);
+			void enableForward(bool f);
+
+		public:
+			HelpBrowser(const QString &caption, const QString &path, const QString &file="index.html", const QString &imgpath="img", QWidget *parent=NULL);
+			virtual ~HelpBrowser();
+			static QString getLocaleHelpDir(const QString &maindir, const QString &file=QString::null);
+	};
+}
 
 #endif
 

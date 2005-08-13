@@ -16,6 +16,8 @@
 #include "thumbnail.h"
 #include "thumbnailevent.h"
 
+using namespace QComicBook;
+
 ThumbnailsWindow::ThumbnailsWindow(Place p, QWidget *parent): QDockWindow(p, parent)
 {
 	setCaption(tr("Thumbnails"));

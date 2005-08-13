@@ -15,7 +15,6 @@
 
 #include <qtabdialog.h>
 
-class ComicBookSettings;
 class QCheckBox;
 class QPushButton;
 class QRadioButton;
@@ -23,49 +22,55 @@ class QSpinBox;
 class QLabel;
 class QLineEdit;
 
-class ComicBookCfgDialog: public QTabDialog
+namespace QComicBook
 {
-	Q_OBJECT
+	class ComicBookSettings;
+	class ComicBookCfgDialog: public QTabDialog
+	{
+		Q_OBJECT
 
-	private:
-		ComicBookSettings *cfg;
-		QCheckBox *cb_twopagesstep;
-		QCheckBox *cb_smallcursor;
-		QCheckBox *cb_hidemenu;
-		QCheckBox *cb_hidestatus;
-		QPushButton *pb_color;
-		QCheckBox *cb_preload;
-		QCheckBox *cb_confirmexit;
-		QCheckBox *cb_autoinfo;
-		QSpinBox *sb_cachesize;
-		QCheckBox *cb_thumbs;
-		QSpinBox *sb_thumbsage;
-		QColor bgcolor;
-		QSpinBox *sb_fontsize;
-		QRadioButton *rb_smooth;
-		QRadioButton *rb_fast;
-		QCheckBox *cb_intbrowser;
-		QLineEdit *le_extbrowser;
-		QPushButton *pb_brbrowse;
-		QLabel *fontname;
-		QFont font;
+		private:
+			ComicBookSettings *cfg;
+			QCheckBox *cb_twopagesstep;
+			QCheckBox *cb_smallcursor;
+			QCheckBox *cb_hidemenu;
+			QCheckBox *cb_hidestatus;
+			QPushButton *pb_color;
+			QCheckBox *cb_preload;
+			QCheckBox *cb_confirmexit;
+			QCheckBox *cb_autoinfo;
+			QSpinBox *sb_cachesize;
+			QCheckBox *cb_thumbs;
+			QSpinBox *sb_thumbsage;
+			QColor bgcolor;
+			QSpinBox *sb_fontsize;
+			QRadioButton *rb_smooth;
+			QRadioButton *rb_fast;
+			QCheckBox *cb_intbrowser;
+			QLineEdit *le_extbrowser;
+			QPushButton *pb_brbrowse;
+			QLabel *fontname;
+			QFont font;
+			QCheckBox *cb_editing;
 
-		void setupDisplayTab();
-		void setupMiscTab();
-		void updateFontPreview();
+			void setupDisplayTab();
+			void setupMiscTab();
+			void setupEditTab();
+			void updateFontPreview();
 
-	protected slots:
-		void apply();
-		void cancel();
-		void showBackgroundDialog();
-		void showFontDialog();
-		void browseExternalBrowser();
-		void browserCheckboxToggled(bool f);
+		protected slots:
+			void apply();
+			void cancel();
+			void showBackgroundDialog();
+			void showFontDialog();
+			void browseExternalBrowser();
+			void browserCheckboxToggled(bool f);
 
-	public:
-		ComicBookCfgDialog(QWidget *parent, ComicBookSettings *cfg);
-		virtual ~ComicBookCfgDialog();
-};
+		public:
+			ComicBookCfgDialog(QWidget *parent, ComicBookSettings *cfg);
+			virtual ~ComicBookCfgDialog();
+	};
+}
 
 #endif
 

@@ -1,5 +1,6 @@
 iconsdir = $(datadir)/qcomicbook
 icons_DATA = bestfit.png \
+	     bookmark.png \
 	     fitheight.png \
 	     fitwidth.png \
 	     fforward.png \
@@ -7,6 +8,8 @@ icons_DATA = bestfit.png \
 	     info.png \
 	     japanese.png \
 	     nextpage.png \
+	     openarch.png \
+	     opendir.png \
 	     orgsize.png \
 	     pagebottom.png \
 	     pagetop.png \
@@ -14,6 +17,7 @@ icons_DATA = bestfit.png \
 	     rright.png \
 	     rleft.png \
 	     qcomicbook.png \
+	     settings.png \
 	     thumbnails.png \
 	     twopages.png \
 	     wholepage.png

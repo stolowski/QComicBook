@@ -15,28 +15,31 @@
 
 #include <qimage.h>
 
-class Thumbnail
+namespace QComicBook
 {
-	private:
-		int num;
-		QImage img;
-		static int thwidth, thheight; //default thumbnail width and height
-		
-	public:
-		Thumbnail(int n);
-		Thumbnail(int n, const QImage &i);
-		~Thumbnail();
+	class Thumbnail
+	{
+		private:
+			int num;
+			QImage img;
+			static int thwidth, thheight; //default thumbnail width and height
 
-		int page() const;
-		const QImage& image() const;
-		void touch(const QString &fname);
-		bool tryLoad(const QString &fname);
-		bool save(const QString &fname);
-		void setImage(const QImage &i);
-		
-		static int maxWidth();
-		static int maxHeight();
-};
+		public:
+			Thumbnail(int n);
+			Thumbnail(int n, const QImage &i);
+			~Thumbnail();
+
+			int page() const;
+			const QImage& image() const;
+			void touch(const QString &fname);
+			bool tryLoad(const QString &fname);
+			bool save(const QString &fname);
+			void setImage(const QImage &i);
+
+			static int maxWidth();
+			static int maxHeight();
+	};
+}
 
 #endif
 

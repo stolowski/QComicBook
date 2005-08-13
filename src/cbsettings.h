@@ -15,6 +15,7 @@
 
 #include "imgview.h"
 #include "history.h"
+#include "enummap.h"
 #include <qobject.h>
 #include <qfont.h>
 
@@ -23,128 +24,126 @@ class QRect;
 class QColor;
 class QMainWindow;
 
-class ComicBookSettings: public QObject
+namespace QComicBook
 {
-	Q_OBJECT
-		
-	private:
-		QSettings *cfg;
-		bool smallcursor;
-		bool twopages;
-		bool twopagesstep;
-		bool japanese;
-		bool contscroll;
-		bool scrollbars;
-		bool preload;
-		bool fscrhidemenu;
-		bool fscrhidestatus;
-		ComicImageView::Size pagesize;
-		ComicImageView::Scaling scaling;
-		int x, y, w, h;
-		QString lastdir;
-		QColor bgcolor;
-		History recent;
-		int cachesize;
-		int thumbsage;
-		bool cachethumbs;
-		bool autoinfo;
-		bool confirmexit;
-		bool statusbar;
-		bool intbrowser;
-		QString extbrowser;
-		QString docklayout;
-		QFont font;
-		
-		static QString bkpath; //bookmarks path
-		static QString thpath; //thumbnails cache path
-		static bool dirsok; //is above dirs are ok
+	using namespace Utility;
 
-		struct int2qstring { //struct for mapping enum to strings
-			int v;
-			QString str;
-		};
+	class ComicBookSettings: public QObject
+	{
+		Q_OBJECT
 
-		static const int2qstring size2string[];
-		static const int2qstring scaling2string[];
+		private:
+			QSettings *cfg;
+			bool smallcursor;
+			bool twopages;
+			bool twopagesstep;
+			bool japanese;
+			bool contscroll;
+			bool scrollbars;
+			bool preload;
+			bool fscrhidemenu;
+			bool fscrhidestatus;
+			Size pagesize;
+			Scaling scaling;
+			int x, y, w, h;
+			QString lastdir;
+			QColor bgcolor;
+			History recent;
+			int cachesize;
+			int thumbsage;
+			bool cachethumbs;
+			bool autoinfo;
+			bool confirmexit;
+			bool statusbar;
+			bool editsupport;
+			bool intbrowser;
+			QString extbrowser;
+			QString docklayout;
+			QFont font;
 
-		const QString& convert(ComicImageView::Size s);
-		ComicImageView::Size convertToSize(const QString &s);
-		const QString& convert(ComicImageView::Scaling s);
-		ComicImageView::Scaling convertToScaling(const QString &s);
+			static QString bkpath; //bookmarks path
+			static QString thpath; //thumbnails cache path
+			static bool dirsok; //is above dirs are ok
 
-	signals:
-		void backgroundChanged(const QColor &color);
-		void scalingMethodChanged(ComicImageView::Scaling s);
-		void cursorChanged(bool f);
+			static const EnumMap<Size> size2string[];
+			static const EnumMap<Scaling> scaling2string[];
 
-	private:
-		ComicBookSettings();
-		~ComicBookSettings();
+		signals:
+			void backgroundChanged(const QColor &color);
+			void scalingMethodChanged(Scaling s);
+			void cursorChanged(bool f);
 
-	public:
-		void load();
+		private:
+			ComicBookSettings();
+			~ComicBookSettings();
 
-		bool smallCursor() const;
-		bool twoPagesMode() const;
-		bool twoPagesStep() const;
-		bool japaneseMode() const;
-		bool continuousScrolling() const;
-		bool scrollbarsVisible() const;
-		QRect geometry() const;
-		ComicImageView::Size pageSize() const;
-		ComicImageView::Scaling pageScaling() const;
-		QString lastDir() const;
-		const History& recentlyOpened() const;
-		QColor background() const;
-		int cacheSize() const;
-		bool cacheThumbnails() const;
-		int thumbnailsAge() const;
-		bool preloadPages() const;
-		bool confirmExit() const;
-		bool autoInfo() const;
-		bool fullScreenHideMenu() const;
-		bool fullScreenHideStatusbar() const;
-		bool showStatusbar() const;
-		bool useInternalBrowser() const;
-		const QFont& infoFont() const;
-		QString externalBrowser() const;
-		void restoreDockLayout(QMainWindow *w);
-		
-		void smallCursor(bool f);
-		void twoPagesMode(bool f);
-		void twoPagesStep(bool f);
-		void japaneseMode(bool f);
-		void continuousScrolling(bool f);
-		void scrollbarsVisible(bool f);
-		void geometry(const QRect g);
-		void pageSize(ComicImageView::Size s);
-		void pageScaling(ComicImageView::Scaling s);
-		void lastDir(const QString &d);
-		void recentlyOpened(const History &hist);
-		void background(const QColor &color);
-		void cacheSize(int s);
-		void cacheThumbnails(bool f);
-		void thumbnailsAge(int n);
-		void preloadPages(bool f);
-		void confirmExit(bool f);
-		void autoInfo(bool f);
-		void fullScreenHideMenu(bool f);
-		void fullScreenHideStatusbar(bool f);
-		void showStatusbar(bool f);
-		void useInternalBrowser(bool f);
-		void infoFont(const QFont &f);
-		void externalBrowser(const QString &cmd);
-		void saveDockLayout(QMainWindow *w);
-		
-		static ComicBookSettings& instance();
+		public:
+			void load();
 
-		//
-		// checks and creates .qcomicbook/ and cache subdirectories if
-		// necessary
-		static bool checkDirs();
-		static const QString& bookmarksDir();
-		static const QString& thumbnailsDir();
-};
+			bool smallCursor() const;
+			bool twoPagesMode() const;
+			bool twoPagesStep() const;
+			bool japaneseMode() const;
+			bool continuousScrolling() const;
+			bool scrollbarsVisible() const;
+			QRect geometry() const;
+			Size pageSize() const;
+			Scaling pageScaling() const;
+			QString lastDir() const;
+			const History& recentlyOpened() const;
+			QColor background() const;
+			int cacheSize() const;
+			bool cacheThumbnails() const;
+			int thumbnailsAge() const;
+			bool preloadPages() const;
+			bool confirmExit() const;
+			bool autoInfo() const;
+			bool fullScreenHideMenu() const;
+			bool fullScreenHideStatusbar() const;
+			bool showStatusbar() const;
+			bool useInternalBrowser() const;
+			const QFont& infoFont() const;
+			QString externalBrowser() const;
+			void restoreDockLayout(QMainWindow *w);
+			bool editSupport() const;
+
+			void smallCursor(bool f);
+			void twoPagesMode(bool f);
+			void twoPagesStep(bool f);
+			void japaneseMode(bool f);
+			void continuousScrolling(bool f);
+			void scrollbarsVisible(bool f);
+			void geometry(const QRect g);
+			void pageSize(Size s);
+			void pageScaling(Scaling s);
+			void lastDir(const QString &d);
+			void recentlyOpened(const History &hist);
+			void background(const QColor &color);
+			void cacheSize(int s);
+			void cacheThumbnails(bool f);
+			void thumbnailsAge(int n);
+			void preloadPages(bool f);
+			void confirmExit(bool f);
+			void autoInfo(bool f);
+			void fullScreenHideMenu(bool f);
+			void fullScreenHideStatusbar(bool f);
+			void showStatusbar(bool f);
+			void useInternalBrowser(bool f);
+			void infoFont(const QFont &f);
+			void externalBrowser(const QString &cmd);
+			void saveDockLayout(QMainWindow *w);
+			void editSupport(bool f);
+
+			static ComicBookSettings& instance();
+
+			//
+			// checks and creates .qcomicbook/ and cache subdirectories if
+			// necessary
+			static bool checkDirs();
+			static const QString& bookmarksDir();
+			static const QString& thumbnailsDir();
+	};
+}
 
 #endif
 

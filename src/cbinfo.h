@@ -17,20 +17,24 @@
 #include <qfont.h>
 
 class QStringList;
-class ImgSink;
 
-class ComicBookInfo: public QTabDialog
+namespace QComicBook
 {
-	protected:
-		QFont font;
+	class ImgDirSink;
+	
+	class ComicBookInfo: public QTabDialog
+	{
+		protected:
+			QFont font;
 
-		void setupGeneralTab(ImgSink &sink);
-		void setupDescriptionTabs(const ImgSink &sink);
+			void setupGeneralTab(ImgDirSink &sink);
+			void setupDescriptionTabs(const ImgDirSink &sink);
 
-	public:
-		ComicBookInfo(QWidget *parent, ImgSink &sink, const QFont& f);
-		virtual ~ComicBookInfo();
-};
+		public:
+			ComicBookInfo(QWidget *parent, ImgDirSink &sink, const QFont& f);
+			virtual ~ComicBookInfo();
+	};
+}
 
 #endif
 

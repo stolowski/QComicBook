@@ -13,6 +13,8 @@
 #include "pagenumberedit.h"
 #include <qvalidator.h>
 
+using namespace QComicBook;
+
 PageNumberEdit::PageNumberEdit(QWidget *parent, int val, int max): QLineEdit(parent)
 {
 	//setMaxLength(3);

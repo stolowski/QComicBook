@@ -17,6 +17,8 @@
 #include <qpopupmenu.h>
 #include <qmenubar.h>
 
+using namespace QComicBook;
+
 HelpBrowser::HelpBrowser(const QString &caption, const QString &path, const QString &file, const QString &imgpath, QWidget *parent): QMainWindow(parent)
 {
 	setCaption(caption);

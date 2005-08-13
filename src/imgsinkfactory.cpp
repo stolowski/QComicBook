@@ -16,6 +16,8 @@
 #include <qstring.h>
 #include <qfileinfo.h>
 
+using namespace QComicBook;
+
 ImgSinkFactory::ImgSinkFactory()
 {
 }
@@ -30,21 +32,21 @@ ImgSinkFactory& ImgSinkFactory::instance()
 	return f;
 }
 
-ImgSink* ImgSinkFactory::createImgSink(SinkType s)
+ImgDirSink* ImgSinkFactory::createImgSink(SinkType s, int cachesize)
 {
 	if (s == ArchiveSink)
-		return new ImgArchiveSink();
+		return new ImgArchiveSink(cachesize);
 	if (s == DirSink)
-		return new ImgDirSink();
+		return new ImgDirSink(cachesize);
 	return NULL;
 }
 
-ImgSink* ImgSinkFactory::createImgSink(const QString &path)
+ImgDirSink* ImgSinkFactory::createImgSink(const QString &path, int cachesize)
 {
 	const QFileInfo finfo(path);
 	if (finfo.isDir())
-		return createImgSink(DirSink);
+		return createImgSink(DirSink, cachesize);
 	else
-		return createImgSink(ArchiveSink);
+		return createImgSink(ArchiveSink, cachesize);
 }
 

@@ -12,6 +12,8 @@
 
 #include "thumbnailitem.h"
 
+using namespace QComicBook;
+
 ThumbnailItem::ThumbnailItem(QIconView *view, int page, const QPixmap &pixmap): QIconViewItem(view, QString::number(page+1), pixmap), pnum(page), loaded(false)
 {
 }

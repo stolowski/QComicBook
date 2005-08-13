@@ -18,18 +18,21 @@
 
 class QLabel;
 
-class WaitDialog: public QDialog
+namespace QComicBook
 {
-	Q_OBJECT
-		
-	private:
-		QLabel *info;
+	class WaitDialog: public QDialog
+	{
+		Q_OBJECT
 
-	public:
-		WaitDialog(QWidget *parent, const QString &caption, const QString &text=QString::null);
-		~WaitDialog();
-		void setText(const QString &text);
-};
+		private:
+			QLabel *info;
+
+		public:
+			WaitDialog(QWidget *parent, const QString &caption, const QString &text=QString::null);
+			~WaitDialog();
+			void setText(const QString &text);
+	};
+}
 
 #endif
 

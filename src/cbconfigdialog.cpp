@@ -28,6 +28,8 @@
 #include <qfiledialog.h>
 #include <qlineedit.h>
 
+using namespace QComicBook;
+
 ComicBookCfgDialog::ComicBookCfgDialog(QWidget *parent, ComicBookSettings *cfg): QTabDialog(parent), cfg(cfg)
 {
 	setCaption("QComicBook Settings");
@@ -35,6 +37,7 @@ ComicBookCfgDialog::ComicBookCfgDialog(QWidget *parent, ComicBookSettings *cfg):
 
 	setupDisplayTab();
 	setupMiscTab();
+	setupEditTab();
 
 	setCancelButton();
 	setOkButton();
@@ -81,7 +84,7 @@ void ComicBookCfgDialog::setupDisplayTab()
 	QButtonGroup *gr_scaling = new QButtonGroup(2, Qt::Horizontal, tr("Scaling method"), w);
 	rb_smooth = new QRadioButton(tr("Smooth"), gr_scaling);
 	rb_fast = new QRadioButton(tr("Fast"), gr_scaling);
-	if (cfg->pageScaling() == ComicImageView::Fast)
+	if (cfg->pageScaling() == Fast)
 		rb_fast->setChecked(true);
 	else
 		rb_smooth->setChecked(true);
@@ -161,18 +164,32 @@ void ComicBookCfgDialog::setupMiscTab()
 	addTab(w, tr("Misc"));
 }
 
+void ComicBookCfgDialog::setupEditTab()
+{
+	QWidget *w = new QWidget(this);
+	QVBoxLayout *lay = new QVBoxLayout(w, 5, 5);
+
+	cb_editing = new QCheckBox(tr("Enable editing"), w);
+	cb_editing->setChecked(cfg->editSupport());
+	lay->addWidget(cb_editing);
+
+	lay->addStretch();
+	addTab(w, tr("Editing"));
+}
+
 void ComicBookCfgDialog::apply()
 {
+	//
 	// display
 	cfg->background(bgcolor);
 	cfg->fullScreenHideMenu(cb_hidemenu->isChecked());
 	cfg->fullScreenHideStatusbar(cb_hidestatus->isChecked());
 	cfg->smallCursor(cb_smallcursor->isChecked());
 	if (rb_smooth->isChecked())
-		cfg->pageScaling(ComicImageView::Smooth);
+		cfg->pageScaling(Smooth);
 	else
 		if (rb_fast->isChecked())
-			cfg->pageScaling(ComicImageView::Fast);
+			cfg->pageScaling(Fast);
 	cfg->infoFont(font);
 
 	//
@@ -186,6 +203,10 @@ void ComicBookCfgDialog::apply()
 	cfg->externalBrowser(le_extbrowser->text());
 	cfg->autoInfo(cb_autoinfo->isChecked());
 	cfg->confirmExit(cb_confirmexit->isChecked());
+
+	//
+	// edit
+	cfg->editSupport(cb_editing->isChecked());
 }
 
 void ComicBookCfgDialog::cancel()

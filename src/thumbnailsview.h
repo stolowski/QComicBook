@@ -20,39 +20,43 @@
 class QPixmap;
 class QIconViewItem;
 class QPopupMenu;
-class Thumbnail;
-
-class ThumbnailsView: public QIconView
+ 
+namespace QComicBook
 {
-	Q_OBJECT
+	class Thumbnail;
 
-	private:
-		int numpages;
-		QPixmap *emptypage;
-		QPtrVector<ThumbnailItem> icons;
-		QPopupMenu *menu;
-		QIconViewItem *selected;
+	class ThumbnailsView: public QIconView
+	{
+		Q_OBJECT
 
-	signals:
-		void requestedPage(int n, bool force);
+		private:
+			int numpages;
+			QPixmap *emptypage;
+			QPtrVector<ThumbnailItem> icons;
+			QPopupMenu *menu;
+			QIconViewItem *selected;
 
-	protected slots:
-		void onDoubleClick(QIconViewItem *item);
-		void showContextMenu(QIconViewItem *item, const QPoint &p);
-		void goToPageAction();
+		signals:
+			void requestedPage(int n, bool force);
 
-	public:
-		ThumbnailsView(QWidget *parent);
-		virtual ~ThumbnailsView();
-		virtual bool isLoaded(int n) const;
-		
-	public slots:
-		void setPages(int pages);
-		void setPage(int n, const QImage &img);
-		void setPage(const Thumbnail &t);
-		void clear();
-		void scrollToPage(int n);
-};
+		protected slots:
+			void onDoubleClick(QIconViewItem *item);
+			void showContextMenu(QIconViewItem *item, const QPoint &p);
+			void goToPageAction();
+
+		public:
+			ThumbnailsView(QWidget *parent);
+			virtual ~ThumbnailsView();
+			virtual bool isLoaded(int n) const;
+
+		public slots:
+			void setPages(int pages);
+			void setPage(int n, const QImage &img);
+			void setPage(const Thumbnail &t);
+			void clear();
+			void scrollToPage(int n);
+	};
+}
 
 #endif
 
