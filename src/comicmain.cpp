@@ -30,6 +30,7 @@
 #include "thumbnailloader.h"
 #include "bookmarkmanager.h"
 #include "miscutil.h"
+#include "archiverdialog.h"
 #include <qimage.h>
 #include <qmenubar.h>
 #include <qpopupmenu.h>
@@ -43,14 +44,11 @@
 #include <qframe.h>
 #include <jumptopagewin.h>
 #include <qprogressdialog.h>
+#include <qprocess.h>
 #include <typeinfo>
 
 using namespace QComicBook;
 using namespace Utility;
-
-//
-// archives extensions used for Open File dialog and filtering out files in OpenNext() function
-const QString ComicMainWindow::ARCH_EXTENSIONS = "*.rar *.cbr *.zip *.cbz *.ace *.cba *.tar.gz *.tgz *.cbg *.tar.bz2 *.cbb";
 
 ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WType_TopLevel|WDestructiveClose), sink(NULL), currpage(0), edit_menu(NULL)
 {
@@ -284,7 +282,7 @@ void ComicMainWindow::setupEditMenu()
         //edit_menu->insertItem(tr("Open with Kolour Paint"), this, SLOT(openWithGimp()));
         //edit_menu->insertItem(tr("Open with ImageMagick"), this, SLOT(openWithGimp()));
 	edit_menu->insertSeparator();
-	reload_id = edit_menu->insertItem(tr("Reload page"), this, SLOT(dummy()));
+	reload_id = edit_menu->insertItem(tr("Reload page"), this, SLOT(reloadPage()));
         menuBar()->insertItem(tr("&Edit"), edit_menu);
 }
 
@@ -511,6 +509,12 @@ void ComicMainWindow::toggleJapaneseMode(bool f)
                 jumpToPage(currpage, true);
 }
 
+void ComicMainWindow::reloadPage()
+{
+	if (sink)
+		jumpToPage(currpage, true);
+}
+
 void ComicMainWindow::updateCaption()
 {
         QString c = "QComicBook";
@@ -593,10 +597,14 @@ void ComicMainWindow::browseDirectory()
 void ComicMainWindow::browseArchive()
 {
         const QString file = QFileDialog::getOpenFileName(lastdir,
-                        "Archives (" + ARCH_EXTENSIONS + ");;All files (*)",
+                        "Archives (" + ImgArchiveSink::supportedOpenExtensions() + ");;All files (*)",
                         this, NULL, tr("Choose a file") );
         if (!file.isEmpty())
                 open(file, 0);
+}
+
+void ComicMainWindow::createArchive()
+{
 }
 
 void ComicMainWindow::open(const QString &path, int page)
@@ -639,7 +647,7 @@ void ComicMainWindow::openNext()
         {
                 QFileInfo finfo(sink->getFullName());
                 QDir dir(finfo.dirPath(true)); //get the full path of current cb
-                QStringList files = dir.entryList(ARCH_EXTENSIONS, QDir::Files|QDir::Readable, QDir::Name);
+                QStringList files = dir.entryList(ImgArchiveSink::supportedOpenExtensions(), QDir::Files|QDir::Readable, QDir::Name);
                 QStringList::iterator it = files.find(finfo.fileName()); //find current cb
                 if (it != files.end())
                         if (++it != files.end()) //get next file name
@@ -656,7 +664,7 @@ void ComicMainWindow::openPrevious()
         {
                 QFileInfo finfo(sink->getFullName());
                 QDir dir(finfo.dirPath(true)); //get the full path of current cb
-                QStringList files = dir.entryList(ARCH_EXTENSIONS, QDir::Files|QDir::Readable, QDir::Name);
+                QStringList files = dir.entryList(ImgArchiveSink::supportedOpenExtensions(), QDir::Files|QDir::Readable, QDir::Name);
                 QStringList::iterator it = files.find(finfo.fileName()); //find current cb
                 if (it != files.end() && it != files.begin())
                 {
@@ -858,12 +866,24 @@ void ComicMainWindow::closeSink()
 {
         enableComicBookActions(false);
 
-        view->clear();
         if (sink)
         {
+		//if (typeid(*sink) == typeid(ImgArchiveSink) && cfg->editSupport() && sink->hasModifiedFiles()) 
+		{
+        		if (QMessageBox::warning(this, tr("Create archive?"),
+				tr("Warning! Some files were modified in this comic book\nDo you want to create new archive file?"),
+                                QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+			{
+				ArchiverDialog *win = new ArchiverDialog(this, sink);
+				win->exec();
+				delete win;
+			}
+
+		}
                 sink->deleteLater();
                 sink = NULL;
         }
+        view->clear();
         thumbswin->view()->clear();
         updateCaption();
         statusbar->clear();

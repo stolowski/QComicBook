@@ -68,7 +68,6 @@ namespace QComicBook
 			 *  @param total total number of steps */
 			void progress(int current, int total);
 
-
 		private:
 			ThumbnailLoaderThread thloader;
 			ImgLoaderThread imgloader;

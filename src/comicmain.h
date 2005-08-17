@@ -106,8 +106,6 @@ namespace QComicBook
 			QAction *openArchiveAction;
 			QAction *openDirAction;
 
-			static const QString ARCH_EXTENSIONS; //!<space-separated list of archives extensions
-
 		protected:
 			void keyPressEvent(QKeyEvent *e);
 			void closeEvent(QCloseEvent *e);
@@ -151,6 +149,7 @@ namespace QComicBook
 			void exitFullscreen();
 			void browseDirectory();
 			void browseArchive();
+			void createArchive();
 			void open(const QString &path, int page=0);
 			void openNext();
 			void openPrevious();
@@ -168,6 +167,7 @@ namespace QComicBook
 			void toggleFullScreen();
 			void toggleContinousScroll();
 			void toggleJapaneseMode(bool f);
+			void reloadPage();
 
 		public:
 			ComicMainWindow(QWidget *parent);

@@ -1,6 +1,7 @@
 bin_PROGRAMS = qcomicbook
 
-BUILT_SOURCES = moc_bookmarkmanager.cpp \
+BUILT_SOURCES = moc_archiverdialog.cpp \
+		moc_bookmarkmanager.cpp \
 		moc_cbconfigdialog.cpp \
 		moc_cbsettings.cpp \
 		moc_comicmain.cpp \
@@ -15,11 +16,12 @@ BUILT_SOURCES = moc_bookmarkmanager.cpp \
 		moc_thumbnailsview.cpp \
 		moc_waitdialog.cpp 
 
-qcomicbook_SOURCES = aboutdialog.cpp bookmark.cpp bookmarkmanager.cpp\
+qcomicbook_SOURCES = aboutdialog.cpp archiverdialog.cpp bookmark.cpp bookmarkmanager.cpp\
 	bookmarks.cpp cbconfigdialog.cpp cbinfo.cpp cbsettings.cpp comicmain.cpp\
 	helpbrowser.cpp history.cpp icons.cpp imgarchivesink.cpp imgcache.cpp\
 	imgdirsink.cpp imgloader.cpp imgsinkfactory.cpp imgview.cpp\
-	jumptopagewin.cpp main.cpp miscutil.cpp pagenumberedit.cpp statusbar.cpp thumbnail.cpp\
+	jumptopagewin.cpp main.cpp miscutil.cpp pagenumberedit.cpp\
+	statusbar.cpp thumbnail.cpp\
 	thumbnailevent.cpp thumbnailitem.cpp thumbnailloader.cpp\
 	thumbnailsview.cpp thumbnailswin.cpp waitdialog.cpp
 
@@ -28,6 +30,7 @@ qcomicbook_SOURCES = aboutdialog.cpp bookmark.cpp bookmarkmanager.cpp\
 nodist_qcomicbook_SOURCES = $(BUILT_SOURCES)
 
 noinst_HEADERS = aboutdialog.h \
+		 archiverdialog.h \
 		 bookmark.h \
 		 bookmarkmanager.h \
 		 bookmarks.h \

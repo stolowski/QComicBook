@@ -18,10 +18,10 @@
 #include <qstring.h>
 #include <qobject.h>
 #include <qstringlist.h>
-#include <qprocess.h>
 #include "imgdirsink.h"
 
 class QImage;
+class QProcess;
 
 namespace QComicBook
 {
@@ -32,20 +32,21 @@ namespace QComicBook
 	{
 		Q_OBJECT
 
-		protected:
-
+		public:
 			enum ArchiveType {
-				RAR_ARCHIVE = 0,
-				ZIP_ARCHIVE,
-				ACE_ARCHIVE,
-				TARGZ_ARCHIVE,
-				TARBZ2_ARCHIVE,
-				UNKNOWN_ARCHIVE
+				RAR_ARCHIVE = 1,
+				ZIP_ARCHIVE = 2,
+				ACE_ARCHIVE = 4,
+				TARGZ_ARCHIVE = 8,
+				TARBZ2_ARCHIVE = 16,
+				UNKNOWN_ARCHIVE = 2<<31
 			};
 
+		protected:
+
 			ArchiveType archivetype; ///< the type of currently opened archive
-			QProcess pext; ///< extracting process
-			QProcess pinf; ///< file list extracing process
+			QProcess *pext; ///< extracting process
+			QProcess *pinf; ///< file list extracing process
 			QString archivename; ///< archive file name, without path
 			QString archivepath; ///< full path, including archive name
 			QString tmppath; ///< path to extracted archive
@@ -54,6 +55,13 @@ namespace QComicBook
 			int filesnum; ///< number of files gathered from parsing archiver output, used for progress bar
 			int extcnt; ///< extracted files counter for progress bar
 
+			struct ArchiveExtension
+			{
+				ArchiveType archtype;
+				QString ext;
+			};
+			static ArchiveExtension exts[];
+			
 			static QStringList zip; ///< unzip executable and extract options
 			static QStringList rar; ///< rar/unrar executbale and extract options
 			static QStringList ace; ///< unace executbale and extract options
@@ -64,11 +72,16 @@ namespace QComicBook
 			static QStringList ace_i; ///< unace executable and list options
 			static QStringList targz_i;
 			static QStringList tarbz2_i;
-			static bool havezip;
-			static bool haverar;
-			static bool haveace;
-			static bool havetargz;
-			static bool havetarbz2;
+			static int suppopen; ///< supported archives flags (for open)
+			static int suppsave; ///< supported archives flags (for save)
+			static QString openext; ///< supported archives extensions (for open)
+			static QString saveext; ///< supported archives extensions (for save)
+
+			static void autoconfRAR();
+			static void autoconfZIP();
+			static void autoconfACE();
+			static void autoconfTARGZ();
+			static void autoconfTARBZ2();
 
 			//! Determines archive type
 			/*! Determines archive type basing on filename extension. As a last effort, if
@@ -94,16 +107,11 @@ namespace QComicBook
 			virtual QString getName(int maxlen = 50);
 			virtual QString getFullName();
 
-			static bool autoconfRAR();
-			static bool autoconfZIP();
-			static bool autoconfACE();
-			static bool autoconfTARGZ();
-			static bool autoconfTARBZ2();
-			static bool haveRAR();
-			static bool haveZIP();
-			static bool haveACE();
-			static bool haveTARGZ();
-			static bool haveTARBZ2();
+			static void autoconfArchivers();
+			static int supportedArchives();
+			static bool supportsOpen(ArchiveType t);
+			static QString supportedOpenExtensions();
+			static QString supportedSaveExtensions();
 	};
 }
 

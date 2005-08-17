@@ -17,6 +17,7 @@
 #include <qprocess.h>
 #include <qfileinfo.h>
 #include <qfile.h>
+#include <qapplication.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -34,11 +35,24 @@ QStringList ImgArchiveSink::rar_i;
 QStringList ImgArchiveSink::ace_i;
 QStringList ImgArchiveSink::targz_i;
 QStringList ImgArchiveSink::tarbz2_i;
-bool ImgArchiveSink::havezip = false;
-bool ImgArchiveSink::haverar = false;
-bool ImgArchiveSink::haveace = false;
-bool ImgArchiveSink::havetargz = false;
-bool ImgArchiveSink::havetarbz2 = false;
+int ImgArchiveSink::suppopen = 0;
+int ImgArchiveSink::suppsave = 0;
+QString ImgArchiveSink::openext;
+QString ImgArchiveSink::saveext;
+
+ImgArchiveSink::ArchiveExtension ImgArchiveSink::exts[] = {
+				{RAR_ARCHIVE,   ".rar"},
+				{RAR_ARCHIVE,   ".cbr"},
+				{ZIP_ARCHIVE,   ".zip"},
+				{ZIP_ARCHIVE,   ".cbz"},
+				{ACE_ARCHIVE,   ".ace"},
+				{ACE_ARCHIVE,   ".cba"},
+				{TARGZ_ARCHIVE, ".tgz"},
+				{TARGZ_ARCHIVE, ".tar.gz"},
+				{TARGZ_ARCHIVE, ".cbg"},
+				{TARBZ2_ARCHIVE,".tar.bz2"},
+				{TARBZ2_ARCHIVE,".cbb"},
+				{UNKNOWN_ARCHIVE, QString::null}};
 
 ImgArchiveSink::ImgArchiveSink(int cachesize): ImgDirSink(cachesize) 
 {
@@ -58,10 +72,12 @@ ImgArchiveSink::~ImgArchiveSink()
 
 void ImgArchiveSink::init()
 {
-	connect(&pinf, SIGNAL(readyReadStdout()), this, SLOT(infoStdoutReady()));
-	connect(&pinf, SIGNAL(processExited()), this, SLOT(infoExited()));
-	connect(&pext, SIGNAL(readyReadStdout()), this, SLOT(extractStdoutReady()));
-	connect(&pext, SIGNAL(processExited()), this, SLOT(extractExited()));
+	pinf = new QProcess(this);
+	pext = new QProcess(this);
+	connect(pinf, SIGNAL(readyReadStdout()), this, SLOT(infoStdoutReady()));
+	connect(pinf, SIGNAL(processExited()), this, SLOT(infoExited()));
+	connect(pext, SIGNAL(readyReadStdout()), this, SLOT(extractStdoutReady()));
+	connect(pext, SIGNAL(processExited()), this, SLOT(extractExited()));
 }
 
 ImgArchiveSink::ArchiveType ImgArchiveSink::archiveType(const QString &filename)
@@ -102,16 +118,9 @@ ImgArchiveSink::ArchiveType ImgArchiveSink::archiveType(const QString &filename)
 		file.close();
 	}
 
-	if (filename.endsWith(".tar.gz", false) || filename.endsWith(".tgz", false) || filename.endsWith(".cbg", false))
-		return TARGZ_ARCHIVE;
-	if (filename.endsWith(".tar.bz2", false) || filename.endsWith(".cbb", false))
-		return TARBZ2_ARCHIVE;
-	if (filename.endsWith(".rar", false) || filename.endsWith(".cbr", false))
-		return RAR_ARCHIVE;
-	if (filename.endsWith(".zip", false) || filename.endsWith(".cbz", false))
-		return ZIP_ARCHIVE;
-	if (filename.endsWith(".ace", false) || filename.endsWith(".cba", false))
-		return ACE_ARCHIVE;
+	for (int i=0; exts[i].archtype!=UNKNOWN_ARCHIVE; i++)
+		if (filename.endsWith(exts[i].ext, false))
+			return exts[i].archtype;
 
 	return UNKNOWN_ARCHIVE;
 }
@@ -124,44 +133,42 @@ int ImgArchiveSink::extract(const QString &filename, const QString &destdir)
 	if (archivetype == UNKNOWN_ARCHIVE)
 		return SINKERR_UNKNOWNFILE;
 
-	if ((archivetype == RAR_ARCHIVE && !haverar) || (archivetype == ZIP_ARCHIVE && !havezip) ||
-	    (archivetype == ACE_ARCHIVE && !haveace) || (archivetype == TARGZ_ARCHIVE && !havetargz) ||
-	    (archivetype == TARBZ2_ARCHIVE && !havetarbz2))
+	if (!supportsOpen(archivetype))
 		return SINKERR_NOTSUPPORTED;	
 		
 	if (archivetype == RAR_ARCHIVE)
 	{
-		pext.setArguments(rar);
-		pinf.setArguments(rar_i);
+		pext->setArguments(rar);
+		pinf->setArguments(rar_i);
 	}
 	else if (archivetype == ZIP_ARCHIVE)
 	{
-		pext.setArguments(zip);
-		pinf.setArguments(zip_i);
+		pext->setArguments(zip);
+		pinf->setArguments(zip_i);
 	}
 	else if (archivetype == ACE_ARCHIVE)
 	{
-		pext.setArguments(ace);
-		pinf.setArguments(ace_i);
+		pext->setArguments(ace);
+		pinf->setArguments(ace_i);
 	}
 	else if (archivetype == TARGZ_ARCHIVE)
 	{
-		pext.setArguments(targz);
-		pinf.setArguments(targz_i);
+		pext->setArguments(targz);
+		pinf->setArguments(targz_i);
 	}
 	else if (archivetype == TARBZ2_ARCHIVE)
 	{
-		pext.setArguments(tarbz2);
-		pinf.setArguments(tarbz2_i);
+		pext->setArguments(tarbz2);
+		pinf->setArguments(tarbz2_i);
 	}
 
-	pext.addArgument(filename);
-	pinf.addArgument(filename);
-	pext.setWorkingDirectory(destdir);
+	pext->addArgument(filename);
+	pinf->addArgument(filename);
+	pext->setWorkingDirectory(destdir);
 
 	//
 	// extract archive file list first
-	if (!pinf.start())
+	if (!pinf->start())
 		return SINKERR_OTHER;
 	return 0;
 }
@@ -231,7 +238,7 @@ QString ImgArchiveSink::getFullName()
 void ImgArchiveSink::infoExited()
 {
 	extcnt = 0;
-	if (!pext.start())
+	if (!pext->start())
 		emit sinkError(SINKERR_OTHER);
 }
 
@@ -247,7 +254,7 @@ void ImgArchiveSink::extractExited()
 	archdirs = ImgDirSink::getAlldirs();
 	setComicBookName(archivename);
 
-	if (!pext.normalExit())
+	if (!pext->normalExit())
 	{
 		emit sinkError(SINKERR_ARCHEXIT);
 		close();
@@ -275,7 +282,7 @@ void ImgArchiveSink::extractExited()
 
 void ImgArchiveSink::infoStdoutReady()
 {
-	QByteArray b = pinf.readStdout();
+	QByteArray b = pinf->readStdout();
 	for (int i=0; i<b.size(); i++)
 		if (b[i] == '\n')
 			++filesnum;
@@ -283,13 +290,15 @@ void ImgArchiveSink::infoStdoutReady()
 
 void ImgArchiveSink::extractStdoutReady()
 {
-	QByteArray b = pext.readStdout();
+	QByteArray b = pext->readStdout();
 	for (int i=0; i<b.size(); i++)
 		if (b[i] == '\n' && extcnt < filesnum)
-			emit progress(++extcnt, filesnum);
+			++extcnt;
+	emit progress(extcnt, filesnum);
+	qApp->processEvents();
 }
 
-bool ImgArchiveSink::autoconfRAR()
+void ImgArchiveSink::autoconfRAR()
 {
 	rar.clear();
 	rar_i.clear();
@@ -299,7 +308,9 @@ bool ImgArchiveSink::autoconfRAR()
 		rar.append("x");
 		rar_i.append("rar");
 		rar_i.append("lb");
-		return haverar = true;
+		suppsave |= RAR_ARCHIVE;
+		suppopen |= RAR_ARCHIVE;
+		return;
 	}
 	if (which("unrar") != QString::null)
 	{
@@ -307,12 +318,11 @@ bool ImgArchiveSink::autoconfRAR()
 		rar.append("x");
 		rar_i.append("unrar");
 		rar_i.append("lb");
-		return haverar = true;
+		suppopen |= RAR_ARCHIVE;
 	}
-	return haverar = false;
 }
 
-bool ImgArchiveSink::autoconfZIP()
+void ImgArchiveSink::autoconfZIP()
 {
 	zip.clear();
 	zip_i.clear();
@@ -321,12 +331,15 @@ bool ImgArchiveSink::autoconfZIP()
 		zip.append("unzip");
 		zip_i.append("unzip");
 		zip_i.append("-l");
-		return havezip = true;
+		suppopen |= ZIP_ARCHIVE;
 	}
-	return havezip = false;
+	if (which("zip") != QString::null)
+	{
+		suppsave |= ZIP_ARCHIVE;
+	}
 }
 
-bool ImgArchiveSink::autoconfACE()
+void ImgArchiveSink::autoconfACE()
 {
 	ace.clear();
 	ace_i.clear();
@@ -340,12 +353,11 @@ bool ImgArchiveSink::autoconfACE()
 		ace_i.append("l");
 		ace_i.append("-y");
 		ace_i.append("-c-");
-		return haveace = true;
+		suppopen |= ACE_ARCHIVE;
 	}
-	return haveace = false;
 }
 
-bool ImgArchiveSink::autoconfTARGZ()
+void ImgArchiveSink::autoconfTARGZ()
 {
 	targz.clear();
 	targz_i.clear();
@@ -355,12 +367,12 @@ bool ImgArchiveSink::autoconfTARGZ()
 		targz.append("-xvzf");
 		targz_i.append("tar");
 		targz_i.append("-tzf");
-		return havetargz = true;
+		suppopen |= TARGZ_ARCHIVE;
+		suppsave |= TARGZ_ARCHIVE;
 	}
-	return havetargz = false;
 }
 
-bool ImgArchiveSink::autoconfTARBZ2()
+void ImgArchiveSink::autoconfTARBZ2()
 {
 	tarbz2.clear();
 	tarbz2_i.clear();
@@ -370,33 +382,54 @@ bool ImgArchiveSink::autoconfTARBZ2()
 		tarbz2.append("-xjvf");
 		tarbz2_i.append("tar");
 		tarbz2_i.append("-tjf");
-		return havetarbz2 = true;
+		suppopen |= TARBZ2_ARCHIVE;
+		suppsave |= TARBZ2_ARCHIVE;
 	}
-	return havetarbz2 = false;
 }
 
-bool ImgArchiveSink::haveRAR()
+void ImgArchiveSink::autoconfArchivers()
 {
-	return haverar;
+	autoconfRAR();
+	autoconfZIP();
+	autoconfACE();
+	autoconfTARGZ();
+	autoconfTARBZ2();
+	
+	openext = saveext = QString::null;	
+	for (int i=0; exts[i].archtype!=UNKNOWN_ARCHIVE; i++)
+	{
+		if (suppopen & exts[i].archtype)
+		{
+			if (openext != QString::null)
+				openext += " ";
+			openext += "*" + exts[i].ext;
+		}
+		if (suppsave & exts[i].archtype)
+		{
+			if (saveext != QString::null)
+				saveext += " ";
+			saveext += "*" + exts[i].ext;
+		}
+	}
 }
 
-bool ImgArchiveSink::haveZIP()
+QString ImgArchiveSink::supportedOpenExtensions()
 {
-	return havezip;
+	return openext;
 }
 
-bool ImgArchiveSink::haveACE()
+QString ImgArchiveSink::supportedSaveExtensions()
 {
-	return haveace;
+	return saveext;
 }
 
-bool ImgArchiveSink::haveTARGZ()
+int ImgArchiveSink::supportedArchives()
 {
-	return havetargz;
+	return suppopen;
 }
 
-bool ImgArchiveSink::haveTARBZ2()
+bool ImgArchiveSink::supportsOpen(ArchiveType t)
 {
-	return havetarbz2;
+	return (suppopen & t) > 0;
 }
 

@@ -36,12 +36,8 @@ int main(int argc, char *argv[])
 	
 	//
 	// initialize unpackers
-	ImgArchiveSink::autoconfRAR();
-	ImgArchiveSink::autoconfZIP();
-	ImgArchiveSink::autoconfACE();
-	ImgArchiveSink::autoconfTARGZ();
-	ImgArchiveSink::autoconfTARBZ2();
-	
+	ImgArchiveSink::autoconfArchivers();
+		
 	ComicMainWindow *win = new ComicMainWindow(NULL);
 	app.setMainWidget(win);
 	win->show();
