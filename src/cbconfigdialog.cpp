@@ -37,7 +37,7 @@ ComicBookCfgDialog::ComicBookCfgDialog(QWidget *parent, ComicBookSettings *cfg):
 
 	setupDisplayTab();
 	setupMiscTab();
-	setupEditTab();
+	//setupEditTab();
 
 	setCancelButton();
 	setOkButton();
@@ -206,7 +206,7 @@ void ComicBookCfgDialog::apply()
 
 	//
 	// edit
-	cfg->editSupport(cb_editing->isChecked());
+	//cfg->editSupport(cb_editing->isChecked());
 }
 
 void ComicBookCfgDialog::cancel()

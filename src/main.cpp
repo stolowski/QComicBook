@@ -12,6 +12,8 @@
 
 #include <qapplication.h>
 #include <qmessagebox.h>
+#include <qsplashscreen.h>
+#include <qtimer.h>
 #include "imgarchivesink.h"
 #include "icons.h"
 #include "comicmain.h"
@@ -23,6 +25,16 @@ int main(int argc, char *argv[])
 
 	QApplication app(argc, argv);
 	const QString errcaption = ComicMainWindow::tr("QComicBook error");
+
+	//
+	// show splashscreen
+	QPixmap splashpix(DATADIR "qcomicbook-splash.png");
+	QSplashScreen *splash = NULL;
+	if (!splashpix.isNull())
+	{
+		splash = new QSplashScreen(splashpix);
+		splash->show();
+	}
 
 	ComicBookSettings::instance().load();
 	
@@ -46,6 +58,16 @@ int main(int argc, char *argv[])
 	// command line argument
 	if (app.argc() > 1)
 		win->open(app.argv()[1]);
+
+	//
+	// close splashscreen after a few seconds
+	if (splash)
+	{
+		QTimer *timer = new QTimer(win);
+		QObject::connect(timer, SIGNAL(timeout()), splash, SLOT(close()));
+		timer->start(2000, true);
+		//splash->finish(win);
+	}
 
 	return app.exec();
 }

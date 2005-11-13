@@ -868,7 +868,7 @@ void ComicMainWindow::closeSink()
 
         if (sink)
         {
-		//if (typeid(*sink) == typeid(ImgArchiveSink) && cfg->editSupport() && sink->hasModifiedFiles()) 
+		/*if (typeid(*sink) == typeid(ImgArchiveSink) && cfg->editSupport() && sink->hasModifiedFiles()) 
 		{
         		if (QMessageBox::warning(this, tr("Create archive?"),
 				tr("Warning! Some files were modified in this comic book\nDo you want to create new archive file?"),
@@ -879,7 +879,7 @@ void ComicMainWindow::closeSink()
 				delete win;
 			}
 
-		}
+		}*/
                 sink->deleteLater();
                 sink = NULL;
         }

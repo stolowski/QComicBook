@@ -20,5 +20,6 @@ icons_DATA = bestfit.png \
 	     settings.png \
 	     thumbnails.png \
 	     twopages.png \
-	     wholepage.png
+	     wholepage.png \
+	     qcomicbook-splash.png
 
