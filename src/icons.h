@@ -22,10 +22,9 @@ namespace QComicBook
 	{
 		private:
 			static QDict<QIconSet> set;
-			static QString iconpath;
 
 		public:
-			static bool init(const QString &path);
+			static bool init();
 			static const QIconSet& get(const QString &name);
 	};
 }

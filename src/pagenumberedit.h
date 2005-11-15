@@ -26,8 +26,8 @@ namespace QComicBook
 		private:
 			QIntValidator *validator;
 
-			protected slots:
-				void onReturn();
+		protected slots:
+			void onReturn();
 			void selectAll();
 
 		signals:

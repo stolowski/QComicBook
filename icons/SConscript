@@ -1,0 +1,27 @@
+Import('env')
+env.KDEinstall('KDEDATA', 'qcomicbook/',
+"""
+bestfit.png
+bookmark.png
+fbackward.png
+fforward.png
+fitheight.png
+fitwidth.png
+info.png
+japanese.png
+nextpage.png
+openarch.png
+opendir.png
+orgsize.png
+pagebottom.png
+pagetop.png
+prevpage.png
+qcomicbook.png
+qcomicbook-splash.png
+rleft.png
+rright.png
+settings.png
+thumbnails.png
+twopages.png
+wholepage.png
+""")

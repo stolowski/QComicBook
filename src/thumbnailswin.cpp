@@ -55,3 +55,4 @@ ThumbnailsView* ThumbnailsWindow::view() const
 	return tview;
 }
 
+#include "thumbnailswin.moc"

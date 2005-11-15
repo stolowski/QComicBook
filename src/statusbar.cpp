@@ -64,3 +64,4 @@ void StatusBar::setName(const QString &n)
 	name->setText(n);
 }
 
+#include "statusbar.moc"

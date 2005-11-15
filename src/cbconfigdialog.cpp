@@ -248,3 +248,4 @@ void ComicBookCfgDialog::browserCheckboxToggled(bool f)
 	pb_brbrowse->setDisabled(f);
 }
 
+#include "cbconfigdialog.moc"

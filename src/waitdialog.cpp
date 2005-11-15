@@ -36,4 +36,5 @@ void WaitDialog::setText(const QString &text)
 {
 	info->setText(text);
 }
-	
+
+#include "waitdialog.moc"

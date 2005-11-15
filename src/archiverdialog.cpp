@@ -61,3 +61,4 @@ void ArchiverDialog::browse()
 		le_destname->setText(file);
 }
 
+#include "archiverdialog.moc"

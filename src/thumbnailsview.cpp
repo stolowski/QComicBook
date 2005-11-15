@@ -124,3 +124,4 @@ bool ThumbnailsView::isLoaded(int n) const
 	return (n < icons.count()) ? icons[n]->isLoaded() : false;
 }
 
+#include "thumbnailsview.moc"

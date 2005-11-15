@@ -10,7 +10,6 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "config.h"
 #include "bookmarks.h"
 #include "comicmain.h"
 #include "icons.h"
@@ -826,7 +825,7 @@ void ComicMainWindow::showAbout()
 
 void ComicMainWindow::showHelp()
 {
-        const QString helpdir = HelpBrowser::getLocaleHelpDir(DATADIR "/help");
+        /*const QString helpdir = HelpBrowser::getLocaleHelpDir(DATADIR "/help");
         if (!cfg->useInternalBrowser() && cfg->externalBrowser() != QString::null)
         {
                 QProcess *proc = new QProcess(this);
@@ -843,7 +842,7 @@ void ComicMainWindow::showHelp()
         {
                 HelpBrowser *help = new HelpBrowser(tr("QComicBook Help"), helpdir);
                 help->show();
-        }
+        }*/
 }
 
 void ComicMainWindow::showConfigDialog()
@@ -967,3 +966,4 @@ void ComicMainWindow::saveSettings()
         bookmarks->save();        
 }
 
+#include "comicmain.moc"

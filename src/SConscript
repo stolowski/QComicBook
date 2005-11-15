@@ -1,0 +1,42 @@
+Import('env')
+
+#env.KDEinstall('KDEDATA', 'qcomicbook/', 'kleansweep_bar.png')
+#env.KDEinstall('KDEMENU', 'System/', 'qcomicbook.desktop')
+
+obj=env.kobject('program')
+obj.target='qcomicbook'
+obj.source="""
+aboutdialog.cpp
+archiverdialog.cpp
+bookmark.cpp
+bookmarkmanager.cpp
+bookmarks.cpp
+cbconfigdialog.cpp
+cbinfo.cpp
+cbsettings.cpp
+comicmain.cpp
+helpbrowser.cpp
+history.cpp
+icons.cpp
+imgarchivesink.cpp
+imgcache.cpp
+imgdirsink.cpp
+imgloader.cpp
+imgsinkfactory.cpp
+imgview.cpp
+jumptopagewin.cpp
+main.cpp
+miscutil.cpp
+pagenumberedit.cpp
+statusbar.cpp
+thumbnail.cpp
+thumbnailevent.cpp
+thumbnailitem.cpp
+thumbnailloader.cpp
+thumbnailsview.cpp
+thumbnailswin.cpp
+waitdialog.cpp
+"""
+obj.libs='qt-mt kdeui kio kdecore'
+obj.execute()
+

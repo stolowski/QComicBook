@@ -130,3 +130,4 @@ void BookmarkManager::selectInvalid()
 		item->setSelected(true);
 }
 
+#include "bookmarkmanager.moc"

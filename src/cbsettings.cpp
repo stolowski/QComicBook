@@ -490,3 +490,4 @@ void ComicBookSettings::editSupport(bool f)
 		cfg->writeEntry(GRP_MISC OPT_EDITING, editsupport = f);
 }
 
+#include "cbsettings.moc"

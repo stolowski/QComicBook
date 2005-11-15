@@ -433,3 +433,4 @@ bool ImgArchiveSink::supportsOpen(ArchiveType t)
 	return (suppopen & t) > 0;
 }
 
+#include "imgarchivesink.moc"

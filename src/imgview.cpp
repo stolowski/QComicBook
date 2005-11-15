@@ -473,3 +473,4 @@ const QPixmap& ComicImageView::image() const
         return *pixmap;
 }
 
+#include "imgview.moc"

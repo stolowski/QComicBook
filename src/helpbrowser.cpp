@@ -85,3 +85,4 @@ QString HelpBrowser::getLocaleHelpDir(const QString &maindir, const QString &fil
 	return QString::null;
 }
 
+#include "helpbrowser.moc"

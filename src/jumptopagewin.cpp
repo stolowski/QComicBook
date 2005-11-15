@@ -54,3 +54,4 @@ void JumpToPageWindow::jumpPressed()
 	emit pageSelected(n);
 }
 
+#include "jumptopagewin.moc"
