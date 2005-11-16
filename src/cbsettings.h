@@ -56,8 +56,6 @@ namespace QComicBook
 			bool confirmexit;
 			bool statusbar;
 			bool editsupport;
-			bool intbrowser;
-			QString extbrowser;
 			QString docklayout;
 			QFont font;
 
@@ -101,9 +99,7 @@ namespace QComicBook
 			bool fullScreenHideMenu() const;
 			bool fullScreenHideStatusbar() const;
 			bool showStatusbar() const;
-			bool useInternalBrowser() const;
 			const QFont& infoFont() const;
-			QString externalBrowser() const;
 			void restoreDockLayout(QMainWindow *w);
 			bool editSupport() const;
 
@@ -128,9 +124,7 @@ namespace QComicBook
 			void fullScreenHideMenu(bool f);
 			void fullScreenHideStatusbar(bool f);
 			void showStatusbar(bool f);
-			void useInternalBrowser(bool f);
 			void infoFont(const QFont &f);
-			void externalBrowser(const QString &cmd);
 			void saveDockLayout(QMainWindow *w);
 			void editSupport(bool f);
 

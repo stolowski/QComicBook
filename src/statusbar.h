@@ -13,14 +13,15 @@
 #ifndef __STATUSBAR_H
 #define __STATUSBAR_H
 
-#include <qstatusbar.h>
+#include <kstatusbar.h>
 
 class QLabel;
 class QImage;
+class QProgressBar;
 
 namespace QComicBook
 {
-	class StatusBar: public QStatusBar
+	class StatusBar: public KStatusBar
 	{
 		Q_OBJECT
 
@@ -28,15 +29,21 @@ namespace QComicBook
 			QLabel *page;
 			QLabel *imginfo;
 			QLabel *name;
+			QProgressBar *pbar;
+
+		protected:
+			void createInfoElements(); //creates widgets for displaying info
+			void removeInfoElements();
 
 		public slots:
 			void setPage(int n, int total);
 			void setName(const QString &n);
 			void setImageInfo(const QImage *img1, const QImage *img2=NULL);
+			void setProgress(int n, int total);
 			void clear();
 
 		public:
-			StatusBar(QWidget *parent);
+			StatusBar(QWidget *parent, bool elms=true);
 			~StatusBar();
 	};
 }

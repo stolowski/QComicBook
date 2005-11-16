@@ -15,7 +15,7 @@
 #ifndef __COMIC_MAIN_H
 #define __COMIC_MAIN_H
 
-#include <qmainwindow.h>
+#include <kmainwindow.h>
 #include "history.h"
 
 class QAction;
@@ -35,7 +35,7 @@ namespace QComicBook
 	using Utility::History;
 
 	//! The main window of QComicBook.
-	class ComicMainWindow: public QMainWindow
+	class ComicMainWindow: public KMainWindow
 	{
 		Q_OBJECT
 
@@ -45,7 +45,7 @@ namespace QComicBook
 			ThumbnailsWindow *thumbswin;
 			History *recentfiles;
 			Bookmarks *bookmarks;
-			StatusBar *statusbar;
+			QComicBook::StatusBar *statusbar;
 			ComicBookSettings *cfg;
 			int currpage; //!<current page number
 			int scrv_id; //!<identifier of "Scrollbars visible" menu option
@@ -153,8 +153,6 @@ namespace QComicBook
 			void open(const QString &path, int page=0);
 			void openNext();
 			void openPrevious();
-			void showAbout();
-			void showHelp();
 			void showInfo();
 			void showConfigDialog();
 			void showJumpToPage(const QString &number=QString::null);

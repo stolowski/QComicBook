@@ -11,6 +11,7 @@
 #include <qhbox.h>
 #include <qvbox.h>
 #include <qsizepolicy.h>
+#include <klocale.h>
 
 using namespace QComicBook;
 
@@ -27,21 +28,21 @@ ArchiverDialog::ArchiverDialog(QWidget *parent, ImgDirSink *sink): QDialog(paren
 
 	QHBox *box1 = new QHBox(box0);
 	box1->setSpacing(5);
-	new QLabel(tr("Destination file name"), box1);
+	new QLabel(i18n("Destination file name"), box1);
 	le_destname = new QLineEdit(box1);
-	QPushButton *b_browse = new QPushButton(tr("Browse"), box1);
+	QPushButton *b_browse = new QPushButton(i18n("Browse"), box1);
 	connect(b_browse, SIGNAL(clicked()), this, SLOT(browse()));
 
 	QHBox *box2 = new QHBox(box0);
 	box2->setSpacing(5);
-	new QLabel(tr("Archive type"), box2);
+	new QLabel(i18n("Archive type"), box2);
 	cm_archtype = new QComboBox(box2);
 	cm_archtype->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum));
 
 	lay0->addStretch();
 	QHBoxLayout *lay3 = new QHBoxLayout(NULL, 5, 5);
-	QPushButton *b_cancel = new QPushButton(tr("Cancel"), this);
-	QPushButton *b_create = new QPushButton(tr("Create"), this);
+	QPushButton *b_cancel = new QPushButton(i18n("Cancel"), this);
+	QPushButton *b_create = new QPushButton(i18n("Create"), this);
 	lay3->addStretch();
 	lay3->addWidget(b_create);
 	lay3->addWidget(b_cancel);
@@ -56,7 +57,7 @@ void ArchiverDialog::browse()
 {        
 	const QString file = QFileDialog::getSaveFileName(imgsink->getFullName(),
                         "Archives (" + ImgArchiveSink::supportedSaveExtensions() + ");;All files (*)",
-                        this, NULL, tr("Choose a file") );
+                        this, i18n("Choose a file") );
         if (!file.isEmpty())
 		le_destname->setText(file);
 }

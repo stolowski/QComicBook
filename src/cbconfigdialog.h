@@ -46,9 +46,6 @@ namespace QComicBook
 			QSpinBox *sb_fontsize;
 			QRadioButton *rb_smooth;
 			QRadioButton *rb_fast;
-			QCheckBox *cb_intbrowser;
-			QLineEdit *le_extbrowser;
-			QPushButton *pb_brbrowse;
 			QLabel *fontname;
 			QFont font;
 			QCheckBox *cb_editing;
@@ -63,8 +60,6 @@ namespace QComicBook
 			void cancel();
 			void showBackgroundDialog();
 			void showFontDialog();
-			void browseExternalBrowser();
-			void browserCheckboxToggled(bool f);
 
 		public:
 			ComicBookCfgDialog(QWidget *parent, ComicBookSettings *cfg);

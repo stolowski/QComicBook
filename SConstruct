@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-version = '0.2.6';
+version = '0.3.0';
 
 Help("""
 Type: 'scons' to build QComicBook with defaults

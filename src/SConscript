@@ -6,7 +6,6 @@ Import('env')
 obj=env.kobject('program')
 obj.target='qcomicbook'
 obj.source="""
-aboutdialog.cpp
 archiverdialog.cpp
 bookmark.cpp
 bookmarkmanager.cpp
@@ -15,7 +14,6 @@ cbconfigdialog.cpp
 cbinfo.cpp
 cbsettings.cpp
 comicmain.cpp
-helpbrowser.cpp
 history.cpp
 icons.cpp
 imgarchivesink.cpp

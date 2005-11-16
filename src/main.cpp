@@ -23,7 +23,7 @@
 #include "cbsettings.h"
 
 static const char description[] =
-    I18N_NOOP("Disk cleaning tool");
+    I18N_NOOP("Comicbook archives viewer");
 
 static KCmdLineOptions options[] =
 {

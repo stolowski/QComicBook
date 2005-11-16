@@ -18,10 +18,8 @@
 #include "imgview.h"
 #include "imgarchivesink.h"
 #include "imgsinkfactory.h"
-#include "aboutdialog.h"
 #include "cbsettings.h"
 #include "history.h"
-#include "helpbrowser.h"
 #include "cbconfigdialog.h"
 #include "statusbar.h"
 #include "thumbnailswin.h"
@@ -31,25 +29,25 @@
 #include "miscutil.h"
 #include "archiverdialog.h"
 #include <qimage.h>
-#include <qmenubar.h>
-#include <qpopupmenu.h>
+#include <kmenubar.h>
+#include <klocale.h>
+#include <kpopupmenu.h>
 #include <qstringlist.h>
 #include <qaction.h>
-#include <qfiledialog.h>
+#include <kfiledialog.h>
 #include <qfileinfo.h>
 #include <qtoolbar.h>
 #include <qmessagebox.h>
 #include <qlabel.h>
 #include <qframe.h>
 #include <jumptopagewin.h>
-#include <qprogressdialog.h>
 #include <qprocess.h>
 #include <typeinfo>
 
 using namespace QComicBook;
 using namespace Utility;
 
-ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WType_TopLevel|WDestructiveClose), sink(NULL), currpage(0), edit_menu(NULL)
+ComicMainWindow::ComicMainWindow(QWidget *parent): KMainWindow(parent, NULL, WType_TopLevel|WDestructiveClose), sink(NULL), currpage(0), edit_menu(NULL)
 {
         updateCaption();
         setIcon(Icons::get(ICON_APPICON).pixmap(QIconSet::Small, true));
@@ -100,55 +98,55 @@ ComicMainWindow::~ComicMainWindow()
 
 void ComicMainWindow::setupActions()
 {
-        openArchiveAction = new QAction(Icons::get(ICON_OPENARCH), tr("Open archive"), CTRL+Key_O, this);
-        openDirAction = new QAction(Icons::get(ICON_OPENDIR), tr("Open directory"), CTRL+Key_D, this);
-        openNextAction = new QAction(tr("Open next"), CTRL+Key_N, this);
-        openPrevAction = new QAction(tr("Open previous"), CTRL+Key_P, this);
-        fullScreenAction = new QAction(tr("&Fullscreen"), Key_F11, this);
-        nextPageAction = new QAction(Icons::get(ICON_NEXTPAGE), tr("Next page"), Key_PageDown, this);
-        forwardPageAction = new QAction(Icons::get(ICON_FORWARD), tr("5 pages forward"), QKeySequence(), this);
-        backwardPageAction = new QAction(Icons::get (ICON_BACKWARD), tr("5 pages backward"), QKeySequence(), this);
+        openArchiveAction = new QAction(Icons::get(ICON_OPENARCH), i18n("Open archive"), CTRL+Key_O, this);
+        openDirAction = new QAction(Icons::get(ICON_OPENDIR), i18n("Open directory"), CTRL+Key_D, this);
+        openNextAction = new QAction(i18n("Open next"), CTRL+Key_N, this);
+        openPrevAction = new QAction(i18n("Open previous"), CTRL+Key_P, this);
+        fullScreenAction = new QAction(i18n("&Fullscreen"), Key_F11, this);
+        nextPageAction = new QAction(Icons::get(ICON_NEXTPAGE), i18n("Next page"), Key_PageDown, this);
+        forwardPageAction = new QAction(Icons::get(ICON_FORWARD), i18n("5 pages forward"), QKeySequence(), this);
+        backwardPageAction = new QAction(Icons::get (ICON_BACKWARD), i18n("5 pages backward"), QKeySequence(), this);
         jumpDownAction = new QAction(QString::null, Key_Space, this);
         jumpUpAction = new QAction(QString::null, Key_Backspace, this);
-        prevPageAction = new QAction(Icons::get(ICON_PREVPAGE), tr("&Previous page"), Key_PageUp, this);
-        pageTopAction = new QAction(Icons::get(ICON_PAGETOP), tr("Page top"), Key_Home, this);
-        pageBottomAction = new QAction(Icons::get(ICON_PAGEBOTTOM), tr("Page bottom"), Key_End, this);
-        scrollRightAction = new QAction(tr("Scroll right"), Key_Right, this);        
-        scrollLeftAction = new QAction(tr("Scroll left"), Key_Left, this);
-        scrollRightFastAction = new QAction(tr("Fast scroll right"), SHIFT+Key_Right, this);
-        scrollLeftFastAction = new QAction(tr("Fast scroll left"), SHIFT+Key_Left, this);
-        scrollUpAction = new QAction(tr("Scroll up"), Key_Up, this);
-        scrollDownAction = new QAction(tr("Scroll down"), Key_Down, this);
-        scrollUpFastAction = new QAction(tr("Fast scroll up"), SHIFT+Key_Up, this);
-        scrollDownFastAction = new QAction(tr("Fast scroll down"), SHIFT+Key_Down, this);
+        prevPageAction = new QAction(Icons::get(ICON_PREVPAGE), i18n("&Previous page"), Key_PageUp, this);
+        pageTopAction = new QAction(Icons::get(ICON_PAGETOP), i18n("Page top"), Key_Home, this);
+        pageBottomAction = new QAction(Icons::get(ICON_PAGEBOTTOM), i18n("Page bottom"), Key_End, this);
+        scrollRightAction = new QAction(i18n("Scroll right"), Key_Right, this);        
+        scrollLeftAction = new QAction(i18n("Scroll left"), Key_Left, this);
+        scrollRightFastAction = new QAction(i18n("Fast scroll right"), SHIFT+Key_Right, this);
+        scrollLeftFastAction = new QAction(i18n("Fast scroll left"), SHIFT+Key_Left, this);
+        scrollUpAction = new QAction(i18n("Scroll up"), Key_Up, this);
+        scrollDownAction = new QAction(i18n("Scroll down"), Key_Down, this);
+        scrollUpFastAction = new QAction(i18n("Fast scroll up"), SHIFT+Key_Up, this);
+        scrollDownFastAction = new QAction(i18n("Fast scroll down"), SHIFT+Key_Down, this);
 
         QActionGroup *scaleActions = new QActionGroup(this);
-        fitWidthAction = new QAction(Icons::get(ICON_FITWIDTH), tr("Fit width"), ALT+Key_W, scaleActions);                         
+        fitWidthAction = new QAction(Icons::get(ICON_FITWIDTH), i18n("Fit width"), ALT+Key_W, scaleActions);                         
         fitWidthAction->setToggleAction(true);
-        fitHeightAction = new QAction(Icons::get(ICON_FITHEIGHT), tr("Fit height"), ALT+Key_H, scaleActions);
+        fitHeightAction = new QAction(Icons::get(ICON_FITHEIGHT), i18n("Fit height"), ALT+Key_H, scaleActions);
         fitHeightAction->setToggleAction(true);
-        wholePageAction = new QAction(Icons::get(ICON_WHOLEPAGE), tr("Whole page"), ALT+Key_A, scaleActions);
+        wholePageAction = new QAction(Icons::get(ICON_WHOLEPAGE), i18n("Whole page"), ALT+Key_A, scaleActions);
         wholePageAction->setToggleAction(true);
-        originalSizeAction = new QAction(Icons::get(ICON_ORGSIZE), tr("Original size"), ALT+Key_O, scaleActions);
+        originalSizeAction = new QAction(Icons::get(ICON_ORGSIZE), i18n("Original size"), ALT+Key_O, scaleActions);
         originalSizeAction->setToggleAction(true);
-        bestFitAction = new QAction(Icons::get(ICON_BESTFIT), tr("Best fit"), ALT+Key_B, scaleActions);
+        bestFitAction = new QAction(Icons::get(ICON_BESTFIT), i18n("Best fit"), ALT+Key_B, scaleActions);
         bestFitAction->setToggleAction(true);
-        mangaModeAction = new QAction(Icons::get(ICON_JAPANESE), tr("Japanese mode"), CTRL+Key_J, this);
+        mangaModeAction = new QAction(Icons::get(ICON_JAPANESE), i18n("Japanese mode"), CTRL+Key_J, this);
         mangaModeAction->setToggleAction(true);
-        twoPagesAction = new QAction(Icons::get(ICON_TWOPAGES), tr("Two pages"), CTRL+Key_T, this);
+        twoPagesAction = new QAction(Icons::get(ICON_TWOPAGES), i18n("Two pages"), CTRL+Key_T, this);
         twoPagesAction->setToggleAction(true);
-        rotateRightAction = new QAction(Icons::get(ICON_ROTRIGHT), tr("Rotate right"), QKeySequence(), this);
-        rotateLeftAction = new QAction(Icons::get(ICON_ROTLEFT), tr("Rotate left"), QKeySequence(), this);
-        rotateResetAction = new QAction(tr("No rotation"), QKeySequence(), this);
-        togglePreserveRotationAction = new QAction(tr("Preserve rotation"), QKeySequence(), this);
+        rotateRightAction = new QAction(Icons::get(ICON_ROTRIGHT), i18n("Rotate right"), QKeySequence(), this);
+        rotateLeftAction = new QAction(Icons::get(ICON_ROTLEFT), i18n("Rotate left"), QKeySequence(), this);
+        rotateResetAction = new QAction(i18n("No rotation"), QKeySequence(), this);
+        togglePreserveRotationAction = new QAction(i18n("Preserve rotation"), QKeySequence(), this);
         togglePreserveRotationAction->setToggleAction(true);
-        showInfoAction = new QAction(Icons::get(ICON_INFO), tr("Info"), ALT+Key_I, this);
+        showInfoAction = new QAction(Icons::get(ICON_INFO), i18n("Info"), ALT+Key_I, this);
         exitFullScreenAction = new QAction(QString::null, Key_Escape, this);
-        toggleStatusbarAction = new QAction(tr("Statusbar"), QKeySequence(), this);
+        toggleStatusbarAction = new QAction(i18n("Statusbar"), QKeySequence(), this);
         toggleStatusbarAction->setToggleAction(true);
-        toggleThumbnailsAction = new QAction(Icons::get(ICON_THUMBNAILS), tr("Thumbnails"), ALT+Key_T, this);
+        toggleThumbnailsAction = new QAction(Icons::get(ICON_THUMBNAILS), i18n("Thumbnails"), ALT+Key_T, this);
         toggleThumbnailsAction->setToggleAction(true);
-        toggleToolbarAction = new QAction(tr("Toolbar"), QKeySequence(), this);
+        toggleToolbarAction = new QAction(i18n("Toolbar"), QKeySequence(), this);
         toggleToolbarAction->setToggleAction(true);
 
         connect(openArchiveAction, SIGNAL(activated()), this, SLOT(browseArchive()));
@@ -225,7 +223,7 @@ void ComicMainWindow::setupThumbnailsWindow()
 
 void ComicMainWindow::setupToolbar()
 {
-        toolbar = new QToolBar(tr("Toolbar"), this);
+        toolbar = new QToolBar(i18n("Toolbar"), this);
 	openDirAction->addTo(toolbar);
 	openArchiveAction->addTo(toolbar);
         toolbar->addSeparator();
@@ -262,27 +260,27 @@ void ComicMainWindow::setupFileMenu()
         openNextAction->addTo(file_menu);
         openPrevAction->addTo(file_menu);
         recent_menu = new QPopupMenu(this);
-        file_menu->insertItem(tr("Recently opened"), recent_menu);
+        file_menu->insertItem(i18n("Recently opened"), recent_menu);
         connect(recent_menu, SIGNAL(activated(int)), this, SLOT(recentSelected(int)));
         file_menu->insertSeparator();
         showInfoAction->addTo(file_menu);
-        file_menu->insertItem(Icons::get(ICON_SETTINGS), tr("Settings"), this, SLOT(showConfigDialog()));
+        file_menu->insertItem(Icons::get(ICON_SETTINGS), i18n("Settings"), this, SLOT(showConfigDialog()));
         file_menu->insertSeparator();
-        close_id = file_menu->insertItem(tr("Close"), this, SLOT(closeSink()));
+        close_id = file_menu->insertItem(i18n("Close"), this, SLOT(closeSink()));
         file_menu->insertSeparator();
-        file_menu->insertItem(tr("&Quit"), this, SLOT(close()));
-        menuBar()->insertItem(tr("&File"), file_menu);   
+        file_menu->insertItem(i18n("&Quit"), this, SLOT(close()));
+        menuBar()->insertItem(i18n("&File"), file_menu);   
 }
 
 void ComicMainWindow::setupEditMenu()
 {
         edit_menu = new QPopupMenu(this);
-        gimp_id = edit_menu->insertItem(tr("Open with Gimp"), this, SLOT(openWithGimp()));
-        //edit_menu->insertItem(tr("Open with Kolour Paint"), this, SLOT(openWithGimp()));
-        //edit_menu->insertItem(tr("Open with ImageMagick"), this, SLOT(openWithGimp()));
+        gimp_id = edit_menu->insertItem(i18n("Open with Gimp"), this, SLOT(openWithGimp()));
+        //edit_menu->insertItem(i18n("Open with Kolour Paint"), this, SLOT(openWithGimp()));
+        //edit_menu->insertItem(i18n("Open with ImageMagick"), this, SLOT(openWithGimp()));
 	edit_menu->insertSeparator();
-	reload_id = edit_menu->insertItem(tr("Reload page"), this, SLOT(reloadPage()));
-        menuBar()->insertItem(tr("&Edit"), edit_menu);
+	reload_id = edit_menu->insertItem(i18n("Reload page"), this, SLOT(reloadPage()));
+        menuBar()->insertItem(i18n("&Edit"), edit_menu);
 }
 
 void ComicMainWindow::setupViewMenu()
@@ -307,11 +305,11 @@ void ComicMainWindow::setupViewMenu()
         mangaModeAction->addTo(view_menu);
         toggleThumbnailsAction->addTo(view_menu);
         view_menu->insertSeparator();
-        scrv_id = view_menu->insertItem(tr("Scrollbars"), this, SLOT(toggleScrollbars()));
+        scrv_id = view_menu->insertItem(i18n("Scrollbars"), this, SLOT(toggleScrollbars()));
         view_menu->setItemChecked(scrv_id, f = cfg->scrollbarsVisible());
         toggleToolbarAction->addTo(view_menu);
         toggleStatusbarAction->addTo(view_menu);
-        menuBar()->insertItem(tr("&View"), view_menu);     
+        menuBar()->insertItem(i18n("&View"), view_menu);     
 }
 
 void ComicMainWindow::setupNavigationMenu()
@@ -323,28 +321,28 @@ void ComicMainWindow::setupNavigationMenu()
         forwardPageAction->addTo(navi_menu);
         backwardPageAction->addTo(navi_menu);
         navi_menu->insertSeparator();
-        jumpto_id = navi_menu->insertItem(tr("Jump to page..."), this, SLOT(showJumpToPage()));
-        firstpage_id = navi_menu->insertItem(tr("First page"), this, SLOT(firstPage()));
-        lastpage_id = navi_menu->insertItem(tr("Last page"), this, SLOT(lastPage()));
+        jumpto_id = navi_menu->insertItem(i18n("Jump to page..."), this, SLOT(showJumpToPage()));
+        firstpage_id = navi_menu->insertItem(i18n("First page"), this, SLOT(firstPage()));
+        lastpage_id = navi_menu->insertItem(i18n("Last page"), this, SLOT(lastPage()));
         navi_menu->insertSeparator();
         pageTopAction->addTo(navi_menu);
         pageBottomAction->addTo(navi_menu);
         navi_menu->insertSeparator();
-        contscr_id = navi_menu->insertItem(tr("Continuous scrolling"), this, SLOT(toggleContinousScroll()));
+        contscr_id = navi_menu->insertItem(i18n("Continuous scrolling"), this, SLOT(toggleContinousScroll()));
         twoPagesAction->setOn(cfg->twoPagesMode());
         mangaModeAction->setOn(cfg->japaneseMode());
         navi_menu->setItemChecked(contscr_id, cfg->continuousScrolling());
-        menuBar()->insertItem(tr("&Navigation"), navi_menu);
+        menuBar()->insertItem(i18n("&Navigation"), navi_menu);
 }
 
 void ComicMainWindow::setupBookmarksMenu()
 {
         bookmarks_menu = new QPopupMenu(this);
         bookmarks = new Bookmarks(bookmarks_menu);
-        menuBar()->insertItem(tr("&Bookmarks"), bookmarks_menu);
-        setbookmark_id = bookmarks_menu->insertItem(Icons::get(ICON_BOOKMARK), tr("Set bookmark for this comicbook"), this, SLOT(setBookmark()));
-        rmvbookmark_id = bookmarks_menu->insertItem(tr("Remove bookmark for this comicbook"), this, SLOT(removeBookmark()));
-        bookmarks_menu->insertItem(tr("Manage bookmarks"), this, SLOT(openBookmarksManager()));
+        menuBar()->insertItem(i18n("&Bookmarks"), bookmarks_menu);
+        setbookmark_id = bookmarks_menu->insertItem(Icons::get(ICON_BOOKMARK), i18n("Set bookmark for this comicbook"), this, SLOT(setBookmark()));
+        rmvbookmark_id = bookmarks_menu->insertItem(i18n("Remove bookmark for this comicbook"), this, SLOT(removeBookmark()));
+        bookmarks_menu->insertItem(i18n("Manage bookmarks"), this, SLOT(openBookmarksManager()));
         bookmarks_menu->insertSeparator();
         bookmarks->load();
         connect(bookmarks_menu, SIGNAL(activated(int)), this, SLOT(bookmarkSelected(int)));
@@ -352,15 +350,13 @@ void ComicMainWindow::setupBookmarksMenu()
 
 void ComicMainWindow::setupHelpMenu()
 {
-        QPopupMenu *help_menu = new QPopupMenu(this);
-        help_menu->insertItem(tr("Index"), this, SLOT(showHelp()));
-        help_menu->insertItem(tr("About"), this, SLOT(showAbout()));
-        menuBar()->insertItem(tr("&Help"), help_menu);
+        KPopupMenu *help_menu = helpMenu();
+        menuBar()->insertItem(i18n("&Help"), help_menu);
 }
 
 void ComicMainWindow::setupStatusbar()
 {
-        statusbar = new StatusBar(this);      
+        statusbar = new QComicBook::StatusBar(this);      
         connect(toggleStatusbarAction, SIGNAL(toggled(bool)), statusbar, SLOT(setShown(bool)));
         toggleStatusbarAction->setOn(cfg->showStatusbar());
         statusbar->setShown(cfg->showStatusbar());
@@ -547,6 +543,8 @@ void ComicMainWindow::recentSelected(int id)
 
 void ComicMainWindow::sinkReady(const QString &path)
 {
+	statusbar->setShown(toggleStatusbarAction->isOn()); //applies back user's statusbar preference
+	
         recentfiles->append(path);
         setRecentFilesMenu(*recentfiles);
 
@@ -568,16 +566,17 @@ void ComicMainWindow::sinkReady(const QString &path)
 
 void ComicMainWindow::sinkError(int code)
 {
-        QString msg;
+	statusbar->setShown(toggleStatusbarAction->isOn()); //applies back user's statusbar preference
 
+        QString msg;
         switch (code)
         {
-                case SINKERR_EMPTY: msg = tr("no images found"); break;
-                case SINKERR_UNKNOWNFILE: msg = tr("unknown archive"); break;
-                case SINKERR_ACCESS: msg = tr("can't access directory"); break;
-                case SINKERR_NOTFOUND: msg = tr("file/directory not found"); break;
-                case SINKERR_NOTSUPPORTED: msg = tr("archive not supported"); break;
-                case SINKERR_ARCHEXIT: msg = tr("archive extractor exited with error"); break;
+                case SINKERR_EMPTY: msg = i18n("no images found"); break;
+                case SINKERR_UNKNOWNFILE: msg = i18n("unknown archive"); break;
+                case SINKERR_ACCESS: msg = i18n("can't access directory"); break;
+                case SINKERR_NOTFOUND: msg = i18n("file/directory not found"); break;
+                case SINKERR_NOTSUPPORTED: msg = i18n("archive not supported"); break;
+                case SINKERR_ARCHEXIT: msg = i18n("archive extractor exited with error"); break;
                 default: break;
         }
         QMessageBox::critical(this, "QComicBook error", "Error opening comicbook: " + msg, 
@@ -587,17 +586,17 @@ void ComicMainWindow::sinkError(int code)
 
 void ComicMainWindow::browseDirectory()
 {
-        const QString dir = QFileDialog::getExistingDirectory(lastdir, this, 
-                        NULL, tr("Choose a directory") );
+        const QString dir = KFileDialog::getExistingDirectory(lastdir, this, 
+                        i18n("Choose a directory") );
         if (!dir.isEmpty())
                 open(dir, 0);
 }
 
 void ComicMainWindow::browseArchive()
 {
-        const QString file = QFileDialog::getOpenFileName(lastdir,
+        const QString file = KFileDialog::getOpenFileName(lastdir,
                         "Archives (" + ImgArchiveSink::supportedOpenExtensions() + ");;All files (*)",
-                        this, NULL, tr("Choose a file") );
+                        this, i18n("Choose a file") );
         if (!file.isEmpty())
                 open(file, 0);
 }
@@ -625,18 +624,9 @@ void ComicMainWindow::open(const QString &path, int page)
 
         connect(sink, SIGNAL(sinkReady(const QString&)), this, SLOT(sinkReady(const QString&)));
         connect(sink, SIGNAL(sinkError(int)), this, SLOT(sinkError(int)));
+        connect(sink, SIGNAL(progress(int, int)), statusbar, SLOT(setProgress(int, int))); //progress in statusbar
 
-        QProgressDialog *win = new QProgressDialog(tr("Please wait. Opening comicbook"), 0, 1, this, 0, true, WDestructiveClose);
-        win->setCaption(caption());
-        win->setAutoClose(true);
-        win->setAutoReset(true);
-
-        connect(sink, SIGNAL(progress(int, int)), win, SLOT(setProgress(int, int)));
-        connect(sink, SIGNAL(sinkReady(const QString&)), win, SLOT(close()));
-        connect(sink, SIGNAL(sinkError(int)), win, SLOT(close()));
-
-        win->show();
-
+        statusbar->setShown(true); //ensures status bar is visible when opening regardless of user settings
         sink->open(fullname);
 }
 
@@ -796,7 +786,7 @@ void ComicMainWindow::jumpToPage(int n, bool force)
                 }
                 if (mangaModeAction->isOn())
                         view->ensureVisible(view->image().width(), 0);
-                const QString page = tr("Page") + " " + QString::number(currpage + 1) + "/" + QString::number(sink->numOfImages());
+                const QString page = i18n("Page") + " " + QString::number(currpage + 1) + "/" + QString::number(sink->numOfImages());
                 pageinfo->setText(page);
                 statusbar->setPage(currpage + 1, sink->numOfImages());
                 thumbswin->view()->scrollToPage(currpage);
@@ -810,39 +800,6 @@ void ComicMainWindow::showInfo()
                 ComicBookInfo *i = new ComicBookInfo(this, *sink, cfg->infoFont());
                 i->show();
         }
-}
-
-void ComicMainWindow::showAbout()
-{
-        AboutDialog *win = new AboutDialog(this, "About QComicBook",
-                        "QComicBook " VERSION " - comic book viewer for GNU/Linux\n"
-                        "(c)by Pawel Stolowski 2005\n"
-                        "released under terms of GNU General Public License\n\n"
-                        "http://linux.bydg.org/~yogin\n"
-                        "yogin@linux.bydg.org");
-        win->show();
-}
-
-void ComicMainWindow::showHelp()
-{
-        /*const QString helpdir = HelpBrowser::getLocaleHelpDir(DATADIR "/help");
-        if (!cfg->useInternalBrowser() && cfg->externalBrowser() != QString::null)
-        {
-                QProcess *proc = new QProcess(this);
-                proc->addArgument(cfg->externalBrowser());
-                proc->addArgument(helpdir + "/index.html");
-                connect(proc, SIGNAL(processExited()), proc, SLOT(deleteLater()));
-                if (!proc->start())
-                {
-                        proc->deleteLater();
-                        cfg->useInternalBrowser(true);
-                }
-        }
-        if (cfg->useInternalBrowser())
-        {
-                HelpBrowser *help = new HelpBrowser(tr("QComicBook Help"), helpdir);
-                help->show();
-        }*/
 }
 
 void ComicMainWindow::showConfigDialog()
@@ -869,8 +826,8 @@ void ComicMainWindow::closeSink()
         {
 		/*if (typeid(*sink) == typeid(ImgArchiveSink) && cfg->editSupport() && sink->hasModifiedFiles()) 
 		{
-        		if (QMessageBox::warning(this, tr("Create archive?"),
-				tr("Warning! Some files were modified in this comic book\nDo you want to create new archive file?"),
+        		if (QMessageBox::warning(this, i18n("Create archive?"),
+				i18n("Warning! Some files were modified in this comic book\nDo you want to create new archive file?"),
                                 QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
 			{
 				ArchiverDialog *win = new ArchiverDialog(this, sink);
@@ -896,8 +853,8 @@ void ComicMainWindow::setBookmark()
 
 void ComicMainWindow::removeBookmark()
 {
-        if (sink && bookmarks->exists(sink->getFullName()) && QMessageBox::question(this, tr("Removing bookmark"),
-                                tr("Do you really want to remove bookmark\nfor this comic book?"),
+        if (sink && bookmarks->exists(sink->getFullName()) && QMessageBox::question(this, i18n("Removing bookmark"),
+                                i18n("Do you really want to remove bookmark\nfor this comic book?"),
                                 QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
                 bookmarks->remove(sink->getFullName());
 }
@@ -939,8 +896,8 @@ void ComicMainWindow::bookmarkSelected(int id)
                         QFileInfo finfo(fname);
                         if (!finfo.exists())
                         {
-                                if (QMessageBox::question(this, tr("Comic book not found"),
-                                                        tr("Selected bookmark points to\nnon-existing comic book\nDo you want to remove it?"),
+                                if (QMessageBox::question(this, i18n("Comic book not found"),
+                                                        i18n("Selected bookmark points to\nnon-existing comic book\nDo you want to remove it?"),
                                                         QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
                                         bookmarks->remove(id);
                                 return;
