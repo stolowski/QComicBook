@@ -109,9 +109,13 @@ namespace QComicBook
 
 			static void autoconfArchivers();
 			static int supportedArchives();
+			static int supportedCreateArchives();
 			static bool supportsOpen(ArchiveType t);
+			static bool supportsSave(ArchiveType t);
 			static QString supportedOpenExtensions();
 			static QString supportedSaveExtensions();
+			static QString getExtension(ArchiveType t);
+			static QStringList getAllExtenstionsList();
 	};
 }
 

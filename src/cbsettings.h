@@ -43,6 +43,7 @@ namespace QComicBook
 			bool preload;
 			bool fscrhidemenu;
 			bool fscrhidestatus;
+			bool splashscreen;
 			Size pagesize;
 			Scaling scaling;
 			int x, y, w, h;
@@ -102,6 +103,7 @@ namespace QComicBook
 			const QFont& infoFont() const;
 			void restoreDockLayout(QMainWindow *w);
 			bool editSupport() const;
+			bool showSplashScreen() const;
 
 			void smallCursor(bool f);
 			void twoPagesMode(bool f);
@@ -127,6 +129,7 @@ namespace QComicBook
 			void infoFont(const QFont &f);
 			void saveDockLayout(QMainWindow *w);
 			void editSupport(bool f);
+			void showSplashScreen(bool f);
 
 			static ComicBookSettings& instance();
 

@@ -142,6 +142,10 @@ void ComicBookCfgDialog::setupMiscTab()
 	cb_autoinfo->setChecked(cfg->autoInfo());
 	lay->addWidget(cb_autoinfo);
 
+	cb_showsplash = new QCheckBox(i18n("Show splash screen"), w);
+	cb_showsplash->setChecked(cfg->showSplashScreen());
+	lay->addWidget(cb_showsplash);
+	
 	cb_confirmexit = new QCheckBox(i18n("Confirm exit"), w);
 	cb_confirmexit->setChecked(cfg->confirmExit());
 	lay->addWidget(cb_confirmexit);
@@ -187,6 +191,7 @@ void ComicBookCfgDialog::apply()
 	cfg->twoPagesStep(cb_twopagesstep->isChecked());
 	cfg->autoInfo(cb_autoinfo->isChecked());
 	cfg->confirmExit(cb_confirmexit->isChecked());
+	cfg->showSplashScreen(cb_showsplash->isChecked());
 
 	//
 	// edit

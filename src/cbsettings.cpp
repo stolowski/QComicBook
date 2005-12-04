@@ -55,6 +55,7 @@
 #define OPT_PRELOAD     "/Preload"
 #define OPT_CONFIRMEXIT "/ConfirmExit"
 #define OPT_EDITING     "/Editing"
+#define OPT_SHOWSPLASH  "/SplashScreen"
 
 using namespace QComicBook;
 
@@ -165,6 +166,7 @@ void ComicBookSettings::load()
 		thumbsage = cfg->readNumEntry(OPT_THUMBSAGE, 7);
 		cachethumbs = cfg->readBoolEntry(OPT_CACHETHUMBS, true);
 		editsupport = cfg->readBoolEntry(OPT_EDITING, false);
+		splashscreen = cfg->readBoolEntry(OPT_SHOWSPLASH, true);
 	cfg->endGroup();
 }
 
@@ -271,6 +273,11 @@ bool ComicBookSettings::fullScreenHideStatusbar() const
 bool ComicBookSettings::showStatusbar() const
 {
 	return statusbar;
+}
+
+bool ComicBookSettings::showSplashScreen() const
+{
+	return splashscreen;
 }
 
 const QFont& ComicBookSettings::infoFont() const
@@ -430,6 +437,12 @@ void ComicBookSettings::showStatusbar(bool f)
 {
 	if (f != statusbar)
 		cfg->writeEntry(GRP_VIEW OPT_STATUSBAR, statusbar = f);
+}
+
+void ComicBookSettings::showSplashScreen(bool f)
+{
+	if (f != splashscreen)
+		cfg->writeEntry(GRP_MISC OPT_SHOWSPLASH, splashscreen = f);
 }
 
 void ComicBookSettings::infoFont(const QFont &s)

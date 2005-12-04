@@ -48,6 +48,7 @@ namespace QComicBook
 			QRadioButton *rb_fast;
 			QLabel *fontname;
 			QFont font;
+			QCheckBox *cb_showsplash;
 			QCheckBox *cb_editing;
 
 			void setupDisplayTab();

@@ -13,7 +13,7 @@
 #ifndef __THUMBNAILSVIEW_H
 #define __THUMBNAILSVIEW_H
 
-#include <qiconview.h>
+#include <kiconview.h>
 #include <qptrvector.h>
 #include <thumbnailitem.h>
 
@@ -25,7 +25,7 @@ namespace QComicBook
 {
 	class Thumbnail;
 
-	class ThumbnailsView: public QIconView
+	class ThumbnailsView: public KIconView
 	{
 		Q_OBJECT
 

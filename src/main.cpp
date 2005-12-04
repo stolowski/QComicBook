@@ -44,17 +44,22 @@ int main(int argc, char *argv[])
 	KApplication app;
 	const QString errcaption = ComicMainWindow::tr("QComicBook error");
 
+	ComicBookSettings::instance().load();
+	ComicBookSettings *cfg = &ComicBookSettings::instance();
+
 	//
 	// show splashscreen
-	QPixmap splashpix(locate("appdata", "qcomicbook-splash.png"));
 	KSplashScreen *splash = NULL;
-	if (!splashpix.isNull())
+	if (cfg->showSplashScreen())
 	{
-		splash = new KSplashScreen(splashpix);
-		splash->show();
+		QPixmap splashpix(locate("appdata", "qcomicbook-splash.png"));
+		if (!splashpix.isNull())
+		{
+			splash = new KSplashScreen(splashpix);
+			splash->show();
+		}
 	}
 
-	ComicBookSettings::instance().load();
 	
 	if (!Icons::init())
 		QMessageBox::critical(NULL, errcaption, ComicMainWindow::tr("Can't find icons"),
@@ -63,7 +68,6 @@ int main(int argc, char *argv[])
 	if (!ComicBookSettings::checkDirs())
 		QMessageBox::critical(NULL, errcaption, ComicMainWindow::tr("Can't initialize QComicBook directories"),
 				QMessageBox::Ok, QMessageBox::NoButton);
-	
 	//
 	// initialize unpackers
 	ImgArchiveSink::autoconfArchivers();

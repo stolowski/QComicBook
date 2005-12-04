@@ -69,6 +69,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): KMainWindow(parent, NULL, WTy
         setupViewMenu();
         setupNavigationMenu();
         setupBookmarksMenu();
+	setupSettingsMenu();
         setupHelpMenu();
         setupContextMenu();    
 
@@ -105,7 +106,7 @@ void ComicMainWindow::setupActions()
         fullScreenAction = new QAction(i18n("&Fullscreen"), Key_F11, this);
         nextPageAction = new QAction(Icons::get(ICON_NEXTPAGE), i18n("Next page"), Key_PageDown, this);
         forwardPageAction = new QAction(Icons::get(ICON_FORWARD), i18n("5 pages forward"), QKeySequence(), this);
-        backwardPageAction = new QAction(Icons::get (ICON_BACKWARD), i18n("5 pages backward"), QKeySequence(), this);
+        backwardPageAction = new QAction(Icons::get(ICON_BACKWARD), i18n("5 pages backward"), QKeySequence(), this);
         jumpDownAction = new QAction(QString::null, Key_Space, this);
         jumpUpAction = new QAction(QString::null, Key_Backspace, this);
         prevPageAction = new QAction(Icons::get(ICON_PREVPAGE), i18n("&Previous page"), Key_PageUp, this);
@@ -260,16 +261,31 @@ void ComicMainWindow::setupFileMenu()
         openNextAction->addTo(file_menu);
         openPrevAction->addTo(file_menu);
         recent_menu = new QPopupMenu(this);
-        file_menu->insertItem(i18n("Recently opened"), recent_menu);
+        file_menu->insertItem(i18n("Open recent"), recent_menu);
         connect(recent_menu, SIGNAL(activated(int)), this, SLOT(recentSelected(int)));
         file_menu->insertSeparator();
         showInfoAction->addTo(file_menu);
-        file_menu->insertItem(Icons::get(ICON_SETTINGS), i18n("Settings"), this, SLOT(showConfigDialog()));
+	//file_menu->insertItem(i18n("Save As"), this, SLOT(saveAs()));
+	//TODO: save as
         file_menu->insertSeparator();
         close_id = file_menu->insertItem(i18n("Close"), this, SLOT(closeSink()));
         file_menu->insertSeparator();
         file_menu->insertItem(i18n("&Quit"), this, SLOT(close()));
         menuBar()->insertItem(i18n("&File"), file_menu);   
+}
+
+void ComicMainWindow::setupSettingsMenu()
+{
+	settings_menu = new QPopupMenu(this);
+        fullScreenAction->addTo(settings_menu);
+	settings_menu->insertSeparator();
+        scrv_id = settings_menu->insertItem(i18n("Scrollbars"), this, SLOT(toggleScrollbars()));
+        settings_menu->setItemChecked(scrv_id, cfg->scrollbarsVisible());
+        toggleToolbarAction->addTo(settings_menu);
+        toggleStatusbarAction->addTo(settings_menu);
+	settings_menu->insertSeparator();
+        settings_menu->insertItem(Icons::get(ICON_SETTINGS), i18n("Configure QComicBook"), this, SLOT(showConfigDialog()));
+        menuBar()->insertItem(i18n("&Settings"), settings_menu);   
 }
 
 void ComicMainWindow::setupEditMenu()
@@ -285,7 +301,6 @@ void ComicMainWindow::setupEditMenu()
 
 void ComicMainWindow::setupViewMenu()
 {
-        bool f;
         view_menu = new QPopupMenu(this);
         view_menu->setCheckable(true);
         originalSizeAction->addTo(view_menu);
@@ -299,16 +314,9 @@ void ComicMainWindow::setupViewMenu()
         rotateResetAction->addTo(view_menu);
         togglePreserveRotationAction->addTo(view_menu);
         view_menu->insertSeparator();
-        fullScreenAction->addTo(view_menu);
-        view_menu->insertSeparator();
         twoPagesAction->addTo(view_menu);
         mangaModeAction->addTo(view_menu);
         toggleThumbnailsAction->addTo(view_menu);
-        view_menu->insertSeparator();
-        scrv_id = view_menu->insertItem(i18n("Scrollbars"), this, SLOT(toggleScrollbars()));
-        view_menu->setItemChecked(scrv_id, f = cfg->scrollbarsVisible());
-        toggleToolbarAction->addTo(view_menu);
-        toggleStatusbarAction->addTo(view_menu);
         menuBar()->insertItem(i18n("&View"), view_menu);     
 }
 
@@ -471,8 +479,8 @@ void ComicMainWindow::toolbarVisibilityChanged(bool f)
 
 void ComicMainWindow::toggleScrollbars()
 {
-        bool f = view_menu->isItemChecked(scrv_id);
-        view_menu->setItemChecked(scrv_id, !f);
+        bool f = settings_menu->isItemChecked(scrv_id);
+        settings_menu->setItemChecked(scrv_id, !f);
         view->enableScrollbars(!f);
 }
 
@@ -911,7 +919,7 @@ void ComicMainWindow::saveSettings()
 {
         cfg->geometry(frameGeometry());
         cfg->saveDockLayout(this);
-        cfg->scrollbarsVisible(view_menu->isItemChecked(scrv_id));
+        cfg->scrollbarsVisible(settings_menu->isItemChecked(scrv_id));
         cfg->twoPagesMode(twoPagesAction->isOn());
         cfg->japaneseMode(mangaModeAction->isOn());
         cfg->continuousScrolling(navi_menu->isItemChecked(contscr_id));

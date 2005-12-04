@@ -1,6 +1,5 @@
 #include "archiverdialog.h"
 #include "imgdirsink.h"
-#include "imgarchivesink.h"
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qfiledialog.h>
@@ -39,6 +38,24 @@ ArchiverDialog::ArchiverDialog(QWidget *parent, ImgDirSink *sink): QDialog(paren
 	cm_archtype = new QComboBox(box2);
 	cm_archtype->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum));
 
+	struct { ImgArchiveSink::ArchiveType t; char *name; } names[] = {
+		{ImgArchiveSink::RAR_ARCHIVE, "RAR"},
+		{ImgArchiveSink::ZIP_ARCHIVE, "ZIP"},
+		{ImgArchiveSink::ACE_ARCHIVE, "ACE"},
+		{ImgArchiveSink::TARBZ2_ARCHIVE, "Bzipped tar"},
+		{ImgArchiveSink::TARGZ_ARCHIVE, "Gzipped tar"},
+		{ImgArchiveSink::UNKNOWN_ARCHIVE, NULL}};
+	int supp = ImgArchiveSink::supportedCreateArchives();
+
+	int n = 0;
+	for (int i=0; names[i].name; i++)
+		if (supp & names[i].t)
+		{
+			cm_archtype->insertItem(names[i].name);
+			map.insert(++n, names[i].t); 
+		}
+	connect(cm_archtype, SIGNAL(activated(int)), this, SLOT(archiveTypeChanged(int)));
+
 	lay0->addStretch();
 	QHBoxLayout *lay3 = new QHBoxLayout(NULL, 5, 5);
 	QPushButton *b_cancel = new QPushButton(i18n("Cancel"), this);
@@ -60,6 +77,22 @@ void ArchiverDialog::browse()
                         this, i18n("Choose a file") );
         if (!file.isEmpty())
 		le_destname->setText(file);
+}
+
+void ArchiverDialog::archiveTypeChanged(int index)
+{
+	if (map.contains(index))
+	{
+		QString newext = ImgArchiveSink::getExtension(map[index]);
+		QStringList exts = ImgArchiveSink::getAllExtenstionsList();
+		for (QStringList::const_iterator it = exts.begin(); it != exts.end(); it++)
+		{
+			if (le_destname->text().endsWith(*it)) //todo: ignore case
+			{
+				//todo: replace extension
+			}
+		}
+	}
 }
 
 #include "archiverdialog.moc"

@@ -60,6 +60,7 @@ namespace QComicBook
 			int reload_id; //<!identifier of "Reload page" menu option
 			QToolBar *toolbar;
 			QPopupMenu *file_menu;
+			QPopupMenu *settings_menu;
 			QPopupMenu *edit_menu;
 			QPopupMenu *context_menu;
 			QPopupMenu *view_menu;
@@ -118,6 +119,7 @@ namespace QComicBook
 			void setupThumbnailsWindow();
 			void setupToolbar();
 			void setupFileMenu();
+			void setupSettingsMenu();
 			void setupEditMenu();
 			void setupViewMenu();
 			void setupNavigationMenu();

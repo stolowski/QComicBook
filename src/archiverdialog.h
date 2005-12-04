@@ -2,6 +2,8 @@
 #define __ARCHIVERWIN_H
 
 #include <qdialog.h>
+#include <qmap.h>
+#include "imgarchivesink.h"
 
 /*! \file archiverwin.h */
 
@@ -20,6 +22,10 @@ namespace QComicBook
 			QLineEdit *le_destname;
 			QComboBox *cm_archtype;
 			ImgDirSink *imgsink;
+			QMap<int, ImgArchiveSink::ArchiveType> map; //<! maps cm_archtype indexes to archive types
+
+		protected slots:
+			void archiveTypeChanged(int index);
 
 		public slots:
 			void browse();

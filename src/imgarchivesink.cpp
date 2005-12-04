@@ -428,9 +428,30 @@ int ImgArchiveSink::supportedArchives()
 	return suppopen;
 }
 
+int ImgArchiveSink::supportedCreateArchives()
+{
+	return suppsave;
+}
+
 bool ImgArchiveSink::supportsOpen(ArchiveType t)
 {
 	return (suppopen & t) > 0;
+}
+
+bool ImgArchiveSink::supportsSave(ArchiveType t)
+{
+	return (suppsave & t) > 0;
+}
+			
+QStringList ImgArchiveSink::getAllExtenstionsList()
+{
+	QStringList lst; //TODO
+	return lst;
+}
+
+QString ImgArchiveSink::getExtension(ArchiveType t)
+{
+	//TODO
 }
 
 #include "imgarchivesink.moc"
