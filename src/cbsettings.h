@@ -14,12 +14,11 @@
 #define __SETTINGS_H
 
 #include "imgview.h"
-#include "history.h"
 #include "enummap.h"
-#include <qobject.h>
+#include <kconfigskeleton.h>
 #include <qfont.h>
+#include <qstringlist.h>
 
-class QSettings;
 class QRect;
 class QColor;
 class QMainWindow;
@@ -28,12 +27,9 @@ namespace QComicBook
 {
 	using namespace Utility;
 
-	class ComicBookSettings: public QObject
+	class ComicBookSettings: public KConfigSkeleton 
 	{
-		Q_OBJECT
-
 		private:
-			QSettings *cfg;
 			bool smallcursor;
 			bool twopages;
 			bool twopagesstep;
@@ -44,12 +40,12 @@ namespace QComicBook
 			bool fscrhidemenu;
 			bool fscrhidestatus;
 			bool splashscreen;
-			Size pagesize;
-			Scaling scaling;
+			QString pagesize;
+			QString scaling;
 			int x, y, w, h;
 			QString lastdir;
 			QColor bgcolor;
-			History recent;
+			QStringList recent;
 			int cachesize;
 			int thumbsage;
 			bool cachethumbs;
@@ -67,10 +63,10 @@ namespace QComicBook
 			static const EnumMap<Size> size2string[];
 			static const EnumMap<Scaling> scaling2string[];
 
-		signals:
+		/*signals:
 			void backgroundChanged(const QColor &color);
 			void scalingMethodChanged(Scaling s);
-			void cursorChanged(bool f);
+			void cursorChanged(bool f);*/
 
 		private:
 			ComicBookSettings();
@@ -89,7 +85,7 @@ namespace QComicBook
 			Size pageSize() const;
 			Scaling pageScaling() const;
 			QString lastDir() const;
-			const History& recentlyOpened() const;
+			const QStringList& recentlyOpened() const;
 			QColor background() const;
 			int cacheSize() const;
 			bool cacheThumbnails() const;
@@ -115,7 +111,7 @@ namespace QComicBook
 			void pageSize(Size s);
 			void pageScaling(Scaling s);
 			void lastDir(const QString &d);
-			void recentlyOpened(const History &hist);
+			void recentlyOpened(const QStringList &hist);
 			void background(const QColor &color);
 			void cacheSize(int s);
 			void cacheThumbnails(bool f);

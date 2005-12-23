@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 	KApplication app;
 	const QString errcaption = ComicMainWindow::tr("QComicBook error");
 
-	ComicBookSettings::instance().load();
+	ComicBookSettings::instance().readConfig();
 	ComicBookSettings *cfg = &ComicBookSettings::instance();
 
 	//
