@@ -15,17 +15,26 @@
 
 #include <qiconset.h>
 #include <qdict.h>
+#include <qmap.h>
+#include <kicontheme.h>
 
 namespace QComicBook
 {
+	enum IconStyle { 
+		QComicBookIcons = 0,
+		KDEDefaultIcons
+	};
+
 	class Icons
 	{
 		private:
 			static QDict<QIconSet> set;
+			static QMap<QString, QString> namemap;
+			static IconStyle istyle;
 
 		public:
-			static bool init();
-			static const QIconSet& get(const QString &name);
+			static bool init(IconStyle style = QComicBookIcons);
+			static const QIconSet& get(const QString &name, KIcon::Group group = KIcon::NoGroup);
 	};
 }
 

@@ -51,6 +51,12 @@ const EnumMap<Scaling> ComicBookSettings::scaling2string[] = {
 	{"fast",   Fast},
 	{QString::null}
 };
+			
+const EnumMap<IconStyle> ComicBookSettings::iconstyle2string[] = {
+	{"kde", KDEDefaultIcons},
+	{"qcomicbook", QComicBookIcons},
+	{QString::null}
+};
 
 ComicBookSettings& ComicBookSettings::instance()
 {
@@ -72,6 +78,7 @@ ComicBookSettings::ComicBookSettings(): KConfigSkeleton()
 	addItemFont("InfoFont", font);
 	addItemString("Scaling", scaling, scaling2string[0].str);
 	addItemString("PageSize", pagesize, size2string[0].str);
+	addItemString("IconStyle", iconstyle, iconstyle2string[0].str);
 
 	setCurrentGroup("Navigation");
 	addItemBool("ContinuousScroll", contscroll, true);
@@ -241,6 +248,11 @@ const QFont& ComicBookSettings::infoFont() const
 	return font;
 }
 
+IconStyle ComicBookSettings::iconStyle() const
+{
+	return convert(iconstyle2string, iconstyle);
+}
+
 void ComicBookSettings::restoreDockLayout(QMainWindow *w)
 {
 	QTextStream str(&docklayout, IO_ReadOnly);
@@ -388,6 +400,11 @@ void ComicBookSettings::saveDockLayout(QMainWindow *w)
 void ComicBookSettings::editSupport(bool f)
 {
 	editsupport = f;
+}
+
+void ComicBookSettings::iconStyle(IconStyle s)
+{
+	iconstyle = convert(iconstyle2string, s);
 }
 
 //#include "cbsettings.moc"

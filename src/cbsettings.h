@@ -15,6 +15,7 @@
 
 #include "imgview.h"
 #include "enummap.h"
+#include "icons.h"
 #include <kconfigskeleton.h>
 #include <qfont.h>
 #include <qstringlist.h>
@@ -42,6 +43,7 @@ namespace QComicBook
 			bool splashscreen;
 			QString pagesize;
 			QString scaling;
+			QString iconstyle;
 			int x, y, w, h;
 			QString lastdir;
 			QColor bgcolor;
@@ -62,6 +64,7 @@ namespace QComicBook
 
 			static const EnumMap<Size> size2string[];
 			static const EnumMap<Scaling> scaling2string[];
+			static const EnumMap<IconStyle> iconstyle2string[];
 
 		/*signals:
 			void backgroundChanged(const QColor &color);
@@ -100,6 +103,7 @@ namespace QComicBook
 			void restoreDockLayout(QMainWindow *w);
 			bool editSupport() const;
 			bool showSplashScreen() const;
+			IconStyle iconStyle() const;
 
 			void smallCursor(bool f);
 			void twoPagesMode(bool f);
@@ -126,6 +130,7 @@ namespace QComicBook
 			void saveDockLayout(QMainWindow *w);
 			void editSupport(bool f);
 			void showSplashScreen(bool f);
+			void iconStyle(IconStyle s);
 
 			static ComicBookSettings& instance();
 

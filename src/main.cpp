@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 	KSplashScreen *splash = NULL;
 	if (cfg->showSplashScreen())
 	{
-		QPixmap splashpix(locate("appdata", "qcomicbook-splash.png"));
+		QPixmap splashpix(locate("appdata", "pics/qcomicbook-splash.png"));
 		if (!splashpix.isNull())
 		{
 			splash = new KSplashScreen(splashpix);
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 	}
 
 	
-	if (!Icons::init())
+	if (!Icons::init(cfg->iconStyle()))
 		QMessageBox::critical(NULL, errcaption, ComicMainWindow::tr("Can't find icons"),
 				QMessageBox::Ok, QMessageBox::NoButton);
 

@@ -78,6 +78,17 @@ void ComicBookCfgDialog::setupDisplayTab()
 	cb_smallcursor = new QCheckBox(i18n("Small mouse cursor"), w);
 	cb_smallcursor->setChecked(cfg->smallCursor());
 	lay->addWidget(cb_smallcursor);
+
+	//
+	// icons
+	QButtonGroup *gr_icons = new QButtonGroup(2, Qt::Horizontal, i18n("Icons"), w);
+	rb_kdeicons = new QRadioButton(i18n("KDE"), gr_icons);
+	rb_qcbicons = new QRadioButton(i18n("QComicBook"), gr_icons);
+	if (cfg->iconStyle() == KDEDefaultIcons)
+		rb_kdeicons->setChecked(true);
+	else
+		rb_qcbicons->setChecked(true);
+	lay->addWidget(gr_icons);
 		
 	//
 	// scaling method
@@ -175,10 +186,13 @@ void ComicBookCfgDialog::apply()
 	cfg->fullScreenHideMenu(cb_hidemenu->isChecked());
 	cfg->fullScreenHideStatusbar(cb_hidestatus->isChecked());
 	cfg->smallCursor(cb_smallcursor->isChecked());
+	if (rb_kdeicons->isChecked())
+		cfg->iconStyle(KDEDefaultIcons);
+	else if (rb_qcbicons->isChecked())
+			cfg->iconStyle(QComicBookIcons);
 	if (rb_smooth->isChecked())
 		cfg->pageScaling(Smooth);
-	else
-		if (rb_fast->isChecked())
+	else if (rb_fast->isChecked())
 			cfg->pageScaling(Fast);
 	cfg->infoFont(font);
 

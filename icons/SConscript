@@ -1,5 +1,6 @@
 Import('env')
-env.KDEinstall('KDEDATA', 'qcomicbook/',
+env.KDEinstall('KDEDATA', 'qcomicbook/', 'icons.cfg')
+env.KDEinstall('KDEDATA', 'qcomicbook/pics/',
 """
 bestfit.png
 bookmark.png

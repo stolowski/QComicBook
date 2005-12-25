@@ -47,15 +47,13 @@
 using namespace QComicBook;
 using namespace Utility;
 
-ComicMainWindow::ComicMainWindow(QWidget *parent): KMainWindow(parent, NULL, WType_TopLevel|WDestructiveClose), sink(NULL), currpage(0), edit_menu(NULL)
+ComicMainWindow::ComicMainWindow(QWidget *parent): KDockMainWindow(parent, NULL, WType_TopLevel|WDestructiveClose), sink(NULL), currpage(0), edit_menu(NULL)
 {
         updateCaption();
         setIcon(Icons::get(ICON_APPICON).pixmap(QIconSet::Small, true));
-        setMinimumSize(320, 200);
+        //setMinimumSize(320, 200);
 
         cfg = &ComicBookSettings::instance();
-
-        setGeometry(cfg->geometry());
 
         setupActions();
         setupToolbar();
@@ -78,9 +76,9 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): KMainWindow(parent, NULL, WTy
         *recentfiles = cfg->recentlyOpened();
         setRecentFilesMenu(*recentfiles);
 
-        cfg->restoreDockLayout(this);
-
         enableComicBookActions(false);
+
+	setAutoSaveSettings();
 }
 
 ComicMainWindow::~ComicMainWindow()
@@ -103,7 +101,7 @@ void ComicMainWindow::setupActions()
         openDirAction = new QAction(Icons::get(ICON_OPENDIR), i18n("Open directory"), CTRL+Key_D, this);
         openNextAction = new QAction(i18n("Open next"), CTRL+Key_N, this);
         openPrevAction = new QAction(i18n("Open previous"), CTRL+Key_P, this);
-        fullScreenAction = new QAction(i18n("&Fullscreen"), Key_F11, this);
+        fullScreenAction = new QAction(Icons::get(ICON_FULLSCREEN), i18n("&Fullscreen"), Key_F11, this);
         nextPageAction = new QAction(Icons::get(ICON_NEXTPAGE), i18n("Next page"), Key_PageDown, this);
         forwardPageAction = new QAction(Icons::get(ICON_FORWARD), i18n("5 pages forward"), QKeySequence(), this);
         backwardPageAction = new QAction(Icons::get(ICON_BACKWARD), i18n("5 pages backward"), QKeySequence(), this);
@@ -225,7 +223,7 @@ void ComicMainWindow::setupThumbnailsWindow()
 void ComicMainWindow::setupToolbar()
 {
         toolbar = new QToolBar(i18n("Toolbar"), this);
-	openDirAction->addTo(toolbar);
+	//openDirAction->addTo(toolbar);
 	openArchiveAction->addTo(toolbar);
         toolbar->addSeparator();
         showInfoAction->addTo(toolbar);
@@ -256,21 +254,22 @@ void ComicMainWindow::setupToolbar()
 void ComicMainWindow::setupFileMenu()
 {
         file_menu = new QPopupMenu(this);
-        openDirAction->addTo(file_menu);
         openArchiveAction->addTo(file_menu);
-        openNextAction->addTo(file_menu);
-        openPrevAction->addTo(file_menu);
+        openDirAction->addTo(file_menu);
         recent_menu = new QPopupMenu(this);
         file_menu->insertItem(i18n("Open recent"), recent_menu);
         connect(recent_menu, SIGNAL(activated(int)), this, SLOT(recentSelected(int)));
+        file_menu->insertSeparator();
+        openNextAction->addTo(file_menu);
+        openPrevAction->addTo(file_menu);
         file_menu->insertSeparator();
         showInfoAction->addTo(file_menu);
 	//file_menu->insertItem(i18n("Save As"), this, SLOT(saveAs()));
 	//TODO: save as
         file_menu->insertSeparator();
-        close_id = file_menu->insertItem(i18n("Close"), this, SLOT(closeSink()));
+        close_id = file_menu->insertItem(Icons::get(ICON_CLOSE), i18n("Close"), this, SLOT(closeSink()));
         file_menu->insertSeparator();
-        file_menu->insertItem(i18n("&Quit"), this, SLOT(close()));
+        file_menu->insertItem(Icons::get(ICON_QUIT), i18n("&Quit"), this, SLOT(close()));
         menuBar()->insertItem(i18n("&File"), file_menu);   
 }
 
@@ -329,7 +328,7 @@ void ComicMainWindow::setupNavigationMenu()
         forwardPageAction->addTo(navi_menu);
         backwardPageAction->addTo(navi_menu);
         navi_menu->insertSeparator();
-        jumpto_id = navi_menu->insertItem(i18n("Jump to page..."), this, SLOT(showJumpToPage()));
+        jumpto_id = navi_menu->insertItem(Icons::get(ICON_JUMPTO), i18n("Jump to page..."), this, SLOT(showJumpToPage()));
         firstpage_id = navi_menu->insertItem(i18n("First page"), this, SLOT(firstPage()));
         lastpage_id = navi_menu->insertItem(i18n("Last page"), this, SLOT(lastPage()));
         navi_menu->insertSeparator();
@@ -350,7 +349,7 @@ void ComicMainWindow::setupBookmarksMenu()
         menuBar()->insertItem(i18n("&Bookmarks"), bookmarks_menu);
         setbookmark_id = bookmarks_menu->insertItem(Icons::get(ICON_BOOKMARK), i18n("Set bookmark for this comicbook"), this, SLOT(setBookmark()));
         rmvbookmark_id = bookmarks_menu->insertItem(i18n("Remove bookmark for this comicbook"), this, SLOT(removeBookmark()));
-        bookmarks_menu->insertItem(i18n("Manage bookmarks"), this, SLOT(openBookmarksManager()));
+        bookmarks_menu->insertItem(Icons::get(ICON_BOOKMARKS), i18n("Edit bookmarks"), this, SLOT(openBookmarksManager()));
         bookmarks_menu->insertSeparator();
         bookmarks->load();
         connect(bookmarks_menu, SIGNAL(activated(int)), this, SLOT(bookmarkSelected(int)));
@@ -675,6 +674,7 @@ void ComicMainWindow::toggleFullScreen()
 {
         if (isFullScreen())
         {
+		fullScreenAction->setIconSet(Icons::get(ICON_FULLSCREEN));
                 exitFullscreen();
         }
         else
@@ -683,6 +683,7 @@ void ComicMainWindow::toggleFullScreen()
                         menuBar()->hide();
                 if (cfg->fullScreenHideStatusbar())
                         statusbar->hide();
+		fullScreenAction->setIconSet(Icons::get(ICON_NOFULLSCREEN));
                 showFullScreen();
         }
 }
@@ -917,8 +918,6 @@ void ComicMainWindow::bookmarkSelected(int id)
 
 void ComicMainWindow::saveSettings()
 {
-        cfg->geometry(frameGeometry());
-        cfg->saveDockLayout(this);
         cfg->scrollbarsVisible(settings_menu->isItemChecked(scrv_id));
         cfg->twoPagesMode(twoPagesAction->isOn());
         cfg->japaneseMode(mangaModeAction->isOn());

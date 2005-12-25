@@ -15,7 +15,7 @@
 #ifndef __COMIC_MAIN_H
 #define __COMIC_MAIN_H
 
-#include <kmainwindow.h>
+#include <kdockwidget.h>
 #include "history.h"
 
 class QAction;
@@ -35,7 +35,7 @@ namespace QComicBook
 	using Utility::History;
 
 	//! The main window of QComicBook.
-	class ComicMainWindow: public KMainWindow
+	class ComicMainWindow: public KDockMainWindow
 	{
 		Q_OBJECT
 

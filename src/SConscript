@@ -1,8 +1,6 @@
 Import('env')
 
-#env.KDEinstall('KDEDATA', 'qcomicbook/', 'kleansweep_bar.png')
 #env.KDEinstall('KDEMENU', 'System/', 'qcomicbook.desktop')
-env.KDEinstall('KDEDATA', 'qcomicbook/', 'qcomicbook.t')
 
 obj=env.kobject('program')
 obj.target='qcomicbook'
@@ -34,7 +32,6 @@ thumbnailitem.cpp
 thumbnailloader.cpp
 thumbnailsview.cpp
 thumbnailswin.cpp
-waitdialog.cpp
 """
 obj.libs='qt-mt kdeui kio kdecore'
 obj.execute()

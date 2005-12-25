@@ -1,3 +1,10 @@
+2005-xx-yy:  0.3.0       -- full support for KDE (kdelibs are required)
+                         -- moved to scons build system
+                         -- splash screen may be turned off
+			 -- opening progress bar is now embedded in status bar
+			 -- new option to use QComicBook or KDE icons; KDE
+			    theme is now the default
+
 2005-11-13:  0.2.5       -- splash screen added (made exclusively for
                             QComicBook by Adam Mateja)
                          -- icons for Open Archive/Directory, Settings and
