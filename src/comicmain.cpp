@@ -43,7 +43,6 @@
 #include <qlabel.h>
 #include <qframe.h>
 #include <jumptopagewin.h>
-#include <qprogressdialog.h>
 #include <qprocess.h>
 #include <typeinfo>
 
@@ -548,6 +547,8 @@ void ComicMainWindow::recentSelected(int id)
 
 void ComicMainWindow::sinkReady(const QString &path)
 {
+	statusbar->setShown(toggleStatusbarAction->isOn()); //applies back user's statusbar preference
+
         recentfiles->append(path);
         setRecentFilesMenu(*recentfiles);
 
@@ -569,8 +570,9 @@ void ComicMainWindow::sinkReady(const QString &path)
 
 void ComicMainWindow::sinkError(int code)
 {
-        QString msg;
+	statusbar->setShown(toggleStatusbarAction->isOn()); //applies back user's statusbar preference
 
+        QString msg;
         switch (code)
         {
                 case SINKERR_EMPTY: msg = tr("no images found"); break;
@@ -626,17 +628,9 @@ void ComicMainWindow::open(const QString &path, int page)
 
         connect(sink, SIGNAL(sinkReady(const QString&)), this, SLOT(sinkReady(const QString&)));
         connect(sink, SIGNAL(sinkError(int)), this, SLOT(sinkError(int)));
+        connect(sink, SIGNAL(progress(int, int)), statusbar, SLOT(setProgress(int, int)));
 
-        QProgressDialog *win = new QProgressDialog(tr("Please wait. Opening comicbook"), 0, 1, this, 0, true, WDestructiveClose);
-        win->setCaption(caption());
-        win->setAutoClose(true);
-        win->setAutoReset(true);
-
-        connect(sink, SIGNAL(progress(int, int)), win, SLOT(setProgress(int, int)));
-        connect(sink, SIGNAL(sinkReady(const QString&)), win, SLOT(close()));
-        connect(sink, SIGNAL(sinkError(int)), win, SLOT(close()));
-
-        win->show();
+        statusbar->setShown(true); //ensures status bar is visible when opening regardless of user settings
 
         sink->open(fullname);
 }

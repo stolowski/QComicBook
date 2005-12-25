@@ -17,6 +17,7 @@
 
 class QLabel;
 class QImage;
+class QProgressBar;
 
 namespace QComicBook
 {
@@ -28,15 +29,21 @@ namespace QComicBook
 			QLabel *page;
 			QLabel *imginfo;
 			QLabel *name;
+			QProgressBar *pbar;
 
 		public slots:
 			void setPage(int n, int total);
 			void setName(const QString &n);
 			void setImageInfo(const QImage *img1, const QImage *img2=NULL);
+			void setProgress(int n, int total);
 			void clear();
 
+		protected:
+			void createInfoElements();
+			void removeInfoElements();
+
 		public:
-			StatusBar(QWidget *parent);
+			StatusBar(QWidget *parent, bool elms=true);
 			~StatusBar();
 	};
 }

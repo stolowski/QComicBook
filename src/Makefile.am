@@ -13,8 +13,7 @@ BUILT_SOURCES = moc_archiverdialog.cpp \
 		moc_pagenumberedit.cpp \
 		moc_statusbar.cpp \
 		moc_thumbnailswin.cpp \
-		moc_thumbnailsview.cpp \
-		moc_waitdialog.cpp 
+		moc_thumbnailsview.cpp
 
 qcomicbook_SOURCES = aboutdialog.cpp archiverdialog.cpp bookmark.cpp bookmarkmanager.cpp\
 	bookmarks.cpp cbconfigdialog.cpp cbinfo.cpp cbsettings.cpp comicmain.cpp\
@@ -23,7 +22,7 @@ qcomicbook_SOURCES = aboutdialog.cpp archiverdialog.cpp bookmark.cpp bookmarkman
 	jumptopagewin.cpp main.cpp miscutil.cpp pagenumberedit.cpp\
 	statusbar.cpp thumbnail.cpp\
 	thumbnailevent.cpp thumbnailitem.cpp thumbnailloader.cpp\
-	thumbnailsview.cpp thumbnailswin.cpp waitdialog.cpp
+	thumbnailsview.cpp thumbnailswin.cpp
 
 #dist_qcomicbook_SOURCES = $(qcomicbook_SOURCES)
 		      
@@ -58,8 +57,7 @@ noinst_HEADERS = aboutdialog.h \
 		 thumbnailitem.h \
 		 thumbnailloader.h \
 		 thumbnailswin.h \
-		 thumbnailsview.h \
-		 waitdialog.h
+		 thumbnailsview.h
 		 
 MOSTLYCLEANFILES =+ $(BUILT_SOURCES)
 
