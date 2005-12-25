@@ -15,7 +15,6 @@
 #include <qtextedit.h>
 #include <qlayout.h>
 #include <qfont.h>
-#include <klocale.h>
 #include "imgdirsink.h"
 
 using namespace QComicBook;
@@ -63,7 +62,7 @@ void ComicBookInfo::setupGeneralTab(ImgDirSink &sink)
 	txt->setFont(font);
 	txt->setText(sink.getStats());
 
-	addTab(w, i18n("General info"));
+	addTab(w, tr("General info"));
 }
 
 ComicBookInfo::~ComicBookInfo()

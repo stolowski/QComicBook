@@ -14,12 +14,12 @@
 #define __SETTINGS_H
 
 #include "imgview.h"
+#include "history.h"
 #include "enummap.h"
-#include "icons.h"
-#include <kconfigskeleton.h>
+#include <qobject.h>
 #include <qfont.h>
-#include <qstringlist.h>
 
+class QSettings;
 class QRect;
 class QColor;
 class QMainWindow;
@@ -28,9 +28,12 @@ namespace QComicBook
 {
 	using namespace Utility;
 
-	class ComicBookSettings: public KConfigSkeleton 
+	class ComicBookSettings: public QObject
 	{
+		Q_OBJECT
+
 		private:
+			QSettings *cfg;
 			bool smallcursor;
 			bool twopages;
 			bool twopagesstep;
@@ -40,14 +43,12 @@ namespace QComicBook
 			bool preload;
 			bool fscrhidemenu;
 			bool fscrhidestatus;
-			bool splashscreen;
-			QString pagesize;
-			QString scaling;
-			QString iconstyle;
+			Size pagesize;
+			Scaling scaling;
 			int x, y, w, h;
 			QString lastdir;
 			QColor bgcolor;
-			QStringList recent;
+			History recent;
 			int cachesize;
 			int thumbsage;
 			bool cachethumbs;
@@ -55,6 +56,8 @@ namespace QComicBook
 			bool confirmexit;
 			bool statusbar;
 			bool editsupport;
+			bool intbrowser;
+			QString extbrowser;
 			QString docklayout;
 			QFont font;
 
@@ -64,12 +67,11 @@ namespace QComicBook
 
 			static const EnumMap<Size> size2string[];
 			static const EnumMap<Scaling> scaling2string[];
-			static const EnumMap<IconStyle> iconstyle2string[];
 
-		/*signals:
+		signals:
 			void backgroundChanged(const QColor &color);
 			void scalingMethodChanged(Scaling s);
-			void cursorChanged(bool f);*/
+			void cursorChanged(bool f);
 
 		private:
 			ComicBookSettings();
@@ -88,7 +90,7 @@ namespace QComicBook
 			Size pageSize() const;
 			Scaling pageScaling() const;
 			QString lastDir() const;
-			const QStringList& recentlyOpened() const;
+			const History& recentlyOpened() const;
 			QColor background() const;
 			int cacheSize() const;
 			bool cacheThumbnails() const;
@@ -99,11 +101,11 @@ namespace QComicBook
 			bool fullScreenHideMenu() const;
 			bool fullScreenHideStatusbar() const;
 			bool showStatusbar() const;
+			bool useInternalBrowser() const;
 			const QFont& infoFont() const;
+			QString externalBrowser() const;
 			void restoreDockLayout(QMainWindow *w);
 			bool editSupport() const;
-			bool showSplashScreen() const;
-			IconStyle iconStyle() const;
 
 			void smallCursor(bool f);
 			void twoPagesMode(bool f);
@@ -115,7 +117,7 @@ namespace QComicBook
 			void pageSize(Size s);
 			void pageScaling(Scaling s);
 			void lastDir(const QString &d);
-			void recentlyOpened(const QStringList &hist);
+			void recentlyOpened(const History &hist);
 			void background(const QColor &color);
 			void cacheSize(int s);
 			void cacheThumbnails(bool f);
@@ -126,11 +128,11 @@ namespace QComicBook
 			void fullScreenHideMenu(bool f);
 			void fullScreenHideStatusbar(bool f);
 			void showStatusbar(bool f);
+			void useInternalBrowser(bool f);
 			void infoFont(const QFont &f);
+			void externalBrowser(const QString &cmd);
 			void saveDockLayout(QMainWindow *w);
 			void editSupport(bool f);
-			void showSplashScreen(bool f);
-			void iconStyle(IconStyle s);
 
 			static ComicBookSettings& instance();
 

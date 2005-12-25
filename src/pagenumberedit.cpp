@@ -53,4 +53,3 @@ void PageNumberEdit::selectAll()
 	//do nothing - just override default QLineEdit behavior
 }
 
-#include "pagenumberedit.moc"

@@ -11,49 +11,26 @@
  */
 
 #include "icons.h"
-#include <kglobal.h>
-#include <kstandarddirs.h>
-#include <kiconloader.h>
 #include <qdir.h>
-#include <qtextstream.h>
-#include <qfile.h>
 
 using namespace QComicBook;
 
+QString Icons::iconpath = QString::null;
 QDict<QIconSet> Icons::set;
-QMap<QString, QString> Icons::namemap;
-IconStyle Icons::istyle;
 
-bool Icons::init(IconStyle style)
+bool Icons::init(const QString& path)
 {
-	istyle = style;
-	const QString &iconsfile = KGlobal::dirs()->findResource("appdata", "icons.cfg");
-	if (iconsfile != QString::null)
-	{
-		QFile f(iconsfile);
-		if (!f.open(IO_ReadOnly))
-			return false;
-		QTextStream str(&f);
-		while (!f.atEnd())
-		{
-			QString key, val[2];
-			str >> key >> val[0] >> val[1];
-			namemap.insert(key, val[static_cast<int>(style)]);
-
-		}
-		f.close();
-	}
+	QDir dir(iconpath = path);
 	set.setAutoDelete(true); //icons in the set will be deleted on set deletion
-	return true;
+	return dir.exists();
 }
 
-const QIconSet& Icons::get(const QString &name, KIcon::Group group)
+const QIconSet& Icons::get(const QString &name)
 {
-	const QString fname = namemap.contains(name) ? namemap[name] : name;
 	QIconSet *icon = set.find(name);
 	if (icon)
 		return *icon;
-	QPixmap pixmap = KGlobal::iconLoader()->loadIcon(fname, istyle == QComicBookIcons ? KIcon::User : group, 0, KIcon::DefaultState, 0L, true);
+	QPixmap pixmap(iconpath + "/" + name);
 	set.insert(name, icon = new QIconSet(pixmap));
 	return *icon;
 }

@@ -13,9 +13,6 @@
 #include "thumbnailsview.h"
 #include "thumbnailitem.h"
 #include "thumbnail.h"
-#include "thumbnailevent.h"
-#include "icons.h"
-#include "cbicons.h"
 #include <qiconview.h>
 #include <qpixmap.h>
 #include <qstring.h>
@@ -25,7 +22,7 @@
 
 using namespace QComicBook;
 
-ThumbnailsView::ThumbnailsView(QWidget *parent): KIconView(parent), selected(NULL), numpages(0)
+ThumbnailsView::ThumbnailsView(QWidget *parent): QIconView(parent), selected(NULL), numpages(0)
 {
 	setFocusPolicy(QWidget::NoFocus);
 	setItemsMovable(false);
@@ -37,7 +34,7 @@ ThumbnailsView::ThumbnailsView(QWidget *parent): KIconView(parent), selected(NUL
 	//
 	// context menu
 	menu = new QPopupMenu(this);
-	menu->insertItem(Icons::get(ICON_JUMPTO), tr("Go to"), this, SLOT(goToPageAction()));
+	menu->insertItem(tr("Go to"), this, SLOT(goToPageAction()));
 	
 	//
 	// create "empty page" image
@@ -127,17 +124,3 @@ bool ThumbnailsView::isLoaded(int n) const
 	return (n < icons.count()) ? icons[n]->isLoaded() : false;
 }
 
-void ThumbnailsView::customEvent(QCustomEvent *e)
-{
-	if (e->type() == ThumbnailReady)
-	{
-		ThumbnailEvent *evt = dynamic_cast<ThumbnailEvent *>(e);
-		setPage(*evt->getThumbnail());
-	}
-	else
-	{
-		KIconView::customEvent(e);
-	}
-}
-
-#include "thumbnailsview.moc"

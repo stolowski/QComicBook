@@ -426,4 +426,3 @@ ThumbnailLoaderThread& ImgDirSink::thumbnailLoader()
         return thloader;
 }
 
-#include "imgdirsink.moc"

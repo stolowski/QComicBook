@@ -13,7 +13,7 @@
 #ifndef __THUMBNAILSVIEW_H
 #define __THUMBNAILSVIEW_H
 
-#include <kiconview.h>
+#include <qiconview.h>
 #include <qptrvector.h>
 #include <thumbnailitem.h>
 
@@ -25,7 +25,7 @@ namespace QComicBook
 {
 	class Thumbnail;
 
-	class ThumbnailsView: public KIconView
+	class ThumbnailsView: public QIconView
 	{
 		Q_OBJECT
 
@@ -43,9 +43,6 @@ namespace QComicBook
 			void onDoubleClick(QIconViewItem *item);
 			void showContextMenu(QIconViewItem *item, const QPoint &p);
 			void goToPageAction();
-
-		protected:
-			void customEvent(QCustomEvent *e);
 
 		public:
 			ThumbnailsView(QWidget *parent);

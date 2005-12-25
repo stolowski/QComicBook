@@ -15,14 +15,13 @@
 #ifndef __COMIC_MAIN_H
 #define __COMIC_MAIN_H
 
-#include <kdockwidget.h>
+#include <qmainwindow.h>
 #include "history.h"
 
 class QAction;
-class KAction;
 class QPopupMenu;
 class QLabel;
-class KToolBar;
+class QToolBar;
 class QDockWindow;
 
 namespace QComicBook
@@ -31,23 +30,22 @@ namespace QComicBook
 	class ComicBookSettings;
 	class ComicImageView;
 	class ThumbnailsWindow;
-	class ThumbnailsView;
 	class Bookmarks;
 	class StatusBar;
 	using Utility::History;
 
 	//! The main window of QComicBook.
-	class ComicMainWindow: public KDockMainWindow
+	class ComicMainWindow: public QMainWindow
 	{
 		Q_OBJECT
 
 		private:
 			ImgDirSink *sink;
 			ComicImageView *view;
-			ThumbnailsView *thumbswin;
+			ThumbnailsWindow *thumbswin;
 			History *recentfiles;
 			Bookmarks *bookmarks;
-			QComicBook::StatusBar *statusbar;
+			StatusBar *statusbar;
 			ComicBookSettings *cfg;
 			int currpage; //!<current page number
 			int scrv_id; //!<identifier of "Scrollbars visible" menu option
@@ -60,10 +58,8 @@ namespace QComicBook
 			int close_id; //!<identifier of "Close" menu option
 			int gimp_id; //<!identifier of "Open with Gimp" menu option
 			int reload_id; //<!identifier of "Reload page" menu option
-			KToolBar *toolbar;
-			KDockWidget *maindock;
+			QToolBar *toolbar;
 			QPopupMenu *file_menu;
-			QPopupMenu *settings_menu;
 			QPopupMenu *edit_menu;
 			QPopupMenu *context_menu;
 			QPopupMenu *view_menu;
@@ -107,7 +103,7 @@ namespace QComicBook
 			QAction *jumpDownAction;
 			QAction *jumpUpAction;
 			QAction *togglePreserveRotationAction;
-			KAction *openArchiveAction;
+			QAction *openArchiveAction;
 			QAction *openDirAction;
 
 		protected:
@@ -122,7 +118,6 @@ namespace QComicBook
 			void setupThumbnailsWindow();
 			void setupToolbar();
 			void setupFileMenu();
-			void setupSettingsMenu();
 			void setupEditMenu();
 			void setupViewMenu();
 			void setupNavigationMenu();
@@ -138,7 +133,7 @@ namespace QComicBook
 			void setRecentFilesMenu(const History &hist);
 			void recentSelected(int id);
 			void bookmarkSelected(int id);
-			void thumbnailsVisibilityChanged();
+			void thumbnailsVisibilityChanged(bool f);
 			void toolbarVisibilityChanged(bool f);
 			void openWithGimp();
 
@@ -158,6 +153,8 @@ namespace QComicBook
 			void open(const QString &path, int page=0);
 			void openNext();
 			void openPrevious();
+			void showAbout();
+			void showHelp();
 			void showInfo();
 			void showConfigDialog();
 			void showJumpToPage(const QString &number=QString::null);

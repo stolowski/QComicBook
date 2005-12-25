@@ -16,7 +16,6 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qmessagebox.h>
-#include <klocale.h>
 
 using namespace QComicBook;
 
@@ -24,34 +23,34 @@ BookmarkManager::BookmarkManager(QWidget *parent, Bookmarks *b): QWidget(parent,
 {
 	QVBoxLayout *box0 = new QVBoxLayout(this, 5, 5);
 	lview = new QListView(this);
-	lview->addColumn(i18n("Name"));
-	lview->addColumn(i18n("Page"));
+	lview->addColumn(tr("Name"));
+	lview->addColumn(tr("Page"));
 	lview->setSelectionMode(QListView::Multi);
 	box0->addWidget(lview);
 	
 	QHBoxLayout *box1 = new QHBoxLayout(NULL, 0, 5);
 
-	QPushButton *b_selall = new QPushButton(i18n("Select all"), this);
+	QPushButton *b_selall = new QPushButton(tr("Select all"), this);
 	box1->addWidget(b_selall);
 	box1->addStretch();
 	
-	QPushButton *b_selrev = new QPushButton(i18n("Invert selection"), this);
+	QPushButton *b_selrev = new QPushButton(tr("Invert selection"), this);
 	box1->addWidget(b_selrev);
 	box1->addStretch(0);
 		
-	b_selinv = new QPushButton(i18n("Select invalid"), this);
+	b_selinv = new QPushButton(tr("Select invalid"), this);
 	box1->addWidget(b_selinv);
 	box1->addStretch();
 	
-	QPushButton *b_selnone = new QPushButton(i18n("Clear selection"), this);
+	QPushButton *b_selnone = new QPushButton(tr("Clear selection"), this);
 	box1->addWidget(b_selnone);
 	box1->addStretch(1);
 	
-	b_remsel = new QPushButton(i18n("Remove selected"), this);
+	b_remsel = new QPushButton(tr("Remove selected"), this);
 	box1->addWidget(b_remsel);
 	box1->addStretch();
 
-	QPushButton *b_ok = new QPushButton(i18n("Close"), this);
+	QPushButton *b_ok = new QPushButton(tr("Close"), this);
 	box1->addWidget(b_ok);
 	box0->addLayout(box1);
 
@@ -103,7 +102,7 @@ void BookmarkManager::removeSelected()
 	for (QListViewItemIterator it(lview, QListViewItemIterator::Selected); it.current(); ++it)
 		todel.append(it.current());
 
-	if (todel.count() && QMessageBox::question(this, i18n("Deleting bookmarks"), i18n("Delete selected bookmarks?"),
+	if (todel.count() && QMessageBox::question(this, tr("Deleting bookmarks"), tr("Delete selected bookmarks?"),
 						   QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
 	{
 		for (QListViewItem *item = todel.first(); item; item = todel.next())
@@ -131,4 +130,3 @@ void BookmarkManager::selectInvalid()
 		item->setSelected(true);
 }
 
-#include "bookmarkmanager.moc"

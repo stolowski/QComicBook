@@ -10,14 +10,12 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include <kpushbutton.h>
+#include <qpushbutton.h>
 #include <qhbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include "jumptopagewin.h"
 #include "pagenumberedit.h"
-#include "icons.h"
-#include "cbicons.h"
 
 using namespace QComicBook;
 
@@ -34,7 +32,7 @@ JumpToPageWindow::JumpToPageWindow(QWidget *parent, int value, int max): QDialog
 	new QLabel(tr("Page number"), box);
 	pedit = new PageNumberEdit(box, value, max);
 	new QLabel(QString("/") + QString::number(max), box);
-	KPushButton *b_ok = new KPushButton(Icons::get(ICON_JUMPTO, KIcon::Small), tr("Jump"), box);
+	QPushButton *b_ok = new QPushButton(tr("Jump"), box);
 	connect(b_ok, SIGNAL(clicked()), this, SLOT(jumpPressed()));
 	connect(b_ok, SIGNAL(clicked()), this, SLOT(close()));
 	b_ok->setDefault(true);
@@ -56,4 +54,3 @@ void JumpToPageWindow::jumpPressed()
 	emit pageSelected(n);
 }
 
-#include "jumptopagewin.moc"

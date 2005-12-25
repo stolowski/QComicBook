@@ -25,8 +25,8 @@
 #include <qvgroupbox.h>
 #include <qspinbox.h>
 #include <qfontdialog.h>
+#include <qfiledialog.h>
 #include <qlineedit.h>
-#include <klocale.h>
 
 using namespace QComicBook;
 
@@ -60,41 +60,30 @@ void ComicBookCfgDialog::setupDisplayTab()
 	//
 	// background color
 	QHBoxLayout *lay1 = new QHBoxLayout;
-	lay1->addWidget(new QLabel(i18n("Background color"), w));
+	lay1->addWidget(new QLabel(tr("Background color"), w));
 	lay1->addWidget(pb_color = new QPushButton(w));
 	pb_color->setFixedWidth(32);
 	pb_color->setPaletteBackgroundColor(bgcolor = cfg->background());
 	connect(pb_color, SIGNAL(clicked()), this, SLOT(showBackgroundDialog()));
 	lay->addLayout(lay1);
 
-	cb_hidemenu = new QCheckBox(i18n("Hide menubar in fullscreen mode"), w);
+	cb_hidemenu = new QCheckBox(tr("Hide menubar in fullscreen mode"), w);
 	cb_hidemenu->setChecked(cfg->fullScreenHideMenu());
 	lay->addWidget(cb_hidemenu);
 
-	cb_hidestatus = new QCheckBox(i18n("Hide statusbar in fullscreen mode"), w);
+	cb_hidestatus = new QCheckBox(tr("Hide statusbar in fullscreen mode"), w);
 	cb_hidestatus->setChecked(cfg->fullScreenHideStatusbar());
 	lay->addWidget(cb_hidestatus);
 
-	cb_smallcursor = new QCheckBox(i18n("Small mouse cursor"), w);
+	cb_smallcursor = new QCheckBox(tr("Small mouse cursor"), w);
 	cb_smallcursor->setChecked(cfg->smallCursor());
 	lay->addWidget(cb_smallcursor);
-
-	//
-	// icons
-	QButtonGroup *gr_icons = new QButtonGroup(2, Qt::Horizontal, i18n("Icons"), w);
-	rb_kdeicons = new QRadioButton(i18n("KDE"), gr_icons);
-	rb_qcbicons = new QRadioButton(i18n("QComicBook"), gr_icons);
-	if (cfg->iconStyle() == KDEDefaultIcons)
-		rb_kdeicons->setChecked(true);
-	else
-		rb_qcbicons->setChecked(true);
-	lay->addWidget(gr_icons);
 		
 	//
 	// scaling method
-	QButtonGroup *gr_scaling = new QButtonGroup(2, Qt::Horizontal, i18n("Scaling method"), w);
-	rb_smooth = new QRadioButton(i18n("Smooth"), gr_scaling);
-	rb_fast = new QRadioButton(i18n("Fast"), gr_scaling);
+	QButtonGroup *gr_scaling = new QButtonGroup(2, Qt::Horizontal, tr("Scaling method"), w);
+	rb_smooth = new QRadioButton(tr("Smooth"), gr_scaling);
+	rb_fast = new QRadioButton(tr("Fast"), gr_scaling);
 	if (cfg->pageScaling() == Fast)
 		rb_fast->setChecked(true);
 	else
@@ -104,12 +93,12 @@ void ComicBookCfgDialog::setupDisplayTab()
 	//
 	// font
 	QHBoxLayout *lay3 = new QHBoxLayout;
-	lay3->addWidget(new QLabel(i18n("Info text font"), w));
+	lay3->addWidget(new QLabel(tr("Info text font"), w));
 	fontname = new QLabel(w);
 	fontname->setFrameStyle(QFrame::Panel | QFrame::Sunken);
 	fontname->setLineWidth(1);
 	lay3->addWidget(fontname, 1);
-	QPushButton *pb_font = new QPushButton(i18n("Choose"), w);
+	QPushButton *pb_font = new QPushButton(tr("Choose"), w);
 	connect(pb_font, SIGNAL(clicked()), this, SLOT(showFontDialog()));
 	lay3->addWidget(pb_font);
 	lay->addLayout(lay3);
@@ -117,7 +106,7 @@ void ComicBookCfgDialog::setupDisplayTab()
 	lay->addStretch();
 	updateFontPreview();
 	
-	addTab(w, i18n("Display"));
+	addTab(w, tr("Display"));
 }
 
 void ComicBookCfgDialog::setupMiscTab()
@@ -127,42 +116,52 @@ void ComicBookCfgDialog::setupMiscTab()
 	QWidget *w = new QWidget(this);
 	QVBoxLayout *lay = new QVBoxLayout(w, 5, 5);
 
-	QVGroupBox *grp0 = new QVGroupBox(i18n("Cache"), w);
+	QVGroupBox *grp0 = new QVGroupBox(tr("Cache"), w);
 	QHBox *box1 = new QHBox(grp0);
-	new QLabel(i18n("Cache size"), box1);
+	new QLabel(tr("Cache size"), box1);
 	sb_cachesize = new QSpinBox(0, 99, 1, box1);
 	sb_cachesize->setValue(cfg->cacheSize());
-	cb_preload = new QCheckBox(i18n("Preload next page"), grp0);
+	cb_preload = new QCheckBox(tr("Preload next page"), grp0);
 	cb_preload->setChecked(cfg->preloadPages());
 	lay->addWidget(grp0);
 
-	QVGroupBox *grp1 = new QVGroupBox(i18n("Thumbnails"), w);
-	cb_thumbs = new QCheckBox(i18n("Use disk cache for thumbnails"), grp1);
+	QVGroupBox *grp1 = new QVGroupBox(tr("Thumbnails"), w);
+	cb_thumbs = new QCheckBox(tr("Use disk cache for thumbnails"), grp1);
 	cb_thumbs->setChecked(cfg->cacheThumbnails());
 	QHBox *box2 = new QHBox(grp1);
-	new QLabel(i18n("Number of days to keep thumbnails"), box2);
+	new QLabel(tr("Number of days to keep thumbnails"), box2);
 	sb_thumbsage = new QSpinBox(0, 365, 1, box2);
 	sb_thumbsage->setValue(cfg->thumbnailsAge());
 	lay->addWidget(grp1);
+	
+	QVGroupBox *grp2 = new QVGroupBox(tr("Help browser"), w);
+	cb_intbrowser = new QCheckBox(tr("Use Built-in browser"), grp2);
+	QWidget *box3 = new QWidget(grp2);
+	QHBoxLayout *lay3 = new QHBoxLayout(box3, 0, 5);
+	lay3->addWidget(new QLabel(tr("External browser"), box3));
+	lay3->addWidget(le_extbrowser = new QLineEdit(box3));
+	lay3->addWidget(pb_brbrowse = new QPushButton(tr("Browse"), box3));
+	connect(pb_brbrowse, SIGNAL(clicked()), this, SLOT(browseExternalBrowser()));
+	lay->addWidget(grp2);
+	connect(cb_intbrowser, SIGNAL(toggled(bool)), this, SLOT(browserCheckboxToggled(bool)));
+	cb_intbrowser->setChecked(f = cfg->useInternalBrowser());
+	browserCheckboxToggled(f);
+	le_extbrowser->setText(cfg->externalBrowser());
 
-	cb_twopagesstep = new QCheckBox(i18n("Forward and backward two pages in two-pages mode"), w);
+	cb_twopagesstep = new QCheckBox(tr("Forward and backward two pages in two-pages mode"), w);
 	cb_twopagesstep->setChecked(cfg->twoPagesStep());
 	lay->addWidget(cb_twopagesstep);
 	
-	cb_autoinfo = new QCheckBox(i18n("Open info dialog after opening comic book"), w);
+	cb_autoinfo = new QCheckBox(tr("Open info dialog after opening comic book"), w);
 	cb_autoinfo->setChecked(cfg->autoInfo());
 	lay->addWidget(cb_autoinfo);
 
-	cb_showsplash = new QCheckBox(i18n("Show splash screen"), w);
-	cb_showsplash->setChecked(cfg->showSplashScreen());
-	lay->addWidget(cb_showsplash);
-	
-	cb_confirmexit = new QCheckBox(i18n("Confirm exit"), w);
+	cb_confirmexit = new QCheckBox(tr("Confirm exit"), w);
 	cb_confirmexit->setChecked(cfg->confirmExit());
 	lay->addWidget(cb_confirmexit);
 
 	lay->addStretch();
-	addTab(w, i18n("Misc"));
+	addTab(w, tr("Misc"));
 }
 
 void ComicBookCfgDialog::setupEditTab()
@@ -170,12 +169,12 @@ void ComicBookCfgDialog::setupEditTab()
 	QWidget *w = new QWidget(this);
 	QVBoxLayout *lay = new QVBoxLayout(w, 5, 5);
 
-	cb_editing = new QCheckBox(i18n("Enable editing"), w);
+	cb_editing = new QCheckBox(tr("Enable editing"), w);
 	cb_editing->setChecked(cfg->editSupport());
 	lay->addWidget(cb_editing);
 
 	lay->addStretch();
-	addTab(w, i18n("Editing"));
+	addTab(w, tr("Editing"));
 }
 
 void ComicBookCfgDialog::apply()
@@ -186,13 +185,10 @@ void ComicBookCfgDialog::apply()
 	cfg->fullScreenHideMenu(cb_hidemenu->isChecked());
 	cfg->fullScreenHideStatusbar(cb_hidestatus->isChecked());
 	cfg->smallCursor(cb_smallcursor->isChecked());
-	if (rb_kdeicons->isChecked())
-		cfg->iconStyle(KDEDefaultIcons);
-	else if (rb_qcbicons->isChecked())
-			cfg->iconStyle(QComicBookIcons);
 	if (rb_smooth->isChecked())
 		cfg->pageScaling(Smooth);
-	else if (rb_fast->isChecked())
+	else
+		if (rb_fast->isChecked())
 			cfg->pageScaling(Fast);
 	cfg->infoFont(font);
 
@@ -203,9 +199,10 @@ void ComicBookCfgDialog::apply()
 	cfg->cacheThumbnails(cb_thumbs->isChecked());
 	cfg->thumbnailsAge(sb_thumbsage->value());
 	cfg->twoPagesStep(cb_twopagesstep->isChecked());
+	cfg->useInternalBrowser(cb_intbrowser->isChecked());
+	cfg->externalBrowser(le_extbrowser->text());
 	cfg->autoInfo(cb_autoinfo->isChecked());
 	cfg->confirmExit(cb_confirmexit->isChecked());
-	cfg->showSplashScreen(cb_showsplash->isChecked());
 
 	//
 	// edit
@@ -237,4 +234,17 @@ void ComicBookCfgDialog::showFontDialog()
 		updateFontPreview();
 }
 
-#include "cbconfigdialog.moc"
+void ComicBookCfgDialog::browseExternalBrowser()
+{
+	const QString file = QFileDialog::getOpenFileName(QString::null,
+			"All files (*)", this, NULL, tr("Choose a file") );
+	if (file != QString::null)
+		le_extbrowser->setText(file);
+}
+
+void ComicBookCfgDialog::browserCheckboxToggled(bool f)
+{
+	le_extbrowser->setDisabled(f);
+	pb_brbrowse->setDisabled(f);
+}
+

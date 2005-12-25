@@ -10,36 +10,25 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#ifndef __STATUSBAR_H
-#define __STATUSBAR_H
+#ifndef __ABOUT_DIALOG_H
+#define __ABOUT_DIALOG_H
 
-#include <qstatusbar.h>
+#include <qdialog.h>
 
 class QLabel;
-class QImage;
 
 namespace QComicBook
 {
-	class StatusBar: public QStatusBar
-	{
-		Q_OBJECT
+    class AboutDialog: public QDialog
+    {
+        private:
+        QLabel *about;
 
-		private:
-			QLabel *page;
-			QLabel *imginfo;
-			QLabel *name;
-
-		public slots:
-			void setPage(int n, int total);
-			void setName(const QString &n);
-			void setImageInfo(const QImage *img1, const QImage *img2=NULL);
-			void clear();
-
-		public:
-			StatusBar(QWidget *parent);
-			~StatusBar();
-	};
+        public:
+        AboutDialog(QWidget *parent, const QString &caption, const QString &text=QString::null);
+        virtual ~AboutDialog();
+        void setText(const QString &text);
+    };
 }
-
 #endif
 
