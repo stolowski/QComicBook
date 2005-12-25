@@ -26,17 +26,20 @@ int main(int argc, char *argv[])
 	QApplication app(argc, argv);
 	const QString errcaption = ComicMainWindow::tr("QComicBook error");
 
+	ComicBookSettings::instance().load();
+
 	//
 	// show splashscreen
-	QPixmap splashpix(DATADIR "qcomicbook-splash.png");
 	QSplashScreen *splash = NULL;
-	if (!splashpix.isNull())
+	if (ComicBookSettings::instance().showSplash())
 	{
-		splash = new QSplashScreen(splashpix);
-		splash->show();
+		QPixmap splashpix(DATADIR "qcomicbook-splash.png");
+		if (!splashpix.isNull())
+		{
+			splash = new QSplashScreen(splashpix);
+			splash->show();
+		}
 	}
-
-	ComicBookSettings::instance().load();
 	
 	if (!Icons::init(DATADIR))
 		QMessageBox::critical(NULL, errcaption, ComicMainWindow::tr("Can't initialize icons path") + ":\n" DATADIR,

@@ -156,6 +156,10 @@ void ComicBookCfgDialog::setupMiscTab()
 	cb_autoinfo->setChecked(cfg->autoInfo());
 	lay->addWidget(cb_autoinfo);
 
+	cb_splash = new QCheckBox(tr("Show splashscreen"), w);
+	cb_splash->setChecked(cfg->showSplash());
+	lay->addWidget(cb_splash);
+	
 	cb_confirmexit = new QCheckBox(tr("Confirm exit"), w);
 	cb_confirmexit->setChecked(cfg->confirmExit());
 	lay->addWidget(cb_confirmexit);
@@ -202,6 +206,7 @@ void ComicBookCfgDialog::apply()
 	cfg->useInternalBrowser(cb_intbrowser->isChecked());
 	cfg->externalBrowser(le_extbrowser->text());
 	cfg->autoInfo(cb_autoinfo->isChecked());
+	cfg->showSplash(cb_splash->isChecked());
 	cfg->confirmExit(cb_confirmexit->isChecked());
 
 	//

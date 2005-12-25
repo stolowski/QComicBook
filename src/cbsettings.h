@@ -57,6 +57,7 @@ namespace QComicBook
 			bool statusbar;
 			bool editsupport;
 			bool intbrowser;
+			bool showsplash;
 			QString extbrowser;
 			QString docklayout;
 			QFont font;
@@ -106,6 +107,7 @@ namespace QComicBook
 			QString externalBrowser() const;
 			void restoreDockLayout(QMainWindow *w);
 			bool editSupport() const;
+			bool showSplash() const;
 
 			void smallCursor(bool f);
 			void twoPagesMode(bool f);
@@ -133,6 +135,7 @@ namespace QComicBook
 			void externalBrowser(const QString &cmd);
 			void saveDockLayout(QMainWindow *w);
 			void editSupport(bool f);
+			void showSplash(bool f);
 
 			static ComicBookSettings& instance();
 

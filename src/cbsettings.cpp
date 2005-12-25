@@ -54,6 +54,7 @@
 #define OPT_CACHETHUMBS "/CacheThumbnails"
 #define OPT_PRELOAD     "/Preload"
 #define OPT_CONFIRMEXIT "/ConfirmExit"
+#define OPT_SHOWSPLASH  "/ShowSplashscreen"
 #define OPT_INTBROWSER  "/UseIntBrowser"
 #define OPT_EXTBROWSER  "/ExtBrowserCmd"
 #define OPT_EDITING     "/Editing"
@@ -175,6 +176,7 @@ void ComicBookSettings::load()
 		intbrowser = cfg->readBoolEntry(OPT_INTBROWSER, true);
 		extbrowser = cfg->readEntry(OPT_EXTBROWSER, defbrowser);
 		autoinfo = cfg->readBoolEntry(OPT_AUTOINFO, false);
+		showsplash = cfg->readBoolEntry(OPT_SHOWSPLASH, true);
 		thumbsage = cfg->readNumEntry(OPT_THUMBSAGE, 7);
 		cachethumbs = cfg->readBoolEntry(OPT_CACHETHUMBS, true);
 		editsupport = cfg->readBoolEntry(OPT_EDITING, false);
@@ -299,6 +301,11 @@ bool ComicBookSettings::useInternalBrowser() const
 QString ComicBookSettings::externalBrowser() const
 {
 	return extbrowser;
+}
+
+bool ComicBookSettings::showSplash() const
+{
+	return showsplash;
 }
 
 void ComicBookSettings::restoreDockLayout(QMainWindow *w)
@@ -488,5 +495,11 @@ void ComicBookSettings::editSupport(bool f)
 {
 	if (f != editsupport)
 		cfg->writeEntry(GRP_MISC OPT_EDITING, editsupport = f);
+}
+
+void ComicBookSettings::showSplash(bool f)
+{
+	if (f != showsplash)
+		cfg->writeEntry(GRP_MISC OPT_SHOWSPLASH, showsplash = f);
 }
 
