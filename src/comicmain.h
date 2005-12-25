@@ -66,6 +66,7 @@ namespace QComicBook
 			QPopupMenu *navi_menu;
 			QPopupMenu *recent_menu;
 			QPopupMenu *bookmarks_menu;
+			QPopupMenu *settings_menu;
 			QLabel *pageinfo; //!<page info displayed in right-click context menu
 			QString lastdir; //!<last opened directory for Open File/Directory dialog
 			QAction *toggleThumbnailsAction;
@@ -122,6 +123,7 @@ namespace QComicBook
 			void setupViewMenu();
 			void setupNavigationMenu();
 			void setupBookmarksMenu();
+			void setupSettingsMenu();
 			void setupHelpMenu();
 			void setupStatusbar();
 			void setupContextMenu();
