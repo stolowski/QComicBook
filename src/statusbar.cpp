@@ -18,7 +18,7 @@
 
 using namespace QComicBook;
 
-StatusBar::StatusBar(QWidget *parent, bool elms): QStatusBar(parent)
+StatusBar::StatusBar(QWidget *parent, bool elms): QStatusBar(parent), page(NULL), imginfo(NULL), name(NULL)
 {
 	if (elms)
 	{
