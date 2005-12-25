@@ -22,7 +22,6 @@
 #include "history.h"
 #include "cbconfigdialog.h"
 #include "statusbar.h"
-#include "thumbnailswin.h"
 #include "thumbnailsview.h"
 #include "thumbnailloader.h"
 #include "bookmarkmanager.h"
@@ -34,9 +33,10 @@
 #include <kpopupmenu.h>
 #include <qstringlist.h>
 #include <qaction.h>
+#include <kaction.h>
 #include <kfiledialog.h>
 #include <qfileinfo.h>
-#include <qtoolbar.h>
+#include <ktoolbar.h>
 #include <qmessagebox.h>
 #include <qlabel.h>
 #include <qframe.h>
@@ -56,9 +56,9 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): KDockMainWindow(parent, NULL,
         cfg = &ComicBookSettings::instance();
 
         setupActions();
-        setupToolbar();
         setupStatusbar();
         setupComicImageView();
+        setupToolbar();
         setupThumbnailsWindow();
 
         setupFileMenu();  
@@ -97,7 +97,7 @@ ComicMainWindow::~ComicMainWindow()
 
 void ComicMainWindow::setupActions()
 {
-        openArchiveAction = new QAction(Icons::get(ICON_OPENARCH), i18n("Open archive"), CTRL+Key_O, this);
+        openArchiveAction = new KAction(i18n("Open archive"), Icons::get(ICON_OPENARCH), KShortcut(CTRL+Key_O), this, SLOT(browseArchive()));
         openDirAction = new QAction(Icons::get(ICON_OPENDIR), i18n("Open directory"), CTRL+Key_D, this);
         openNextAction = new QAction(i18n("Open next"), CTRL+Key_N, this);
         openPrevAction = new QAction(i18n("Open previous"), CTRL+Key_P, this);
@@ -161,10 +161,17 @@ void ComicMainWindow::setupActions()
 
 void ComicMainWindow::setupComicImageView()
 {
-        view = new ComicImageView(this, cfg->pageSize(), cfg->pageScaling(), cfg->background());
-        setCentralWidget(view);
-        view->setFocus();
-        view->setSmallCursor(cfg->smallCursor());
+	maindock = createDockWidget("Page view", Icons::get(ICON_QUIT).pixmap(), NULL, "page_view");
+        view = new ComicImageView(maindock, cfg->pageSize(), cfg->pageScaling(), cfg->background());
+        //setCentralWidget(view);
+	maindock->setWidget(view);
+	maindock->setDockSite(KDockWidget::DockCorner);
+	maindock->setEnableDocking(KDockWidget::DockNone);
+	setView(maindock);
+	setMainDockWidget(maindock);
+
+        //view->setFocus();
+        //view->setSmallCursor(cfg->smallCursor());
         //connect(cfg, SIGNAL(backgroundChanged(const QColor&)), view, SLOT(setBackground(const QColor&)));
         //connect(cfg, SIGNAL(scalingMethodChanged(Scaling)), view, SLOT(setScaling(Scaling)));
         //connect(cfg, SIGNAL(cursorChanged(bool)), view, SLOT(setSmallCursor(bool)));
@@ -212,19 +219,26 @@ void ComicMainWindow::setupComicImageView()
 
 void ComicMainWindow::setupThumbnailsWindow()
 {
-        thumbswin = new ThumbnailsWindow(QDockWindow::InDock, this);
+       /* thumbswin = new ThumbnailsWindow(QDockWindow::InDock, this);
         moveDockWindow(thumbswin, Qt::DockLeft); //initial position of thumbnails window
-        connect(thumbswin, SIGNAL(requestedPage(int, bool)), this, SLOT(jumpToPage(int, bool)));
         connect(thumbswin, SIGNAL(visibilityChanged(bool)), this, SLOT(thumbnailsVisibilityChanged(bool)));
         connect(thumbswin, SIGNAL(visibilityChanged(bool)), toggleThumbnailsAction, SLOT(setOn(bool)));
-        connect(toggleThumbnailsAction, SIGNAL(toggled(bool)), thumbswin, SLOT(setShown(bool)));       
+        connect(toggleThumbnailsAction, SIGNAL(toggled(bool)), thumbswin, SLOT(setShown(bool)));       */
+	KDockWidget *dck = createDockWidget("Thumbnails", Icons::get(ICON_THUMBNAILS).pixmap(), NULL, i18n("Thumbnails"));
+	thumbswin = new ThumbnailsView(dck);
+	dck->setWidget(thumbswin);
+	dck->manualDock(maindock, KDockWidget::DockLeft, 20);
+        connect(thumbswin, SIGNAL(requestedPage(int, bool)), this, SLOT(jumpToPage(int, bool)));
+	//activateDock();
 }
 
 void ComicMainWindow::setupToolbar()
 {
-        toolbar = new QToolBar(i18n("Toolbar"), this);
 	//openDirAction->addTo(toolbar);
-	openArchiveAction->addTo(toolbar);
+	toolbar = toolBar("Main Toolbar");
+	setStandardToolBarMenuEnabled(true);
+	//openArchiveAction->addTo(toolbar);
+	openArchiveAction->plug(toolbar);
         toolbar->addSeparator();
         showInfoAction->addTo(toolbar);
         toggleThumbnailsAction->addTo(toolbar);
@@ -254,7 +268,8 @@ void ComicMainWindow::setupToolbar()
 void ComicMainWindow::setupFileMenu()
 {
         file_menu = new QPopupMenu(this);
-        openArchiveAction->addTo(file_menu);
+        //openArchiveAction->addTo(file_menu);
+        openArchiveAction->plug(file_menu);
         openDirAction->addTo(file_menu);
         recent_menu = new QPopupMenu(this);
         file_menu->insertItem(i18n("Open recent"), recent_menu);
@@ -316,6 +331,7 @@ void ComicMainWindow::setupViewMenu()
         twoPagesAction->addTo(view_menu);
         mangaModeAction->addTo(view_menu);
         toggleThumbnailsAction->addTo(view_menu);
+	view_menu->insertItem(i18n("TODO"), dockHideShowMenu()); //TODO
         menuBar()->insertItem(i18n("&View"), view_menu);     
 }
 
@@ -460,15 +476,15 @@ bool ComicMainWindow::confirmExit()
         return QMessageBox::question(this, "Leave QComicBook?", "Do you really want to quit QComicBook?", QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes;
 }
 
-void ComicMainWindow::thumbnailsVisibilityChanged(bool f)
+void ComicMainWindow::thumbnailsVisibilityChanged()
 {
-        if (f && sink)
+/*        if (f && sink)
         {
                 int max = sink->numOfImages();
                 for (int i=0; i<max; i++)
-                        if (!thumbswin->view()->isLoaded(i))
+                        if (!thumbswin->isLoaded(i))
                                 sink->requestThumbnail(i);
-        }
+        }*/
 }
 
 void ComicMainWindow::toolbarVisibilityChanged(bool f)
@@ -559,7 +575,7 @@ void ComicMainWindow::sinkReady(const QString &path)
         updateCaption();
         statusbar->setName(sink->getFullName());
 
-        thumbswin->view()->setPages(sink->numOfImages());
+        thumbswin->setPages(sink->numOfImages());
 
         //
         // request thumbnails for all pages
@@ -798,7 +814,7 @@ void ComicMainWindow::jumpToPage(int n, bool force)
                 const QString page = i18n("Page") + " " + QString::number(currpage + 1) + "/" + QString::number(sink->numOfImages());
                 pageinfo->setText(page);
                 statusbar->setPage(currpage + 1, sink->numOfImages());
-                thumbswin->view()->scrollToPage(currpage);
+                thumbswin->scrollToPage(currpage);
         }
 }
 
@@ -849,7 +865,7 @@ void ComicMainWindow::closeSink()
                 sink = NULL;
         }
         view->clear();
-        thumbswin->view()->clear();
+        thumbswin->clear();
         updateCaption();
         statusbar->clear();
 }

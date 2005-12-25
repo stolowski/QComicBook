@@ -19,9 +19,10 @@
 #include "history.h"
 
 class QAction;
+class KAction;
 class QPopupMenu;
 class QLabel;
-class QToolBar;
+class KToolBar;
 class QDockWindow;
 
 namespace QComicBook
@@ -30,6 +31,7 @@ namespace QComicBook
 	class ComicBookSettings;
 	class ComicImageView;
 	class ThumbnailsWindow;
+	class ThumbnailsView;
 	class Bookmarks;
 	class StatusBar;
 	using Utility::History;
@@ -42,7 +44,7 @@ namespace QComicBook
 		private:
 			ImgDirSink *sink;
 			ComicImageView *view;
-			ThumbnailsWindow *thumbswin;
+			ThumbnailsView *thumbswin;
 			History *recentfiles;
 			Bookmarks *bookmarks;
 			QComicBook::StatusBar *statusbar;
@@ -58,7 +60,8 @@ namespace QComicBook
 			int close_id; //!<identifier of "Close" menu option
 			int gimp_id; //<!identifier of "Open with Gimp" menu option
 			int reload_id; //<!identifier of "Reload page" menu option
-			QToolBar *toolbar;
+			KToolBar *toolbar;
+			KDockWidget *maindock;
 			QPopupMenu *file_menu;
 			QPopupMenu *settings_menu;
 			QPopupMenu *edit_menu;
@@ -104,7 +107,7 @@ namespace QComicBook
 			QAction *jumpDownAction;
 			QAction *jumpUpAction;
 			QAction *togglePreserveRotationAction;
-			QAction *openArchiveAction;
+			KAction *openArchiveAction;
 			QAction *openDirAction;
 
 		protected:
@@ -135,7 +138,7 @@ namespace QComicBook
 			void setRecentFilesMenu(const History &hist);
 			void recentSelected(int id);
 			void bookmarkSelected(int id);
-			void thumbnailsVisibilityChanged(bool f);
+			void thumbnailsVisibilityChanged();
 			void toolbarVisibilityChanged(bool f);
 			void openWithGimp();
 

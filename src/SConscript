@@ -31,7 +31,6 @@ thumbnailevent.cpp
 thumbnailitem.cpp
 thumbnailloader.cpp
 thumbnailsview.cpp
-thumbnailswin.cpp
 """
 obj.libs='qt-mt kdeui kio kdecore'
 obj.execute()

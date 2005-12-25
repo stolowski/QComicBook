@@ -44,6 +44,9 @@ namespace QComicBook
 			void showContextMenu(QIconViewItem *item, const QPoint &p);
 			void goToPageAction();
 
+		protected:
+			void customEvent(QCustomEvent *e);
+
 		public:
 			ThumbnailsView(QWidget *parent);
 			virtual ~ThumbnailsView();

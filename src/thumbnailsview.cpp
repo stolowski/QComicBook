@@ -13,6 +13,9 @@
 #include "thumbnailsview.h"
 #include "thumbnailitem.h"
 #include "thumbnail.h"
+#include "thumbnailevent.h"
+#include "icons.h"
+#include "cbicons.h"
 #include <qiconview.h>
 #include <qpixmap.h>
 #include <qstring.h>
@@ -34,7 +37,7 @@ ThumbnailsView::ThumbnailsView(QWidget *parent): KIconView(parent), selected(NUL
 	//
 	// context menu
 	menu = new QPopupMenu(this);
-	menu->insertItem(tr("Go to"), this, SLOT(goToPageAction()));
+	menu->insertItem(Icons::get(ICON_JUMPTO), tr("Go to"), this, SLOT(goToPageAction()));
 	
 	//
 	// create "empty page" image
@@ -122,6 +125,19 @@ void ThumbnailsView::goToPageAction()
 bool ThumbnailsView::isLoaded(int n) const
 {
 	return (n < icons.count()) ? icons[n]->isLoaded() : false;
+}
+
+void ThumbnailsView::customEvent(QCustomEvent *e)
+{
+	if (e->type() == ThumbnailReady)
+	{
+		ThumbnailEvent *evt = dynamic_cast<ThumbnailEvent *>(e);
+		setPage(*evt->getThumbnail());
+	}
+	else
+	{
+		KIconView::customEvent(e);
+	}
 }
 
 #include "thumbnailsview.moc"
