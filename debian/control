@@ -16,8 +16,8 @@ Description: qt viewer for comic book archives (cbr/cbz/cba/cbg/cbb)
  page scaling, mouse or keyboard navigation etc.
  .
  QComicBook for now supports archives:
- - cbr - rar-compressed
- - cbz - zip-compressed
- - cba - ace-compressed
- - cbg - targzipped
- - cbb - tarbzip2ped
+  - cbr - rar-compressed
+  - cbz - zip-compressed
+  - cba - ace-compressed
+  - cbg - targzipped
+  - cbb - tarbzip2ped
