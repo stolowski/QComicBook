@@ -1,7 +1,9 @@
-2005-12-xx:  0.2.6       -- option to hide splashscreen added
+2005-12-27:  0.2.6       -- option to hide splashscreen added
                          -- progress is now displayed in statusbar
 			 -- Changes in the menu: "Settings" menu created to
 			    resemble KDE menus layout.
+			 -- autoconf bnv_have_qt macro updated with latest
+			    version
 
 2005-11-13:  0.2.5       -- splash screen added (made exclusively for
                             QComicBook by Adam Mateja)

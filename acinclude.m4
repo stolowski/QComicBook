@@ -77,7 +77,7 @@ dnl other variables are set to the empty string.
 dnl
 dnl @category InstalledPackages
 dnl @author Bastiaan Veelo <Bastiaan.N.Veelo@ntnu.no>
-dnl @version 2005-01-24
+dnl @version 2005-12-18
 dnl @license AllPermissive
 
 dnl Copyright (C) 2001, 2002, 2003, 2005, Bastiaan Veelo
@@ -322,7 +322,7 @@ EOF
 
 dnl Internal subroutine of BNV_HAVE_QT
 dnl Set bnv_qt_dir bnv_qt_include_dir bnv_qt_bin_dir bnv_qt_lib_dir bnv_qt_lib
-AC_DEFUN(BNV_PATH_QT_DIRECT,
+AC_DEFUN([BNV_PATH_QT_DIRECT],
 [
   ## Binary utilities ##
   if test x"$with_Qt_bin_dir" != x; then

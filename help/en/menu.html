@@ -10,11 +10,74 @@
 	    recently opened on the top)
 	<li>Info - displays information about currenly opened comic book. This includes
 	contents of file_id.diz *.nfo files (if any) as well as memory usage info
-	<li>Settings - allows you to <a href="#settings">fine-tune some options</a>
 	<li>Close - closes currently opened comic book
 	<li>Quit - quits QComicBook
 </ul>
 </p>
+
+<h2><a name="view">View</a></h2>
+<p>
+<b>View</b> submenu provides some basic settings for page view.</p>
+You can select one of the following scaling modes:
+<ul>
+	<li>Original size - no scaling is done and original image size is preserved
+	<li>Fit width - image is scaled to fit window width
+	<li>Fit height - image is scaled to fit window height
+	<li>Whole page - image is scaled to fit window
+	<li>Best fit - depending on image dimensions, QComicBook chooses the best method
+	to scale image
+</ul>
+The page can be rotated with 90 degree step, with these options:
+<ul>
+	<li>Rotate right - rotates image clockwise
+	<li>Rotate left - rotates image counter clockwise
+	<li>No rotation - resets rotation, restores original image
+	<li>Preserve rotation - makes rotation "permanent" for viewing next pages
+</ul>
+Other options in this menu:
+<ul>
+	depending on you <a href="#file">settings</a>, menubar may be hidden in fullscreen mode, so to back to
+	windowed mode you need to press F11 or ESC key
+	<li>Two pages - display two pages, side by side, just like when reading normal book
+	<li>Japanese mode - scrolls to top-right corner on page change; in two pages mode additionaly swaps pages.
+	<li>Thumbnails - toggles thumbnails window
+</ul>
+
+<p>
+Settings in this menu are saved when quitting QComicBook (except for "fullscreen" option).
+</p>
+
+<h2><a name="bookmarks">Bookmarks</a></h2>
+<p>
+<b>Bookmarks</b> menu allows you to bookmark pages in comic books.
+These bookmarks are however somewhat different than, for example, in any
+webbrowser and are more similiar to real bookmarks. Each bookmark keeps
+bookmarked page number (as well as file name), so you can easily start with
+your comic book from the point, where you last stopped reading.
+</p>
+Two options are available in this menu:
+<ul>
+	<li>Set bookmark for this comicbook - creates bookmark for current
+	  comic book; existing bookmark for this comic book is deleted
+	<li>Remove bookmark for this comicbook - removes existing bookmark
+	for current comic book; to remove other bookmarks, use <i>Manage bookmarks</i> option.
+	<li>Manage bookmarks - opens bookmark manager, where bookmarks can be
+	easily removed.
+</ul>
+<p>
+Below these options you can see the list of currently saved bookmarks. Just
+click on one of them to go to bookmarked comic book and page.
+
+<h2><a name="settings">Settings</a></h2>
+<ul>
+	<li>Scrollbars - toggles displaying of scrollbars for large pages; please note that scrollbars will be shown
+	only if necessary
+	<li>Toolbar - toggles displaying of toolbar
+	<li>Statusbar - toggles displaying of statusbar
+	<li>Fullscreen - toggles beetween fullscreen and windowed mode; please note, that
+	<li>Configure QComicBook - allows you to <a href="#config">fine-tune some options</a>
+</ul>
+
 <p>
 QComicBook offers some tunable options, available via <a name="settings"><b>Settings</b></a>
 menu option. These options include:
@@ -46,61 +109,3 @@ menu option. These options include:
  </ul>
 Note: changing cache size takes effect on new comic book.
 </p>
-
-<h2><a name="view">View</a></h2>
-<p>
-<b>View</b> submenu provides some basic settings for page view.</p>
-You can select one of the following scaling modes:
-<ul>
-	<li>Original size - no scaling is done and original image size is preserved
-	<li>Fit width - image is scaled to fit window width
-	<li>Fit height - image is scaled to fit window height
-	<li>Whole page - image is scaled to fit window
-	<li>Best fit - depending on image dimensions, QComicBook chooses the best method
-	to scale image
-</ul>
-The page can be rotated with 90 degree step, with these options:
-<ul>
-	<li>Rotate right - rotates image clockwise
-	<li>Rotate left - rotates image counter clockwise
-	<li>No rotation - resets rotation, restores original image
-	<li>Preserve rotation - makes rotation "permanent" for viewing next pages
-</ul>
-Other options in this menu:
-<ul>
-	<li>Fullscreen - toggles beetween fullscreen and windowed mode; please note, that
-	depending on you <a href="#file">settings</a>, menubar may be hidden in fullscreen mode, so to back to
-	windowed mode you need to press F11 or ESC key
-	<li>Two pages - display two pages, side by side, just like when reading normal book
-	<li>Japanese mode - scrolls to top-right corner on page change; in two pages mode additionaly swaps pages.
-	<li>Thumbnails - toggles thumbnails window
-	<li>Scrollbars - toggles displaying of scrollbars for large pages; please note that scrollbars will be shown
-	only if necessary
-	<li>Toolbar - toggles displaying of toolbar
-	<li>Statusbar - toggles displaying of statusbar
-</ul>
-
-<p>
-Settings in this menu are saved when quitting QComicBook (except for "fullscreen" option).
-</p>
-
-<h2><a name="bookmarks">Bookmarks</a></h2>
-<p>
-<b>Bookmarks</b> menu allows you to bookmark pages in comic books.
-These bookmarks are however somewhat different than, for example, in any
-webbrowser and are more similiar to real bookmarks. Each bookmark keeps
-bookmarked page number (as well as file name), so you can easily start with
-your comic book from the point, where you last stopped reading.
-</p>
-Two options are available in this menu:
-<ul>
-	<li>Set bookmark for this comicbook - creates bookmark for current
-	  comic book; existing bookmark for this comic book is deleted
-	<li>Remove bookmark for this comicbook - removes existing bookmark
-	for current comic book; to remove other bookmarks, use <i>Manage bookmarks</i> option.
-	<li>Manage bookmarks - opens bookmark manager, where bookmarks can be
-	easily removed.
-</ul>
-<p>
-Below these options you can see the list of currently saved bookmarks. Just
-click on one of them to go to bookmarked comic book and page.
