@@ -1,3 +1,6 @@
+2006-03-02:  0.2.7       -- fixed bug with status bar hiding in fullscreen mode 
+                            if 'Hide statusbar in fullscreen mode' option is on.
+
 2005-12-27:  0.2.6       -- option to hide splashscreen added
                          -- progress is now displayed in statusbar
 			 -- Changes in the menu: "Settings" menu created to

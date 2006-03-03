@@ -553,7 +553,7 @@ void ComicMainWindow::recentSelected(int id)
 
 void ComicMainWindow::sinkReady(const QString &path)
 {
-	statusbar->setShown(toggleStatusbarAction->isOn()); //applies back user's statusbar preference
+	statusbar->setShown(toggleStatusbarAction->isOn() && !(isFullScreen() && cfg->fullScreenHideStatusbar())); //applies back user's statusbar preference
 
         recentfiles->append(path);
         setRecentFilesMenu(*recentfiles);
@@ -576,7 +576,7 @@ void ComicMainWindow::sinkReady(const QString &path)
 
 void ComicMainWindow::sinkError(int code)
 {
-	statusbar->setShown(toggleStatusbarAction->isOn()); //applies back user's statusbar preference
+	statusbar->setShown(toggleStatusbarAction->isOn() && !(isFullScreen() && cfg->fullScreenHideStatusbar())); //applies back user's statusbar preference
 
         QString msg;
         switch (code)
