@@ -31,6 +31,7 @@
 #include "bookmarkmanager.h"
 #include "miscutil.h"
 #include "archiverdialog.h"
+#include "suparchwin.h"
 #include <qimage.h>
 #include <qmenubar.h>
 #include <qpopupmenu.h>
@@ -266,6 +267,8 @@ void ComicMainWindow::setupFileMenu()
         file_menu->insertItem(tr("Recently opened"), recent_menu);
         connect(recent_menu, SIGNAL(activated(int)), this, SLOT(recentSelected(int)));
         file_menu->insertSeparator();
+	create_id = file_menu->insertItem(tr("Create archive"), this, SLOT(createArchive()));
+        file_menu->insertSeparator();
         showInfoAction->addTo(file_menu);
         file_menu->insertSeparator();
         close_id = file_menu->insertItem(tr("Close"), this, SLOT(closeSink()));
@@ -359,6 +362,8 @@ void ComicMainWindow::setupSettingsMenu()
 void ComicMainWindow::setupHelpMenu()
 {
         QPopupMenu *help_menu = new QPopupMenu(this);
+	help_menu->insertItem(tr("System information"), this, SLOT(showSysInfo()));
+	help_menu->insertSeparator();
         help_menu->insertItem(tr("Index"), this, SLOT(showHelp()));
         help_menu->insertItem(tr("About"), this, SLOT(showAbout()));
         menuBar()->insertItem(tr("&Help"), help_menu);
@@ -406,6 +411,7 @@ void ComicMainWindow::enableComicBookActions(bool f)
         // file menu
         const bool x = f && sink && typeid(*sink) == typeid(ImgArchiveSink);
         file_menu->setItemEnabled(close_id, f);
+        file_menu->setItemEnabled(create_id, f);
         showInfoAction->setEnabled(f);
         openNextAction->setEnabled(x);
         openPrevAction->setEnabled(x);
@@ -611,10 +617,6 @@ void ComicMainWindow::browseArchive()
                 open(file, 0);
 }
 
-void ComicMainWindow::createArchive()
-{
-}
-
 void ComicMainWindow::open(const QString &path, int page)
 {
         const QFileInfo f(path);
@@ -811,6 +813,22 @@ void ComicMainWindow::showInfo()
                 ComicBookInfo *i = new ComicBookInfo(this, *sink, cfg->infoFont());
                 i->show();
         }
+}
+
+void ComicMainWindow::showSysInfo()
+{
+	SupportedArchivesWindow *win = new SupportedArchivesWindow(this);
+	win->show();
+}
+
+void ComicMainWindow::createArchive()
+{
+	if (sink)
+	{
+		ArchiverDialog *win = new ArchiverDialog(this, sink);
+		win->exec();
+		delete win;
+	}
 }
 
 void ComicMainWindow::showAbout()

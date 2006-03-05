@@ -18,6 +18,7 @@
 #include <qstring.h>
 #include <qobject.h>
 #include <qstringlist.h>
+#include <qvaluelist.h>
 #include "imgdirsink.h"
 
 class QImage;
@@ -42,6 +43,17 @@ namespace QComicBook
 				UNKNOWN_ARCHIVE = 2<<31
 			};
 
+			struct ArchiveTypeInfo
+			{
+				ArchiveType type;
+				QString name;
+				QStringList listopts;
+				QStringList extractopts;
+				QStringList extensions;
+				bool reading;
+				bool writing;
+			};
+
 		protected:
 
 			ArchiveType archivetype; ///< the type of currently opened archive
@@ -55,25 +67,10 @@ namespace QComicBook
 			int filesnum; ///< number of files gathered from parsing archiver output, used for progress bar
 			int extcnt; ///< extracted files counter for progress bar
 
-			struct ArchiveExtension
-			{
-				ArchiveType archtype;
-				QString ext;
-			};
-			static ArchiveExtension exts[];
+			static QValueList<ArchiveTypeInfo> archinfo;
 			
-			static QStringList zip; ///< unzip executable and extract options
-			static QStringList rar; ///< rar/unrar executbale and extract options
-			static QStringList ace; ///< unace executbale and extract options
-			static QStringList targz;
-			static QStringList tarbz2;
-			static QStringList zip_i; ///< unzip executable and list options
-			static QStringList rar_i; ///< rar/unrar executable and list options
-			static QStringList ace_i; ///< unace executable and list options
-			static QStringList targz_i;
-			static QStringList tarbz2_i;
-			static int suppopen; ///< supported archives flags (for open)
-			static int suppsave; ///< supported archives flags (for save)
+			static int suppopen;
+			static int suppsave;
 			static QString openext; ///< supported archives extensions (for open)
 			static QString saveext; ///< supported archives extensions (for save)
 
@@ -109,7 +106,9 @@ namespace QComicBook
 
 			static void autoconfArchivers();
 			static int supportedArchives();
+			static QValueList<ImgArchiveSink::ArchiveTypeInfo> supportedArchivesInfo();
 			static bool supportsOpen(ArchiveType t);
+			static bool supportsSave(ArchiveType t);
 			static QString supportedOpenExtensions();
 			static QString supportedSaveExtensions();
 	};

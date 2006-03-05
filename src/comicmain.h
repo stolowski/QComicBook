@@ -56,6 +56,7 @@ namespace QComicBook
 			int setbookmark_id; //!<identifier of "Set bookmark" menu option
 			int rmvbookmark_id; //!<identifier of "Remove bookmark" menu option
 			int close_id; //!<identifier of "Close" menu option
+			int create_id; //!<identifier of "Create" menu option
 			int gimp_id; //<!identifier of "Open with Gimp" menu option
 			int reload_id; //<!identifier of "Reload page" menu option
 			QToolBar *toolbar;
@@ -158,6 +159,7 @@ namespace QComicBook
 			void showAbout();
 			void showHelp();
 			void showInfo();
+			void showSysInfo();
 			void showConfigDialog();
 			void showJumpToPage(const QString &number=QString::null);
 			void closeSink();
