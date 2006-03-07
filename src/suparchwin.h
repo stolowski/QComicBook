@@ -17,12 +17,17 @@
 
 #include <qdialog.h>
 
-class SupportedArchivesWindow: public QWidget
+namespace QComicBook
 {
-	public:
-		SupportedArchivesWindow(QWidget *parent);
-		virtual ~SupportedArchivesWindow();
-};
+	class SupportedArchivesWindow: public QWidget
+	{
+		Q_OBJECT
+
+		public:
+			SupportedArchivesWindow(QWidget *parent);
+			virtual ~SupportedArchivesWindow();
+	};
+}
 
 #endif
 

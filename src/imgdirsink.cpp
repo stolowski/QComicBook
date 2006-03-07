@@ -42,6 +42,21 @@ ImgDirSink::ImgDirSink(const QString &path, int cachesize): QObject(), cachemtx(
         open(path);
 }
 
+ImgDirSink::ImgDirSink(const ImgDirSink &sink): QObject(), cachemtx(true)
+{
+        cache = new ImgCache(1); //TODO
+        thloader.setSink(this);
+        imgloader.setSink(this);
+
+	dirpath = sink.dirpath;
+	cbname = sink.cbname;
+	imgfiles = sink.imgfiles;
+	txtfiles = sink.txtfiles;
+	otherfiles = sink.otherfiles;
+	dirs = sink.dirs;
+	timestamps = sink.timestamps;
+}
+
 ImgDirSink::~ImgDirSink()
 {
         close();

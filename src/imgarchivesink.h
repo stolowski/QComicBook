@@ -66,6 +66,7 @@ namespace QComicBook
 			QStringList archdirs; ///< list of archive dirs
 			int filesnum; ///< number of files gathered from parsing archiver output, used for progress bar
 			int extcnt; ///< extracted files counter for progress bar
+			bool docleanup; ///< if cleanup should be performed on comicbook directory on close()
 
 			static QValueList<ArchiveTypeInfo> archinfo;
 			
@@ -87,6 +88,11 @@ namespace QComicBook
 			static ArchiveType archiveType(const QString &filename);
 			int extract(const QString &filename, const QString &destdir);
 			void init();
+			
+		signals:
+			void createProgress(int current, int total);
+			void createReady();
+			void createError();
 
 		protected slots:
 			void extractExited();
@@ -97,12 +103,15 @@ namespace QComicBook
 		public:
 			ImgArchiveSink(int cachesize=1);
 			ImgArchiveSink(const QString &path, int cachesize=1);
+			ImgArchiveSink(const ImgDirSink &sink);
 			virtual ~ImgArchiveSink();
 
 			virtual int open(const QString &path);
 			virtual void close();
 			virtual QString getName(int maxlen = 50);
 			virtual QString getFullName();
+
+			virtual void create(const QString &destname, QValueList<int> pages);
 
 			static void autoconfArchivers();
 			static int supportedArchives();

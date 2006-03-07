@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <iostream>
 
 using namespace QComicBook;
 using Utility::which;
@@ -32,15 +33,19 @@ int ImgArchiveSink::suppsave;
 
 QValueList<ImgArchiveSink::ArchiveTypeInfo> ImgArchiveSink::archinfo;
 
-ImgArchiveSink::ImgArchiveSink(int cachesize): ImgDirSink(cachesize) 
+ImgArchiveSink::ImgArchiveSink(int cachesize): ImgDirSink(cachesize), docleanup(true)
 {
 	init();
 }
 
-ImgArchiveSink::ImgArchiveSink(const QString &path, int cachesize): ImgDirSink(cachesize)
+ImgArchiveSink::ImgArchiveSink(const QString &path, int cachesize): ImgDirSink(cachesize), docleanup(true)
 {
 	init();
 	open(path);
+}
+
+ImgArchiveSink::ImgArchiveSink(const ImgDirSink &sink): ImgDirSink(sink), docleanup(false)
+{
 }
 
 ImgArchiveSink::~ImgArchiveSink()
@@ -192,6 +197,14 @@ void ImgArchiveSink::close()
 		dir.rmdir(*it);
 	dir.rmdir(tmppath);
 	archivename = QString::null;
+}
+
+void ImgArchiveSink::create(const QString &destname, QValueList<int> pages)
+{
+	//TODO
+	for (QValueList<int>::const_iterator it = pages.begin(); it != pages.end(); it++)
+		std::cout << *it << " ";
+	std::cout << "\n";
 }
 
 QString ImgArchiveSink::getName(int maxlen)

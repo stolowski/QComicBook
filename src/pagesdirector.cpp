@@ -22,12 +22,13 @@ PagesDirector::PagesDirector(QWidget *parent, ImgDirSink *snk): QListView(parent
 	const int n = sink->numOfImages();
 	pages = new QCheckListItem* [n];
 
-	addColumn(tr("Page Number"));
+	addColumn(tr("#"));
 	addColumn(tr("Image"));
 	
 	setColumnAlignment(0, Qt::AlignCenter);
 	setColumnAlignment(1, Qt::AlignVCenter | Qt::AlignLeft);
 	setSorting(-1);
+	setAllColumnsShowFocus(true);
 
 	for (int i=0; i<n; i++)
 	{
@@ -68,10 +69,16 @@ void PagesDirector::customEvent(QCustomEvent *e)
 QValueList<int> PagesDirector::markedPages()
 {
 	QValueList<int> marked;
-	const int n = sink->numOfImages();
-	for (int i=0; i<n; i++)
-		if (pages[i]->isOn())
-			marked.append(i);
+
+	int i = 0;
+	for (QListViewItem *item = firstChild(); item; item = item->nextSibling())
+		if (QCheckListItem *citem = dynamic_cast<QCheckListItem*>(item))
+		{
+			// TODO: order
+			if (citem->isOn())
+				marked.append(i);
+			++i;
+		}
 	return marked;
 }
 
@@ -111,5 +118,36 @@ void PagesDirector::moveDownSelected()
 {
 	if (QListViewItem *item = selectedItem())
 		moveDown(item);
+}
+
+void PagesDirector::makeSelectedFirst(QListViewItem *item)
+{
+	takeItem(item);
+	insertItem(item);
+	setSelected(item, true);
+	ensureItemVisible(item);
+}
+
+void PagesDirector::makeSelectedLast(QListViewItem *item)
+{
+	QListViewItem *last = lastItem();
+	if (item != last)
+	{
+		item->moveItem(last);
+		//setSelected(item, true);
+		ensureItemVisible(item);
+	}
+}
+
+void PagesDirector::makeSelectedFirst()
+{
+	if (QListViewItem *item = selectedItem())
+		makeSelectedFirst(item);
+}
+
+void PagesDirector::makeSelectedLast()
+{
+	if (QListViewItem *item = selectedItem())
+		makeSelectedLast(item);
 }
 

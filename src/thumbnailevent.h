@@ -23,6 +23,7 @@ namespace QComicBook
 {
 
 	class Thumbnail;
+
 	class ThumbnailEvent: public QCustomEvent
 	{
 		private:

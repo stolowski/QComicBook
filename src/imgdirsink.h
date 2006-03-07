@@ -125,6 +125,7 @@ namespace QComicBook
 		public:
 			ImgDirSink(int cachesize=1);
 			ImgDirSink(const QString &path, int cachesize=1);
+			ImgDirSink(const ImgDirSink &sink);
 			virtual ~ImgDirSink();
 
 			//! Opens this comic book sink with specifiled path.

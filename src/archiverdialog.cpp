@@ -68,15 +68,21 @@ ArchiverDialog::ArchiverDialog(QWidget *parent, ImgDirSink *sink): QDialog(paren
 	QVBoxLayout *lay2 = new QVBoxLayout(lay1);
 	QPushButton *b_moveup = new QPushButton(tr("Up"), this);
 	QPushButton *b_movedown = new QPushButton(tr("Down"), this);
+	QPushButton *b_first = new QPushButton(tr("Make first"), this);
+	QPushButton *b_last = new QPushButton(tr("Make last"), this);
 	connect(b_moveup, SIGNAL(clicked()), pagesdir, SLOT(moveUpSelected()));
 	connect(b_movedown, SIGNAL(clicked()), pagesdir, SLOT(moveDownSelected()));
+	connect(b_first, SIGNAL(clicked()), pagesdir, SLOT(makeSelectedFirst()));
+	connect(b_last, SIGNAL(clicked()), pagesdir, SLOT(makeSelectedLast()));
 	lay2->addWidget(b_moveup);
 	lay2->addWidget(b_movedown);
+	lay2->addWidget(b_first);
+	lay2->addWidget(b_last);
 	lay2->addStretch();
 
 	QHBoxLayout *lay3 = new QHBoxLayout(NULL, 5, 5);
-	QPushButton *b_cancel = new QPushButton(tr("Cancel"), this);
-	QPushButton *b_create = new QPushButton(tr("Create"), this);
+	b_cancel = new QPushButton(tr("Cancel"), this);
+	b_create = new QPushButton(tr("Create"), this);
 	connect(b_cancel, SIGNAL(clicked()), this, SLOT(close()));
 	connect(b_create, SIGNAL(clicked()), this, SLOT(create()));
 	lay3->addStretch();
@@ -84,7 +90,6 @@ ArchiverDialog::ArchiverDialog(QWidget *parent, ImgDirSink *sink): QDialog(paren
 	lay3->addWidget(b_cancel);
 	pbar = new QProgressBar(this);
 	pbar->setPercentageVisible(true);
-	// TODO: sygnaly progressu z sink
 	lay0->addWidget(pbar);
 	lay0->addLayout(lay3);
 }
@@ -95,6 +100,25 @@ ArchiverDialog::~ArchiverDialog()
 
 void ArchiverDialog::create()
 {
+	b_create->setDisabled(true);
+	b_cancel->setDisabled(true);
+	archive = new ImgArchiveSink(*imgsink);
+	connect(archive, SIGNAL(createProgress(int, int)), pbar, SLOT(setProgress(int, int)));
+	connect(archive, SIGNAL(createReady()), this, SLOT(createDone()));
+	connect(archive, SIGNAL(createError()), this, SLOT(createError()));
+	archive->create("", pagesdir->markedPages());
+}
+
+void ArchiverDialog::createReady()
+{
+	// TODO
+	delete archive;
+}
+
+void ArchiverDialog::createError()
+{
+	// TODO
+	delete archive;
 }
 
 void ArchiverDialog::browse()

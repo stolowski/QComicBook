@@ -36,10 +36,14 @@ namespace QComicBook
 			virtual void customEvent(QCustomEvent *e);
 
 		public slots:
-			virtual void moveUp(QListViewItem *item);
-			virtual void moveDown(QListViewItem *item);
-			virtual void moveUpSelected();
-			virtual void moveDownSelected();
+			void moveUp(QListViewItem *item);
+			void moveDown(QListViewItem *item);
+			void moveUpSelected();
+			void moveDownSelected();
+			void makeSelectedFirst(QListViewItem *item);
+			void makeSelectedLast(QListViewItem *item);
+			void makeSelectedFirst();
+			void makeSelectedLast();
 				
 		public:
 			PagesDirector(QWidget *parent, ImgDirSink *snk);

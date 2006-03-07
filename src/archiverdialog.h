@@ -20,10 +20,12 @@
 class QLineEdit;
 class QComboBox;
 class QProgressBar;
+class QPushButton;
 
 namespace QComicBook
 {
 	class ImgDirSink;
+	class ImgArchiveSink;
 	class PagesDirector;
 
 	class ArchiverDialog: public QDialog
@@ -34,12 +36,17 @@ namespace QComicBook
 			QLineEdit *le_destname;
 			QComboBox *cm_archtype;
 			QProgressBar *pbar;
+			QPushButton *b_cancel;
+			QPushButton *b_create;
 			PagesDirector *pagesdir;
-			ImgDirSink *imgsink;
+			ImgDirSink *imgsink; //original sink (directory or archive)
+			ImgArchiveSink *archive; //new archive
 
-		public slots:
+		protected slots:
 			void browse();
 			void create();
+			void createReady();
+			void createError();
 
 		public:
 			ArchiverDialog(QWidget *parent, ImgDirSink *sink);
