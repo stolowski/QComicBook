@@ -14,6 +14,7 @@
 #include "imgdirsink.h"
 #include "thumbnail.h"
 #include "thumbnailevent.h"
+#include "listviewthumbnail.h"
 
 using namespace QComicBook;
 
@@ -32,7 +33,7 @@ PagesDirector::PagesDirector(QWidget *parent, ImgDirSink *snk): QListView(parent
 
 	for (int i=0; i<n; i++)
 	{
-		pages[i] = new QCheckListItem(this, i>0 ? pages[i-1] : NULL, QString::number(i+1), QCheckListItem::CheckBox);
+		pages[i] = new ListViewThumbnail(this, i>0 ? pages[i-1] : NULL, i);
 		pages[i]->setOn(true);
 	}
 
@@ -71,12 +72,13 @@ QValueList<int> PagesDirector::markedPages()
 	QValueList<int> marked;
 
 	int i = 0;
+	//
+	// create list of marked pages
 	for (QListViewItem *item = firstChild(); item; item = item->nextSibling())
-		if (QCheckListItem *citem = dynamic_cast<QCheckListItem*>(item))
+		if (ListViewThumbnail *citem = dynamic_cast<ListViewThumbnail*>(item))
 		{
-			// TODO: order
 			if (citem->isOn())
-				marked.append(i);
+				marked.append(citem->page()); //this ensures order is honored
 			++i;
 		}
 	return marked;
@@ -134,7 +136,6 @@ void PagesDirector::makeSelectedLast(QListViewItem *item)
 	if (item != last)
 	{
 		item->moveItem(last);
-		//setSelected(item, true);
 		ensureItemVisible(item);
 	}
 }

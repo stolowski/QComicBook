@@ -97,6 +97,7 @@ namespace QComicBook
 			QStringList otherfiles; //!< list of other files
 			QStringList dirs; //!< directories
 			QMap<QString, FileStatus> timestamps; //!< last modifications timestamps for all pages
+			static const QString imgext[];
 
 			//! Scans directories recursively for image and text files.
 			/*! Scans directories for jpg, png, gif, xpm image files and .nfo and file_id.diz text files.
@@ -187,6 +188,9 @@ namespace QComicBook
 			//! Removes old thumbnails.
 			/*! @param days thumbnails older than this number will be removed */
 			static void removeThumbnails(int days);
+
+			static bool knownImageExtension(const QString &path);
+			static QString getKnownImageExtension(const QString &path);
 	};
 }
 

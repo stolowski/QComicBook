@@ -10,35 +10,15 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "thumbnailitem.h"
-#include "thumbnail.h"
+#include "iconviewthumbnail.h"
 
 using namespace QComicBook;
 
-ThumbnailItem::ThumbnailItem(int page): pnum(page), loaded(false)
+IconViewThumbnail::IconViewThumbnail(QIconView *view, int page, const QPixmap &pixmap): QIconViewItem(view, QString::number(page+1), pixmap), ThumbnailItem(page)
 {
 }
 
-ThumbnailItem::~ThumbnailItem()
-{
-}
-
-int ThumbnailItem::page() const
-{
-	return pnum;
-}
-
-void ThumbnailItem::setLoaded(bool f)
-{
-	loaded = f;
-}
-
-bool ThumbnailItem::isLoaded() const
-{
-	return loaded;
-}
-
-void ThumbnailItem::setThumbnail(const Thumbnail *t)
+IconViewThumbnail::~IconViewThumbnail()
 {
 }
 

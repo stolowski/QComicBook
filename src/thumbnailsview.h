@@ -15,7 +15,7 @@
 
 #include <qiconview.h>
 #include <qptrvector.h>
-#include <thumbnailitem.h>
+#include <iconviewthumbnail.h>
 
 class QPixmap;
 class QIconViewItem;
@@ -32,7 +32,7 @@ namespace QComicBook
 		private:
 			int numpages;
 			QPixmap *emptypage;
-			QPtrVector<ThumbnailItem> icons;
+			QPtrVector<IconViewThumbnail> icons;
 			QPopupMenu *menu;
 			QIconViewItem *selected;
 

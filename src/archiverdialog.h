@@ -46,7 +46,7 @@ namespace QComicBook
 			void browse();
 			void create();
 			void createReady();
-			void createError();
+			void createError(int code);
 
 		public:
 			ArchiverDialog(QWidget *parent, ImgDirSink *sink);

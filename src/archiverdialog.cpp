@@ -25,6 +25,7 @@
 #include <qvbox.h>
 #include <qprogressbar.h>
 #include <qsizepolicy.h>
+#include <qmessagebox.h>
 
 using namespace QComicBook;
 
@@ -104,20 +105,33 @@ void ArchiverDialog::create()
 	b_cancel->setDisabled(true);
 	archive = new ImgArchiveSink(*imgsink);
 	connect(archive, SIGNAL(createProgress(int, int)), pbar, SLOT(setProgress(int, int)));
-	connect(archive, SIGNAL(createReady()), this, SLOT(createDone()));
-	connect(archive, SIGNAL(createError()), this, SLOT(createError()));
-	archive->create("", pagesdir->markedPages());
+	connect(archive, SIGNAL(createReady()), this, SLOT(createReady()));
+	connect(archive, SIGNAL(createError(int)), this, SLOT(createError(int)));
+
+	const QString choosen = cm_archtype->currentText();
+	QValueList<ImgArchiveSink::ArchiveTypeInfo> archlist = ImgArchiveSink::supportedArchivesInfo();
+	for (QValueList<ImgArchiveSink::ArchiveTypeInfo>::const_iterator it = archlist.begin(); it != archlist.end(); it++)
+	{
+		const ImgArchiveSink::ArchiveTypeInfo &inf = *it;
+		if (choosen == inf.name)
+		{
+			archive->create(le_destname->text(), inf.type, pagesdir->markedPages());
+			break;
+		}
+	}
 }
 
 void ArchiverDialog::createReady()
 {
-	// TODO
+        QMessageBox::critical(this, "QComicBook", "OK", 
+                        QMessageBox::Ok, QMessageBox::NoButton);
 	delete archive;
 }
 
-void ArchiverDialog::createError()
+void ArchiverDialog::createError(int code)
 {
-	// TODO
+        QMessageBox::critical(this, "QComicBook:", "ERROR", 
+                        QMessageBox::Ok, QMessageBox::NoButton);
 	delete archive;
 }
 

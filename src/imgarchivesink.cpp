@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <unistd.h>
 #include <iostream>
 
 using namespace QComicBook;
@@ -46,6 +47,7 @@ ImgArchiveSink::ImgArchiveSink(const QString &path, int cachesize): ImgDirSink(c
 
 ImgArchiveSink::ImgArchiveSink(const ImgDirSink &sink): ImgDirSink(sink), docleanup(false)
 {
+	init();
 }
 
 ImgArchiveSink::~ImgArchiveSink()
@@ -57,10 +59,13 @@ void ImgArchiveSink::init()
 {
 	pinf = new QProcess(this);
 	pext = new QProcess(this);
+	pomp = new QProcess(this); //????????
 	connect(pinf, SIGNAL(readyReadStdout()), this, SLOT(infoStdoutReady()));
 	connect(pinf, SIGNAL(processExited()), this, SLOT(infoExited()));
 	connect(pext, SIGNAL(readyReadStdout()), this, SLOT(extractStdoutReady()));
 	connect(pext, SIGNAL(processExited()), this, SLOT(extractExited()));
+	connect(pomp, SIGNAL(processExited()), this, SLOT(compressExited()));
+	connect(pomp, SIGNAL(readyReadStdout()), this, SLOT(compressStdoutReady()));
 }
 
 ImgArchiveSink::ArchiveType ImgArchiveSink::archiveType(const QString &filename)
@@ -164,10 +169,8 @@ int ImgArchiveSink::open(const QString &path)
 	{
 		if (info.isReadable())
 		{
-			char tmpd[19];
-			strcpy(tmpd, "/tmp/qcomic-XXXXXX");
-			mkdtemp(tmpd);
-			int status = extract(path, tmppath = tmpd);
+			tmppath = makeTempDir();
+			int status = extract(path, tmppath);
 			if (status != 0)
 			{
 				emit sinkError(status);
@@ -199,12 +202,61 @@ void ImgArchiveSink::close()
 	archivename = QString::null;
 }
 
-void ImgArchiveSink::create(const QString &destname, QValueList<int> pages)
+void ImgArchiveSink::create(const QString &destname, ArchiveType type, QValueList<int> pages)
 {
-	//TODO
+	bool status = false;
+
+	//
+	// match archive type, set subprocess options
+	for (QValueList<ArchiveTypeInfo>::const_iterator it = archinfo.begin(); it!=archinfo.end(); it++)
+	{
+		const ArchiveTypeInfo &inf = *it;
+		if (type == inf.type)
+		{
+			pomp->setArguments(inf.compressopts);
+			status = true;
+			break;
+		}
+	}
+
+	if (!status)
+	{
+		emit createError(SINKERR_NOTSUPPORTED);
+		return;
+	}
+
+	tmppath = makeTempDir();
+	pomp->addArgument(destname);
+	pomp->addArgument("*");
+
+	char *fmt;
+	if (pages.size() < 100)
+		fmt = "%.2d";
+	else
+		fmt = "%.3d";
+
+	std::cout << "DIR = " << dirpath << "\n";
+	int cnt = 0; //pages counter, used to create file names with new numbering scheme
 	for (QValueList<int>::const_iterator it = pages.begin(); it != pages.end(); it++)
-		std::cout << *it << " ";
-	std::cout << "\n";
+	{
+		QString fname;
+		QString ext = getKnownImageExtension(imgfiles[*it]);
+		if (ext.isEmpty())
+			; //TODO
+		fname.sprintf(fmt, cnt++);
+		std::cout << *it << " : " << imgfiles[*it] << "\n";
+		fname = tmppath + "/" + fname + ext;
+		if (symlink(imgfiles[*it], fname) < 0)
+			; //TODO: error handling
+
+	}
+
+	pomp->setWorkingDirectory(tmppath);
+
+	extcnt = 0;
+	filesnum = pages.count();
+	if (!pomp->start())
+		emit createError(0);
 }
 
 QString ImgArchiveSink::getName(int maxlen)
@@ -225,6 +277,14 @@ void ImgArchiveSink::infoExited()
 	extcnt = 0;
 	if (!pext->start())
 		emit sinkError(SINKERR_OTHER);
+}
+
+void ImgArchiveSink::compressExited()
+{
+	if (!pomp->normalExit())
+		emit createError(0);
+	else
+		emit createReady();
 }
 
 void ImgArchiveSink::extractExited()
@@ -283,6 +343,16 @@ void ImgArchiveSink::extractStdoutReady()
 	qApp->processEvents();
 }
 
+void ImgArchiveSink::compressStdoutReady()
+{
+	QByteArray b = pomp->readStdout();
+	for (int i=0; i<b.size(); i++)
+		if (b[i] == '\n')
+			++extcnt;
+	emit createProgress(extcnt, filesnum);
+	qApp->processEvents();
+}
+
 void ImgArchiveSink::autoconfRAR()
 {
 	ArchiveTypeInfo inf;
@@ -299,9 +369,10 @@ void ImgArchiveSink::autoconfRAR()
 		inf.listopts.append("rar");
 		inf.listopts.append("lb");
 		inf.reading = inf.writing = true;
-		return;
+		inf.compressopts.append("rar");
+		inf.compressopts.append("a");
 	}
-	if (which("unrar") != QString::null)
+	else if (which("unrar") != QString::null)
 	{
 		inf.extractopts.append("unrar");
 		inf.extractopts.append("x");
@@ -331,6 +402,7 @@ void ImgArchiveSink::autoconfZIP()
 	if (which("zip") != QString::null)
 	{
 		inf.writing = true;
+		inf.compressopts.append("zip");
 	}
 	archinfo.append(inf);
 }
@@ -374,6 +446,8 @@ void ImgArchiveSink::autoconfTARGZ()
 		inf.listopts.append("tar");
 		inf.listopts.append("-tzf");
 		inf.reading = inf.writing = true;
+		inf.compressopts.append("tar");
+		inf.compressopts.append("-chzvf");
 	}
 	archinfo.append(inf);
 }
@@ -392,6 +466,8 @@ void ImgArchiveSink::autoconfTARBZ2()
 		inf.listopts.append("tar");
 		inf.listopts.append("-tjf");
 		inf.reading = inf.writing = true;
+		inf.compressopts.append("tar");
+		inf.compressopts.append("-chjvf");
 	}
 	archinfo.append(inf);
 }
@@ -429,6 +505,14 @@ void ImgArchiveSink::autoconfArchivers()
 			}
 		}
 	}
+}
+
+QString ImgArchiveSink::makeTempDir()
+{
+	char tmpd[19];
+	strcpy(tmpd, "/tmp/qcomic-XXXXXX");
+	mkdtemp(tmpd);
+	return QString(tmpd);
 }
 
 QString ImgArchiveSink::supportedOpenExtensions()

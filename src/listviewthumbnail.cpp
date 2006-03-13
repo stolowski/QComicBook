@@ -10,35 +10,15 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "thumbnailitem.h"
-#include "thumbnail.h"
+#include "listviewthumbnail.h"
 
 using namespace QComicBook;
 
-ThumbnailItem::ThumbnailItem(int page): pnum(page), loaded(false)
+ListViewThumbnail::ListViewThumbnail(QListView *parent, QListViewItem *after, int page): QCheckListItem(parent, after, QString::number(page+1), QCheckListItem::CheckBox), ThumbnailItem(page)
 {
 }
 
-ThumbnailItem::~ThumbnailItem()
-{
-}
-
-int ThumbnailItem::page() const
-{
-	return pnum;
-}
-
-void ThumbnailItem::setLoaded(bool f)
-{
-	loaded = f;
-}
-
-bool ThumbnailItem::isLoaded() const
-{
-	return loaded;
-}
-
-void ThumbnailItem::setThumbnail(const Thumbnail *t)
+ListViewThumbnail::~ListViewThumbnail()
 {
 }
 

@@ -26,6 +26,8 @@
 #define MAX_TEXTFILE_SIZE 65535
 
 using namespace QComicBook;
+                        
+const QString ImgDirSink::imgext[] = {".jpg", ".jpeg", ".png", ".gif", ".xpm", NULL};
 
 ImgDirSink::ImgDirSink(int cachesize): QObject(), cachemtx(true), dirpath(QString::null)
 {
@@ -102,7 +104,7 @@ void ImgDirSink::recurseDir(const QString &s)
                 QFileInfo finf(dir.absFilePath(*it, false));
                 if (finf.isFile())
                 {
-                        if ((*it).endsWith(".jpg", false) || (*it).endsWith(".jpeg", false) || (*it).endsWith(".png", false) || (*it).endsWith(".gif", false) || (*it).endsWith(".xpm", false))
+			if (knownImageExtension(*it))
                                 imgfiles.append(finf.absFilePath());
                         else if ((*it).endsWith(".nfo", false) || (*it) == "file_id.diz")
                                 txtfiles.append(finf.absFilePath());
@@ -439,5 +441,21 @@ void ImgDirSink::removeThumbnails(int days)
 ThumbnailLoaderThread& ImgDirSink::thumbnailLoader()
 {
         return thloader;
+}
+
+bool ImgDirSink::knownImageExtension(const QString &path)
+{
+	for (int i=0; imgext[i]; i++)
+		if (path.endsWith(imgext[i], false))
+			return true;
+	return false;
+}
+
+QString ImgDirSink::getKnownImageExtension(const QString &path)
+{
+	for (int i=0; imgext[i]; i++)
+		if (path.endsWith(imgext[i], false))
+			return imgext[i];
+	return false;
 }
 

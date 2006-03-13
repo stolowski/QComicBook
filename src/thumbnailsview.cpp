@@ -11,7 +11,7 @@
  */
 
 #include "thumbnailsview.h"
-#include "thumbnailitem.h"
+#include "iconviewthumbnail.h"
 #include "thumbnail.h"
 #include <qiconview.h>
 #include <qpixmap.h>
@@ -65,7 +65,7 @@ void ThumbnailsView::setPages(int pages)
 
 	icons.resize(numpages = pages);	
 	for (int i=0; i<numpages; i++)
-		icons.insert(i, new ThumbnailItem(this, i, *emptypage));
+		icons.insert(i, new IconViewThumbnail(this, i, *emptypage));
 
 	setArrangement(visibleWidth() > visibleHeight() ? QIconView::TopToBottom : QIconView::LeftToRight);
 }
@@ -74,7 +74,7 @@ void ThumbnailsView::setPage(int n, const QImage &img)
 {
 	if (n < icons.count())
 	{
-		ThumbnailItem *th = icons[n];
+		IconViewThumbnail *th = icons[n];
 		th->setPixmap(img);
 		th->setLoaded(true);
 	}
@@ -97,7 +97,7 @@ void ThumbnailsView::scrollToPage(int n)
 {
 	if (n < icons.count())
 	{
-		ThumbnailItem *th = icons[n];
+		IconViewThumbnail *th = icons[n];
 		setSelected(th, true);
 		if (isVisible())
 			ensureVisible(th->x(), th->y());

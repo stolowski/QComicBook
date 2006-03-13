@@ -10,28 +10,21 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#ifndef __THUMBNAILITEM_H
-#define __THUMBNAILITEM_H
+#ifndef __ICONVIEWTHUMBNAIL_H
+#define __ICONVIEWTHUMBNAIL_H
+
+/*! \file iconviewthumbnail.h */
+
+#include <qiconview.h>
+#include "thumbnailitem.h"
 
 namespace QComicBook
 {
-	class Thumbnail;
-
-	class ThumbnailItem
+	class IconViewThumbnail: public QIconViewItem, public ThumbnailItem
 	{
-		protected:
-			int pnum; //page number
-			bool loaded; //has image or is it empty?
-
 		public:
-			ThumbnailItem(int page);
-			virtual ~ThumbnailItem();
-
-			virtual int page() const;
-			virtual void setLoaded(bool f);
-			virtual bool isLoaded() const;
-
-			virtual void setThumbnail(const Thumbnail *t);
+			IconViewThumbnail(QIconView *view, int page, const QPixmap &pixmap);
+			virtual ~IconViewThumbnail();
 	};
 }
 

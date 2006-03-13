@@ -49,6 +49,7 @@ namespace QComicBook
 				QString name;
 				QStringList listopts;
 				QStringList extractopts;
+				QStringList compressopts;
 				QStringList extensions;
 				bool reading;
 				bool writing;
@@ -59,6 +60,7 @@ namespace QComicBook
 			ArchiveType archivetype; ///< the type of currently opened archive
 			QProcess *pext; ///< extracting process
 			QProcess *pinf; ///< file list extracing process
+			QProcess *pomp; ///< archiving process
 			QString archivename; ///< archive file name, without path
 			QString archivepath; ///< full path, including archive name
 			QString tmppath; ///< path to extracted archive
@@ -92,13 +94,15 @@ namespace QComicBook
 		signals:
 			void createProgress(int current, int total);
 			void createReady();
-			void createError();
+			void createError(int code);
 
 		protected slots:
 			void extractExited();
 			void extractStdoutReady();
 			void infoStdoutReady();
 			void infoExited();
+			void compressExited();
+			void compressStdoutReady();
 
 		public:
 			ImgArchiveSink(int cachesize=1);
@@ -111,7 +115,7 @@ namespace QComicBook
 			virtual QString getName(int maxlen = 50);
 			virtual QString getFullName();
 
-			virtual void create(const QString &destname, QValueList<int> pages);
+			virtual void create(const QString &destname, ArchiveType type, QValueList<int> pages);
 
 			static void autoconfArchivers();
 			static int supportedArchives();
@@ -120,6 +124,7 @@ namespace QComicBook
 			static bool supportsSave(ArchiveType t);
 			static QString supportedOpenExtensions();
 			static QString supportedSaveExtensions();
+			static QString makeTempDir();
 	};
 }
 
