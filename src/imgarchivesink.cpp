@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005 Pawel Stolowski <yogin@linux.bydg.org>
+ * Copyright (C) 2006 Pawel Stolowski <yogin@linux.bydg.org>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -18,7 +18,9 @@
 #include <qfileinfo.h>
 #include <qfile.h>
 #include <qapplication.h>
+#include <qregexp.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -374,11 +376,43 @@ void ImgArchiveSink::autoconfRAR()
 	}
 	else if (which("unrar") != QString::null)
 	{
+		FILE *f;
+		bool nonfree_unrar = false;
 		inf.extractopts.append("unrar");
-		inf.extractopts.append("x");
 		inf.listopts.append("unrar");
-		inf.listopts.append("lb");
-		inf.name = "rar";
+		//
+		// now determine which unrar it is - free or non-free
+		if ((f = popen("unrar", "r")) != NULL)
+		{
+			QRegExp regexp("^UNRAR.+freeware");
+			for (QTextIStream s(f); !s.atEnd(); )
+			{
+				if (regexp.search(s.readLine()) >= 0)
+				{
+					nonfree_unrar = true;
+					break;
+				}
+			}
+			pclose(f);
+			if (nonfree_unrar)
+			{
+				inf.extractopts.append("x");
+				inf.listopts.append("lb");
+			}
+			else
+			{
+				inf.extractopts.append("-x");
+				inf.listopts.append("-t");
+			}
+			inf.reading = true;
+		}
+	}
+	else if (which("unrar-free") != QString::null) //some distros rename free unrar like this
+	{
+		inf.extractopts.append("unrar-free");
+		inf.listopts.append("unrar-free");
+		inf.extractopts.append("-x");
+		inf.listopts.append("-t");
 		inf.reading = true;
 	}
 	archinfo.append(inf);
