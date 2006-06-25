@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005 Pawel Stolowski <yogin@linux.bydg.org>
+ * Copyright (C) 2006 Pawel Stolowski <yogin@linux.bydg.org>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -115,6 +115,8 @@ void ComicMainWindow::setupActions()
         prevPageAction = new QAction(Icons::get(ICON_PREVPAGE), tr("&Previous page"), Key_PageUp, this);
         pageTopAction = new QAction(Icons::get(ICON_PAGETOP), tr("Page top"), Key_Home, this);
         pageBottomAction = new QAction(Icons::get(ICON_PAGEBOTTOM), tr("Page bottom"), Key_End, this);
+        firstPageAction = new QAction(tr("First page"), CTRL+Key_Home, this);
+        lastPageAction = new QAction(tr("Last page"), CTRL+Key_End, this);
         scrollRightAction = new QAction(tr("Scroll right"), Key_Right, this);        
         scrollLeftAction = new QAction(tr("Scroll left"), Key_Left, this);
         scrollRightFastAction = new QAction(tr("Fast scroll right"), SHIFT+Key_Right, this);
@@ -123,6 +125,7 @@ void ComicMainWindow::setupActions()
         scrollDownAction = new QAction(tr("Scroll down"), Key_Down, this);
         scrollUpFastAction = new QAction(tr("Fast scroll up"), SHIFT+Key_Up, this);
         scrollDownFastAction = new QAction(tr("Fast scroll down"), SHIFT+Key_Down, this);
+	quitAction = new QAction(tr("Quit"), CTRL+Key_Q, this);
 
         QActionGroup *scaleActions = new QActionGroup(this);
         fitWidthAction = new QAction(Icons::get(ICON_FITWIDTH), tr("Fit width"), ALT+Key_W, scaleActions);                         
@@ -161,7 +164,10 @@ void ComicMainWindow::setupActions()
         connect(exitFullScreenAction, SIGNAL(activated()), this, SLOT(exitFullscreen()));
         connect(nextPageAction, SIGNAL(activated()), this, SLOT(nextPage()));
         connect(forwardPageAction, SIGNAL(activated()), this, SLOT(forwardPages()));
+	connect(firstPageAction, SIGNAL(activated()), this, SLOT(firstPage()));
+	connect(lastPageAction, SIGNAL(activated()), this, SLOT(lastPage()));
         connect(backwardPageAction, SIGNAL(activated()), this, SLOT(backwardPages())); 
+	connect(quitAction, SIGNAL(activated()), this, SLOT(close()));
 }
 
 void ComicMainWindow::setupComicImageView()
@@ -273,7 +279,7 @@ void ComicMainWindow::setupFileMenu()
         file_menu->insertSeparator();
         close_id = file_menu->insertItem(tr("Close"), this, SLOT(closeSink()));
         file_menu->insertSeparator();
-        file_menu->insertItem(tr("&Quit"), this, SLOT(close()));
+	quitAction->addTo(file_menu);
         menuBar()->insertItem(tr("&File"), file_menu);   
 }
 
@@ -319,8 +325,8 @@ void ComicMainWindow::setupNavigationMenu()
         backwardPageAction->addTo(navi_menu);
         navi_menu->insertSeparator();
         jumpto_id = navi_menu->insertItem(tr("Jump to page..."), this, SLOT(showJumpToPage()));
-        firstpage_id = navi_menu->insertItem(tr("First page"), this, SLOT(firstPage()));
-        lastpage_id = navi_menu->insertItem(tr("Last page"), this, SLOT(lastPage()));
+	firstPageAction->addTo(navi_menu);
+	lastPageAction->addTo(navi_menu);
         navi_menu->insertSeparator();
         pageTopAction->addTo(navi_menu);
         pageBottomAction->addTo(navi_menu);
@@ -432,8 +438,8 @@ void ComicMainWindow::enableComicBookActions(bool f)
 
         //
         // navigation menu
-        navi_menu->setItemEnabled(firstpage_id, f);
-        navi_menu->setItemEnabled(lastpage_id, f);
+	lastPageAction->setEnabled(f);
+	firstPageAction->setEnabled(f);
         navi_menu->setItemEnabled(jumpto_id, f);
         nextPageAction->setEnabled(f);
         prevPageAction->setEnabled(f);
@@ -559,7 +565,8 @@ void ComicMainWindow::recentSelected(int id)
 
 void ComicMainWindow::sinkReady(const QString &path)
 {
-	statusbar->setShown(toggleStatusbarAction->isOn() && !(isFullScreen() && cfg->fullScreenHideStatusbar())); //applies back user's statusbar preference
+	statusbar->setShown(toggleStatusbarAction->isOn() && !(isFullScreen() && cfg->fullScreenHideStatusbar())); //applies back user's statusbar&toolbar preferences
+	//toolbar->setShown(toggleToolbarAction->isOn() && !(isFullScreen() && cfg->fullScreenHideToolbar()));
 
         recentfiles->append(path);
         setRecentFilesMenu(*recentfiles);
@@ -582,7 +589,8 @@ void ComicMainWindow::sinkReady(const QString &path)
 
 void ComicMainWindow::sinkError(int code)
 {
-	statusbar->setShown(toggleStatusbarAction->isOn() && !(isFullScreen() && cfg->fullScreenHideStatusbar())); //applies back user's statusbar preference
+	statusbar->setShown(toggleStatusbarAction->isOn() && !(isFullScreen() && cfg->fullScreenHideStatusbar())); //applies back user's statusbar&toolbar preferences
+	//toolbar->setShown(toggleToolbarAction->isOn() && !(isFullScreen() && cfg->fullScreenHideToolbar()));
 
         QString msg;
         switch (code)
@@ -688,6 +696,8 @@ void ComicMainWindow::toggleFullScreen()
                         menuBar()->hide();
                 if (cfg->fullScreenHideStatusbar())
                         statusbar->hide();
+                /*if (cfg->fullScreenHideToolbar())
+                        toolbar->hide();*/
                 showFullScreen();
         }
 }
@@ -699,6 +709,8 @@ void ComicMainWindow::exitFullscreen()
                 menuBar()->show();
                 if (toggleStatusbarAction->isOn())
                         statusbar->show();
+                /*if (toggleToolbarAction->isOn())
+                        toolbar->show();*/
                 showNormal();
         }
 }

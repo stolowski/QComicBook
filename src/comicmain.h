@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005 Pawel Stolowski <yogin@linux.bydg.org>
+ * Copyright (C) 2006 Pawel Stolowski <yogin@linux.bydg.org>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -50,8 +50,6 @@ namespace QComicBook
 			int currpage; //!<current page number
 			int scrv_id; //!<identifier of "Scrollbars visible" menu option
 			int contscr_id; //!<identifier of "Continous scrolling" menu option
-			int firstpage_id; //!<identifier of "First page" menu option
-			int lastpage_id; //!<identifier of "Last page" menu option
 			int jumpto_id; //!<identifier of "Jump to" menu option
 			int setbookmark_id; //!<identifier of "Set bookmark" menu option
 			int rmvbookmark_id; //!<identifier of "Remove bookmark" menu option
@@ -76,6 +74,8 @@ namespace QComicBook
 			QAction *showInfoAction;
 			QAction *nextPageAction;
 			QAction *prevPageAction;
+			QAction *firstPageAction;
+			QAction *lastPageAction;
 			QAction *fullScreenAction;
 			QAction *exitFullScreenAction;
 			QAction *bestFitAction;
@@ -107,6 +107,7 @@ namespace QComicBook
 			QAction *togglePreserveRotationAction;
 			QAction *openArchiveAction;
 			QAction *openDirAction;
+			QAction *quitAction;
 
 		protected:
 			void keyPressEvent(QKeyEvent *e);
