@@ -1,2 +1,0 @@
-?package(qcomicbook):needs="X11" section="Apps/Viewers"\
-  icon="qcomicbook.xpm" title="QComicBook" command="/usr/bin/qcomicbook"

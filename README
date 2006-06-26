@@ -1,5 +1,5 @@
-QComicBook v0.2.7
-(c)by Pawel Stolowski 2005
+QComicBook v0.2.8
+(c)by Pawel Stolowski 2005-2006
 released under terms of GNU General Public License v2
 
 1. Introduction
@@ -36,12 +36,14 @@ methods -- see Debian guides for details.
 
 4. Known issues
 ---------------
-rar/unrar (and unzip/unace probably too) may have problems with files/dirs in the
+* rar/unrar (and unzip/unace probably too) may have problems with files/dirs in the
 archive, which names contain non-ascii characters (like special characters for you
 language). As a result they won't be decompressed and qcomicbook may show
 "No images found" error box.
+* the free (opensource) unrar doesn't currently support 3.0 rar archives. Such archives are reported
+as empty by QComicBook. It is recommended to use non-free rar/unrar.
 
 5. Bugs
 -------
-Please report any bugs to: yogin@linux.bydg.org. Ideas are welcome too!
+Please report any bugs to: pawel.stolowski@wp.pl. Ideas are welcome too!
 
