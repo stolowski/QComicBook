@@ -35,6 +35,7 @@ namespace QComicBook
 			QCheckBox *cb_smallcursor;
 			QCheckBox *cb_hidemenu;
 			QCheckBox *cb_hidestatus;
+			QCheckBox *cb_hidetoolbar;
 			QPushButton *pb_color;
 			QCheckBox *cb_preload;
 			QCheckBox *cb_confirmexit;

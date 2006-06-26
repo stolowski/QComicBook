@@ -30,6 +30,7 @@
 #define OPT_BACKGROUND               "/Background"
 #define OPT_FULLSCREENHIDEMENU       "/FullScreenHideMenu"
 #define OPT_FULLSCREENHIDESTATUS     "/FullScreenHideStatusbar"
+#define OPT_FULLSCREENHIDETOOLBAR    "/FullScreenHideToolbar"
 #define OPT_STATUSBAR                "/Statusbar"
 #define OPT_FONT                     "/InfoFont"
 #define OPT_SMALLCURSOR              "/SmallCursor"
@@ -155,6 +156,7 @@ void ComicBookSettings::load()
 		bgcolor.setNamedColor(cfg->readEntry(OPT_BACKGROUND, "#000000"));
 		fscrhidemenu = cfg->readBoolEntry(OPT_FULLSCREENHIDEMENU, true);
 		fscrhidestatus = cfg->readBoolEntry(OPT_FULLSCREENHIDESTATUS, true);
+		fscrhidetoolbar = cfg->readBoolEntry(OPT_FULLSCREENHIDETOOLBAR, false);
 		statusbar = cfg->readBoolEntry(OPT_STATUSBAR, true);
 		fontdesc = cfg->readEntry(OPT_FONT, QString::null);
 		if (fontdesc.isNull() || !font.fromString(fontdesc))
@@ -281,6 +283,11 @@ bool ComicBookSettings::fullScreenHideMenu() const
 bool ComicBookSettings::fullScreenHideStatusbar() const
 {
 	return fscrhidestatus;
+}
+
+bool ComicBookSettings::fullScreenHideToolbar() const
+{
+	return fscrhidetoolbar;
 }
 
 bool ComicBookSettings::showStatusbar() const
@@ -454,6 +461,12 @@ void ComicBookSettings::fullScreenHideStatusbar(bool f)
 {
 	if (f != fscrhidestatus)
 		cfg->writeEntry(GRP_VIEW OPT_FULLSCREENHIDESTATUS, fscrhidestatus = f);
+}
+
+void ComicBookSettings::fullScreenHideToolbar(bool f)
+{
+	if (f != fscrhidetoolbar)
+		cfg->writeEntry(GRP_VIEW OPT_FULLSCREENHIDETOOLBAR, fscrhidetoolbar = f);
 }
 
 void ComicBookSettings::showStatusbar(bool f)

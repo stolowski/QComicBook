@@ -70,6 +70,10 @@ void ComicBookCfgDialog::setupDisplayTab()
 	cb_hidemenu = new QCheckBox(tr("Hide menubar in fullscreen mode"), w);
 	cb_hidemenu->setChecked(cfg->fullScreenHideMenu());
 	lay->addWidget(cb_hidemenu);
+	
+	/*cb_hidetoolbar = new QCheckBox(tr("Hide toolbar in fullscreen mode"), w);
+	cb_hidetoolbar->setChecked(cfg->fullScreenHideToolbar());
+	lay->addWidget(cb_hidetoolbar);*/
 
 	cb_hidestatus = new QCheckBox(tr("Hide statusbar in fullscreen mode"), w);
 	cb_hidestatus->setChecked(cfg->fullScreenHideStatusbar());
@@ -188,6 +192,7 @@ void ComicBookCfgDialog::apply()
 	cfg->background(bgcolor);
 	cfg->fullScreenHideMenu(cb_hidemenu->isChecked());
 	cfg->fullScreenHideStatusbar(cb_hidestatus->isChecked());
+	//cfg->fullScreenHideToolbar(cb_hidetoolbar->isChecked());
 	cfg->smallCursor(cb_smallcursor->isChecked());
 	if (rb_smooth->isChecked())
 		cfg->pageScaling(Smooth);

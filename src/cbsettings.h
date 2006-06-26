@@ -43,6 +43,7 @@ namespace QComicBook
 			bool preload;
 			bool fscrhidemenu;
 			bool fscrhidestatus;
+			bool fscrhidetoolbar;
 			Size pagesize;
 			Scaling scaling;
 			int x, y, w, h;
@@ -101,6 +102,7 @@ namespace QComicBook
 			bool autoInfo() const;
 			bool fullScreenHideMenu() const;
 			bool fullScreenHideStatusbar() const;
+			bool fullScreenHideToolbar() const;
 			bool showStatusbar() const;
 			bool useInternalBrowser() const;
 			const QFont& infoFont() const;
@@ -129,6 +131,7 @@ namespace QComicBook
 			void autoInfo(bool f);
 			void fullScreenHideMenu(bool f);
 			void fullScreenHideStatusbar(bool f);
+			void fullScreenHideToolbar(bool f);
 			void showStatusbar(bool f);
 			void useInternalBrowser(bool f);
 			void infoFont(const QFont &f);
