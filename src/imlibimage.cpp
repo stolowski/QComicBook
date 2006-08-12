@@ -33,7 +33,7 @@ int ImlibImage::load(const char *path)
 	return 0;
 }
 
-void ImlibImage::draw(QPaintDevice *p, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh, int orient)
+void ImlibImage::draw(QPaintDevice *p, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh)
 {
 	std::cout << "sx=" << sx << " "
 		  << "sy=" << sy << " "

@@ -18,7 +18,7 @@ namespace QComicBook
 			ImlibImage();
 			~ImlibImage();
 			int load(const char *path);
-			void draw(QPaintDevice *p, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh, int orient=0);
+			void draw(QPaintDevice *p, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh);
 			int width();
 			int height();
 			void rotate(int orient);

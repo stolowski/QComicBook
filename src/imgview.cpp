@@ -75,25 +75,34 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 	double dx = std::max(xoff - contentsX(), clipx-contentsX());
 	double dy = std::max(yoff - contentsY(), clipy-contentsY());
 
-        orgimage[0]->draw(p->device(), (int)sx, (int)sy, sw, sh, dx, dy, clipw, cliph, iangle);
+        orgimage[0]->draw(p->device(), (int)sx, (int)sy, sw, sh, dx, dy, clipw, cliph);
 
-	//if ((sx + w_asp*clipw) > (orgimage[0]->width()*w_asp))
+	if (1)
 	{
-		dx += orgimage[0]->width();
 		if (orgimage[1])
 		{
 			std::cout << "img2\n";
-			orgimage[1]->draw(p->device(), 0, (int)sy, w_asp*clipw, h_asp*cliph, dx, dy, clipw, cliph, iangle);
+			if ((iangle & 1) == 0)
+			{
+				dx += (double)orgimage[0]->width() / w_asp;
+			}
+			else
+			{
+				//TODO
+			}
+			if (sx > (double)orgimage[0]->width())
+			{
+				std::cout << "true sx = " << sx << std::endl;
+				sx = (clipx - ((double)orgimage[0]->width()/w_asp))*w_asp;;
+				dx = clipx;
+			}
+			else
+			{
+				sx = 0.0f;
+			}
+			orgimage[1]->draw(p->device(), sx, sy, sw, sh, dx, dy, clipw, cliph);
 		}
 	}
-
-
-	/* OK
-	 *
-	double sx = w_asp * px;
-	double sy = h_asp * py;
-        orgimage[0]->draw(p->device(), (int)sx, (int)sy, w_asp*clipw, h_asp*cliph, std::max(xoff-contentsX(), clipx-contentsX()), std::max(yoff - contentsY(), clipy-contentsY()), clipw, cliph);
-	*/
 }
 
 QPopupMenu *ComicImageView::contextMenu() const
