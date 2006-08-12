@@ -28,6 +28,7 @@ class QImage;
 
 namespace QComicBook
 {
+
 	//! Possible errors.
 	enum SinkError
 	{
@@ -43,8 +44,8 @@ namespace QComicBook
 		SINKERR_OTHER  //!<another kind of error
 	};
 
-	class ImgCache;
 	class Thumbnail;
+	class ImlibImage;
 
 	//! Comic book directory sink.
 	/*! Allows opening directories containing image files. */
@@ -87,15 +88,14 @@ namespace QComicBook
 					bool operator!=(const QDateTime &d) const { return d != timestamp; }
 					operator QDateTime() const { return timestamp; }
 			};
-			mutable QMutex cachemtx; //!< mutex for cache, pre, precnt
 			mutable QMutex listmtx; //!< mutex for imgfiles
-			ImgCache *cache;
 			QString dirpath; //!< path to directory
 			QString cbname; //!< comic book name (directory path by default)
 			QStringList imgfiles; //!< list of images files in directory
 			QStringList txtfiles; //!< text files (.nfo, file_id.diz)
 			QStringList otherfiles; //!< list of other files
 			QStringList dirs; //!< directories
+			bool dirsfirst; //!< visit directories first, then files
 			QMap<QString, FileStatus> timestamps; //!< last modifications timestamps for all pages
 			static const QString imgext[];
 
@@ -124,8 +124,8 @@ namespace QComicBook
 
 
 		public:
-			ImgDirSink(int cachesize=1);
-			ImgDirSink(const QString &path, int cachesize=1);
+			ImgDirSink(bool dirs=false);
+			ImgDirSink(const QString &path, bool dirs=false);
 			ImgDirSink(const ImgDirSink &sink);
 			virtual ~ImgDirSink();
 
@@ -145,7 +145,7 @@ namespace QComicBook
 			 *  @param result contains 0 on succes or value greater than 0 for error
 			 *  @param preload number of pages to preload in preloading thread 
 			 *  @return an image */
-			virtual QImage getImage(unsigned int num, int &result, int preload=0);
+			virtual ImlibImage* getImage(unsigned int num, int &result, int preload=0);
 
 			//! Returns thumbnail image for specified page.
 			/*! Thumbnail is loaded from disk if found and caching is enabled. Otherwise,

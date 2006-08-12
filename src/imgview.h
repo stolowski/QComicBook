@@ -14,7 +14,6 @@
 #define __IMGVIEW_H
 
 #include <qscrollview.h>
-#include <qwmatrix.h>
 
 class QPopupMenu;
 class QImage;
@@ -28,18 +27,18 @@ namespace QComicBook
 	enum Scaling { Smooth, Fast };
 	enum Rotation { None, Left, Right };
 
+	class ImlibImage;
+
 	class ComicImageView: public QScrollView
 	{
 		Q_OBJECT
 
 		private:
 			QPopupMenu *context_menu;
-			QImage *orgimage; //original 1:1 image
-			QPixmap *pixmap;
+			ImlibImage *orgimage[2];
 			Size isize;
 			Scaling iscaling;
 			int iangle; //rotation angle, 0..3, multipled by 90
-			QWMatrix rmtx; //rotation matrix
 			int spdx, spdy; //scroll speed
 			int xoff, yoff;
 			int lx, ly; //last mouse position when tracking mouse moves
@@ -47,9 +46,15 @@ namespace QComicBook
 			QCursor *smallcursor;
 			static const int EXTRA_WHEEL_SPIN; //number of extra wheel spins to flip the page
 
+			// test - na potrzeby imlib
+			double asp;
+			double w_asp;
+			double h_asp;
+
 		signals:
 			void bottomReached();
 			void topReached();
+			void doubleClick();
 
 		protected:
 			void resizeEvent(QResizeEvent *e);
@@ -58,12 +63,13 @@ namespace QComicBook
 			virtual void contentsWheelEvent(QWheelEvent *e);
 			virtual void contentsMouseMoveEvent(QMouseEvent *e);
 			virtual void contentsMousePressEvent(QMouseEvent *e);
+			virtual void contentsMouseDoubleClickEvent(QMouseEvent *e);
 			virtual void contentsMouseReleaseEvent(QMouseEvent *e);
 			virtual void drawContents(QPainter *p, int clipx, int clipy, int clipw, int cliph);
 
-			public slots:
-				void setImage(const QImage &img, bool preserveangle=false);
-			void setImage(const QImage &img1, const QImage &img2, bool preserveangle=false);
+		public slots:
+			void setImage(ImlibImage *img, bool preserveangle=false);
+			void setImage(ImlibImage *img1, ImlibImage *img2, bool preserveangle=false);
 			void setScaling(Scaling s);
 			void setRotation(Rotation r);
 			void setSize(Size s);
@@ -99,7 +105,7 @@ namespace QComicBook
 			bool onTop();
 			QPopupMenu *contextMenu() const;
 			Size getSize() const;
-			const QPixmap& image() const;
+			int imageWidth() const;
 	};
 }
 

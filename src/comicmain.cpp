@@ -32,6 +32,7 @@
 #include "miscutil.h"
 #include "archiverdialog.h"
 #include "suparchwin.h"
+#include "imlibimage.h"
 #include <qimage.h>
 #include <qmenubar.h>
 #include <qpopupmenu.h>
@@ -208,6 +209,7 @@ void ComicMainWindow::setupComicImageView()
                 connect(view, SIGNAL(bottomReached()), this, SLOT(nextPage()));
                 connect(view, SIGNAL(topReached()), this, SLOT(prevPageBottom()));
         }
+	connect(view, SIGNAL(doubleClick()), this, SLOT(nextPage()));
         view->enableScrollbars(cfg->scrollbarsVisible());
         QAction *which = originalSizeAction;
         switch (cfg->pageSize())
@@ -782,35 +784,35 @@ void ComicMainWindow::jumpToPage(int n, bool force)
 
                 if (twoPagesAction->isOn())
                 {
-                        QImage img1(sink->getImage(currpage = n, result1, 0)); //get 1st image, don't preload next one
-                        QImage img2(sink->getImage(currpage + 1, result2, cfg->twoPagesStep() ? 2*preload : preload)); //preload next 2 images
-                        if (result2 == 0)
+                        ImlibImage *img1 = sink->getImage(currpage = n, result1, 0); //preload next image
+                        ImlibImage *img2 = sink->getImage(currpage + 1, result2, 0); //preload next image
+                        if (1) //result2 == 0)
                         {
                                 if (mangaModeAction->isOn())
                                 {
                                         view->setImage(img2, img1, preserveangle);
-                                        statusbar->setImageInfo(&img2, &img1);
+                                        //statusbar->setImageInfo(&img2, &img1);
                                 }
                                 else
                                 {
                                         view->setImage(img1, img2, preserveangle);
-                                        statusbar->setImageInfo(&img1, &img2);
+                                        //statusbar->setImageInfo(&img1, &img2);
                                 }
                         }
                         else
                         {
                                 view->setImage(img1, preserveangle);
-                                statusbar->setImageInfo(&img1);
+                                //statusbar->setImageInfo(&img1);
                         }
                 }
                 else
                 {
-                        QImage img(sink->getImage(currpage = n, result1, preload)); //preload next image
+                        ImlibImage *img = sink->getImage(currpage = n, result1, preload); //preload next image
                         view->setImage(img, preserveangle);
-                        statusbar->setImageInfo(&img);
+                        //statusbar->setImageInfo(&img);
                 }
                 if (mangaModeAction->isOn())
-                        view->ensureVisible(view->image().width(), 0);
+                        view->ensureVisible(view->imageWidth(), 0);
                 const QString page = tr("Page") + " " + QString::number(currpage + 1) + "/" + QString::number(sink->numOfImages());
                 pageinfo->setText(page);
                 statusbar->setPage(currpage + 1, sink->numOfImages());

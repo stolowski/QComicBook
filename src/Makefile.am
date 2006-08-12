@@ -21,7 +21,7 @@ qcomicbook_SOURCES = aboutdialog.cpp archiverdialog.cpp bookmark.cpp bookmarkman
 	bookmarks.cpp cbconfigdialog.cpp cbinfo.cpp cbsettings.cpp comicmain.cpp\
 	helpbrowser.cpp history.cpp icons.cpp iconviewthumbnail.cpp imgarchivesink.cpp imgcache.cpp\
 	imgdirsink.cpp imgloader.cpp imgsinkfactory.cpp imgtransform.cpp imgview.cpp\
-	jumptopagewin.cpp listviewthumbnail.cpp main.cpp miscutil.cpp pagenumberedit.cpp\
+	imlibimage.cpp jumptopagewin.cpp listviewthumbnail.cpp main.cpp miscutil.cpp pagenumberedit.cpp\
 	pagesdirector.cpp statusbar.cpp suparchwin.cpp thumbnail.cpp\
 	thumbnailevent.cpp thumbnailitem.cpp thumbnailloader.cpp\
 	thumbnailsview.cpp thumbnailswin.cpp
@@ -52,6 +52,7 @@ noinst_HEADERS = aboutdialog.h \
 		 imgarchivesink.h \
 		 imgloader.h \
 		 imgtransform.h \
+		 imlibimage.h \
 		 jumptopagewin.h \
 		 listviewthumbnail.h \
 		 miscutil.h \
@@ -68,7 +69,7 @@ noinst_HEADERS = aboutdialog.h \
 		 
 MOSTLYCLEANFILES =+ $(BUILT_SOURCES)
 
-qcomicbook_LDFLAGS = $(QT_LIBS)
+qcomicbook_LDFLAGS = $(QT_LIBS) -lImlib2
 qcomicbook_CPPFLAGS = -DDATADIR=\"$(datadir)/qcomicbook/\" -DQT_THREAD_SUPPORT $(QT_CXXFLAGS)
 qcomicbook_CXXFLAGS = $(qcomicbook_CPPFLAGS)
 
