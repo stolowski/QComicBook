@@ -105,8 +105,8 @@ namespace QComicBook
 			void compressStdoutReady();
 
 		public:
-			ImgArchiveSink(int cachesize=1);
-			ImgArchiveSink(const QString &path, int cachesize=1);
+			ImgArchiveSink();
+			ImgArchiveSink(const QString &path);
 			ImgArchiveSink(const ImgDirSink &sink);
 			virtual ~ImgArchiveSink();
 

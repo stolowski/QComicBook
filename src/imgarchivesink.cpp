@@ -36,12 +36,12 @@ int ImgArchiveSink::suppsave;
 
 QValueList<ImgArchiveSink::ArchiveTypeInfo> ImgArchiveSink::archinfo;
 
-ImgArchiveSink::ImgArchiveSink(int cachesize): ImgDirSink(cachesize), docleanup(true)
+ImgArchiveSink::ImgArchiveSink(): ImgDirSink(), docleanup(true)
 {
 	init();
 }
 
-ImgArchiveSink::ImgArchiveSink(const QString &path, int cachesize): ImgDirSink(cachesize), docleanup(true)
+ImgArchiveSink::ImgArchiveSink(const QString &path): ImgDirSink(), docleanup(true)
 {
 	init();
 	open(path);

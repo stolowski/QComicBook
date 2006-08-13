@@ -20,11 +20,13 @@ namespace QComicBook
 			~ImlibImage();
 			int load(const QString &path);
 			void draw(QPaintDevice *p, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh);
-			int width();
-			int height();
+			int width() const;
+			int height() const;
 			void rotate(int orient);
 			ImlibImage* rotateClone(int orient);
 			void reset();
+
+			static void setCacheSize(int bytes);
 	};
 };
 

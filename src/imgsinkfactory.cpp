@@ -32,21 +32,21 @@ ImgSinkFactory& ImgSinkFactory::instance()
 	return f;
 }
 
-ImgDirSink* ImgSinkFactory::createImgSink(SinkType s, int cachesize)
+ImgDirSink* ImgSinkFactory::createImgSink(SinkType s)
 {
 	if (s == ArchiveSink)
-		return new ImgArchiveSink(cachesize);
+		return new ImgArchiveSink();
 	if (s == DirSink)
-		return new ImgDirSink(cachesize);
+		return new ImgDirSink();
 	return NULL;
 }
 
-ImgDirSink* ImgSinkFactory::createImgSink(const QString &path, int cachesize)
+ImgDirSink* ImgSinkFactory::createImgSink(const QString &path)
 {
 	const QFileInfo finfo(path);
 	if (finfo.isDir())
-		return createImgSink(DirSink, cachesize);
+		return createImgSink(DirSink);
 	else
-		return createImgSink(ArchiveSink, cachesize);
+		return createImgSink(ArchiveSink);
 }
 

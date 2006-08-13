@@ -250,7 +250,12 @@ ImlibImage* ImgDirSink::getImage(unsigned int num, int &result, int preload)
 		listmtx.unlock();
 
 		ImlibImage *im = new ImlibImage();
-		im->load(fname.latin1()); //??????????
+		if (!im->load(fname))
+		{
+			delete im;
+			im = NULL;
+		}
+		result = 0;
 
 		/*const QFileInfo finf(fname);
 

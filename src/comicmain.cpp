@@ -640,7 +640,9 @@ void ComicMainWindow::open(const QString &path, int page)
 
         closeSink();
 
-        sink = ImgSinkFactory::instance().createImgSink(path, cfg->cacheSize());
+	ImlibImage::setCacheSize(cfg->cacheSize()*1024*1024);
+
+        sink = ImgSinkFactory::instance().createImgSink(path);
         sink->thumbnailLoader().setReciever(thumbswin);
         sink->thumbnailLoader().setUseCache(cfg->cacheThumbnails());
 
@@ -785,30 +787,30 @@ void ComicMainWindow::jumpToPage(int n, bool force)
                 {
                         ImlibImage *img1 = sink->getImage(currpage = n, result1, 0);
                         ImlibImage *img2 = sink->getImage(currpage + 1, result2, 0);
-                        if (1) //result2 == 0)
+                        if (result2 == 0)
                         {
                                 if (mangaModeAction->isOn())
                                 {
                                         view->setImage(img2, img1, preserveangle);
-                                        //statusbar->setImageInfo(&img2, &img1);
+                                        statusbar->setImageInfo(img2, img1);
                                 }
                                 else
                                 {
                                         view->setImage(img1, img2, preserveangle);
-                                        //statusbar->setImageInfo(&img1, &img2);
+                                        statusbar->setImageInfo(img1, img2);
                                 }
                         }
                         else
                         {
                                 view->setImage(img1, preserveangle);
-                                //statusbar->setImageInfo(&img1);
+                                statusbar->setImageInfo(img1);
                         }
                 }
                 else
                 {
                         ImlibImage *img = sink->getImage(currpage = n, result1, 0);
                         view->setImage(img, preserveangle);
-                        //statusbar->setImageInfo(&img);
+                        statusbar->setImageInfo(img);
                 }
                 if (mangaModeAction->isOn())
                         view->ensureVisible(view->imageWidth(), 0);

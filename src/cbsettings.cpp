@@ -173,6 +173,8 @@ void ComicBookSettings::load()
 		lastdir = cfg->readEntry(OPT_LASTDIR, QString::null);
 		recent = cfg->readListEntry(OPT_RECENT);
 		cachesize = cfg->readNumEntry(OPT_CACHESIZE, 3);
+		if (cachesize < 1)
+			cachesize = 1;
 		preload = cfg->readBoolEntry(OPT_PRELOAD, true);
 		confirmexit = cfg->readBoolEntry(OPT_CONFIRMEXIT, true);
 		intbrowser = cfg->readBoolEntry(OPT_INTBROWSER, true);
@@ -418,7 +420,11 @@ void ComicBookSettings::background(const QColor &color)
 void ComicBookSettings::cacheSize(int s)
 {
 	if (s != cachesize)
+	{
+		if (s < 1)
+			s = 1;
 		cfg->writeEntry(GRP_MISC OPT_CACHESIZE, cachesize = s);
+	}
 }
 
 void ComicBookSettings::cacheThumbnails(bool f)

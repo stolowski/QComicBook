@@ -35,8 +35,8 @@ namespace QComicBook
 
 		public:
 			static ImgSinkFactory& instance();
-			ImgDirSink* createImgSink(SinkType s, int cachesize=1);
-			ImgDirSink* createImgSink(const QString &path, int cachesize=1);
+			ImgDirSink* createImgSink(SinkType s);
+			ImgDirSink* createImgSink(const QString &path);
 	};
 }
 

@@ -1,3 +1,9 @@
+2006-08-xx:  0.3.0       -- ImLib2 is now used and required - huge speed
+                            improvement in image loading & rendering
+			 -- caching is now specified in Mb and is handled by
+			    Imlib
+			 -- double click moves to next page
+
 2006-06-26:  0.2.8       -- added support for free unrar
 			 -- new hotkeys: Ctrl+Q, Ctrl+Home, Ctrl+End
 			 -- updated autoconf bnv_have_qt macro

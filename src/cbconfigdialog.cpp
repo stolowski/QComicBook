@@ -123,7 +123,8 @@ void ComicBookCfgDialog::setupMiscTab()
 	QVGroupBox *grp0 = new QVGroupBox(tr("Cache"), w);
 	QHBox *box1 = new QHBox(grp0);
 	new QLabel(tr("Cache size"), box1);
-	sb_cachesize = new QSpinBox(0, 99, 1, box1);
+	sb_cachesize = new QSpinBox(1, 128, 1, box1);
+	sb_cachesize->setSuffix(" " + tr("Mb"));
 	sb_cachesize->setValue(cfg->cacheSize());
 	cb_preload = new QCheckBox(tr("Preload next page"), grp0);
 	cb_preload->setChecked(cfg->preloadPages());

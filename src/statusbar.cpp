@@ -13,7 +13,7 @@
 #include "statusbar.h"
 #include <qlabel.h>
 #include <qstring.h>
-#include <qimage.h>
+#include "imlibimage.h"
 #include <qprogressbar.h>
 
 using namespace QComicBook;
@@ -86,7 +86,7 @@ void StatusBar::setPage(int n, int total)
 	page->setText(tr("Page") + " " + QString::number(n) + " / " + QString::number(total));
 }
 
-void StatusBar::setImageInfo(const QImage *img1, const QImage *img2)
+void StatusBar::setImageInfo(const ImlibImage *img1, const ImlibImage *img2)
 {
 	QString txt;
 	if (img1)

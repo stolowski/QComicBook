@@ -101,7 +101,6 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 				sx = (clipx - xoff - ((double)orgimage[0]->width()/w_asp))*w_asp;;
 				dx = clipx;
 				dx = std::max(xoff, clipx-painted_w) - contentsX();
-				//dx = xoff - contentsX();
 			}
 			else
 			{

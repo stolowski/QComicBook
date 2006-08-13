@@ -34,7 +34,7 @@ int ImlibImage::load(const QString &path)
 	w = imlib_image_get_width();
 	h = imlib_image_get_height();
 	imlib_context_pop();
-	return 0;
+	return 1;
 }
 
 void ImlibImage::draw(QPaintDevice *p, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh)
@@ -65,12 +65,12 @@ void ImlibImage::draw(QPaintDevice *p, int sx, int sy, int sw, int sh, int dx, i
 	}
 }
 
-int ImlibImage::width()
+int ImlibImage::width() const
 {
 	return w;
 }
 
-int ImlibImage::height()
+int ImlibImage::height() const
 {
 	return h;
 }
@@ -121,4 +121,9 @@ void ImlibImage::reset()
 	}
 }
 
+
+void ImlibImage::setCacheSize(int bytes)
+{
+	imlib_set_cache_size(bytes);
+}
 
