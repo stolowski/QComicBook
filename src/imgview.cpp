@@ -17,8 +17,8 @@
 #include <qpainter.h>
 #include <qbitmap.h>
 #include <qcursor.h>
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 
 using namespace QComicBook;
 
@@ -46,6 +46,10 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 		return;
 
 	std::cout << "clipx=" << clipx << " clipy=" << clipy << " clipw=" << clipw << " cliph=" << cliph << " wasp=" << w_asp << " hasp=" << h_asp << std::endl;
+
+	int painted_w = 0; //ilosc pikseli narysowanych w oknie
+	int painted_h = 0;
+
         int px = clipx - xoff;
         int py = clipy - yoff;
               
@@ -62,9 +66,6 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
        
         if (clipx + clipw < xoff || clipy + cliph < yoff)
                  return;
-        //p->drawPixmap(std::max(xoff, clipx), std::max(yoff, clipy), *pixmap, px, py, clipw, cliph);
-        //orgimage[0]->draw(p->device(), clipx, clipy, w_asp*clipw, h_asp*cliph, std::max(xoff-contentsX(), clipx-contentsX()), clipy-contentsY(), clipw, cliph);
-        //orgimage[0]->draw(p->device(), clipx, clipy, w_asp*clipw, h_asp*cliph, std::max(xoff-contentsX(), clipx-contentsX()), std::max(yoff - contentsY(), clipy-contentsY()), clipw, cliph);
 	
 	double sx = w_asp * px;
 	double sy = h_asp * py;
@@ -72,19 +73,25 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 	double sw = w_asp*clipw;
 	double sh = h_asp*cliph;
 	
-	double dx = std::max(xoff - contentsX(), clipx-contentsX());
-	double dy = std::max(yoff - contentsY(), clipy-contentsY());
+	double dx = std::max(xoff, clipx) - contentsX();
+	double dy = std::max(yoff, clipy) - contentsY();
 
         orgimage[0]->draw(p->device(), (int)sx, (int)sy, sw, sh, dx, dy, clipw, cliph);
 
-	if (1)
+	painted_w = std::min(clipw, (int)((double)(orgimage[0]->width() - sx)/w_asp));
+	if (painted_w < 0)
+		painted_w = 0;
+
+	std::cout << "painted_w=" << painted_w << " orgimage[0]->width=" << orgimage[0]->width() << "\n";
+
+	if (painted_w < clipw)
 	{
 		if (orgimage[1])
 		{
 			std::cout << "img2\n";
 			if ((iangle & 1) == 0)
 			{
-				dx += (double)orgimage[0]->width() / w_asp;
+				dx += painted_w;
 			}
 			else
 			{
@@ -93,8 +100,10 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 			if (sx > (double)orgimage[0]->width())
 			{
 				std::cout << "true sx = " << sx << std::endl;
-				sx = (clipx - ((double)orgimage[0]->width()/w_asp))*w_asp;;
+				sx = (clipx - xoff - ((double)orgimage[0]->width()/w_asp))*w_asp;;
 				dx = clipx;
+				dx = std::max(xoff, clipx-painted_w) - contentsX();
+				//dx = xoff - contentsX();
 			}
 			else
 			{
@@ -236,6 +245,7 @@ void ComicImageView::contentsMouseMoveEvent(QMouseEvent *e)
 
 void ComicImageView::contentsMousePressEvent(QMouseEvent *e)
 {
+	std::cout << "x=" << e->x() << " y=" << e->y() << std::endl;
         if (!smallcursor)
                 setCursor(Qt::PointingHandCursor);
 }
