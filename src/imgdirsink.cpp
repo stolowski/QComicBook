@@ -214,18 +214,6 @@ QString ImgDirSink::getStats() const
         //
         // calculate occupied memory and dimensions of the largest image
         p = w = h = 0;
-        /*for (QCacheIterator<QImage> it(*cache); it.current(); ++it)
-        {
-                QImage *img = it.current();
-                int tmp = img->width() * img->height();
-                if (tmp > p)
-                {
-                        p = tmp;
-                        w = img->width();
-                        h = img->height();
-                }
-                cmem += it.current()->numBytes();
-        }*/
 
         int amem = 0;
         const QString cmempfix = memPrefix(cmem);
