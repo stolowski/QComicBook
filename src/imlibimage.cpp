@@ -15,17 +15,20 @@ ImlibImage::~ImlibImage()
 {
 	if (data)
 	{
+		imlib_context_push(context);
 		imlib_context_set_image(data);
 		imlib_free_image();
+		imlib_context_pop(); //??
 	}
 	imlib_context_free(context);
 }
 
 int ImlibImage::load(const char *path)
 {
+	ImlibLoadError error;
 	std::cout << "loading: " << path << std::endl;
 	imlib_context_push(context);
-	data = imlib_load_image(path);
+	data = imlib_load_image_with_error_return(path, &error);
 	imlib_context_set_image(data);
 	w = imlib_image_get_width();
 	h = imlib_image_get_height();
@@ -45,17 +48,20 @@ void ImlibImage::draw(QPaintDevice *p, int sx, int sy, int sw, int sh, int dx, i
 		  << "dh=" << dh << " "
 		  << std::endl;
 
-	imlib_context_push(context);
+	if (data)
+	{
+		imlib_context_push(context);
 
-	imlib_context_set_image(data);
-	Display *disp = QPaintDevice::x11AppDisplay();
-	imlib_context_set_display(disp);
-	imlib_context_set_visual(DefaultVisual(disp, DefaultScreen(disp)));
-	imlib_context_set_colormap(DefaultColormap(disp, DefaultScreen(disp)));
-	imlib_context_set_drawable(p->handle());
-	imlib_render_image_part_on_drawable_at_size(sx, sy, sw, sh, dx, dy, dw, dh);
-
-	imlib_context_pop();
+		imlib_context_set_image(data);
+		Display *disp = QPaintDevice::x11AppDisplay();
+		imlib_context_set_display(disp);
+		imlib_context_set_visual(DefaultVisual(disp, DefaultScreen(disp)));
+		imlib_context_set_colormap(DefaultColormap(disp, DefaultScreen(disp)));
+		imlib_context_set_drawable(p->handle());
+		imlib_render_image_part_on_drawable_at_size(sx, sy, sw, sh, dx, dy, dw, dh);
+		
+		imlib_context_pop();
+	}
 }
 
 int ImlibImage::width()
@@ -70,25 +76,27 @@ int ImlibImage::height()
 
 void ImlibImage::rotate(int orient)
 {
-	
 	std::cout << "angle=" << orient << "\n";
-	imlib_context_push(context);
-	imlib_context_set_image(data);
-	imlib_image_orientate(orient);
-	w = imlib_image_get_width();
-	h = imlib_image_get_height();
-	imlib_context_pop();
+	if (data)
+	{
+		imlib_context_push(context);
+		imlib_context_set_image(data);
+		imlib_image_orientate(orient);
+		w = imlib_image_get_width();
+		h = imlib_image_get_height();
+		imlib_context_pop();
+	}
 }
 
 ImlibImage* ImlibImage::rotateClone(int orient)
 {
 	return NULL;
-/*
-	ImlibImage *img = new ImlibImage();
-	imlib_context_push(context);
-	imlib_context_set_image(data);
-	imlib_image_orientate(orient);
-	img->data = imlib_clone_image();
+	/*
+	   ImlibImage *img = new ImlibImage();
+	   imlib_context_push(context);
+	   imlib_context_set_image(data);
+	   imlib_image_orientate(orient);
+	   img->data = imlib_clone_image();
 
 	imlib_context_set_image(img->data);
 	imlib_image_orientate(0);
@@ -103,10 +111,12 @@ void ImlibImage::reset()
 {
 	if (data)
 	{
+		imlib_context_push(context);
 		imlib_context_set_image(data);
 		imlib_free_image();
 		data = NULL;
 		w = h = 0;
+		imlib_context_pop();
 	}
 }
 

@@ -779,13 +779,12 @@ void ComicMainWindow::jumpToPage(int n, bool force)
         if ((n != currpage) || force)
         {
                 int result1, result2;
-                const int preload = cfg->preloadPages() ? 1 : 0;
                 const bool preserveangle = togglePreserveRotationAction->isOn();
 
                 if (twoPagesAction->isOn())
                 {
-                        ImlibImage *img1 = sink->getImage(currpage = n, result1, 0); //preload next image
-                        ImlibImage *img2 = sink->getImage(currpage + 1, result2, 0); //preload next image
+                        ImlibImage *img1 = sink->getImage(currpage = n, result1, 0);
+                        ImlibImage *img2 = sink->getImage(currpage + 1, result2, 0);
                         if (1) //result2 == 0)
                         {
                                 if (mangaModeAction->isOn())
@@ -807,7 +806,7 @@ void ComicMainWindow::jumpToPage(int n, bool force)
                 }
                 else
                 {
-                        ImlibImage *img = sink->getImage(currpage = n, result1, preload); //preload next image
+                        ImlibImage *img = sink->getImage(currpage = n, result1, 0);
                         view->setImage(img, preserveangle);
                         //statusbar->setImageInfo(&img);
                 }

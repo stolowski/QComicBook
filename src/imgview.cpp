@@ -34,10 +34,8 @@ ComicImageView::ComicImageView(QWidget *parent, Size size, Scaling scaling, cons
 
 ComicImageView::~ComicImageView()
 {
-	if (orgimage[0])
-		delete orgimage[0];
-	if (orgimage[1])
-		delete orgimage[1];
+	delete orgimage[0];
+	delete orgimage[1];
 }
 
 void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, int cliph)
@@ -140,18 +138,12 @@ void ComicImageView::setImage(ImlibImage *img, bool preserveangle)
         if (!preserveangle)
                 iangle = 0;
 
-	if (orgimage[0])
-		delete orgimage[0];
-
-	if (orgimage[1])
-	{
-		delete orgimage[1];
-		orgimage[1] = NULL;
-	}
-
+	delete orgimage[0];
+	delete orgimage[1];
         orgimage[0] = img;
+	orgimage[1] = NULL;
 
-	if (iangle != 0)
+	if (iangle != 0 && orgimage[0])
 		orgimage[0]->rotate(iangle);
 
         updateImageSize();
@@ -165,22 +157,18 @@ void ComicImageView::setImage(ImlibImage *img1, ImlibImage *img2, bool preservea
         if (!preserveangle)
                 iangle = 0;
 
-	if (orgimage[0])
-		delete orgimage[0];
-
-	if (orgimage[1])
-	{
-		delete orgimage[1];
-		orgimage[1] = NULL;
-	}
+	delete orgimage[0];
+	delete orgimage[1];
 
 	orgimage[0] = img1;
 	orgimage[1] = img2;
 
 	if (iangle != 0)
 	{
-		orgimage[0]->rotate(iangle);
-		orgimage[1]->rotate(iangle);
+		if (orgimage[0])
+			orgimage[0]->rotate(iangle);
+		if (orgimage[1])
+			orgimage[1]->rotate(iangle);
 	}
 
         updateImageSize();
