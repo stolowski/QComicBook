@@ -1,6 +1,7 @@
 #include "imlibimage.h"
 #include <iostream>
 #include <qpaintdevice.h>
+#include <qfile.h>
 #include <X11/Xlib.h>
 #include <Imlib2.h>
 
@@ -23,12 +24,12 @@ ImlibImage::~ImlibImage()
 	imlib_context_free(context);
 }
 
-int ImlibImage::load(const char *path)
+int ImlibImage::load(const QString &path)
 {
 	ImlibLoadError error;
 	std::cout << "loading: " << path << std::endl;
 	imlib_context_push(context);
-	data = imlib_load_image_with_error_return(path, &error);
+	data = imlib_load_image_with_error_return(QFile::encodeName(path), &error);
 	imlib_context_set_image(data);
 	w = imlib_image_get_width();
 	h = imlib_image_get_height();

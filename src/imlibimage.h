@@ -4,6 +4,7 @@
 /*! \file imlibimage.h */
 
 class QPaintDevice;
+class QString;
 
 namespace QComicBook
 {
@@ -17,7 +18,7 @@ namespace QComicBook
 		public:
 			ImlibImage();
 			~ImlibImage();
-			int load(const char *path);
+			int load(const QString &path);
 			void draw(QPaintDevice *p, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh);
 			int width();
 			int height();
