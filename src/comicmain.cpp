@@ -850,10 +850,10 @@ void ComicMainWindow::showAbout()
 {
         AboutDialog *win = new AboutDialog(this, "About QComicBook",
                         "QComicBook " VERSION " - comic book viewer for GNU/Linux\n"
-                        "(c)by Pawel Stolowski 2005\n"
+                        "(c)by Pawel Stolowski 2005-2006\n"
                         "released under terms of GNU General Public License\n\n"
                         "http://linux.bydg.org/~yogin\n"
-                        "yogin@linux.bydg.org");
+                        "pawel.stolowski@wp.pl", QPixmap(DATADIR "qcomicbook-splash.png"));
         win->show();
 }
 

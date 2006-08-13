@@ -1,6 +1,6 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(QComicBook, 0.2.8, yogin@linux.bydg.org)
-AM_INIT_AUTOMAKE(qcomicbook, 0.2.8)
+AC_INIT(QComicBook, 0.3.0, pawel.stolowski@wp.pl)
+AM_INIT_AUTOMAKE(qcomicbook, 0.3.0)
 AC_CONFIG_HEADERS([src/config.h])
 AC_PREFIX_DEFAULT([/usr/local])
 
@@ -35,6 +35,14 @@ AC_RUN_IFELSE(
 	      [AC_LANG_PROGRAM([[#include <qglobal.h> #include <stdlib.h>]],[[exit(QT_VERSION<0x030301);]])],
 	      [AC_MSG_RESULT(yes)], [AC_MSG_ERROR(Too old!)],[])
 CPPFLAGS="$save_CPPFLAGS"
+
+PKG_CHECK_MODULES(Imlib2,imlib2,ac_imlib=yes,ac_imlib=no)
+if test "x$ac_imlib" = "xno"
+then
+	AC_MSG_ERROR("Imlib2 not found!", 1)
+fi
+AC_SUBST(Imlib2_CFLAGS)
+AC_SUBST(Imlib2_LIBS)
 
 AC_CONFIG_FILES([Makefile src/Makefile icons/Makefile help/Makefile help/en/Makefile])
 AC_OUTPUT()

@@ -16,18 +16,20 @@
 #include <qdialog.h>
 
 class QLabel;
+class QPixmap;
 
 namespace QComicBook
 {
     class AboutDialog: public QDialog
     {
         private:
-        QLabel *about;
+		QLabel *about_text;
+		QLabel *about_logo;
 
         public:
-        AboutDialog(QWidget *parent, const QString &caption, const QString &text=QString::null);
-        virtual ~AboutDialog();
-        void setText(const QString &text);
+		AboutDialog(QWidget *parent, const QString &caption, const QString &text, const QPixmap &logo);
+		virtual ~AboutDialog();
+		void setText(const QString &text);
     };
 }
 #endif

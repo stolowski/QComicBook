@@ -3,6 +3,7 @@
 			 -- caching is now specified in Mb and is handled by
 			    Imlib
 			 -- double click moves to next page
+			 -- improved "About" dialog
 
 2006-06-26:  0.2.8       -- added support for free unrar
 			 -- new hotkeys: Ctrl+Q, Ctrl+Home, Ctrl+End
