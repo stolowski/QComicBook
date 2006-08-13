@@ -178,7 +178,6 @@ void ComicMainWindow::setupComicImageView()
         view->setFocus();
         view->setSmallCursor(cfg->smallCursor());
         connect(cfg, SIGNAL(backgroundChanged(const QColor&)), view, SLOT(setBackground(const QColor&)));
-        connect(cfg, SIGNAL(scalingMethodChanged(Scaling)), view, SLOT(setScaling(Scaling)));
         connect(cfg, SIGNAL(cursorChanged(bool)), view, SLOT(setSmallCursor(bool)));
         connect(fullScreenAction, SIGNAL(activated()), this, SLOT(toggleFullScreen()));
         connect(pageTopAction, SIGNAL(activated()), view, SLOT(scrollToTop()));

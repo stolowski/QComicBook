@@ -123,16 +123,14 @@ void ArchiverDialog::create()
 
 void ArchiverDialog::createReady()
 {
-        QMessageBox::critical(this, "QComicBook", "OK", 
-                        QMessageBox::Ok, QMessageBox::NoButton);
-	delete archive;
+	archive->deleteLater();
+        QMessageBox::information(this, "QComicBook", tr("Archive successfully created!"), QMessageBox::Ok);
 }
 
 void ArchiverDialog::createError(int code)
 {
-        QMessageBox::critical(this, "QComicBook:", "ERROR", 
-                        QMessageBox::Ok, QMessageBox::NoButton);
-	delete archive;
+	archive->deleteLater();
+        QMessageBox::critical(this, "QComicBook:", tr("Error creating archive!"), QMessageBox::Ok, QMessageBox::NoButton);
 }
 
 void ArchiverDialog::browse()

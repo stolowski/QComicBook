@@ -165,6 +165,11 @@ void ComicBookCfgDialog::setupMiscTab()
 	cb_splash->setChecked(cfg->showSplash());
 	lay->addWidget(cb_splash);
 	
+	/* TODO
+	cb_autobookmark = new QCheckBox(tr("Save bookmark for current comicbook on close/exit"), w);
+	cb_autobookmark->setChecked(cfg->confirmExit());
+	lay->addWidget(cb_autobookmark);*/
+
 	cb_confirmexit = new QCheckBox(tr("Confirm exit"), w);
 	cb_confirmexit->setChecked(cfg->confirmExit());
 	lay->addWidget(cb_confirmexit);

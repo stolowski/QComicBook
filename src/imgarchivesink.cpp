@@ -193,14 +193,17 @@ int ImgArchiveSink::open(const QString &path)
 void ImgArchiveSink::close()
 {
 	ImgDirSink::close();
-	QDir dir(tmppath);
-	//
-	// remove temporary files and dirs
-	for (QStringList::const_iterator it = archfiles.begin(); it != archfiles.end(); ++it)
-		dir.remove(*it);
-	for (QStringList::const_iterator it = archdirs.begin(); it != archdirs.end(); ++it)
-		dir.rmdir(*it);
-	dir.rmdir(tmppath);
+	if (docleanup)
+	{
+		QDir dir(tmppath);
+		//
+		// remove temporary files and dirs
+		for (QStringList::const_iterator it = archfiles.begin(); it != archfiles.end(); ++it)
+			dir.remove(*it);
+		for (QStringList::const_iterator it = archdirs.begin(); it != archdirs.end(); ++it)
+			dir.rmdir(*it);
+		dir.rmdir(tmppath);
+	}
 	archivename = QString::null;
 }
 
