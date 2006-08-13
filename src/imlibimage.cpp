@@ -66,10 +66,11 @@ void ImlibImage::draw(QPaintDevice *p, int sx, int sy, int sw, int sh, int dx, i
 		imlib_context_push(context);
 
 		imlib_context_set_image(data);
-		Display *disp = QPaintDevice::x11AppDisplay();
-		imlib_context_set_display(disp);
-		imlib_context_set_visual(DefaultVisual(disp, DefaultScreen(disp)));
-		imlib_context_set_colormap(DefaultColormap(disp, DefaultScreen(disp)));
+
+		imlib_context_set_display(p->x11Display());
+		imlib_context_set_visual((Visual *)p->x11Visual());
+		imlib_context_set_colormap(p->x11Colormap());
+
 		imlib_context_set_drawable(p->handle());
 		imlib_render_image_part_on_drawable_at_size(sx, sy, sw, sh, dx, dy, dw, dh);
 		

@@ -43,10 +43,22 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 	if (orgimage[0] == NULL)
 		return;
 
+	ImlibImage *image1, *image2;
+
+	if (iangle > 1) //switch image pointers to reflect rotation angle
+	{
+		image1 = orgimage[1];
+		image2 = orgimage[0];
+	}
+	else
+	{
+		image1 = orgimage[0];
+		image2 = orgimage[1];
+	}
+
 	std::cout << "clipx=" << clipx << " clipy=" << clipy << " clipw=" << clipw << " cliph=" << cliph << " wasp=" << w_asp << " hasp=" << h_asp << std::endl;
 
-	int painted_w = 0; //ilosc pikseli narysowanych w oknie
-	int painted_h = 0;
+	int painted_w, painted_h; //ilosc pikseli narysowanych w oknie
 
         int px = clipx - xoff;
         int py = clipy - yoff;
@@ -74,39 +86,53 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 	double dx = std::max(xoff, clipx) - contentsX();
 	double dy = std::max(yoff, clipy) - contentsY();
 
-        orgimage[0]->draw(p->device(), (int)sx, (int)sy, sw, sh, dx, dy, clipw, cliph);
+        image1->draw(p->device(), (int)sx, (int)sy, sw, sh, dx, dy, clipw, cliph);
 
-	painted_w = std::min(clipw, (int)((double)(orgimage[0]->width() - sx)/w_asp));
+	painted_w = std::min(clipw, (int)((double)(image1->width() - sx)/w_asp));
+	painted_h = std::min(cliph, (int)((double)(image1->height() - sy)/h_asp));
+
 	if (painted_w < 0)
 		painted_w = 0;
+	if (painted_h < 0)
+		painted_h = 0;
 
-	std::cout << "painted_w=" << painted_w << " orgimage[0]->width=" << orgimage[0]->width() << "\n";
+	std::cout << "painted_w=" << painted_w << " painted_h=" << painted_h << "\n";
 
-	if (painted_w < clipw)
+	if (painted_w < clipw || painted_h < cliph)
 	{
-		if (orgimage[1])
+		if (image2)
 		{
-			std::cout << "img2\n";
-			if ((iangle & 1) == 0)
+			if ((iangle & 1) == 0) //angle is 0 or 180 - left-right orientation
 			{
 				dx += painted_w;
+				if (sx > (double)image1->width()) //1st image was not drawn, part of 2nd image need to be painted only
+				{
+					std::cout << "true sx = " << sx << std::endl;
+					sx = (clipx - xoff - ((double)image1->width()/w_asp))*w_asp;;
+					dx = clipx;
+					dx = std::max(xoff, clipx-painted_w) - contentsX();
+				}
+				else //whole 2nd image to be painted
+				{
+					sx = 0.0f;
+				}
 			}
-			else
+			else //angle is 90 or 270 - top-bottom orientation
 			{
-				//TODO
+				dy += painted_h;
+				if (sy > (double)image1->height()) //1st image was not drawn, part of 2nd image need to be painted only
+				{
+					std::cout << "true sy = " << sy << std::endl;
+					sy = (clipy - yoff - ((double)image1->height()/h_asp))*h_asp;;
+					dy = clipy;
+					dy = std::max(yoff, clipy-painted_h) - contentsY();
+				}
+				else //whole 2nd image to be painted
+				{
+					sy = 0.0f;
+				}
 			}
-			if (sx > (double)orgimage[0]->width())
-			{
-				std::cout << "true sx = " << sx << std::endl;
-				sx = (clipx - xoff - ((double)orgimage[0]->width()/w_asp))*w_asp;;
-				dx = clipx;
-				dx = std::max(xoff, clipx-painted_w) - contentsX();
-			}
-			else
-			{
-				sx = 0.0f;
-			}
-			orgimage[1]->draw(p->device(), sx, sy, sw, sh, dx, dy, clipw, cliph);
+			image2->draw(p->device(), sx, sy, sw, sh, dx, dy, clipw, cliph);
 		}
 	}
 }
