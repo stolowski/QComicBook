@@ -24,7 +24,7 @@ class QCursor;
 namespace QComicBook
 {
 	enum Size { Original, FitWidth, FitHeight, WholePage, BestFit };
-	enum Scaling { Smooth, Fast };
+	//enum Scaling { Smooth, Fast };
 	enum Rotation { None, Left, Right };
 
 	class ImlibImage;
@@ -37,7 +37,7 @@ namespace QComicBook
 			QPopupMenu *context_menu;
 			ImlibImage *orgimage[2];
 			Size isize;
-			Scaling iscaling;
+			//Scaling iscaling;
 			int iangle; //rotation angle, 0..3, multipled by 90
 			int spdx, spdy; //scroll speed
 			int xoff, yoff;
@@ -70,7 +70,7 @@ namespace QComicBook
 		public slots:
 			void setImage(ImlibImage *img, bool preserveangle=false);
 			void setImage(ImlibImage *img1, ImlibImage *img2, bool preserveangle=false);
-			void setScaling(Scaling s);
+			//void setScaling(Scaling s);
 			void setRotation(Rotation r);
 			void setSize(Size s);
 			void setSizeOriginal();
@@ -99,7 +99,7 @@ namespace QComicBook
 			void setSmallCursor(bool f);
 
 		public:
-			ComicImageView(QWidget *parent, Size size=Original, Scaling scaling=Smooth, const QColor &color=Qt::black);
+			ComicImageView(QWidget *parent, Size size=Original, const QColor &color=Qt::black);
 			~ComicImageView();
 			bool onBottom();
 			bool onTop();

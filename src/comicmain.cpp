@@ -173,7 +173,7 @@ void ComicMainWindow::setupActions()
 
 void ComicMainWindow::setupComicImageView()
 {
-        view = new ComicImageView(this, cfg->pageSize(), cfg->pageScaling(), cfg->background());
+        view = new ComicImageView(this, cfg->pageSize(), cfg->background());
         setCentralWidget(view);
         view->setFocus();
         view->setSmallCursor(cfg->smallCursor());

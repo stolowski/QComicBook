@@ -24,7 +24,7 @@ using namespace QComicBook;
 
 const int ComicImageView::EXTRA_WHEEL_SPIN = 2;
 
-ComicImageView::ComicImageView(QWidget *parent, Size size, Scaling scaling, const QColor &color): QScrollView(parent), isize(size), iscaling(scaling), iangle(0), xoff(0), yoff(0), lx(-1), wheelupcnt(0), wheeldowncnt(0), smallcursor(NULL)
+ComicImageView::ComicImageView(QWidget *parent, Size size, const QColor &color): QScrollView(parent), isize(size), iangle(0), xoff(0), yoff(0), lx(-1), wheelupcnt(0), wheeldowncnt(0), smallcursor(NULL)
 {
 	orgimage[0] = orgimage[1] = NULL;
         context_menu = new QPopupMenu(this);
@@ -375,10 +375,10 @@ void ComicImageView::updateImageSize()
         spdy = dh / 100;
 }
 
-void ComicImageView::setScaling(Scaling s)
+/*void ComicImageView::setScaling(Scaling s)
 {
         iscaling = s;
-}
+}*/
 
 void ComicImageView::setRotation(Rotation r)
 {

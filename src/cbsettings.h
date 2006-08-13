@@ -45,7 +45,7 @@ namespace QComicBook
 			bool fscrhidestatus;
 			bool fscrhidetoolbar;
 			Size pagesize;
-			Scaling scaling;
+			//Scaling scaling;
 			int x, y, w, h;
 			QString lastdir;
 			QColor bgcolor;
@@ -68,11 +68,11 @@ namespace QComicBook
 			static bool dirsok; //is above dirs are ok
 
 			static const EnumMap<Size> size2string[];
-			static const EnumMap<Scaling> scaling2string[];
+			//static const EnumMap<Scaling> scaling2string[];
 
 		signals:
 			void backgroundChanged(const QColor &color);
-			void scalingMethodChanged(Scaling s);
+			//void scalingMethodChanged(Scaling s);
 			void cursorChanged(bool f);
 
 		private:
@@ -90,7 +90,7 @@ namespace QComicBook
 			bool scrollbarsVisible() const;
 			QRect geometry() const;
 			Size pageSize() const;
-			Scaling pageScaling() const;
+			//Scaling pageScaling() const;
 			QString lastDir() const;
 			const History& recentlyOpened() const;
 			QColor background() const;
@@ -119,7 +119,7 @@ namespace QComicBook
 			void scrollbarsVisible(bool f);
 			void geometry(const QRect g);
 			void pageSize(Size s);
-			void pageScaling(Scaling s);
+			//void pageScaling(Scaling s);
 			void lastDir(const QString &d);
 			void recentlyOpened(const History &hist);
 			void background(const QColor &color);

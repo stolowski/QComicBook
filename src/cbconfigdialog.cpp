@@ -85,14 +85,14 @@ void ComicBookCfgDialog::setupDisplayTab()
 		
 	//
 	// scaling method
-	QButtonGroup *gr_scaling = new QButtonGroup(2, Qt::Horizontal, tr("Scaling method"), w);
+	/*QButtonGroup *gr_scaling = new QButtonGroup(2, Qt::Horizontal, tr("Scaling method"), w);
 	rb_smooth = new QRadioButton(tr("Smooth"), gr_scaling);
 	rb_fast = new QRadioButton(tr("Fast"), gr_scaling);
 	if (cfg->pageScaling() == Fast)
 		rb_fast->setChecked(true);
 	else
 		rb_smooth->setChecked(true);
-	lay->addWidget(gr_scaling);
+	lay->addWidget(gr_scaling);*/
 
 	//
 	// font
@@ -195,11 +195,11 @@ void ComicBookCfgDialog::apply()
 	cfg->fullScreenHideStatusbar(cb_hidestatus->isChecked());
 	//cfg->fullScreenHideToolbar(cb_hidetoolbar->isChecked());
 	cfg->smallCursor(cb_smallcursor->isChecked());
-	if (rb_smooth->isChecked())
+	/*if (rb_smooth->isChecked())
 		cfg->pageScaling(Smooth);
 	else
 		if (rb_fast->isChecked())
-			cfg->pageScaling(Fast);
+			cfg->pageScaling(Fast);*/
 	cfg->infoFont(font);
 
 	//

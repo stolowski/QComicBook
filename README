@@ -1,4 +1,4 @@
-QComicBook v0.2.8
+QComicBook v0.3.0
 (c)by Pawel Stolowski 2005-2006
 released under terms of GNU General Public License v2
 
@@ -12,27 +12,20 @@ navigation etc.
 
 2. Requirements
 ---------------
-QComicBook requires Qt library version >=3.3.3. It *may* work with earlier
-versions (from 3.x family), but it was not tested. You will also need
-unzip, rar (or unrar), unace and tar (with gzip and bzip2 support compiled in)
-somewhere in your path to handle archives. If one of these tools is missing
-you can still use QComicBook, but you won't be able to open some archives.
+QComicBook requires Qt library version >=3.3.3, Imlib2 library and pkg-config.
+It *may* work with earlier versions of Qt (from 3.x family), but it was not
+tested. You will also need unzip, rar (or unrar), unace and tar (with gzip and
+bzip2 support compiled in) somewhere in your path to handle archives. If one of
+these tools is missing you can still use QComicBook, but you won't be able to
+open some archives.
 
 3. Installation
 ---------------
-To compile QComicBook, you will need Qt developement package (Qt
-headers, usually named -devel- in many distros). Compilation include
-three steps:
+To compile QComicBook, you will need Qt and Imlib2 developement packages
+usually named -devel- in many distros). Compilation include three steps:
 ./configure --prefix=/usr/local
 make
 make install
-
-Ubuntu users should specify Qt paths manually if configure fails to detect them:
-./configure --with-Qt-lib-dir=/usr/lib --with-Qt-include-dir=/usr/include/qt3
-
-Debian users should add "--with-Qt-lib-dir=/usr/lib" option to the
-first step. NOTE: Debian/Ubuntu users may compile this package using Debian
-methods -- see Debian guides for details.
 
 4. Known issues
 ---------------

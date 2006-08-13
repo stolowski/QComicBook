@@ -46,8 +46,6 @@ namespace QComicBook
 			QSpinBox *sb_thumbsage;
 			QColor bgcolor;
 			QSpinBox *sb_fontsize;
-			QRadioButton *rb_smooth;
-			QRadioButton *rb_fast;
 			QCheckBox *cb_intbrowser;
 			QLineEdit *le_extbrowser;
 			QPushButton *pb_brbrowse;

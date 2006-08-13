@@ -25,7 +25,7 @@
 #define OPT_TWOPAGES                 "/TwoPages"
 #define OPT_JAPANESEMODE             "/JapaneseMode"
 #define OPT_SCROLLBARS               "/Scrollbars"
-#define OPT_SCALING                  "/Scaling"
+//#define OPT_SCALING                  "/Scaling"
 #define OPT_PAGESIZE                 "/PageSize"
 #define OPT_BACKGROUND               "/Background"
 #define OPT_FULLSCREENHIDEMENU       "/FullScreenHideMenu"
@@ -75,11 +75,11 @@ const EnumMap<Size> ComicBookSettings::size2string[] = {
 	{QString::null}
 };
 
-const EnumMap<Scaling> ComicBookSettings::scaling2string[] = {
+/*const EnumMap<Scaling> ComicBookSettings::scaling2string[] = {
 	{"smooth", Smooth},
 	{"fast",   Fast},
 	{QString::null}
-};
+};*/
 
 ComicBookSettings& ComicBookSettings::instance()
 {
@@ -151,7 +151,7 @@ void ComicBookSettings::load()
 		twopages = cfg->readBoolEntry(OPT_TWOPAGES, false);
 		japanese = cfg->readBoolEntry(OPT_JAPANESEMODE, false);
 		scrollbars = cfg->readBoolEntry(OPT_SCROLLBARS, false);
-		scaling = convert(scaling2string, cfg->readEntry(OPT_SCALING, size2string[0].str));
+		//scaling = convert(scaling2string, cfg->readEntry(OPT_SCALING, size2string[0].str));
 		pagesize = convert(size2string, cfg->readEntry(OPT_PAGESIZE, size2string[0].str));
 		bgcolor.setNamedColor(cfg->readEntry(OPT_BACKGROUND, "#000000"));
 		fscrhidemenu = cfg->readBoolEntry(OPT_FULLSCREENHIDEMENU, true);
@@ -227,10 +227,10 @@ Size ComicBookSettings::pageSize() const
 	return pagesize;
 }
 
-Scaling ComicBookSettings::pageScaling() const
+/*Scaling ComicBookSettings::pageScaling() const
 {
 	return scaling;
-}
+}*/
 
 QString ComicBookSettings::lastDir() const
 {
@@ -386,14 +386,14 @@ void ComicBookSettings::pageSize(Size s)
 		cfg->writeEntry(GRP_VIEW OPT_PAGESIZE, convert(size2string, pagesize = s));
 }
 
-void ComicBookSettings::pageScaling(Scaling s)
+/*void ComicBookSettings::pageScaling(Scaling s)
 {
 	if (s != scaling)
 	{
 		cfg->writeEntry(GRP_VIEW OPT_SCALING, convert(scaling2string, scaling = s));
 		emit scalingMethodChanged(scaling);
 	}
-}
+}*/
 
 void ComicBookSettings::lastDir(const QString &d)
 {
