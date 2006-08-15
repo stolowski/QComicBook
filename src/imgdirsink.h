@@ -165,7 +165,7 @@ namespace QComicBook
 
 			/*! Returns full name of the comic book.
 			 *  @return name of comic book */
-			virtual QString getFullName();    		
+			virtual QString getFullName() const;
 			virtual QString getFullFileName(int page) const;
 
 			/*! @return contents of .nfo and file_id.diz files; file name goes first, then contents. */
@@ -179,6 +179,14 @@ namespace QComicBook
 			virtual QStringList getAllimgfiles() const;
 			virtual bool timestampDiffers(int page) const;
 			virtual bool hasModifiedFiles() const;
+
+			virtual bool supportsNext() const;
+
+			//! Returns the next filename to open.
+			/* @return next filename or QString::null */
+			virtual QString getNext() const;
+
+			virtual QString getPrevious() const;
 			
 			//! Returns the instance of thumbnail loader.
 			/*! @return thumbnail loader instance */

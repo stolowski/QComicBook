@@ -104,7 +104,11 @@ namespace QComicBook
 			virtual int open(const QString &path);
 			virtual void close();
 			virtual QString getName(int maxlen = 50);
-			virtual QString getFullName();
+			virtual QString getFullName() const;
+
+			virtual bool supportsNext() const;
+			virtual QString getNext() const;
+			virtual QString getPrevious() const;
 
 			static void autoconfArchivers();
 			static int supportedArchives();

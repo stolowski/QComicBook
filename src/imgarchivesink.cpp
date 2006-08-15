@@ -217,7 +217,7 @@ QString ImgArchiveSink::getName(int maxlen)
 	return tmpname;
 }
 
-QString ImgArchiveSink::getFullName()
+QString ImgArchiveSink::getFullName() const
 {
 	return archivepath;
 }
@@ -507,5 +507,33 @@ bool ImgArchiveSink::supportsOpen(ArchiveType t)
 bool ImgArchiveSink::supportsSave(ArchiveType t)
 {
 	return (suppsave & t) > 0;
+}
+
+bool ImgArchiveSink::supportsNext() const
+{
+	return true;
+}
+
+QString ImgArchiveSink::getNext() const
+{
+	QFileInfo finfo(getFullName());
+	QDir dir(finfo.dirPath(true)); //get the full path of current cb
+	QStringList files = dir.entryList(ImgArchiveSink::supportedOpenExtensions(), QDir::Files|QDir::Readable, QDir::Name);
+	QStringList::iterator it = files.find(finfo.fileName()); //find current cb
+	if (it != files.end())
+		if (++it != files.end()) //get next file name
+			return dir.filePath(*it, true);
+	return QString::null;
+}
+
+QString ImgArchiveSink::getPrevious() const
+{
+	QFileInfo finfo(getFullName());
+	QDir dir(finfo.dirPath(true)); //get the full path of current cb
+	QStringList files = dir.entryList(ImgArchiveSink::supportedOpenExtensions(), QDir::Files|QDir::Readable, QDir::Name);
+	QStringList::iterator it = files.find(finfo.fileName()); //find current cb
+	if (--it != files.begin())
+		return dir.filePath(*it, true);
+	return QString::null;
 }
 

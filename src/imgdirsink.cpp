@@ -174,7 +174,7 @@ QString ImgDirSink::getName(int maxlen)
         return tmpname;
 }
 
-QString ImgDirSink::getFullName()
+QString ImgDirSink::getFullName() const
 {
         return dirpath;
 }
@@ -364,6 +364,21 @@ bool ImgDirSink::hasModifiedFiles() const
 			return true;
 	}
 	return false;
+}
+
+bool ImgDirSink::supportsNext() const
+{
+	return false;
+}
+
+QString ImgDirSink::getNext() const
+{
+	return QString::null;
+}
+
+QString ImgDirSink::getPrevious() const
+{
+	return QString::null;
 }
 
 void ImgDirSink::removeThumbnails(int days)

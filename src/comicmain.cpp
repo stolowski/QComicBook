@@ -416,7 +416,7 @@ void ComicMainWindow::enableComicBookActions(bool f)
 {
         //
         // file menu
-        const bool x = f && sink && typeid(*sink) == typeid(ImgArchiveSink);
+        const bool x = f && sink && sink->supportsNext();
         file_menu->setItemEnabled(close_id, f);
         file_menu->setItemEnabled(create_id, f);
         showInfoAction->setEnabled(f);
@@ -656,34 +656,21 @@ void ComicMainWindow::open(const QString &path, int page)
 
 void ComicMainWindow::openNext()
 {
-        if (ImgArchiveSink *archive = dynamic_cast<ImgArchiveSink *>(sink))
+	if (sink && sink->supportsNext())
         {
-                QFileInfo finfo(sink->getFullName());
-                QDir dir(finfo.dirPath(true)); //get the full path of current cb
-                QStringList files = dir.entryList(ImgArchiveSink::supportedOpenExtensions(), QDir::Files|QDir::Readable, QDir::Name);
-                QStringList::iterator it = files.find(finfo.fileName()); //find current cb
-                if (it != files.end())
-                        if (++it != files.end()) //get next file name
-                        {
-                                currpage = 0;
-                                open(dir.filePath(*it, true), 0);
-                        }
+		QString fname = sink->getNext();
+		if (!fname.isEmpty())
+			open(fname, 0);
         }
 }
 
 void ComicMainWindow::openPrevious()
 {
-        if (ImgArchiveSink *archive = dynamic_cast<ImgArchiveSink *>(sink))
+	if (sink && sink->supportsNext())
         {
-                QFileInfo finfo(sink->getFullName());
-                QDir dir(finfo.dirPath(true)); //get the full path of current cb
-                QStringList files = dir.entryList(ImgArchiveSink::supportedOpenExtensions(), QDir::Files|QDir::Readable, QDir::Name);
-                QStringList::iterator it = files.find(finfo.fileName()); //find current cb
-                if (it != files.end() && it != files.begin())
-                {
-                        currpage = 0;
-                        open(dir.filePath(*(--it), true), 0);
-                }
+		QString fname = sink->getPrevious();
+		if (!fname.isEmpty())
+                        open(fname, 0);
         }
 }
 
