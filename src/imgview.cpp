@@ -18,7 +18,6 @@
 #include <qbitmap.h>
 #include <qcursor.h>
 #include <algorithm>
-#include <iostream>
 
 using namespace QComicBook;
 
@@ -56,9 +55,7 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 		image2 = orgimage[1];
 	}
 
-	std::cout << "clipx=" << clipx << " clipy=" << clipy << " clipw=" << clipw << " cliph=" << cliph << " wasp=" << w_asp << " hasp=" << h_asp << std::endl;
-
-	int painted_w, painted_h; //ilosc pikseli narysowanych w oknie
+	int painted_w, painted_h; //number of painted pixels
 
         int px = clipx - xoff;
         int py = clipy - yoff;
@@ -96,8 +93,6 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 	if (painted_h < 0)
 		painted_h = 0;
 
-	std::cout << "painted_w=" << painted_w << " painted_h=" << painted_h << "\n";
-
 	if (painted_w < clipw || painted_h < cliph)
 	{
 		if (image2)
@@ -107,7 +102,6 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 				dx += painted_w;
 				if (sx > (double)image1->width()) //1st image was not drawn, part of 2nd image need to be painted only
 				{
-					std::cout << "true sx = " << sx << std::endl;
 					sx = (clipx - xoff - ((double)image1->width()/w_asp))*w_asp;;
 					dx = clipx;
 					dx = std::max(xoff, clipx-painted_w) - contentsX();
@@ -122,7 +116,6 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 				dy += painted_h;
 				if (sy > (double)image1->height()) //1st image was not drawn, part of 2nd image need to be painted only
 				{
-					std::cout << "true sy = " << sy << std::endl;
 					sy = (clipy - yoff - ((double)image1->height()/h_asp))*h_asp;;
 					dy = clipy;
 					dy = std::max(yoff, clipy-painted_h) - contentsY();
@@ -258,7 +251,6 @@ void ComicImageView::contentsMouseMoveEvent(QMouseEvent *e)
 
 void ComicImageView::contentsMousePressEvent(QMouseEvent *e)
 {
-	std::cout << "x=" << e->x() << " y=" << e->y() << std::endl;
         if (!smallcursor)
                 setCursor(Qt::PointingHandCursor);
 }
@@ -328,8 +320,6 @@ void ComicImageView::updateImageSize()
         {       
 		asp = (double)iw / ih;
 
-		std::cout << "iw=" << iw << " ih=" << ih << " asp=" << asp << "\n";
-
 		if (size == FitWidth)
 		{
 			w_asp = iw / viewport()->width();
@@ -355,7 +345,6 @@ void ComicImageView::updateImageSize()
 		dh = ih / h_asp;
         }
 
-	std::cout << "dw=" << dw << " dh=" << dh << "\n";
         int d;
         xoff = yoff = 0;
 
@@ -366,7 +355,6 @@ void ComicImageView::updateImageSize()
         if ((d = viewport()->height() - dh) > 0)
                 yoff = d/2;
           
-	std::cout << "xoff=" << xoff << " yoff=" << yoff << "\n";
 	resizeContents(dw + xoff, dh + yoff);
                 
         //

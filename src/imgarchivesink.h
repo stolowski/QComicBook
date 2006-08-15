@@ -26,7 +26,6 @@ class QProcess;
 
 namespace QComicBook
 {
-
 	//! Comic book archive sink.
 	/*! Allows opening different kind of archives containing image files. */
 	class ImgArchiveSink: public ImgDirSink
@@ -60,7 +59,6 @@ namespace QComicBook
 			ArchiveType archivetype; ///< the type of currently opened archive
 			QProcess *pext; ///< extracting process
 			QProcess *pinf; ///< file list extracing process
-			QProcess *pomp; ///< archiving process
 			QString archivename; ///< archive file name, without path
 			QString archivepath; ///< full path, including archive name
 			QString tmppath; ///< path to extracted archive
@@ -68,7 +66,6 @@ namespace QComicBook
 			QStringList archdirs; ///< list of archive dirs
 			int filesnum; ///< number of files gathered from parsing archiver output, used for progress bar
 			int extcnt; ///< extracted files counter for progress bar
-			bool docleanup; ///< if cleanup should be performed on comicbook directory on close()
 
 			static QValueList<ArchiveTypeInfo> archinfo;
 			
@@ -90,19 +87,13 @@ namespace QComicBook
 			static ArchiveType archiveType(const QString &filename);
 			int extract(const QString &filename, const QString &destdir);
 			void init();
+			virtual void doCleanup();
 			
-		signals:
-			void createProgress(int current, int total);
-			void createReady();
-			void createError(int code);
-
 		protected slots:
 			void extractExited();
 			void extractStdoutReady();
 			void infoStdoutReady();
 			void infoExited();
-			void compressExited();
-			void compressStdoutReady();
 
 		public:
 			ImgArchiveSink();
@@ -114,8 +105,6 @@ namespace QComicBook
 			virtual void close();
 			virtual QString getName(int maxlen = 50);
 			virtual QString getFullName();
-
-			virtual void create(const QString &destname, ArchiveType type, QValueList<int> pages);
 
 			static void autoconfArchivers();
 			static int supportedArchives();

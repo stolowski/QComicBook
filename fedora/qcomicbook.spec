@@ -1,6 +1,6 @@
 Summary: A viewer for comic book archives (rar, cbr, cbz, zip, ace, cba, tar.gz, tar.bz2)
 Name: qcomicbook
-Version: 0.2.8
+Version: 0.3.0
 Release: 1
 License: GPL
 Group: Amusements/Graphics
@@ -14,6 +14,7 @@ Source2: %{name}.png
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildArch: i386
 BuildRequires: qt-devel >= 3.3.1
+BuildRequires: imlib2-devel >= 1.2.0
 
 Prefix: %{_prefix}
 Requires: qt >= 3.3.1

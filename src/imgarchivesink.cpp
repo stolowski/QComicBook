@@ -17,8 +17,8 @@
 #include <qprocess.h>
 #include <qfileinfo.h>
 #include <qfile.h>
-#include <qapplication.h>
 #include <qregexp.h>
+#include <qapplication.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
@@ -36,18 +36,18 @@ int ImgArchiveSink::suppsave;
 
 QValueList<ImgArchiveSink::ArchiveTypeInfo> ImgArchiveSink::archinfo;
 
-ImgArchiveSink::ImgArchiveSink(): ImgDirSink(), docleanup(true)
+ImgArchiveSink::ImgArchiveSink(): ImgDirSink()
 {
 	init();
 }
 
-ImgArchiveSink::ImgArchiveSink(const QString &path): ImgDirSink(), docleanup(true)
+ImgArchiveSink::ImgArchiveSink(const QString &path): ImgDirSink()
 {
 	init();
 	open(path);
 }
 
-ImgArchiveSink::ImgArchiveSink(const ImgDirSink &sink): ImgDirSink(sink), docleanup(false)
+ImgArchiveSink::ImgArchiveSink(const ImgDirSink &sink): ImgDirSink(sink)
 {
 	init();
 }
@@ -61,13 +61,25 @@ void ImgArchiveSink::init()
 {
 	pinf = new QProcess(this);
 	pext = new QProcess(this);
-	pomp = new QProcess(this); //????????
 	connect(pinf, SIGNAL(readyReadStdout()), this, SLOT(infoStdoutReady()));
 	connect(pinf, SIGNAL(processExited()), this, SLOT(infoExited()));
 	connect(pext, SIGNAL(readyReadStdout()), this, SLOT(extractStdoutReady()));
 	connect(pext, SIGNAL(processExited()), this, SLOT(extractExited()));
-	connect(pomp, SIGNAL(processExited()), this, SLOT(compressExited()));
-	connect(pomp, SIGNAL(readyReadStdout()), this, SLOT(compressStdoutReady()));
+}
+
+void ImgArchiveSink::doCleanup()
+{
+	if (!tmppath.isEmpty())
+	{
+		QDir dir(tmppath);
+		//
+		// remove temporary files and dirs
+		for (QStringList::const_iterator it = archfiles.begin(); it != archfiles.end(); ++it)
+			dir.remove(*it);
+		for (QStringList::const_iterator it = archdirs.begin(); it != archdirs.end(); ++it)
+			dir.rmdir(*it);
+		dir.rmdir(tmppath);
+	}
 }
 
 ImgArchiveSink::ArchiveType ImgArchiveSink::archiveType(const QString &filename)
@@ -193,75 +205,8 @@ int ImgArchiveSink::open(const QString &path)
 void ImgArchiveSink::close()
 {
 	ImgDirSink::close();
-	if (docleanup)
-	{
-		QDir dir(tmppath);
-		//
-		// remove temporary files and dirs
-		for (QStringList::const_iterator it = archfiles.begin(); it != archfiles.end(); ++it)
-			dir.remove(*it);
-		for (QStringList::const_iterator it = archdirs.begin(); it != archdirs.end(); ++it)
-			dir.rmdir(*it);
-		dir.rmdir(tmppath);
-	}
+	doCleanup();
 	archivename = QString::null;
-}
-
-void ImgArchiveSink::create(const QString &destname, ArchiveType type, QValueList<int> pages)
-{
-	bool status = false;
-
-	//
-	// match archive type, set subprocess options
-	for (QValueList<ArchiveTypeInfo>::const_iterator it = archinfo.begin(); it!=archinfo.end(); it++)
-	{
-		const ArchiveTypeInfo &inf = *it;
-		if (type == inf.type)
-		{
-			pomp->setArguments(inf.compressopts);
-			status = true;
-			break;
-		}
-	}
-
-	if (!status)
-	{
-		emit createError(SINKERR_NOTSUPPORTED);
-		return;
-	}
-
-	tmppath = makeTempDir();
-	pomp->addArgument(destname);
-	pomp->addArgument("*");
-
-	char *fmt;
-	if (pages.size() < 100)
-		fmt = "%.2d";
-	else
-		fmt = "%.3d";
-
-	std::cout << "DIR = " << dirpath << "\n";
-	int cnt = 0; //pages counter, used to create file names with new numbering scheme
-	for (QValueList<int>::const_iterator it = pages.begin(); it != pages.end(); it++)
-	{
-		QString fname;
-		QString ext = getKnownImageExtension(imgfiles[*it]);
-		if (ext.isEmpty())
-			; //TODO
-		fname.sprintf(fmt, cnt++);
-		std::cout << *it << " : " << imgfiles[*it] << "\n";
-		fname = tmppath + "/" + fname + ext;
-		if (symlink(imgfiles[*it], fname) < 0)
-			; //TODO: error handling
-
-	}
-
-	pomp->setWorkingDirectory(tmppath);
-
-	extcnt = 0;
-	filesnum = pages.count();
-	if (!pomp->start())
-		emit createError(0);
 }
 
 QString ImgArchiveSink::getName(int maxlen)
@@ -282,14 +227,6 @@ void ImgArchiveSink::infoExited()
 	extcnt = 0;
 	if (!pext->start())
 		emit sinkError(SINKERR_OTHER);
-}
-
-void ImgArchiveSink::compressExited()
-{
-	if (!pomp->normalExit())
-		emit createError(0);
-	else
-		emit createReady();
 }
 
 void ImgArchiveSink::extractExited()
@@ -345,16 +282,6 @@ void ImgArchiveSink::extractStdoutReady()
 		if (b[i] == '\n' && extcnt < filesnum)
 			++extcnt;
 	emit progress(extcnt, filesnum);
-	qApp->processEvents();
-}
-
-void ImgArchiveSink::compressStdoutReady()
-{
-	QByteArray b = pomp->readStdout();
-	for (int i=0; i<b.size(); i++)
-		if (b[i] == '\n')
-			++extcnt;
-	emit createProgress(extcnt, filesnum);
 	qApp->processEvents();
 }
 

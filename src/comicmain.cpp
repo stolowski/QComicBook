@@ -274,8 +274,8 @@ void ComicMainWindow::setupFileMenu()
         file_menu->insertItem(tr("Recently opened"), recent_menu);
         connect(recent_menu, SIGNAL(activated(int)), this, SLOT(recentSelected(int)));
         file_menu->insertSeparator();
-	create_id = file_menu->insertItem(tr("Create archive"), this, SLOT(createArchive()));
-        file_menu->insertSeparator();
+	//create_id = file_menu->insertItem(tr("Create archive"), this, SLOT(createArchive()));
+        //file_menu->insertSeparator();
         showInfoAction->addTo(file_menu);
         file_menu->insertSeparator();
         close_id = file_menu->insertItem(tr("Close"), this, SLOT(closeSink()));

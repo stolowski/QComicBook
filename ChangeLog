@@ -1,9 +1,12 @@
-2006-08-xx:  0.3.0       -- ImLib2 is now used and required - huge speed
+2006-08-15:  0.3.0       -- ImLib2 is now used and required - huge speed
                             improvement in image loading & rendering
 			 -- caching is now specified in Mb and is handled by
 			    Imlib
+			 -- removed "Scaling method" option (no longer
+			    applicable)
 			 -- double click moves to next page
-			 -- improved "About" dialog
+			 -- removed experimental "Create archive" option (was
+			    enabled by accident in 0.2.8)
 
 2006-06-26:  0.2.8       -- added support for free unrar
 			 -- new hotkeys: Ctrl+Q, Ctrl+Home, Ctrl+End

@@ -11,7 +11,6 @@
  */
 
 #include "imlibimage.h"
-#include <iostream>
 #include <qpaintdevice.h>
 #include <qfile.h>
 #include <X11/Xlib.h>
@@ -39,7 +38,6 @@ ImlibImage::~ImlibImage()
 int ImlibImage::load(const QString &path)
 {
 	ImlibLoadError error;
-	std::cout << "loading: " << path << std::endl;
 	imlib_context_push(context);
 	data = imlib_load_image_with_error_return(QFile::encodeName(path), &error);
 	imlib_context_set_image(data);
@@ -51,16 +49,6 @@ int ImlibImage::load(const QString &path)
 
 void ImlibImage::draw(QPaintDevice *p, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh)
 {
-	std::cout << "sx=" << sx << " "
-		  << "sy=" << sy << " "
-		  << "sw=" << sw << " "
-		  << "sh=" << sh << " "
-		  << "dx=" << dx << " "
-		  << "dy=" << dy << " "
-		  << "dw=" << dw << " "
-		  << "dh=" << dh << " "
-		  << std::endl;
-
 	if (data)
 	{
 		imlib_context_push(context);
@@ -90,7 +78,6 @@ int ImlibImage::height() const
 
 void ImlibImage::rotate(int orient)
 {
-	std::cout << "angle=" << orient << "\n";
 	if (data)
 	{
 		imlib_context_push(context);

@@ -12,7 +12,7 @@
 
 #include "archiverdialog.h"
 #include "imgdirsink.h"
-#include "imgarchivesink.h"
+#include "imgarchiver.h"
 #include "pagesdirector.h"
 #include <qlayout.h>
 #include <qlineedit.h>
@@ -103,7 +103,7 @@ void ArchiverDialog::create()
 {
 	b_create->setDisabled(true);
 	b_cancel->setDisabled(true);
-	archive = new ImgArchiveSink(*imgsink);
+	archive = new ImgArchiver(*imgsink);
 	connect(archive, SIGNAL(createProgress(int, int)), pbar, SLOT(setProgress(int, int)));
 	connect(archive, SIGNAL(createReady()), this, SLOT(createReady()));
 	connect(archive, SIGNAL(createError(int)), this, SLOT(createError(int)));

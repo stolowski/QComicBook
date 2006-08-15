@@ -25,7 +25,7 @@ class QPushButton;
 namespace QComicBook
 {
 	class ImgDirSink;
-	class ImgArchiveSink;
+	class ImgArchiver;
 	class PagesDirector;
 
 	class ArchiverDialog: public QDialog
@@ -40,7 +40,7 @@ namespace QComicBook
 			QPushButton *b_create;
 			PagesDirector *pagesdir;
 			ImgDirSink *imgsink; //original sink (directory or archive)
-			ImgArchiveSink *archive; //new archive
+			ImgArchiver *archive; //new archive
 
 		protected slots:
 			void browse();
