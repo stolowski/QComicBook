@@ -473,7 +473,7 @@ void ComicMainWindow::closeEvent(QCloseEvent *e)
 
 bool ComicMainWindow::confirmExit()
 {
-        return QMessageBox::question(this, "Leave QComicBook?", "Do you really want to quit QComicBook?", QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes;
+        return QMessageBox::question(this, tr("Leave QComicBook?"), tr("Do you really want to quit QComicBook?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes;
 }
 
 void ComicMainWindow::thumbnailsVisibilityChanged(bool f)

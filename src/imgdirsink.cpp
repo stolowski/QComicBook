@@ -21,11 +21,11 @@
 #include <qfileinfo.h>
 #include <qtextstream.h>
 
+using namespace QComicBook;
+
 //
 // maximum size of description file (won't load files larger than that)
-#define MAX_TEXTFILE_SIZE 65535
-
-using namespace QComicBook;
+const int ImgDirSink::MAX_TEXTFILE_SIZE = 65535;
                         
 const QString ImgDirSink::imgext[] = {".jpg", ".jpeg", ".png", ".gif", ".xpm", NULL};
 
@@ -67,7 +67,7 @@ void ImgDirSink::setComicBookName(const QString &name)
         cbname = name;
 }
 
-QString ImgDirSink::memPrefix(int &s) const
+QString ImgDirSink::memPrefix(int &s)
 {
         QString mempfix;
         if (s < 1024)
@@ -204,26 +204,6 @@ QStringList ImgDirSink::getDescription() const
                 }
         }
         return desc;
-}
-
-QString ImgDirSink::getStats() const
-{
-        int w, h, p;
-        int cmem = 0;
-        
-        //
-        // calculate occupied memory and dimensions of the largest image
-        p = w = h = 0;
-
-        int amem = 0;
-        const QString cmempfix = memPrefix(cmem);
-        const QString amempfix = memPrefix(amem);
-        QString info;
-
-        QTextStream str(&info, IO_WriteOnly);
-        str << tr("Number of pages") << ": " << numOfImages() << endl << 
-               tr("Largest cached image") << ": " << w << "x" << h << endl;
-        return info;
 }
 
 ImlibImage* ImgDirSink::getImage(unsigned int num, int &result, int preload)

@@ -69,10 +69,6 @@ namespace QComicBook
 			 *  @param total total number of steps */
 			void progress(int current, int total);
 
-		private:
-			ThumbnailLoaderThread thloader;
-			ImgLoaderThread imgloader;
-
 		protected:
 			class FileStatus
 			{
@@ -88,16 +84,6 @@ namespace QComicBook
 					bool operator!=(const QDateTime &d) const { return d != timestamp; }
 					operator QDateTime() const { return timestamp; }
 			};
-			mutable QMutex listmtx; //!< mutex for imgfiles
-			QString dirpath; //!< path to directory
-			QString cbname; //!< comic book name (directory path by default)
-			QStringList imgfiles; //!< list of images files in directory
-			QStringList txtfiles; //!< text files (.nfo, file_id.diz)
-			QStringList otherfiles; //!< list of other files
-			QStringList dirs; //!< directories
-			bool dirsfirst; //!< visit directories first, then files
-			QMap<QString, FileStatus> timestamps; //!< last modifications timestamps for all pages
-			static const QString imgext[];
 
 			//! Scans directories recursively for image and text files.
 			/*! Scans directories for jpg, png, gif, xpm image files and .nfo and file_id.diz text files.
@@ -109,8 +95,24 @@ namespace QComicBook
 			 *  @see otherfiles
 			 *  @see dirs */
 			void recurseDir(const QString &s);
-			QString memPrefix(int &s) const;
+			static QString memPrefix(int &s);
 			void setComicBookName(const QString &name);
+
+			static const int MAX_TEXTFILE_SIZE;
+		
+		private:
+			ThumbnailLoaderThread thloader;
+			ImgLoaderThread imgloader;
+			mutable QMutex listmtx; //!< mutex for imgfiles
+			bool dirsfirst; //!< visit directories first, then files
+			static const QString imgext[];
+			QStringList imgfiles; //!< list of images files in directory
+			QStringList txtfiles; //!< text files (.nfo, file_id.diz)
+			QStringList otherfiles; //!< list of other files
+			QStringList dirs; //!< directories
+			QString dirpath; //!< path to directory
+			QString cbname; //!< comic book name (directory path by default)
+			QMap<QString, FileStatus> timestamps; //!< last modifications timestamps for all pages
 
 		public slots:
 			//! Requestes thumbnail to be loaded in separate thread.
@@ -170,9 +172,6 @@ namespace QComicBook
 
 			/*! @return contents of .nfo and file_id.diz files; file name goes first, then contents. */
 			virtual QStringList getDescription() const;
-
-			/*! @return statistics regarding number of images, memory usage etc. */
-			virtual QString getStats() const;
 
 			virtual QStringList getAllfiles() const;
 			virtual QStringList getAlldirs() const;

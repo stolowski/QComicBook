@@ -60,7 +60,7 @@ void ComicBookInfo::setupGeneralTab(ImgDirSink &sink)
 	txt->setTextFormat(Qt::PlainText);
 	txt->setReadOnly(true);
 	txt->setFont(font);
-	txt->setText(sink.getStats());
+	//txt->setText(sink.getStats());
 
 	addTab(w, tr("General info"));
 }
