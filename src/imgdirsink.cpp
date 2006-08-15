@@ -14,7 +14,6 @@
 #include "imgdirsink.h"
 #include "cbsettings.h"
 #include "thumbnail.h"
-#include <qimage.h>
 #include <qstringlist.h>
 #include <qdir.h>
 #include <qfile.h>
