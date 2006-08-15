@@ -15,6 +15,8 @@
 
 /*! \file imlibimage.h */
 
+#include <qmutex.h>
+
 class QPaintDevice;
 class QString;
 
@@ -26,6 +28,7 @@ namespace QComicBook
 			void *data;
 			void *context;
 			int w, h;
+			static QMutex mutex;
 
 		public:
 			ImlibImage();
