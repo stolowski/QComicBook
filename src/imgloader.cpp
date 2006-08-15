@@ -95,7 +95,7 @@ void ImgLoaderThread::run()
 		if (sink)
 		{
 			int result;
-			sink->getImage(n, result, 0);
+			sink->getImage(n, result);
 		}
 		mtx.unlock();
 	}

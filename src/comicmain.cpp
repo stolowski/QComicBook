@@ -771,8 +771,8 @@ void ComicMainWindow::jumpToPage(int n, bool force)
 
                 if (twoPagesAction->isOn())
                 {
-                        ImlibImage *img1 = sink->getImage(currpage = n, result1, 0);
-                        ImlibImage *img2 = sink->getImage(currpage + 1, result2, 0);
+                        ImlibImage *img1 = sink->getImage(currpage = n, result1);
+                        ImlibImage *img2 = sink->getImage(currpage + 1, result2);
                         if (result2 == 0)
                         {
                                 if (mangaModeAction->isOn())
@@ -790,11 +790,13 @@ void ComicMainWindow::jumpToPage(int n, bool force)
                         {
                                 view->setImage(img1, preserveangle);
                                 statusbar->setImageInfo(img1);
+				if (cfg->preloadPages())
+					sink->preload(currpage + 1);
                         }
                 }
                 else
                 {
-                        ImlibImage *img = sink->getImage(currpage = n, result1, 0);
+                        ImlibImage *img = sink->getImage(currpage = n, result1);
                         view->setImage(img, preserveangle);
                         statusbar->setImageInfo(img);
                 }
@@ -804,6 +806,18 @@ void ComicMainWindow::jumpToPage(int n, bool force)
                 pageinfo->setText(page);
                 statusbar->setPage(currpage + 1, sink->numOfImages());
                 thumbswin->view()->scrollToPage(currpage);
+		if (cfg->preloadPages())
+		{
+			if (!twoPagesAction->isOn())
+			{
+				sink->preload(currpage + 1);
+			}
+			else
+			{
+				sink->preload(currpage + 3);
+				sink->preload(currpage + 2);
+			}
+		}
         }
 }
 

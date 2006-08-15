@@ -32,20 +32,17 @@ const QString ImgDirSink::imgext[] = {".jpg", ".jpeg", ".png", ".gif", ".xpm", N
 ImgDirSink::ImgDirSink(bool dirs): QObject(), dirpath(QString::null), dirsfirst(dirs)
 {
         thloader.setSink(this);
-        imgloader.setSink(this);
 }
 
 ImgDirSink::ImgDirSink(const QString &path, bool dirs): QObject(), dirpath(QString::null), dirsfirst(dirs)
 {
         thloader.setSink(this);
-        imgloader.setSink(this);
         open(path);
 }
 
 ImgDirSink::ImgDirSink(const ImgDirSink &sink): QObject()
 {
         thloader.setSink(this);
-        imgloader.setSink(this);
 
 	dirpath = sink.dirpath;
 	cbname = sink.cbname;
@@ -206,7 +203,7 @@ QStringList ImgDirSink::getDescription() const
         return desc;
 }
 
-ImlibImage* ImgDirSink::getImage(unsigned int num, int &result, int preload)
+ImlibImage* ImgDirSink::getImage(unsigned int num, int &result)
 {
         result = SINKERR_LOADERROR;
 
@@ -238,6 +235,17 @@ ImlibImage* ImgDirSink::getImage(unsigned int num, int &result, int preload)
         else
                 listmtx.unlock();
 	return NULL;
+}
+
+void ImgDirSink::preload(unsigned int num)
+{
+	QString name;
+	listmtx.lock();
+	if (num < imgfiles.count())
+		name = imgfiles[num];
+	listmtx.unlock();
+	if (!name.isEmpty())
+		imgloader.request(name);
 }
 
 Thumbnail* ImgDirSink::getThumbnail(int num, bool thumbcache)
