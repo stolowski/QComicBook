@@ -43,7 +43,7 @@ ImlibImage::~ImlibImage()
 
 int ImlibImage::load(const QString &path)
 {
-	ImlibLoadError error;
+	Imlib_Load_Error error;
 
 	mutex.lock();
 
