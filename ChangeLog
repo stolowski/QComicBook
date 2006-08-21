@@ -1,4 +1,6 @@
-2006-08-xx:  0.3.1       -- Fixed bug with "Open previous" not working
+2006-08-21:  0.3.1       -- Fixed bug with "Open previous" not working
+                         -- Fixed redrawing bugs when dragging image with
+			    mouse
                          -- internal improvements and cleanups
 
 2006-08-15:  0.3.0       -- ImLib2 is now used and required - huge speed

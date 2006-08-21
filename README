@@ -1,4 +1,4 @@
-QComicBook v0.3.0
+QComicBook v0.3.1
 (c)by Pawel Stolowski 2005-2006
 released under terms of GNU General Public License v2
 
@@ -22,7 +22,8 @@ open some archives.
 3. Installation
 ---------------
 To compile QComicBook, you will need Qt and Imlib2 developement packages
-usually named -devel- in many distros). Compilation include three steps:
+(usually named -devel- in many distros) and pkg-config. Compilation include
+three steps:
 ./configure --prefix=/usr/local
 make
 make install

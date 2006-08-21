@@ -18,6 +18,7 @@
 #include <qbitmap.h>
 #include <qcursor.h>
 #include <algorithm>
+#include <cmath>
 
 using namespace QComicBook;
 
@@ -55,8 +56,6 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 		image2 = orgimage[1];
 	}
 
-	int painted_w, painted_h; //number of painted pixels
-
         int px = clipx - xoff;
         int py = clipy - yoff;
               
@@ -74,19 +73,24 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
         if (clipx + clipw < xoff || clipy + cliph < yoff)
                  return;
 	
+	const double img1w = static_cast<double>(image1->width());
+	const double img1h = static_cast<double>(image1->height());
+
 	double sx = w_asp * px;
 	double sy = h_asp * py;
 
-	double sw = w_asp*clipw;
-	double sh = h_asp*cliph;
+	double sw = ceil(w_asp*clipw); //round up, so it's never 0
+	double sh = ceil(h_asp*cliph);
+
+	int dx = std::max(xoff, clipx) - contentsX();
+	int dy = std::max(yoff, clipy) - contentsY();
 	
-	double dx = std::max(xoff, clipx) - contentsX();
-	double dy = std::max(yoff, clipy) - contentsY();
+	int painted_w, painted_h; //number of painted pixels
 
-        image1->draw(p->device(), (int)sx, (int)sy, sw, sh, dx, dy, clipw, cliph);
+        image1->draw(p->device(), static_cast<int>(sx), static_cast<int>(sy), static_cast<int>(sw), static_cast<int>(sh), dx, dy, clipw, cliph);
 
-	painted_w = std::min(clipw, (int)((double)(image1->width() - sx)/w_asp));
-	painted_h = std::min(cliph, (int)((double)(image1->height() - sy)/h_asp));
+	painted_w = std::min(clipw, static_cast<int>((img1w - sx)/w_asp));
+	painted_h = std::min(cliph, static_cast<int>((img1h - sy)/h_asp));
 
 	if (painted_w < 0)
 		painted_w = 0;
@@ -100,9 +104,9 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 			if ((iangle & 1) == 0) //angle is 0 or 180 - left-right orientation
 			{
 				dx += painted_w;
-				if (sx > (double)image1->width()) //1st image was not drawn, part of 2nd image need to be painted only
+				if (sx > img1w) //1st image was not drawn, part of 2nd image need to be painted only
 				{
-					sx = (clipx - xoff - ((double)image1->width()/w_asp))*w_asp;;
+					sx = (clipx - xoff - (img1w/w_asp))*w_asp;;
 					dx = clipx;
 					dx = std::max(xoff, clipx-painted_w) - contentsX();
 				}
@@ -114,9 +118,9 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 			else //angle is 90 or 270 - top-bottom orientation
 			{
 				dy += painted_h;
-				if (sy > (double)image1->height()) //1st image was not drawn, part of 2nd image need to be painted only
+				if (sy > img1h) //1st image was not drawn, part of 2nd image need to be painted only
 				{
-					sy = (clipy - yoff - ((double)image1->height()/h_asp))*h_asp;;
+					sy = (clipy - yoff - (img1h/h_asp))*h_asp;;
 					dy = clipy;
 					dy = std::max(yoff, clipy-painted_h) - contentsY();
 				}
@@ -125,7 +129,7 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 					sy = 0.0f;
 				}
 			}
-			image2->draw(p->device(), sx, sy, sw, sh, dx, dy, clipw, cliph);
+			image2->draw(p->device(), static_cast<int>(sx), static_cast<int>(sy), static_cast<int>(sw), static_cast<int>(sh), dx, dy, clipw, cliph);
 		}
 	}
 }
@@ -313,8 +317,8 @@ void ComicImageView::updateImageSize()
 	w_asp = h_asp = 1.0f;
         if (size == Original)
         {
-		dw = iw;
-		dh = ih;
+		dw = static_cast<int>(iw);
+		dh = static_cast<int>(ih);
 	}
         else
         {       
@@ -341,8 +345,8 @@ void ComicImageView::updateImageSize()
 				w_asp = h_asp;
 		}
 
-		dw = iw / w_asp;
-		dh = ih / h_asp;
+		dw = static_cast<int>(iw / w_asp);
+		dh = static_cast<int>(ih / h_asp);
         }
 
         int d;
