@@ -55,7 +55,7 @@ int ImlibImage::load(const QString &path)
 	imlib_context_pop();
 
 	mutex.unlock();
-	return 1;
+	return error == IMLIB_LOAD_ERROR_NONE;
 }
 
 void ImlibImage::draw(QPaintDevice *p, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh)
