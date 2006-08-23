@@ -67,7 +67,7 @@ void ThumbnailsView::setPages(int pages)
 	for (int i=0; i<numpages; i++)
 		icons.insert(i, new IconViewThumbnail(this, i, *emptypage));
 
-	setArrangement(visibleWidth() > visibleHeight() ? QIconView::TopToBottom : QIconView::LeftToRight);
+	setArrangement(visibleWidth() > visibleHeight() ? QIconView::LeftToRight : QIconView::TopToBottom);
 }
 
 void ThumbnailsView::setPage(int n, const QImage &img)

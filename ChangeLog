@@ -1,3 +1,5 @@
+2006-xx-xx:  0.3.2       -- Fixed icon arrangement bug in Thumbnails window
+
 2006-08-21:  0.3.1       -- "Preload next image" option now works with Imlib2
                          -- Fixed bug with "Open previous" not working
                          -- Fixed redrawing bugs when dragging image with
