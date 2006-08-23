@@ -584,7 +584,11 @@ void ComicMainWindow::sinkReady(const QString &path)
                 sink->requestThumbnails(0, sink->numOfImages());
 
         jumpToPage(currpage, true);
-        if (cfg->autoInfo())
+
+	const bool hasdesc = (sink->getDescription().count() > 0);
+	showInfoAction->setDisabled(!hasdesc);
+
+        if (hasdesc && cfg->autoInfo())
                 showInfo();
 }
 

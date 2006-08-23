@@ -182,23 +182,24 @@ QString ImgDirSink::getFullFileName(int page) const
 
 QStringList ImgDirSink::getDescription() const
 {
-        QStringList desc;
-        
-        for (QStringList::const_iterator it = txtfiles.begin(); it!=txtfiles.end(); it++)
-        {
-                QFileInfo finfo(*it);
-                QFile f(*it);
-                if (f.open(IO_ReadOnly) && (f.size() < MAX_TEXTFILE_SIZE))
-                {
-                        QString cont;
-                        QTextStream str(&f);
-                        while (!str.atEnd())
-                                cont += str.readLine() + "\n";
-                        f.close();
-                        desc.append(finfo.fileName()); //append file name
-                        desc.append(cont); //and contents
-                }
-        }
+	if (desc.count() == 0) //read files only once
+	{
+		for (QStringList::const_iterator it = txtfiles.begin(); it!=txtfiles.end(); it++)
+		{
+			QFileInfo finfo(*it);
+			QFile f(*it);
+			if (f.open(IO_ReadOnly) && (f.size() < MAX_TEXTFILE_SIZE))
+			{
+				QString cont;
+				QTextStream str(&f);
+				while (!str.atEnd())
+					cont += str.readLine() + "\n";
+				f.close();
+				desc.append(finfo.fileName()); //append file name
+				desc.append(cont); //and contents
+			}
+		}
+	}
         return desc;
 }
 

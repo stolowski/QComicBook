@@ -26,7 +26,7 @@ ComicBookInfo::ComicBookInfo(QWidget *parent, ImgDirSink &sink, const QFont &f):
 	resize(640, 480);
 
 	setupDescriptionTabs(sink);
-	setupGeneralTab(sink);
+	//setupGeneralTab(sink);
 }
 
 void ComicBookInfo::setupDescriptionTabs(const ImgDirSink &sink)

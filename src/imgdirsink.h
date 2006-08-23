@@ -113,6 +113,7 @@ namespace QComicBook
 			QString dirpath; //!< path to directory
 			QString cbname; //!< comic book name (directory path by default)
 			QMap<QString, FileStatus> timestamps; //!< last modifications timestamps for all pages
+			mutable QStringList desc; //txt files
 
 		public slots:
 			//! Requestes thumbnail to be loaded in separate thread.
