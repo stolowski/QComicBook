@@ -42,10 +42,12 @@ namespace QComicBook
 		protected:
 			void createInfoElements();
 			void removeInfoElements();
+			void createProgressBar();
+			void removeProgressBar();
 
 		public:
 			StatusBar(QWidget *parent, bool elms=true);
-			~StatusBar();
+			virtual ~StatusBar();
 	};
 }
 

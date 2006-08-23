@@ -50,6 +50,9 @@ void StatusBar::createInfoElements()
                 name = new QLabel(this);
                 addWidget(name, 2);
         }
+	page->show();
+	imginfo->show();
+	name->show();
 }
 
 void StatusBar::removeInfoElements()
@@ -74,6 +77,28 @@ void StatusBar::removeInfoElements()
         }
 }
 
+void StatusBar::createProgressBar()
+{
+	if (!pbar)
+	{
+		pbar = new QProgressBar(this);
+		pbar->setPercentageVisible(false);
+		pbar->setFixedHeight(12); //this is a bit ugly... gives chance the
+		addWidget(pbar, 1);
+		pbar->show();
+	}
+}
+
+void StatusBar::removeProgressBar()
+{
+	if (pbar)
+	{
+		removeWidget(pbar);
+		delete pbar;
+		pbar = NULL;
+	}
+}
+
 void StatusBar::clear()
 {
 	setPage(0, 0);
@@ -83,11 +108,21 @@ void StatusBar::clear()
 
 void StatusBar::setPage(int n, int total)
 {
+	if (!page)
+	{
+		removeProgressBar();
+		createInfoElements();
+	}
 	page->setText(tr("Page") + " " + QString::number(n) + " / " + QString::number(total));
 }
 
 void StatusBar::setImageInfo(const ImlibImage *img1, const ImlibImage *img2)
 {
+	if (!imginfo)
+	{
+		removeProgressBar();
+		createInfoElements();
+	}
 	QString txt;
 	if (img1)
 		txt = QString::number(img1->width()) + "x" + QString::number(img1->height()) + " ";
@@ -98,6 +133,11 @@ void StatusBar::setImageInfo(const ImlibImage *img1, const ImlibImage *img2)
 
 void StatusBar::setName(const QString &n)
 {
+	if (!name)
+	{
+		removeProgressBar();
+		createInfoElements();
+	}
 	name->setText(n);
 }
 
@@ -109,13 +149,8 @@ void StatusBar::setProgress(int n, int total)
 		{
 			//
 			// remove progressbar, create and show informative elements
-			removeWidget(pbar);
-			delete pbar;
-			pbar = NULL;
+			removeProgressBar();
 			createInfoElements();
-			page->show();
-			imginfo->show();
-			name->show();
 		}
 	}
 	else
@@ -125,11 +160,7 @@ void StatusBar::setProgress(int n, int total)
 			//
 			// create progressbar, remove informative elements
 			removeInfoElements();
-			pbar = new QProgressBar(this);
-			pbar->setPercentageVisible(false);
-			pbar->setFixedHeight(12); //this is a bit ugly... gives chance the
-			addWidget(pbar, 1);
-			pbar->show();
+			createProgressBar();
 		}
 		pbar->setProgress(n, total);
 
