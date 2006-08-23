@@ -46,6 +46,7 @@
 #include <qframe.h>
 #include <jumptopagewin.h>
 #include <qprocess.h>
+#include <qdragobject.h>
 #include <typeinfo>
 
 using namespace QComicBook;
@@ -56,6 +57,8 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WTy
         updateCaption();
         setIcon(Icons::get(ICON_APPICON).pixmap(QIconSet::Small, true));
         setMinimumSize(320, 200);
+
+	setAcceptDrops(true); //???
 
         cfg = &ComicBookSettings::instance();
 
@@ -453,6 +456,18 @@ void ComicMainWindow::enableComicBookActions(bool f)
         // bookmarks menu
         bookmarks_menu->setItemEnabled(setbookmark_id, f);
         bookmarks_menu->setItemEnabled(rmvbookmark_id, f);
+}
+
+void ComicMainWindow::dragEnterEvent(QDragEnterEvent *e)
+{
+	e->accept(QUriDrag::canDecode(e));
+}
+
+void ComicMainWindow::dropEvent(QDropEvent *e)
+{
+	QStringList files;
+	if (QUriDrag::decodeLocalFiles(e, files))
+		open(files[0], 0);
 }
 
 void ComicMainWindow::keyPressEvent(QKeyEvent *e)

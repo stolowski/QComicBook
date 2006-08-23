@@ -110,8 +110,11 @@ namespace QComicBook
 			QAction *quitAction;
 
 		protected:
-			void keyPressEvent(QKeyEvent *e);
-			void closeEvent(QCloseEvent *e);
+			virtual void dragEnterEvent(QDragEnterEvent *e);
+			virtual void dropEvent(QDropEvent *e);
+			virtual void keyPressEvent(QKeyEvent *e);
+			virtual void closeEvent(QCloseEvent *e);
+
 			bool confirmExit();
 			void enableComicBookActions(bool f=true);
 			void saveSettings();
