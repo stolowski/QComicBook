@@ -1,7 +1,9 @@
-2006-xx-xx:  0.3.2       -- Fixed icon arrangement bug in Thumbnails window
+2006-xx-xx:  0.3.2       -- Added Drag&Drop support
+                         -- Fixed icon arrangement bug in Thumbnails window
                          -- "Show Info" option is disabled if no textual
                              information on comicbook was found.
 			 -- "General Info" tab was removed from Info Window.
+			 -- Fixed crash on empty comicbook (another one...)
 
 2006-08-21:  0.3.1       -- "Preload next image" option now works with Imlib2
                          -- Fixed bug with "Open previous" not working
