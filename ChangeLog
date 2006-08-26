@@ -1,7 +1,7 @@
-2006-xx-xx:  0.3.2       -- Added Drag&Drop support
+2006-08-26:  0.3.2       -- Added Drag&Drop support for archives/dirs
                          -- Fixed icon arrangement bug in Thumbnails window
                          -- "Show Info" option is disabled if no textual
-                             information on comicbook was found.
+                             information for opened comicbook was found.
 			 -- "General Info" tab was removed from Info Window.
 			 -- Fixed crash on empty comicbook (another one...)
 
