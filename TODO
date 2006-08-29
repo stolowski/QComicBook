@@ -1,10 +1,13 @@
+- "split pages into 2" mode
+- cbr in cbr support
+- smooth scroll
+- individual frame zooming + frames editor
 - dosage support
 - basic editing options with external programs (like Gimp)
 - temporary directory setting
 - docbook help/docs
 - doxygen docs
 - image zooming
-- drag & drop support
 - save Info window geometry
 - character encoding option for Info window
 - built-in decompression with third-party libraries
