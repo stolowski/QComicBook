@@ -45,7 +45,7 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 
 	ImlibImage *image1, *image2;
 
-	if (iangle > 1) //switch image pointers to reflect rotation angle
+	if (iangle > 1 && orgimage[1]) //switch image pointers to reflect rotation angle
 	{
 		image1 = orgimage[1];
 		image2 = orgimage[0];
