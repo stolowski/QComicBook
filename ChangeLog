@@ -1,3 +1,6 @@
+2006-09-20:  0.3.3       -- fixed crash when rotating image in single-page
+                            mode
+
 2006-08-26:  0.3.2       -- Added Drag&Drop support for archives/dirs
                          -- Fixed icon arrangement bug in Thumbnails window
                          -- "Show Info" option is disabled if no textual
