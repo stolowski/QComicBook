@@ -61,6 +61,7 @@ namespace QComicBook
 			bool showsplash;
 			QString extbrowser;
 			QString docklayout;
+			QString tmpdir;
 			QFont font;
 
 			static QString bkpath; //bookmarks path
@@ -110,6 +111,7 @@ namespace QComicBook
 			void restoreDockLayout(QMainWindow *w);
 			bool editSupport() const;
 			bool showSplash() const;
+			QString tmpDir() const;
 
 			void smallCursor(bool f);
 			void twoPagesMode(bool f);
@@ -139,6 +141,7 @@ namespace QComicBook
 			void saveDockLayout(QMainWindow *w);
 			void editSupport(bool f);
 			void showSplash(bool f);
+			void tmpDir(const QString &dir);
 
 			static ComicBookSettings& instance();
 

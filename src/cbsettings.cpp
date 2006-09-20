@@ -59,6 +59,7 @@
 #define OPT_INTBROWSER  "/UseIntBrowser"
 #define OPT_EXTBROWSER  "/ExtBrowserCmd"
 #define OPT_EDITING     "/Editing"
+#define OPT_TMPDIR      "/TmpDir"
 
 using namespace QComicBook;
 
@@ -184,6 +185,10 @@ void ComicBookSettings::load()
 		thumbsage = cfg->readNumEntry(OPT_THUMBSAGE, 7);
 		cachethumbs = cfg->readBoolEntry(OPT_CACHETHUMBS, true);
 		editsupport = cfg->readBoolEntry(OPT_EDITING, false);
+		tmpdir = cfg->readEntry(OPT_TMPDIR, QString::null);
+		QDir dir(tmpdir);
+		if (tmpdir.isNull() || !dir.exists())
+			tmpdir = "/tmp";
 	cfg->endGroup();
 }
 
@@ -326,6 +331,11 @@ void ComicBookSettings::restoreDockLayout(QMainWindow *w)
 bool ComicBookSettings::editSupport() const
 {
 	return editsupport;
+}
+
+QString ComicBookSettings::tmpDir() const
+{
+	return tmpdir;
 }
 
 void ComicBookSettings::smallCursor(bool f)
@@ -520,5 +530,11 @@ void ComicBookSettings::showSplash(bool f)
 {
 	if (f != showsplash)
 		cfg->writeEntry(GRP_MISC OPT_SHOWSPLASH, showsplash = f);
+}
+
+void ComicBookSettings::tmpDir(const QString &dir)
+{
+	if (dir != tmpdir)
+		cfg->writeEntry(GRP_MISC OPT_TMPDIR, tmpdir = dir);
 }
 
