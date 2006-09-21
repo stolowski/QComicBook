@@ -26,7 +26,7 @@ using namespace QComicBook;
 // maximum size of description file (won't load files larger than that)
 const int ImgDirSink::MAX_TEXTFILE_SIZE = 65535;
                         
-const QString ImgDirSink::imgext[] = {".jpg", ".jpeg", ".png", ".gif", ".xpm", NULL};
+const QString ImgDirSink::imgext[] = {".jpg", ".jpeg", ".png", ".gif", ".xpm", ".bmp", NULL};
 
 ImgDirSink::ImgDirSink(bool dirs): QObject(), dirpath(QString::null), dirsfirst(dirs)
 {
