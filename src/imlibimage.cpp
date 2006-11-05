@@ -20,7 +20,7 @@ using namespace QComicBook;
 
 QMutex ImlibImage::mutex;
 
-ImlibImage::ImlibImage(): data(NULL)
+ImlibImage::ImlibImage(): data(NULL), w(0), h(0)
 {
 	mutex.lock();
 	context = imlib_context_new();
@@ -49,9 +49,12 @@ int ImlibImage::load(const QString &path)
 
 	imlib_context_push(context);
 	data = imlib_load_image_with_error_return(QFile::encodeName(path), &error);
-	imlib_context_set_image(data);
-	w = imlib_image_get_width();
-	h = imlib_image_get_height();
+	if (error == IMLIB_LOAD_ERROR_NONE)
+	{
+		imlib_context_set_image(data);
+		w = imlib_image_get_width();
+		h = imlib_image_get_height();
+	}
 	imlib_context_pop();
 
 	mutex.unlock();
@@ -141,7 +144,6 @@ void ImlibImage::reset()
 		mutex.unlock();
 	}
 }
-
 
 void ImlibImage::setCacheSize(int bytes)
 {
