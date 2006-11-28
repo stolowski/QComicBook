@@ -19,6 +19,7 @@
 #include <qcursor.h>
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 
 using namespace QComicBook;
 
@@ -87,6 +88,7 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 	
 	int painted_w, painted_h; //number of painted pixels
 
+	std:: cout << "sx=" << sx << " sy=" << sy << " dx=" << dx << " dy=" << dy << " w=" << clipw << " h=" << cliph << "\n";
         image1->draw(p->device(), static_cast<int>(sx), static_cast<int>(sy), static_cast<int>(sw), static_cast<int>(sh), dx, dy, clipw, cliph);
 
 	painted_w = std::min(clipw, static_cast<int>((img1w - sx)/w_asp));
@@ -97,40 +99,43 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 	if (painted_h < 0)
 		painted_h = 0;
 
-	if (painted_w < clipw || painted_h < cliph)
+	std::cout << "painted_w=" << painted_w << " painted_h=" << painted_h << "\n";
+
+	if (image2)
 	{
-		if (image2)
+		bool draw = false;
+		if (painted_w < clipw && (iangle & 1) == 0) //angle is 0 or 180 - left-right orientation
 		{
-			if ((iangle & 1) == 0) //angle is 0 or 180 - left-right orientation
+			dx += painted_w;
+			if (sx > img1w) //1st image was not drawn, part of 2nd image need to be painted only
 			{
-				dx += painted_w;
-				if (sx > img1w) //1st image was not drawn, part of 2nd image need to be painted only
-				{
-					sx = (clipx - xoff - (img1w/w_asp))*w_asp;;
-					dx = clipx;
-					dx = std::max(xoff, clipx-painted_w) - contentsX();
-				}
-				else //whole 2nd image to be painted
-				{
-					sx = 0.0f;
-				}
+				sx = (clipx - xoff - (img1w/w_asp))*w_asp;;
+				dx = clipx;
+				dx = std::max(xoff, clipx-painted_w) - contentsX();
 			}
-			else //angle is 90 or 270 - top-bottom orientation
+			else //whole 2nd image to be painted
 			{
-				dy += painted_h;
-				if (sy > img1h) //1st image was not drawn, part of 2nd image need to be painted only
-				{
-					sy = (clipy - yoff - (img1h/h_asp))*h_asp;;
-					dy = clipy;
-					dy = std::max(yoff, clipy-painted_h) - contentsY();
-				}
-				else //whole 2nd image to be painted
-				{
-					sy = 0.0f;
-				}
+				sx = 0.0f;
 			}
-			image2->draw(p->device(), static_cast<int>(sx), static_cast<int>(sy), static_cast<int>(sw), static_cast<int>(sh), dx, dy, clipw, cliph);
+			draw = true;
 		}
+		else if (painted_h <  cliph && (iangle & 1)) //angle is 90 or 270 - top-bottom orientation
+		{
+			dy += painted_h;
+			if (sy > img1h) //1st image was not drawn, part of 2nd image need to be painted only
+			{
+				sy = (clipy - yoff - (img1h/h_asp))*h_asp;;
+				dy = clipy;
+				dy = std::max(yoff, clipy-painted_h) - contentsY();
+			}
+			else //whole 2nd image to be painted
+			{
+				sy = 0.0f;
+			}
+			draw = true;
+		}
+		if (draw)
+			image2->draw(p->device(), static_cast<int>(sx), static_cast<int>(sy), static_cast<int>(sw), static_cast<int>(sh), dx, dy, clipw, cliph);
 	}
 }
 
@@ -286,12 +291,26 @@ void ComicImageView::updateImageSize()
 	// roatation angle of 2nd image is taken into account
 	double iw = orgimage[0]->width();
 	double ih = orgimage[0]->height();
+
 	if (orgimage[1])
 	{
 		if (iangle & 1)
+		{
+			std::cout << "iangle & 1 = 1\n";
+			/*ih += orgimage[1]->width();
+			if (orgimage[1]->height() > iw)
+				iw = orgimage[1]->height();*/
 			ih += orgimage[1]->height();
+			if (orgimage[1]->width() > iw)
+				iw = orgimage[1]->width();
+		}
 		else
+		{
+			std::cout << "iangle & 1 = 0\n";
 			iw += orgimage[1]->width();
+			if (orgimage[1]->height() > ih)
+				ih = orgimage[1]->height();
+		}
 	}
         
         if (size == BestFit)
