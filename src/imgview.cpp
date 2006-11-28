@@ -19,7 +19,6 @@
 #include <qcursor.h>
 #include <algorithm>
 #include <cmath>
-#include <iostream>
 
 using namespace QComicBook;
 
@@ -45,6 +44,7 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 		return;
 
 	ImlibImage *image1, *image2;
+
 
 	if (iangle > 1 && orgimage[1]) //switch image pointers to reflect rotation angle
 	{
@@ -73,7 +73,7 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
        
         if (clipx + clipw < xoff || clipy + cliph < yoff)
                  return;
-	
+
 	const double img1w = static_cast<double>(image1->width());
 	const double img1h = static_cast<double>(image1->height());
 
@@ -83,35 +83,31 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 	double sw = ceil(w_asp*clipw); //round up, so it's never 0
 	double sh = ceil(h_asp*cliph);
 
-	int dx = std::max(xoff, clipx) - contentsX();
-	int dy = std::max(yoff, clipy) - contentsY();
-	
-	int painted_w, painted_h; //number of painted pixels
+	double dx = std::max(xoff, clipx) - contentsX();
+	double dy = std::max(yoff, clipy) - contentsY();
 
-	std:: cout << "sx=" << sx << " sy=" << sy << " dx=" << dx << " dy=" << dy << " w=" << clipw << " h=" << cliph << "\n";
-        image1->draw(p->device(), static_cast<int>(sx), static_cast<int>(sy), static_cast<int>(sw), static_cast<int>(sh), dx, dy, clipw, cliph);
+        image1->draw(p->device(), static_cast<int>(sx), static_cast<int>(sy), static_cast<int>(sw), static_cast<int>(sh), static_cast<int>(dx), static_cast<int>(dy), clipw, cliph);
 
-	painted_w = std::min(clipw, static_cast<int>((img1w - sx)/w_asp));
-	painted_h = std::min(cliph, static_cast<int>((img1h - sy)/h_asp));
+	//
+	// number of painted pixels
+	double painted_w = std::min(static_cast<double>(clipw), (img1w - sx)/w_asp);
+	double painted_h = std::min(static_cast<double>(cliph), (img1h - sy)/h_asp);
 
 	if (painted_w < 0)
 		painted_w = 0;
 	if (painted_h < 0)
 		painted_h = 0;
 
-	std::cout << "painted_w=" << painted_w << " painted_h=" << painted_h << "\n";
-
 	if (image2)
 	{
 		bool draw = false;
-		if (painted_w < clipw && (iangle & 1) == 0) //angle is 0 or 180 - left-right orientation
+		if ((painted_w < clipw) && (iangle & 1) == 0) //angle is 0 or 180 - left-right orientation
 		{
 			dx += painted_w;
 			if (sx > img1w) //1st image was not drawn, part of 2nd image need to be painted only
 			{
-				sx = (clipx - xoff - (img1w/w_asp))*w_asp;;
-				dx = clipx;
-				dx = std::max(xoff, clipx-painted_w) - contentsX();
+				sx = (static_cast<double>(clipx - xoff) - (img1w/w_asp))*w_asp;;
+				dx = std::max(static_cast<double>(xoff), static_cast<double>(clipx) - painted_w) - contentsX();
 			}
 			else //whole 2nd image to be painted
 			{
@@ -119,14 +115,13 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 			}
 			draw = true;
 		}
-		else if (painted_h <  cliph && (iangle & 1)) //angle is 90 or 270 - top-bottom orientation
+		else if ((painted_h <  cliph) && (iangle & 1)) //angle is 90 or 270 - top-bottom orientation
 		{
 			dy += painted_h;
 			if (sy > img1h) //1st image was not drawn, part of 2nd image need to be painted only
 			{
-				sy = (clipy - yoff - (img1h/h_asp))*h_asp;;
-				dy = clipy;
-				dy = std::max(yoff, clipy-painted_h) - contentsY();
+				sy = (static_cast<double>(clipy - yoff) - (img1h/h_asp))*h_asp;;
+				dy = std::max(static_cast<double>(yoff), static_cast<double>(clipy) - painted_h) - contentsY();
 			}
 			else //whole 2nd image to be painted
 			{
@@ -135,7 +130,7 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 			draw = true;
 		}
 		if (draw)
-			image2->draw(p->device(), static_cast<int>(sx), static_cast<int>(sy), static_cast<int>(sw), static_cast<int>(sh), dx, dy, clipw, cliph);
+			image2->draw(p->device(), static_cast<int>(sx), static_cast<int>(sy), static_cast<int>(sw), static_cast<int>(sh), static_cast<int>(dx), static_cast<int>(dy), clipw, cliph);
 	}
 }
 
@@ -296,17 +291,12 @@ void ComicImageView::updateImageSize()
 	{
 		if (iangle & 1)
 		{
-			std::cout << "iangle & 1 = 1\n";
-			/*ih += orgimage[1]->width();
-			if (orgimage[1]->height() > iw)
-				iw = orgimage[1]->height();*/
 			ih += orgimage[1]->height();
 			if (orgimage[1]->width() > iw)
 				iw = orgimage[1]->width();
 		}
 		else
 		{
-			std::cout << "iangle & 1 = 0\n";
 			iw += orgimage[1]->width();
 			if (orgimage[1]->height() > ih)
 				ih = orgimage[1]->height();
