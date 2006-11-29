@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 	//
 	// command line argument
 	if (app.argc() > 1)
-		win->open(QString::fromLocal8Bit( app.argv()[1] ));
+		win->open(QString::fromLocal8Bit(app.argv()[1]));
 
 	//
 	// close splashscreen after a few seconds
