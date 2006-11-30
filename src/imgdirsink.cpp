@@ -407,3 +407,14 @@ QString ImgDirSink::getKnownImageExtension(const QString &path)
 	return false;
 }
 
+QStringList ImgDirSink::getKnownImageExtensionsList()
+{
+	QStringList list;
+	for (int i=0; imgext[i]; i++)
+	{
+		QString p = "*" + imgext[i];
+		list << p;
+	}
+	return list;
+}
+

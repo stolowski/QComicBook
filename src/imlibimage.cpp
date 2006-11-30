@@ -61,6 +61,26 @@ int ImlibImage::load(const QString &path)
 	return error == IMLIB_LOAD_ERROR_NONE;
 }
 
+int ImlibImage::save(const QString &path)
+{
+	Imlib_Load_Error error;
+
+	mutex.lock();
+
+	imlib_context_push(context);
+
+	int i = path.findRev(".");
+	if (i >= 0 && i < (path.length() - 1))
+		imlib_image_set_format(path.mid(i+1));
+	else
+		imlib_image_set_format("jpg");
+	imlib_save_image_with_error_return(QFile::encodeName(path), &error);
+	imlib_context_pop();
+
+	mutex.unlock();
+	return error == IMLIB_LOAD_ERROR_NONE;
+}
+
 void ImlibImage::draw(QPaintDevice *p, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh)
 {
 	if (data)

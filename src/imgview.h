@@ -106,6 +106,7 @@ namespace QComicBook
 			QPopupMenu *contextMenu() const;
 			Size getSize() const;
 			int imageWidth() const;
+			int visiblePages() const;
 	};
 }
 

@@ -108,6 +108,7 @@ namespace QComicBook
 			QAction *openArchiveAction;
 			QAction *openDirAction;
 			QAction *quitAction;
+			QAction *savePageAction;
 
 		protected:
 			virtual void dragEnterEvent(QDragEnterEvent *e);
@@ -143,6 +144,7 @@ namespace QComicBook
 			void thumbnailsVisibilityChanged(bool f);
 			void toolbarVisibilityChanged(bool f);
 			void openWithGimp();
+			void savePageAs();
 
 		public slots:
 			void firstPage();

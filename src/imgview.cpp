@@ -601,3 +601,13 @@ int ComicImageView::imageWidth() const
 	return 0;
 }
 
+int ComicImageView::visiblePages() const
+{
+	int v = 0;
+	if (orgimage[0])
+		++v;
+	if (orgimage[1])
+		++v;
+	return v;
+}
+

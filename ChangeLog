@@ -1,3 +1,5 @@
+2006-xx-yy:  0.3.5       -- new option: "Save page as"
+
 2006-11-29:  0.3.4       -- fixed drawing/scaling/rotation bugs in two-pages
                             mode when 1st page is smaller than 2nd page.
 		         -- fixed problem with opening files with non-ascii characters

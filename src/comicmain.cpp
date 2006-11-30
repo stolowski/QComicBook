@@ -110,6 +110,7 @@ void ComicMainWindow::setupActions()
         openDirAction = new QAction(Icons::get(ICON_OPENDIR), tr("Open directory"), CTRL+Key_D, this);
         openNextAction = new QAction(tr("Open next"), CTRL+Key_N, this);
         openPrevAction = new QAction(tr("Open previous"), CTRL+Key_P, this);
+	savePageAction = new QAction(tr("Save page as"), 0, this);
         fullScreenAction = new QAction(tr("&Fullscreen"), Key_F11, this);
         nextPageAction = new QAction(Icons::get(ICON_NEXTPAGE), tr("Next page"), Key_PageDown, this);
         forwardPageAction = new QAction(Icons::get(ICON_FORWARD), tr("5 pages forward"), QKeySequence(), this);
@@ -164,6 +165,7 @@ void ComicMainWindow::setupActions()
         connect(openDirAction, SIGNAL(activated()), this, SLOT(browseDirectory()));
         connect(openNextAction, SIGNAL(activated()), this, SLOT(openNext()));
         connect(openPrevAction, SIGNAL(activated()), this, SLOT(openPrevious()));
+	connect(savePageAction, SIGNAL(activated()), this, SLOT(savePageAs()));
         connect(showInfoAction, SIGNAL(activated()), this, SLOT(showInfo()));
         connect(exitFullScreenAction, SIGNAL(activated()), this, SLOT(exitFullscreen()));
         connect(nextPageAction, SIGNAL(activated()), this, SLOT(nextPage()));
@@ -276,6 +278,8 @@ void ComicMainWindow::setupFileMenu()
         recent_menu = new QPopupMenu(this);
         file_menu->insertItem(tr("Recently opened"), recent_menu);
         connect(recent_menu, SIGNAL(activated(int)), this, SLOT(recentSelected(int)));
+        file_menu->insertSeparator();
+	savePageAction->addTo(file_menu);
         file_menu->insertSeparator();
 	//create_id = file_menu->insertItem(tr("Create archive"), this, SLOT(createArchive()));
         //file_menu->insertSeparator();
@@ -425,6 +429,7 @@ void ComicMainWindow::enableComicBookActions(bool f)
         showInfoAction->setEnabled(f);
         openNextAction->setEnabled(x);
         openPrevAction->setEnabled(x);
+	savePageAction->setEnabled(x);
 
 	//
 	// edit menu
@@ -623,7 +628,7 @@ void ComicMainWindow::sinkError(int code)
                 case SINKERR_ARCHEXIT: msg = tr("archive extractor exited with error"); break;
                 default: break;
         }
-        QMessageBox::critical(this, "QComicBook error", "Error opening comicbook: " + msg, 
+        QMessageBox::critical(this, tr("QComicBook error"), tr("Error opening comicbook") + ": " + msg, 
                         QMessageBox::Ok, QMessageBox::NoButton);
         closeSink();
 }
@@ -973,6 +978,37 @@ void ComicMainWindow::openWithGimp()
         {
                 proc->deleteLater();
         }
+}
+
+void ComicMainWindow::savePageAs()
+{
+	if (sink && (sink->numOfImages() > 0))
+	{
+		const QString msg = tr("Choose a filename to save under");
+		int cnt = view->visiblePages();
+		for (int i = 1; i<=cnt; i++)
+		{
+			QString tmpmsg(msg);
+			if (cnt > 1)
+				tmpmsg += " (" + tr("page") + " " + QString::number(i) + ")";
+			QString fname = QFileDialog::getSaveFileName(QString::null, "Images (*.jpg *.png)", this, NULL, tmpmsg);
+			if (!fname.isEmpty())
+			{
+				int result;
+				ImlibImage *img = sink->getImage(currpage, result);
+				if (img)
+				{
+					if (!img->save(fname))
+					{
+						QMessageBox::critical(this, tr("QComicBook error"), tr("Error saving image"), QMessageBox::Ok, QMessageBox::NoButton);
+						delete img;
+						break; //do not attempt to save second image
+					}
+					delete img;
+				}
+			}
+		}
+	}
 }
 
 void ComicMainWindow::bookmarkSelected(int id)

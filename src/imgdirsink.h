@@ -201,6 +201,7 @@ namespace QComicBook
 
 			static bool knownImageExtension(const QString &path);
 			static QString getKnownImageExtension(const QString &path);
+			static QStringList getKnownImageExtensionsList();
 	};
 }
 
