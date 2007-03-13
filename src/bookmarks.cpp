@@ -12,16 +12,16 @@
 
 #include "bookmarks.h"
 #include "cbsettings.h"
-#include <qpopupmenu.h>
-#include <qfile.h>
-#include <qdir.h>
-#include <qtextstream.h>
+#include <QMenu>
+#include <QFile>
+#include <QDir>
+#include <QTextStream>
 
 using namespace QComicBook;
 
-Bookmarks::Bookmarks(QPopupMenu *menu): bmenu(menu), changed(false)
+Bookmarks::Bookmarks(QMenu *menu): bmenu(menu), changed(false)
 {
-	blist.setAutoDelete(true);
+	//blist.setAutoDelete(true); //FIXME
 	fname = ComicBookSettings::bookmarksDir() + "/bookmarks";
 }
 
@@ -34,7 +34,7 @@ bool Bookmarks::load()
 	if (fname.isEmpty())
 		return false;
 	QFile f(fname);
-	if (f.open(IO_ReadOnly))
+	if (f.open(QIODevice::ReadOnly))
 	{
 		QTextStream str(&f);
 		while (!str.atEnd())
@@ -58,10 +58,10 @@ bool Bookmarks::save()
 		return false;
 
 	QFile f(fname);
-	if (f.open(IO_WriteOnly))
+	if (f.open(QIODevice::WriteOnly))
 	{
 		QTextStream str(&f);
-		for (Bookmark *b = blist.first(); b; b = blist.next())
+		foreach (Bookmark *b, blist)
 			str << b->getName() << endl << b->getPage() << endl;
 		f.close();
 		return true;
@@ -71,8 +71,8 @@ bool Bookmarks::save()
 
 void Bookmarks::set(const QString &cbname, int page)
 {
-	int id;
-	for (Bookmark *b = blist.first(); b; b = blist.next())
+/*	int id;
+	foreach (Bookmark *b, blist)
 		if ((b->getName() == cbname))
 		{
 			if (b->getPage() == page) //same page, do nothing
@@ -94,12 +94,12 @@ void Bookmarks::set(const QString &cbname, int page)
 	b->setId(id);
 	bmap.insert(id, b);
 	changed = true;
-	return;
+	return;*/
 }
 
 bool Bookmarks::remove(const QString &cbname)
 {
-	for (Bookmark *b = blist.first(); b; b = blist.next())
+/*	for (Bookmark *b = blist.first(); b; b = blist.next())
 		if ((b->getName() == cbname))
 		{
 			bmenu->removeItem(b->getId());
@@ -107,19 +107,19 @@ bool Bookmarks::remove(const QString &cbname)
 			blist.remove();
 			return true;
 		}
-	return false;
+	return false;*/
 }
 
 bool Bookmarks::remove(int id)
 {
-	if (bmap.contains(id))
+/*	if (bmap.contains(id))
 	{
 		Bookmark *b = bmap[id];
 		bmenu->removeItem(id);
 		bmap.remove(id);
 		blist.remove(b);
 		changed = true;
-	}
+	}*/
 }
 
 bool Bookmarks::get(int id, Bookmark &b)
@@ -132,17 +132,17 @@ bool Bookmarks::get(int id, Bookmark &b)
 	return false;
 }
 
-QValueList<Bookmark> Bookmarks::get()
+QList<Bookmark> Bookmarks::get()
 {
-	QValueList<Bookmark> res;
-	for (Bookmark *b = blist.first(); b; b = blist.next())
+	QList<Bookmark> res;
+	foreach (Bookmark *b, blist)
 		res.push_back(*b);
 	return res;
 }
 
 bool Bookmarks::exists(const QString &cbname)
 {
-	for (Bookmark *b = blist.first(); b; b = blist.next())
+	foreach (Bookmark *b, blist)
 		if (b->getName() == cbname)
 			return true;
 	return false;

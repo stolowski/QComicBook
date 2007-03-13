@@ -15,27 +15,26 @@
 #ifndef __BOOKMARKS_H
 #define __BOOKMARKS_H
 
-#include <qstring.h>
-#include <qvaluelist.h>
-#include <qptrlist.h>
-#include <qmap.h>
+#include <QString>
+#include <QList>
+#include <QMap>
 #include "bookmark.h"
 
-class QPopupMenu;
+class QMenu;
 
 namespace QComicBook
 {
 	class Bookmarks
 	{
 		private:
-			QPtrList<Bookmark> blist; //!<pointers to bookmark objects
+			QList<Bookmark *> blist; //!<pointers to bookmark objects
 			QMap<int, Bookmark *> bmap; //!<for fast id->bookmark lookup
-			QPopupMenu *bmenu; //!<popup menu containing bookmarks
+			QMenu *bmenu; //!<popup menu containing bookmarks
 			bool changed; //!<flag indicator to decide if bookmarks should be saved
 			QString fname; //!<bookmarks file
 
 		public:
-			Bookmarks(QPopupMenu *menu);
+			Bookmarks(QMenu *menu);
 			~Bookmarks();
 			bool load();
 			bool save();
@@ -44,7 +43,7 @@ namespace QComicBook
 			bool remove(const QString &cbname);
 			bool remove(int id);
 			bool get(int id, Bookmark &b);
-			QValueList<Bookmark> get();
+			QList<Bookmark> get();
 			bool exists(const QString &cbname);
 	};
 }

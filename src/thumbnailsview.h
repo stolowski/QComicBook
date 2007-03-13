@@ -13,8 +13,8 @@
 #ifndef __THUMBNAILSVIEW_H
 #define __THUMBNAILSVIEW_H
 
-#include <qiconview.h>
-#include <qptrvector.h>
+#include <QListWidget>
+#include <QVector>
 #include <iconviewthumbnail.h>
 
 class QPixmap;
@@ -25,14 +25,14 @@ namespace QComicBook
 {
 	class Thumbnail;
 
-	class ThumbnailsView: public QIconView
+	class ThumbnailsView: public QListWidget
 	{
 		Q_OBJECT
 
 		private:
 			int numpages;
 			QPixmap *emptypage;
-			QPtrVector<IconViewThumbnail> icons;
+			QVector<IconViewThumbnail *> icons;
 			QPopupMenu *menu;
 			QIconViewItem *selected;
 

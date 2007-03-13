@@ -15,14 +15,14 @@
 #ifndef __IMGARCHIVESINK_H
 #define __IMGARCHIVESINK_H
 
-#include <qstring.h>
-#include <qobject.h>
-#include <qstringlist.h>
-#include <qvaluelist.h>
+#include <QString>
+#include <QObject>
+#include <QStringList>
+#include <QList>
+#include <QProcess>
 #include "imgdirsink.h"
 
 class QImage;
-class QProcess;
 
 namespace QComicBook
 {
@@ -66,13 +66,17 @@ namespace QComicBook
 			QStringList archdirs; ///< list of archive dirs
 			int filesnum; ///< number of files gathered from parsing archiver output, used for progress bar
 			int extcnt; ///< extracted files counter for progress bar
+			QString extprg;
+			QStringList extargs;
+			QString infprg;
+			QStringList infargs;
 
-			static QValueList<ArchiveTypeInfo> archinfo;
+			static QList<ArchiveTypeInfo> archinfo;
 			
 			static int suppopen;
 			static int suppsave;
-			static QString openext; ///< supported archives extensions (for open)
-			static QString saveext; ///< supported archives extensions (for save)
+			static QStringList openext; ///< supported archives extensions (for open)
+			static QStringList saveext; ///< supported archives extensions (for save)
 
 			static void autoconfRAR();
 			static void autoconfZIP();
@@ -90,7 +94,7 @@ namespace QComicBook
 			virtual void doCleanup();
 			
 		protected slots:
-			void extractExited();
+			void extractExited(int code, QProcess::ExitStatus exitStatus);
 			void extractStdoutReady();
 			void infoStdoutReady();
 			void infoExited();
@@ -112,11 +116,11 @@ namespace QComicBook
 
 			static void autoconfArchivers();
 			static int supportedArchives();
-			static QValueList<ImgArchiveSink::ArchiveTypeInfo> supportedArchivesInfo();
+			static QList<ImgArchiveSink::ArchiveTypeInfo> supportedArchivesInfo();
 			static bool supportsOpen(ArchiveType t);
 			static bool supportsSave(ArchiveType t);
-			static QString supportedOpenExtensions();
-			static QString supportedSaveExtensions();
+			static QStringList supportedOpenExtensions();
+			static QStringList supportedSaveExtensions();
 			static QString makeTempDir();
 	};
 }

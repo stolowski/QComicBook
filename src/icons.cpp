@@ -16,22 +16,22 @@
 using namespace QComicBook;
 
 QString Icons::iconpath = QString::null;
-QDict<QIconSet> Icons::set;
+QHash<QString, QIcon*> Icons::set;
 
 bool Icons::init(const QString& path)
 {
 	QDir dir(iconpath = path);
-	set.setAutoDelete(true); //icons in the set will be deleted on set deletion
+	//set.setAutoDelete(true); //icons in the set will be deleted on set deletion TODO
 	return dir.exists();
 }
 
-const QIconSet& Icons::get(const QString &name)
+const QIcon& Icons::get(const QString &name)
 {
-	QIconSet *icon = set.find(name);
+	QIcon *icon = *set.find(name);
 	if (icon)
 		return *icon;
 	QPixmap pixmap(iconpath + "/" + name);
-	set.insert(name, icon = new QIconSet(pixmap));
+	set.insert(name, icon = new QIcon(pixmap));
 	return *icon;
 }
 

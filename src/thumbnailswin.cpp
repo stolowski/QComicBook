@@ -18,7 +18,7 @@
 
 using namespace QComicBook;
 
-ThumbnailsWindow::ThumbnailsWindow(Place p, QWidget *parent): QDockWindow(p, parent)
+ThumbnailsWindow::ThumbnailsWindow(QWidget *parent): QDockWidget(parent)
 {
 	setCaption(tr("Thumbnails"));
 	setResizeEnabled(true);
@@ -27,14 +27,14 @@ ThumbnailsWindow::ThumbnailsWindow(Place p, QWidget *parent): QDockWindow(p, par
 	tview = new ThumbnailsView(this);
 	setWidget(tview);
 	connect(tview, SIGNAL(requestedPage(int, bool)), this, SIGNAL(requestedPage(int, bool)));
-	connect(this, SIGNAL(orientationChanged(Orientation)), this, SLOT(onOrientationChanged(Orientation)));
+	//connect(this, SIGNAL(orientationChanged(Orientation)), this, SLOT(onOrientationChanged(Orientation)));
 }
 
 ThumbnailsWindow::~ThumbnailsWindow()
 {
 }
 
-void ThumbnailsWindow::customEvent(QCustomEvent *e)
+void ThumbnailsWindow::customEvent(QEvent *e)
 {
 	if (e->type() == ThumbnailReady)
 	{
@@ -45,10 +45,10 @@ void ThumbnailsWindow::customEvent(QCustomEvent *e)
 		QDockWindow::customEvent(e);
 }
 
-void ThumbnailsWindow::onOrientationChanged(Orientation o)
+/*void ThumbnailsWindow::onOrientationChanged(Orientation o)
 {
 	tview->setArrangement(o == Qt::Horizontal ? QIconView::TopToBottom : QIconView::LeftToRight);
-}
+}*/
 
 ThumbnailsView* ThumbnailsWindow::view() const
 {

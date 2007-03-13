@@ -15,12 +15,12 @@
 #ifndef __IMGDIRSINK_H
 #define __IMGDIRSINK_H
 
-#include <qstring.h>
-#include <qobject.h>
-#include <qstringlist.h>
-#include <qdatetime.h>
-#include <qmap.h>
-#include <qmutex.h>
+#include <QString>
+#include <QObject>
+#include <QStringList>
+#include <QDateTime>
+#include <QMap>
+#include <QMutex>
 #include "thumbnailloader.h"
 #include "imlibloader.h"
 

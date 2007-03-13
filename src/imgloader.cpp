@@ -47,7 +47,7 @@ void ImgLoaderThread::request(int page)
 		return;
 	}
 	requests.append(page);
-	if (!running() && !stopped)
+	if (!isRunning() && !stopped)
 	{
 		mtx.unlock();
 		start(prio);
@@ -63,7 +63,7 @@ void ImgLoaderThread::request(int first, int n)
 	for (int i=first; i<last; i++)
 		if (requests.contains(i) == 0)
 			requests.append(i);
-	if (!running() && !stopped)
+	if (!isRunning() && !stopped)
 	{
 		mtx.unlock();
 		start(prio);

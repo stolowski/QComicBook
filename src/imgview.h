@@ -13,9 +13,9 @@
 #ifndef __IMGVIEW_H
 #define __IMGVIEW_H
 
-#include <qscrollview.h>
+#include <QWidget>
 
-class QPopupMenu;
+class QMenu;
 class QImage;
 class QPixmap;
 class QColor;
@@ -29,12 +29,12 @@ namespace QComicBook
 
 	class ImlibImage;
 
-	class ComicImageView: public QScrollView
+	class ComicImageView: public QWidget
 	{
 		Q_OBJECT
 
 		private:
-			QPopupMenu *context_menu;
+			QMenu *context_menu;
 			ImlibImage *orgimage[2];
 			Size isize;
 			//Scaling iscaling;
@@ -103,7 +103,7 @@ namespace QComicBook
 			~ComicImageView();
 			bool onBottom();
 			bool onTop();
-			QPopupMenu *contextMenu() const;
+			QMenu *contextMenu() const;
 			Size getSize() const;
 			int imageWidth() const;
 			int visiblePages() const;

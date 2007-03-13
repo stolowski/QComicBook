@@ -13,8 +13,8 @@
 #ifndef __CBINFO_H
 #define __CBINFO_H
 
-#include <qtabdialog.h>
-#include <qfont.h>
+#include <QDialog>
+#include <QFont>
 
 class QStringList;
 
@@ -22,7 +22,7 @@ namespace QComicBook
 {
 	class ImgDirSink;
 	
-	class ComicBookInfo: public QTabDialog
+	class ComicBookInfo: public QDialog
 	{
 		protected:
 			QFont font;

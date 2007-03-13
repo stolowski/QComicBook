@@ -1,6 +1,6 @@
 bin_PROGRAMS = qcomicbook
 
-BUILT_SOURCES = moc_archiverdialog.cpp \
+BUILT_SOURCES = \
 		moc_bookmarkmanager.cpp \
 		moc_cbconfigdialog.cpp \
 		moc_cbsettings.cpp \
@@ -11,19 +11,18 @@ BUILT_SOURCES = moc_archiverdialog.cpp \
 		moc_imgdirsink.cpp \
 		moc_imgview.cpp \
 		moc_jumptopagewin.cpp \
-		moc_pagesdirector.cpp \
 		moc_pagenumberedit.cpp \
 		moc_statusbar.cpp \
 		moc_suparchwin.cpp \
 		moc_thumbnailswin.cpp \
 		moc_thumbnailsview.cpp
 
-qcomicbook_SOURCES = aboutdialog.cpp archiverdialog.cpp bookmark.cpp bookmarkmanager.cpp\
+qcomicbook_SOURCES = aboutdialog.cpp bookmark.cpp bookmarkmanager.cpp\
 	bookmarks.cpp cbconfigdialog.cpp cbinfo.cpp cbsettings.cpp comicmain.cpp\
 	helpbrowser.cpp history.cpp icons.cpp iconviewthumbnail.cpp imgarchiver.cpp imgarchivesink.cpp \
 	imgdirsink.cpp imgloader.cpp imgsinkfactory.cpp imgtransform.cpp imgview.cpp\
-	imlibimage.cpp imlibloader.cpp jumptopagewin.cpp listviewthumbnail.cpp main.cpp miscutil.cpp pagenumberedit.cpp\
-	pagesdirector.cpp statusbar.cpp suparchwin.cpp thumbnail.cpp\
+	imlibloader.cpp jumptopagewin.cpp listviewthumbnail.cpp main.cpp miscutil.cpp pagenumberedit.cpp\
+	statusbar.cpp suparchwin.cpp thumbnail.cpp\
 	thumbnailevent.cpp thumbnailitem.cpp thumbnailloader.cpp\
 	thumbnailsview.cpp thumbnailswin.cpp
 
@@ -32,7 +31,6 @@ qcomicbook_SOURCES = aboutdialog.cpp archiverdialog.cpp bookmark.cpp bookmarkman
 nodist_qcomicbook_SOURCES = $(BUILT_SOURCES)
 
 noinst_HEADERS = aboutdialog.h \
-		 archiverdialog.h \
 		 bookmark.h \
 		 bookmarkmanager.h \
 		 bookmarks.h \
@@ -54,12 +52,10 @@ noinst_HEADERS = aboutdialog.h \
 		 imlibloader.h \
 		 imgloader.h \
 		 imgtransform.h \
-		 imlibimage.h \
 		 jumptopagewin.h \
 		 listviewthumbnail.h \
 		 miscutil.h \
 		 pagenumberedit.h \
-		 pagesdirector.h \
 		 statusbar.h \
 		 suparchwin.h \
 		 thumbnail.h \
@@ -71,11 +67,11 @@ noinst_HEADERS = aboutdialog.h \
 		 
 MOSTLYCLEANFILES =+ $(BUILT_SOURCES)
 
-qcomicbook_LDFLAGS = $(QT_LIBS) $(Imlib2_LIBS)
-qcomicbook_CPPFLAGS = -DDATADIR=\"$(datadir)/qcomicbook/\" -DQT_THREAD_SUPPORT $(QT_CXXFLAGS) $(Imlib2_CFLAGS)
+qcomicbook_LDFLAGS = $(QtGui_LIBS)
+qcomicbook_CPPFLAGS = -DDATADIR=\"$(datadir)/qcomicbook/\" -DQT_THREAD_SUPPORT $(QtGui_CFLAGS)
 qcomicbook_CXXFLAGS = $(qcomicbook_CPPFLAGS)
 
 moc_%.cpp: %.h
-	$(QT_MOC) $< -o $@
+	moc-qt4 $< -o $@
 
 

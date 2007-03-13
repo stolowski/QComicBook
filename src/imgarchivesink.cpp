@@ -14,11 +14,13 @@
 #include "miscutil.h"
 #include <qimage.h>
 #include <qstringlist.h>
-#include <qprocess.h>
+#include <QProcess>
+#include <QTextStream>
 #include <qfileinfo.h>
 #include <qfile.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <qapplication.h>
+#include <QDir>
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
@@ -29,12 +31,12 @@
 using namespace QComicBook;
 using Utility::which;
 
-QString ImgArchiveSink::openext;
-QString ImgArchiveSink::saveext;
+QStringList ImgArchiveSink::openext;
+QStringList ImgArchiveSink::saveext;
 int ImgArchiveSink::suppopen;
 int ImgArchiveSink::suppsave;
 
-QValueList<ImgArchiveSink::ArchiveTypeInfo> ImgArchiveSink::archinfo;
+QList<ImgArchiveSink::ArchiveTypeInfo> ImgArchiveSink::archinfo;
 
 ImgArchiveSink::ImgArchiveSink(): ImgDirSink()
 {
@@ -62,9 +64,9 @@ void ImgArchiveSink::init()
 	pinf = new QProcess(this);
 	pext = new QProcess(this);
 	connect(pinf, SIGNAL(readyReadStdout()), this, SLOT(infoStdoutReady()));
-	connect(pinf, SIGNAL(processExited()), this, SLOT(infoExited()));
+	connect(pinf, SIGNAL(processExited(int, QProcess::ExitStatus)), this, SLOT(infoExited(int, QProcess::ExitStatus)));
 	connect(pext, SIGNAL(readyReadStdout()), this, SLOT(extractStdoutReady()));
-	connect(pext, SIGNAL(processExited()), this, SLOT(extractExited()));
+	connect(pext, SIGNAL(processExited(int, QProcess::ExitStatus)), this, SLOT(extractExited(int, QProcess::ExitStatus)));
 }
 
 void ImgArchiveSink::doCleanup()
@@ -96,17 +98,17 @@ ImgArchiveSink::ArchiveType ImgArchiveSink::archiveType(const QString &filename)
 	};
 
 	QFile file(filename);
-	if (file.open(IO_ReadOnly))
+	if (file.open(QIODevice::ReadOnly))
 	{
 		for (int i=0; i<3; i++)
 		{
 			int j;
-			if (!file.at(magic[i].offset))
+			if (!file.seek(magic[i].offset))
 				continue;
 			for (j=0; j<magic[i].len; j++)
 			{
-				int c;
-				if ((c = file.getch()) < 0)
+				char c;
+				if (!file.getChar(&c))
 					break;
 				if (c != magic[i].ptrn[j])
 					break;
@@ -122,12 +124,12 @@ ImgArchiveSink::ArchiveType ImgArchiveSink::archiveType(const QString &filename)
 
 	//
 	// try to match filename extension
-	for (QValueList<ArchiveTypeInfo>::const_iterator it = archinfo.begin(); it!=archinfo.end(); it++)
+	for (QList<ArchiveTypeInfo>::const_iterator it = archinfo.begin(); it!=archinfo.end(); it++)
 	{
 		const ArchiveTypeInfo &inf = *it;
 		for (QStringList::const_iterator sit = inf.extensions.begin(); sit!=inf.extensions.end(); sit++)
 		{
-			if (filename.endsWith(*sit, false))
+			if (filename.endsWith(*sit, Qt::CaseInsensitive))
 				return inf.type;
 		}
 	}
@@ -147,25 +149,26 @@ int ImgArchiveSink::extract(const QString &filename, const QString &destdir)
 
 	//
 	// match archive type, set subprocess extract and list options
-	for (QValueList<ArchiveTypeInfo>::const_iterator it = archinfo.begin(); it!=archinfo.end(); it++)
+	for (QList<ArchiveTypeInfo>::const_iterator it = archinfo.begin(); it!=archinfo.end(); it++)
 	{
 		const ArchiveTypeInfo &inf = *it;
 		if (archivetype == inf.type)
 		{
-			pext->setArguments(inf.extractopts);
-			pinf->setArguments(inf.listopts);
+			extargs = inf.extractopts;
+			extprg = extargs.takeFirst();
+			infargs = inf.listopts;
+			infprg = infargs.takeFirst();
 			break;
 		}
 	}
 	
-	pext->addArgument(filename);
-	pinf->addArgument(filename);
+	extargs << filename;
+	infargs << filename;
 	pext->setWorkingDirectory(destdir);
 
 	//
 	// extract archive file list first
-	if (!pinf->start())
-		return SINKERR_OTHER;
+	pinf->start(infprg, infargs);
 	return 0;
 }
 
@@ -225,11 +228,10 @@ QString ImgArchiveSink::getFullName() const
 void ImgArchiveSink::infoExited()
 {
 	extcnt = 0;
-	if (!pext->start())
-		emit sinkError(SINKERR_OTHER);
+	pext->start(extprg, extargs);
 }
 
-void ImgArchiveSink::extractExited()
+void ImgArchiveSink::extractExited(int code, QProcess::ExitStatus exitStatus)
 {
 	//
 	// open temporary directory using ImgDirSink::open()
@@ -241,7 +243,7 @@ void ImgArchiveSink::extractExited()
 	archdirs = ImgDirSink::getAlldirs();
 	setComicBookName(archivename);
 
-	if (!pext->normalExit())
+	if (exitStatus != QProcess::NormalExit)
 	{
 		emit sinkError(SINKERR_ARCHEXIT);
 		close();
@@ -261,7 +263,7 @@ void ImgArchiveSink::extractExited()
 		{
 			QFileInfo finfo(*it);
 			if (!finfo.isReadable())
-				chmod(*it, S_IRUSR|S_IWUSR);
+				chmod((*it).toLocal8Bit(), S_IRUSR|S_IWUSR);
 		}
 		emit sinkReady(archivepath);
 	}
@@ -269,7 +271,7 @@ void ImgArchiveSink::extractExited()
 
 void ImgArchiveSink::infoStdoutReady()
 {
-	QByteArray b = pinf->readStdout();
+	QByteArray b = pinf->readAllStandardOutput();
 	for (int i=0; i<b.size(); i++)
 		if (b[i] == '\n')
 			++filesnum;
@@ -277,7 +279,7 @@ void ImgArchiveSink::infoStdoutReady()
 
 void ImgArchiveSink::extractStdoutReady()
 {
-	QByteArray b = pext->readStdout();
+	QByteArray b = pext->readAllStandardOutput();
 	for (int i=0; i<b.size(); i++)
 		if (b[i] == '\n' && extcnt < filesnum)
 			++extcnt;
@@ -315,9 +317,9 @@ void ImgArchiveSink::autoconfRAR()
 		if ((f = popen("unrar", "r")) != NULL)
 		{
 			QRegExp regexp("^UNRAR.+freeware");
-			for (QTextIStream s(f); !s.atEnd(); )
+			for (QTextStream s(f); !s.atEnd(); )
 			{
-				if (regexp.search(s.readLine()) >= 0)
+				if (regexp.indexIn(s.readLine()) >= 0)
 				{
 					nonfree_unrar = true;
 					break;
@@ -444,9 +446,10 @@ void ImgArchiveSink::autoconfArchivers()
 	autoconfTARGZ();
 	autoconfTARBZ2();
 	
-	openext = saveext = QString::null;	
+	openext.clear();
+	saveext.clear();
 
-	for (QValueList<ArchiveTypeInfo>::const_iterator it = archinfo.begin(); it!=archinfo.end(); it++)
+	for (QList<ArchiveTypeInfo>::const_iterator it = archinfo.begin(); it!=archinfo.end(); it++)
 	{
 		const ArchiveTypeInfo &inf = *it;
 		if (inf.reading)
@@ -456,17 +459,9 @@ void ImgArchiveSink::autoconfArchivers()
 		for (QStringList::const_iterator sit = inf.extensions.begin(); sit!=inf.extensions.end(); sit++)
 		{
 			if (inf.reading)
-			{
-				if (openext != QString::null)
-					openext += " ";
-				openext += "*" + *sit;
-			}
+				openext.append("*" + *sit);
 			if (inf.writing)
-			{
-				if (saveext != QString::null)
-					saveext += " ";
-				saveext += "*" + *sit;
-			}
+				saveext.append("*" + *sit);
 		}
 	}
 }
@@ -479,12 +474,12 @@ QString ImgArchiveSink::makeTempDir()
 	return QString(tmpd);
 }
 
-QString ImgArchiveSink::supportedOpenExtensions()
+QStringList ImgArchiveSink::supportedOpenExtensions()
 {
 	return openext;
 }
 
-QString ImgArchiveSink::supportedSaveExtensions()
+QStringList ImgArchiveSink::supportedSaveExtensions()
 {
 	return saveext;
 }
@@ -494,7 +489,7 @@ int ImgArchiveSink::supportedArchives()
 	return suppopen;
 }
 
-QValueList<ImgArchiveSink::ArchiveTypeInfo> ImgArchiveSink::supportedArchivesInfo()
+QList<ImgArchiveSink::ArchiveTypeInfo> ImgArchiveSink::supportedArchivesInfo()
 {
 	return archinfo;
 }
@@ -517,23 +512,22 @@ bool ImgArchiveSink::supportsNext() const
 QString ImgArchiveSink::getNext() const
 {
 	QFileInfo finfo(getFullName());
-	QDir dir(finfo.dirPath(true)); //get the full path of current cb
+	QDir dir(finfo.absolutePath()); //get the full path of current cb
 	QStringList files = dir.entryList(ImgArchiveSink::supportedOpenExtensions(), QDir::Files|QDir::Readable, QDir::Name);
-	QStringList::iterator it = files.find(finfo.fileName()); //find current cb
-	if (it != files.end())
-		if (++it != files.end()) //get next file name
-			return dir.filePath(*it, true);
+	int i = files.indexOf(finfo.fileName()); //find current cb
+	if ((i > 0) && (i < files.size()-1))
+		return dir.absoluteFilePath(files.at(i+1));  //get next file name
 	return QString::null;
 }
 
 QString ImgArchiveSink::getPrevious() const
 {
 	QFileInfo finfo(getFullName());
-	QDir dir(finfo.dirPath(true)); //get the full path of current cb
+	QDir dir(finfo.absolutePath()); //get the full path of current cb
 	QStringList files = dir.entryList(ImgArchiveSink::supportedOpenExtensions(), QDir::Files|QDir::Readable, QDir::Name);
-	QStringList::iterator it = files.find(finfo.fileName()); //find current cb
-	if (--it != files.begin())
-		return dir.filePath(*it, true);
+	int i = files.indexOf(finfo.fileName()); //find current cb
+	if (i > 0)
+		return dir.absoluteFilePath(files.at(i-1));
 	return QString::null;
 }
 

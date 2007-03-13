@@ -33,29 +33,29 @@
 #include "archiverdialog.h"
 #include "suparchwin.h"
 #include "imlibimage.h"
-#include <qimage.h>
-#include <qmenubar.h>
-#include <qpopupmenu.h>
-#include <qstringlist.h>
-#include <qaction.h>
-#include <qfiledialog.h>
-#include <qfileinfo.h>
-#include <qtoolbar.h>
-#include <qmessagebox.h>
-#include <qlabel.h>
-#include <qframe.h>
-#include <jumptopagewin.h>
-#include <qprocess.h>
-#include <qdragobject.h>
+#include "jumptopagewin.h"
+#include <QImage>
+#include <QMenuBar>
+#include <QMenu>
+#include <QStringList>
+#include <QAction>
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QToolBar>
+#include <QMessageBox>
+#include <QLabel>
+#include <QFrame>
+#include <QProcess>
+#include <QKeyEvent>
 #include <typeinfo>
 
 using namespace QComicBook;
 using namespace Utility;
 
-ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent, NULL, WType_TopLevel|WDestructiveClose), sink(NULL), currpage(0), edit_menu(NULL)
+ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent/*, Qt::Window|Qt::WA_DeleteOnClose*/), sink(NULL), currpage(0), edit_menu(NULL)
 {
         updateCaption();
-        setIcon(Icons::get(ICON_APPICON).pixmap(QIconSet::Small, true));
+        setWindowIcon(Icons::get(ICON_APPICON));
         setMinimumSize(320, 200);
 
 	setAcceptDrops(true); //???
@@ -106,60 +106,92 @@ ComicMainWindow::~ComicMainWindow()
 
 void ComicMainWindow::setupActions()
 {
-        openArchiveAction = new QAction(Icons::get(ICON_OPENARCH), tr("Open archive"), CTRL+Key_O, this);
-        openDirAction = new QAction(Icons::get(ICON_OPENDIR), tr("Open directory"), CTRL+Key_D, this);
-        openNextAction = new QAction(tr("Open next"), CTRL+Key_N, this);
-        openPrevAction = new QAction(tr("Open previous"), CTRL+Key_P, this);
-	savePageAction = new QAction(tr("Save page as"), 0, this);
-        fullScreenAction = new QAction(tr("&Fullscreen"), Key_F11, this);
-        nextPageAction = new QAction(Icons::get(ICON_NEXTPAGE), tr("Next page"), Key_PageDown, this);
-        forwardPageAction = new QAction(Icons::get(ICON_FORWARD), tr("5 pages forward"), QKeySequence(), this);
-        backwardPageAction = new QAction(Icons::get (ICON_BACKWARD), tr("5 pages backward"), QKeySequence(), this);
-        jumpDownAction = new QAction(QString::null, Key_Space, this);
-        jumpUpAction = new QAction(QString::null, Key_Backspace, this);
-        prevPageAction = new QAction(Icons::get(ICON_PREVPAGE), tr("&Previous page"), Key_PageUp, this);
-        pageTopAction = new QAction(Icons::get(ICON_PAGETOP), tr("Page top"), Key_Home, this);
-        pageBottomAction = new QAction(Icons::get(ICON_PAGEBOTTOM), tr("Page bottom"), Key_End, this);
-        firstPageAction = new QAction(tr("First page"), CTRL+Key_Home, this);
-        lastPageAction = new QAction(tr("Last page"), CTRL+Key_End, this);
-        scrollRightAction = new QAction(tr("Scroll right"), Key_Right, this);        
-        scrollLeftAction = new QAction(tr("Scroll left"), Key_Left, this);
-        scrollRightFastAction = new QAction(tr("Fast scroll right"), SHIFT+Key_Right, this);
-        scrollLeftFastAction = new QAction(tr("Fast scroll left"), SHIFT+Key_Left, this);
-        scrollUpAction = new QAction(tr("Scroll up"), Key_Up, this);
-        scrollDownAction = new QAction(tr("Scroll down"), Key_Down, this);
-        scrollUpFastAction = new QAction(tr("Fast scroll up"), SHIFT+Key_Up, this);
-        scrollDownFastAction = new QAction(tr("Fast scroll down"), SHIFT+Key_Down, this);
-	quitAction = new QAction(tr("Quit"), CTRL+Key_Q, this);
+        openArchiveAction = new QAction(Icons::get(ICON_OPENARCH), tr("Open archive"), this);
+        openArchiveAction->setShortcut(tr("Ctrl+O"));
+        openDirAction = new QAction(Icons::get(ICON_OPENDIR), tr("Open directory"), this);
+        openDirAction->setShortcut(tr("Ctrl+D"));
+        openNextAction = new QAction(tr("Open next"), this);
+        openNextAction->setShortcut(tr("Ctrl+N"));
+        openPrevAction = new QAction(tr("Open previous"), this);
+        openPrevAction->setShortcut(tr("Ctrl+P"));
+	savePageAction = new QAction(tr("Save page as"), this);
+        fullScreenAction = new QAction(tr("&Fullscreen"), this);
+        fullScreenAction->setShortcut(tr("F11"));
+        nextPageAction = new QAction(Icons::get(ICON_NEXTPAGE), tr("Next page"), this);
+        nextPageAction->setShortcut(tr("PgDown"));
+        forwardPageAction = new QAction(Icons::get(ICON_FORWARD), tr("5 pages forward"), this);
+        backwardPageAction = new QAction(Icons::get (ICON_BACKWARD), tr("5 pages backward"), this);
+        jumpDownAction = new QAction(QString::null, this);
+        jumpDownAction->setShortcut(tr("Space"));
+        jumpUpAction = new QAction(QString::null, this);
+        jumpUpAction->setShortcut(tr("Backspace"));
+        prevPageAction = new QAction(Icons::get(ICON_PREVPAGE), tr("&Previous page"), this);
+        prevPageAction->setShortcut(tr("PgUp"));
+        pageTopAction = new QAction(Icons::get(ICON_PAGETOP), tr("Page top"), this);
+        pageTopAction->setShortcut(tr("Home"));
+        pageBottomAction = new QAction(Icons::get(ICON_PAGEBOTTOM), tr("Page bottom"), this);
+        pageBottomAction->setShortcut(tr("End"));
+        firstPageAction = new QAction(tr("First page"), this);
+        firstPageAction->setShortcut(tr("Ctrl+Home"));
+        lastPageAction = new QAction(tr("Last page"), this);
+        lastPageAction->setShortcut(tr("Ctrl+End"));
+        scrollRightAction = new QAction(tr("Scroll right"), this);        
+        scrollRightAction->setShortcut(tr("Right"));
+        scrollLeftAction = new QAction(tr("Scroll left"), this);
+        scrollLeftAction->setShortcut(tr("Left"));
+        scrollRightFastAction = new QAction(tr("Fast scroll right"), this);
+        scrollRightFastAction->setShortcut(tr("Shift+Right"));
+        scrollLeftFastAction = new QAction(tr("Fast scroll left"), this);
+        scrollLeftFastAction->setShortcut(tr("Shift+Left"));
+        scrollUpAction = new QAction(tr("Scroll up"), this);
+        scrollUpAction->setShortcut(tr("Up"));
+        scrollDownAction = new QAction(tr("Scroll down"), this);
+        scrollDownAction->setShortcut(tr("Down"));
+        scrollUpFastAction = new QAction(tr("Fast scroll up"), this);
+        scrollUpFastAction->setShortcut(tr("Shift+Up"));
+        scrollDownFastAction = new QAction(tr("Fast scroll down"), this);
+        scrollDownFastAction->setShortcut(tr("Shift+Down"));
+	quitAction = new QAction(tr("Quit"), this);
+	quitAction->setShortcut(tr("Ctrl+Q"));
 
         QActionGroup *scaleActions = new QActionGroup(this);
-        fitWidthAction = new QAction(Icons::get(ICON_FITWIDTH), tr("Fit width"), ALT+Key_W, scaleActions);                         
-        fitWidthAction->setToggleAction(true);
-        fitHeightAction = new QAction(Icons::get(ICON_FITHEIGHT), tr("Fit height"), ALT+Key_H, scaleActions);
-        fitHeightAction->setToggleAction(true);
-        wholePageAction = new QAction(Icons::get(ICON_WHOLEPAGE), tr("Whole page"), ALT+Key_A, scaleActions);
-        wholePageAction->setToggleAction(true);
-        originalSizeAction = new QAction(Icons::get(ICON_ORGSIZE), tr("Original size"), ALT+Key_O, scaleActions);
-        originalSizeAction->setToggleAction(true);
-        bestFitAction = new QAction(Icons::get(ICON_BESTFIT), tr("Best fit"), ALT+Key_B, scaleActions);
-        bestFitAction->setToggleAction(true);
-        mangaModeAction = new QAction(Icons::get(ICON_JAPANESE), tr("Japanese mode"), CTRL+Key_J, this);
-        mangaModeAction->setToggleAction(true);
-        twoPagesAction = new QAction(Icons::get(ICON_TWOPAGES), tr("Two pages"), CTRL+Key_T, this);
-        twoPagesAction->setToggleAction(true);
-        rotateRightAction = new QAction(Icons::get(ICON_ROTRIGHT), tr("Rotate right"), QKeySequence(), this);
-        rotateLeftAction = new QAction(Icons::get(ICON_ROTLEFT), tr("Rotate left"), QKeySequence(), this);
-        rotateResetAction = new QAction(tr("No rotation"), QKeySequence(), this);
-        togglePreserveRotationAction = new QAction(tr("Preserve rotation"), QKeySequence(), this);
-        togglePreserveRotationAction->setToggleAction(true);
-        showInfoAction = new QAction(Icons::get(ICON_INFO), tr("Info"), ALT+Key_I, this);
-        exitFullScreenAction = new QAction(QString::null, Key_Escape, this);
-        toggleStatusbarAction = new QAction(tr("Statusbar"), QKeySequence(), this);
-        toggleStatusbarAction->setToggleAction(true);
-        toggleThumbnailsAction = new QAction(Icons::get(ICON_THUMBNAILS), tr("Thumbnails"), ALT+Key_T, this);
-        toggleThumbnailsAction->setToggleAction(true);
-        toggleToolbarAction = new QAction(tr("Toolbar"), QKeySequence(), this);
-        toggleToolbarAction->setToggleAction(true);
+        fitWidthAction = new QAction(Icons::get(ICON_FITWIDTH), tr("Fit width"), scaleActions);                         
+        fitWidthAction->setShortcut(tr("Alt+w"));
+        fitWidthAction->setCheckable(true);
+        fitHeightAction = new QAction(Icons::get(ICON_FITHEIGHT), tr("Fit height"), scaleActions);
+        fitHeightAction->setShortcut(tr("Alt+h"));
+        fitHeightAction->setCheckable(true);
+        wholePageAction = new QAction(Icons::get(ICON_WHOLEPAGE), tr("Whole page"), scaleActions);
+        wholePageAction->setShortcut(tr("Alt+a"));
+        wholePageAction->setCheckable(true);
+        originalSizeAction = new QAction(Icons::get(ICON_ORGSIZE), tr("Original size"), scaleActions);
+        originalSizeAction->setShortcut(tr("Alt+o"));
+        originalSizeAction->setCheckable(true);
+        bestFitAction = new QAction(Icons::get(ICON_BESTFIT), tr("Best fit"), scaleActions);
+        bestFitAction->setShortcut(tr("Alt+b"));
+        bestFitAction->setCheckable(true);
+        mangaModeAction = new QAction(Icons::get(ICON_JAPANESE), tr("Japanese mode"), this);
+        mangaModeAction->setShortcut(tr("Ctrl+j"));
+        mangaModeAction->setCheckable(true);
+        twoPagesAction = new QAction(Icons::get(ICON_TWOPAGES), tr("Two pages"), this);
+        twoPagesAction->setShortcut(tr("Ctrl+t"));
+        twoPagesAction->setCheckable(true);
+        rotateRightAction = new QAction(Icons::get(ICON_ROTRIGHT), tr("Rotate right"), this);
+        rotateLeftAction = new QAction(Icons::get(ICON_ROTLEFT), tr("Rotate left"), this);
+        rotateResetAction = new QAction(tr("No rotation"), this);
+        togglePreserveRotationAction = new QAction(tr("Preserve rotation"), this);
+        togglePreserveRotationAction->setCheckable(true);
+        showInfoAction = new QAction(Icons::get(ICON_INFO), tr("Info"), this);
+        showInfoAction->setShortcut(tr("Alt+i"));
+        exitFullScreenAction = new QAction(QString::null, this);
+        exitFullScreenAction->setShortcut(tr("Escape")); //????
+        toggleStatusbarAction = new QAction(tr("Statusbar"), this);
+        toggleStatusbarAction->setCheckable(true);
+        toggleThumbnailsAction = new QAction(Icons::get(ICON_THUMBNAILS), tr("Thumbnails"), this);
+        toggleThumbnailsAction->setShortcut(tr("Alt+t"));
+        toggleThumbnailsAction->setCheckable(true);
+        toggleToolbarAction = new QAction(tr("Toolbar"), this);
+        toggleToolbarAction->setCheckable(true);
 
         connect(openArchiveAction, SIGNAL(activated()), this, SLOT(browseArchive()));
         connect(openDirAction, SIGNAL(activated()), this, SLOT(browseDirectory()));
@@ -224,13 +256,13 @@ void ComicMainWindow::setupComicImageView()
                 case WholePage: which = wholePageAction; break;
                 case Original:  which = originalSizeAction; break;
         }
-        which->setOn(true);
+        which->setChecked(true);
 }
 
 void ComicMainWindow::setupThumbnailsWindow()
 {
-        thumbswin = new ThumbnailsWindow(QDockWindow::InDock, this);
-        moveDockWindow(thumbswin, Qt::DockLeft); //initial position of thumbnails window
+        thumbswin = new ThumbnailsWindow(this);
+        //moveDockWindow(thumbswin, Qt::DockLeft); //initial position of thumbnails window TODO
         connect(thumbswin, SIGNAL(requestedPage(int, bool)), this, SLOT(jumpToPage(int, bool)));
         connect(thumbswin, SIGNAL(visibilityChanged(bool)), this, SLOT(thumbnailsVisibilityChanged(bool)));
         connect(thumbswin, SIGNAL(visibilityChanged(bool)), toggleThumbnailsAction, SLOT(setOn(bool)));
@@ -240,183 +272,176 @@ void ComicMainWindow::setupThumbnailsWindow()
 void ComicMainWindow::setupToolbar()
 {
         toolbar = new QToolBar(tr("Toolbar"), this);
-	openArchiveAction->addTo(toolbar);
-	openDirAction->addTo(toolbar);
+        toolbar->addAction(openArchiveAction);
+	toolbar->addAction(openDirAction);
         toolbar->addSeparator();
-        showInfoAction->addTo(toolbar);
-        toggleThumbnailsAction->addTo(toolbar);
+        toolbar->addAction(showInfoAction);
+        toolbar->addAction(toggleThumbnailsAction);
         toolbar->addSeparator();
-        twoPagesAction->addTo(toolbar);
-        mangaModeAction->addTo(toolbar);
+        toolbar->addAction(twoPagesAction);
+        toolbar->addAction(mangaModeAction);
         toolbar->addSeparator();
-        prevPageAction->addTo(toolbar);
-        nextPageAction->addTo(toolbar);
-        backwardPageAction->addTo(toolbar);
-        forwardPageAction->addTo(toolbar);
-        pageTopAction->addTo(toolbar);
-        pageBottomAction->addTo(toolbar);
+        toolbar->addAction(prevPageAction);
+        toolbar->addAction(nextPageAction);
+        toolbar->addAction(backwardPageAction);
+        toolbar->addAction(forwardPageAction);
+        toolbar->addAction(pageTopAction);
+        toolbar->addAction(pageBottomAction);
         toolbar->addSeparator();
-        originalSizeAction->addTo(toolbar);
-        fitWidthAction->addTo(toolbar);
-        fitHeightAction->addTo(toolbar);
-        wholePageAction->addTo(toolbar);
-        bestFitAction->addTo(toolbar);
+        toolbar->addAction(originalSizeAction);
+        toolbar->addAction(fitWidthAction);
+        toolbar->addAction(fitHeightAction);
+        toolbar->addAction(wholePageAction);
+        toolbar->addAction(bestFitAction);
         toolbar->addSeparator();
-        rotateRightAction->addTo(toolbar);
-        rotateLeftAction->addTo(toolbar);
+        toolbar->addAction(rotateRightAction);
+        toolbar->addAction(rotateLeftAction);
         connect(toggleToolbarAction, SIGNAL(toggled(bool)), toolbar, SLOT(setShown(bool)));
         connect(toolbar, SIGNAL(visibilityChanged(bool)), this, SLOT(toolbarVisibilityChanged(bool)));
 }
 
 void ComicMainWindow::setupFileMenu()
 {
-        file_menu = new QPopupMenu(this);
-        openArchiveAction->addTo(file_menu);
-        openDirAction->addTo(file_menu);
-        openNextAction->addTo(file_menu);
-        openPrevAction->addTo(file_menu);
-        recent_menu = new QPopupMenu(this);
-        file_menu->insertItem(tr("Recently opened"), recent_menu);
+        file_menu = menuBar()->addMenu(tr("&File"));
+        file_menu->addAction(openArchiveAction);
+        file_menu->addAction(openDirAction);
+        file_menu->addAction(openNextAction);
+        file_menu->addAction(openPrevAction);
+        recent_menu = file_menu->addMenu(tr("Recently opened"));
         connect(recent_menu, SIGNAL(activated(int)), this, SLOT(recentSelected(int)));
-        file_menu->insertSeparator();
-	savePageAction->addTo(file_menu);
-        file_menu->insertSeparator();
+        file_menu->addSeparator();
+	file_menu->addAction(savePageAction);
+        file_menu->addSeparator();
 	//create_id = file_menu->insertItem(tr("Create archive"), this, SLOT(createArchive()));
         //file_menu->insertSeparator();
-        showInfoAction->addTo(file_menu);
-        file_menu->insertSeparator();
-        close_id = file_menu->insertItem(tr("Close"), this, SLOT(closeSink()));
-        file_menu->insertSeparator();
-	quitAction->addTo(file_menu);
-        menuBar()->insertItem(tr("&File"), file_menu);   
+       	file_menu->addAction(showInfoAction);
+        file_menu->addSeparator();
+        closeAction = file_menu->addAction(tr("Close"), this, SLOT(closeSink()));
+        file_menu->addSeparator();
+	file_menu->addAction(quitAction);
 }
 
 void ComicMainWindow::setupEditMenu()
 {
-        edit_menu = new QPopupMenu(this);
-        gimp_id = edit_menu->insertItem(tr("Open with Gimp"), this, SLOT(openWithGimp()));
+        edit_menu = menuBar()->addMenu(tr("&Edit"));
+        gimpAction = edit_menu->addAction(tr("Open with Gimp"), this, SLOT(openWithGimp()));
         //edit_menu->insertItem(tr("Open with Kolour Paint"), this, SLOT(openWithGimp()));
         //edit_menu->insertItem(tr("Open with ImageMagick"), this, SLOT(openWithGimp()));
-	edit_menu->insertSeparator();
-	reload_id = edit_menu->insertItem(tr("Reload page"), this, SLOT(reloadPage()));
-        menuBar()->insertItem(tr("&Edit"), edit_menu);
+	edit_menu->addSeparator();
+	reloadAction = edit_menu->addAction(tr("Reload page"), this, SLOT(reloadPage()));
 }
 
 void ComicMainWindow::setupViewMenu()
 {
-        view_menu = new QPopupMenu(this);
-        view_menu->setCheckable(true);
-        originalSizeAction->addTo(view_menu);
-        fitWidthAction->addTo(view_menu);
-        fitHeightAction->addTo(view_menu);
-        wholePageAction->addTo(view_menu);
-        bestFitAction->addTo(view_menu);
-        view_menu->insertSeparator();
-        rotateRightAction->addTo(view_menu);
-        rotateLeftAction->addTo(view_menu);
-        rotateResetAction->addTo(view_menu);
-        togglePreserveRotationAction->addTo(view_menu);
-        view_menu->insertSeparator();
-        twoPagesAction->addTo(view_menu);
-        mangaModeAction->addTo(view_menu);
-        toggleThumbnailsAction->addTo(view_menu);
-        menuBar()->insertItem(tr("&View"), view_menu);     
+        view_menu = menuBar()->addMenu(tr("&View"));
+        //view_menu->setCheckable(true); ??? TODO
+        view_menu->addAction(originalSizeAction);
+        view_menu->addAction(fitWidthAction);
+        view_menu->addAction(fitHeightAction);
+        view_menu->addAction(wholePageAction);
+        view_menu->addAction(bestFitAction);
+        view_menu->addSeparator();
+        view_menu->addAction(rotateRightAction);
+        view_menu->addAction(rotateLeftAction);
+        view_menu->addAction(rotateResetAction);
+        view_menu->addAction(togglePreserveRotationAction);
+        view_menu->addSeparator();
+        view_menu->addAction(twoPagesAction);
+        view_menu->addAction(mangaModeAction);
+        view_menu->addAction(toggleThumbnailsAction);
 }
 
 void ComicMainWindow::setupNavigationMenu()
 {
-        navi_menu = new QPopupMenu(this);
-        nextPageAction->addTo(navi_menu);
-        prevPageAction->addTo(navi_menu);
-        navi_menu->insertSeparator();
-        forwardPageAction->addTo(navi_menu);
-        backwardPageAction->addTo(navi_menu);
-        navi_menu->insertSeparator();
-        jumpto_id = navi_menu->insertItem(tr("Jump to page..."), this, SLOT(showJumpToPage()));
-	firstPageAction->addTo(navi_menu);
-	lastPageAction->addTo(navi_menu);
-        navi_menu->insertSeparator();
-        pageTopAction->addTo(navi_menu);
-        pageBottomAction->addTo(navi_menu);
-        navi_menu->insertSeparator();
-        contscr_id = navi_menu->insertItem(tr("Continuous scrolling"), this, SLOT(toggleContinousScroll()));
-        twoPagesAction->setOn(cfg->twoPagesMode());
-        mangaModeAction->setOn(cfg->japaneseMode());
-        navi_menu->setItemChecked(contscr_id, cfg->continuousScrolling());
-        menuBar()->insertItem(tr("&Navigation"), navi_menu);
+        navi_menu = menuBar()->addMenu(tr("&Navigation"));
+        navi_menu->addAction(nextPageAction);
+        navi_menu->addAction(prevPageAction);
+        navi_menu->addSeparator();
+        navi_menu->addAction(forwardPageAction);
+        navi_menu->addAction(backwardPageAction);
+        navi_menu->addSeparator();
+        jumpToAction = navi_menu->addAction(tr("Jump to page..."), this, SLOT(showJumpToPage()));
+	navi_menu->addAction(firstPageAction);
+	navi_menu->addAction(lastPageAction);
+        navi_menu->addSeparator();
+        navi_menu->addAction(pageTopAction);
+        navi_menu->addAction(pageBottomAction);
+        navi_menu->addSeparator();
+        contScrollAction = navi_menu->addAction(tr("Continuous scrolling"), this, SLOT(toggleContinousScroll()));
+        twoPagesAction->setChecked(cfg->twoPagesMode());
+        mangaModeAction->setChecked(cfg->japaneseMode());
+        contScrollAction->setChecked(cfg->continuousScrolling());
 }
 
 void ComicMainWindow::setupBookmarksMenu()
 {
-        bookmarks_menu = new QPopupMenu(this);
+        bookmarks_menu = menuBar()->addMenu(tr("&Bookmarks"));
         bookmarks = new Bookmarks(bookmarks_menu);
-        menuBar()->insertItem(tr("&Bookmarks"), bookmarks_menu);
-        setbookmark_id = bookmarks_menu->insertItem(Icons::get(ICON_BOOKMARK), tr("Set bookmark for this comicbook"), this, SLOT(setBookmark()));
-        rmvbookmark_id = bookmarks_menu->insertItem(tr("Remove bookmark for this comicbook"), this, SLOT(removeBookmark()));
-        bookmarks_menu->insertItem(tr("Manage bookmarks"), this, SLOT(openBookmarksManager()));
-        bookmarks_menu->insertSeparator();
+        
+        setBookmarkAction = bookmarks_menu->addAction(Icons::get(ICON_BOOKMARK), tr("Set bookmark for this comicbook"), this, SLOT(setBookmark()));
+        removeBookmarkAction = bookmarks_menu->addAction(tr("Remove bookmark for this comicbook"), this, SLOT(removeBookmark()));
+        bookmarks_menu->addAction(tr("Manage bookmarks"), this, SLOT(openBookmarksManager()));
+        bookmarks_menu->addSeparator();
         bookmarks->load();
         connect(bookmarks_menu, SIGNAL(activated(int)), this, SLOT(bookmarkSelected(int)));
 }
 
 void ComicMainWindow::setupSettingsMenu()
 {
-        settings_menu = new QPopupMenu(this);
-        scrv_id = settings_menu->insertItem(tr("Scrollbars"), this, SLOT(toggleScrollbars()));
-        settings_menu->setItemChecked(scrv_id, cfg->scrollbarsVisible());
-        toggleToolbarAction->addTo(settings_menu);
-        toggleStatusbarAction->addTo(settings_menu);
-	settings_menu->insertSeparator();
-        fullScreenAction->addTo(settings_menu);
-	settings_menu->insertSeparator();
-        settings_menu->insertItem(Icons::get(ICON_SETTINGS), tr("Configure QComicBook"), this, SLOT(showConfigDialog()));
-        menuBar()->insertItem(tr("&Settings"), settings_menu);
+        settings_menu = menuBar()->addMenu(tr("&Settings"));
+        toggleScrollbarsAction = settings_menu->addAction(tr("Scrollbars"), this, SLOT(toggleScrollbars()));
+        toggleScrollbarsAction->setChecked(cfg->scrollbarsVisible());
+        settings_menu->addAction(toggleToolbarAction);
+        settings_menu->addAction(toggleStatusbarAction);
+	settings_menu->addSeparator();
+        settings_menu->addAction(fullScreenAction);
+	settings_menu->addSeparator();
+        settings_menu->addAction(Icons::get(ICON_SETTINGS), tr("Configure QComicBook"), this, SLOT(showConfigDialog()));
 }
 
 void ComicMainWindow::setupHelpMenu()
 {
-        QPopupMenu *help_menu = new QPopupMenu(this);
-	help_menu->insertItem(tr("System information"), this, SLOT(showSysInfo()));
-	help_menu->insertSeparator();
-        help_menu->insertItem(tr("Index"), this, SLOT(showHelp()));
-        help_menu->insertItem(tr("About"), this, SLOT(showAbout()));
-        menuBar()->insertItem(tr("&Help"), help_menu);
+        QMenu *help_menu = menuBar()->addMenu(tr("&Help"));
+	help_menu->addAction(tr("System information"), this, SLOT(showSysInfo()));
+	help_menu->addSeparator();
+        help_menu->addAction(tr("Index"), this, SLOT(showHelp()));
+        help_menu->addAction(tr("About"), this, SLOT(showAbout()));
 }
 
 void ComicMainWindow::setupStatusbar()
 {
         statusbar = new StatusBar(this);      
         connect(toggleStatusbarAction, SIGNAL(toggled(bool)), statusbar, SLOT(setShown(bool)));
-        toggleStatusbarAction->setOn(cfg->showStatusbar());
+        toggleStatusbarAction->setChecked(cfg->showStatusbar());
         statusbar->setShown(cfg->showStatusbar());
 }
 
 void ComicMainWindow::setupContextMenu()
 {
-        QPopupMenu *cmenu = view->contextMenu();
+        QMenu *cmenu = view->contextMenu();
         pageinfo = new QLabel(cmenu);
         pageinfo->setMargin(3);
         pageinfo->setAlignment(Qt::AlignHCenter);
         pageinfo->setFrameStyle(QFrame::Box | QFrame::Raised);
-        nextPageAction->addTo(cmenu);
-        prevPageAction->addTo(cmenu);
-        cmenu->insertSeparator();
-        fitWidthAction->addTo(cmenu);
-        fitHeightAction->addTo(cmenu);
-        wholePageAction->addTo(cmenu);
-        originalSizeAction->addTo(cmenu);
-        bestFitAction->addTo(cmenu);
-        cmenu->insertSeparator();
-        rotateRightAction->addTo(cmenu);
-        rotateLeftAction->addTo(cmenu);
-        rotateResetAction->addTo(cmenu);
-        cmenu->insertSeparator();
-        twoPagesAction->addTo(cmenu);
-        mangaModeAction->addTo(cmenu);
-        cmenu->insertSeparator();
-        fullScreenAction->addTo(cmenu);
-        cmenu->insertSeparator();
-        cmenu->insertItem(pageinfo);
+        cmenu->addAction(nextPageAction);
+        cmenu->addAction(prevPageAction);
+        cmenu->addSeparator();
+        cmenu->addAction(fitWidthAction);
+        cmenu->addAction(fitHeightAction);
+       	cmenu->addAction(wholePageAction);
+        cmenu->addAction(originalSizeAction);
+        cmenu->addAction(bestFitAction);
+        cmenu->addSeparator();
+        cmenu->addAction(rotateRightAction);
+        cmenu->addAction(rotateLeftAction);
+        cmenu->addAction(rotateResetAction);
+        cmenu->addSeparator();
+        cmenu->addAction(twoPagesAction);
+        cmenu->addAction(mangaModeAction);
+        cmenu->addSeparator();
+        cmenu->addAction(fullScreenAction);
+        cmenu->addSeparator();
+        //cmenu->Item(pageinfo); TODO
 }
 
 void ComicMainWindow::enableComicBookActions(bool f)
@@ -424,8 +449,8 @@ void ComicMainWindow::enableComicBookActions(bool f)
         //
         // file menu
         const bool x = f && sink && sink->supportsNext();
-        file_menu->setItemEnabled(close_id, f);
-        file_menu->setItemEnabled(create_id, f);
+        closeAction->setEnabled(f);
+        //createAction->setEnabled(f);
         showInfoAction->setEnabled(f);
         openNextAction->setEnabled(x);
         openPrevAction->setEnabled(x);
@@ -435,8 +460,8 @@ void ComicMainWindow::enableComicBookActions(bool f)
 	// edit menu
 	if (edit_menu)
 	{
-		edit_menu->setItemEnabled(gimp_id, f);
-		edit_menu->setItemEnabled(reload_id, f);
+		gimpAction->setEnabled(f);
+		reloadAction->setEnabled(f);
 	}
 	
         //
@@ -449,7 +474,7 @@ void ComicMainWindow::enableComicBookActions(bool f)
         // navigation menu
 	lastPageAction->setEnabled(f);
 	firstPageAction->setEnabled(f);
-        navi_menu->setItemEnabled(jumpto_id, f);
+        jumpToAction->setEnabled(f);
         nextPageAction->setEnabled(f);
         prevPageAction->setEnabled(f);
         backwardPageAction->setEnabled(f);
@@ -459,21 +484,21 @@ void ComicMainWindow::enableComicBookActions(bool f)
 
         //
         // bookmarks menu
-        bookmarks_menu->setItemEnabled(setbookmark_id, f);
-        bookmarks_menu->setItemEnabled(rmvbookmark_id, f);
+        setBookmarkAction->setEnabled(f);
+        removeBookmarkAction->setEnabled(f);
 }
 
-void ComicMainWindow::dragEnterEvent(QDragEnterEvent *e)
+/*void ComicMainWindow::dragEnterEvent(QDragEnterEvent *e)
 {
 	e->accept(QUriDrag::canDecode(e));
-}
+}*/
 
-void ComicMainWindow::dropEvent(QDropEvent *e)
+/*void ComicMainWindow::dropEvent(QDropEvent *e)
 {
 	QStringList files;
 	if (QUriDrag::decodeLocalFiles(e, files))
 		open(files[0], 0);
-}
+}*/
 
 void ComicMainWindow::keyPressEvent(QKeyEvent *e)
 {
@@ -509,20 +534,20 @@ void ComicMainWindow::thumbnailsVisibilityChanged(bool f)
 
 void ComicMainWindow::toolbarVisibilityChanged(bool f)
 {
-        toggleToolbarAction->setOn(f);
+        toggleToolbarAction->setChecked(f);
 }
 
 void ComicMainWindow::toggleScrollbars()
 {
-        bool f = settings_menu->isItemChecked(scrv_id);
-        settings_menu->setItemChecked(scrv_id, !f);
+        bool f = toggleScrollbarsAction->isChecked();
+        toggleScrollbarsAction->setChecked(!f); //???? potrzebne?
         view->enableScrollbars(!f);
 }
 
 void ComicMainWindow::toggleContinousScroll()
 {
-        bool f = navi_menu->isItemChecked(contscr_id);
-        navi_menu->setItemChecked(contscr_id, !f);
+        bool f = contScrollAction->isChecked();
+        contScrollAction->setChecked(!f); //???? potrzebne?
         if (f)
         {
                 view->disconnect(SIGNAL(bottomReached()), this);
@@ -536,14 +561,14 @@ void ComicMainWindow::toggleContinousScroll()
 
 void ComicMainWindow::toggleTwoPages(bool f)
 {
-        twoPagesAction->setOn(f);
+        twoPagesAction->setChecked(f);
         jumpToPage(currpage, true);
 }
 
 void ComicMainWindow::toggleJapaneseMode(bool f)
 {
-        mangaModeAction->setOn(f);
-        if (twoPagesAction->isOn())
+        mangaModeAction->setChecked(f);
+        if (twoPagesAction->isChecked())
                 jumpToPage(currpage, true);
 }
 
@@ -558,7 +583,7 @@ void ComicMainWindow::updateCaption()
         QString c = "QComicBook";
         if (sink)
                 c += " - " + sink->getName();
-        setCaption(c);
+        setWindowTitle(c);
 }
 
 void ComicMainWindow::setRecentFilesMenu(const History &hist)
@@ -566,12 +591,12 @@ void ComicMainWindow::setRecentFilesMenu(const History &hist)
         QStringList list = hist.getAll();
         recent_menu->clear();
         for (QStringList::const_iterator it = list.begin(); it != list.end(); it++)
-                recent_menu->insertItem(*it);
+                recent_menu->addAction(*it);
 }
 
-void ComicMainWindow::recentSelected(int id)
+void ComicMainWindow::recentSelected(int id) //TODO
 {
-        const QString &fname = recent_menu->text(id);
+        /*const QString &fname = recent_menu->text(id);
         if (fname != QString::null)
         {
                 QFileInfo finfo(fname);
@@ -581,12 +606,12 @@ void ComicMainWindow::recentSelected(int id)
                         recent_menu->removeItem(id);
                 }
                 open(fname, 0);
-        }
+        }*/
 }
 
 void ComicMainWindow::sinkReady(const QString &path)
 {
-	statusbar->setShown(toggleStatusbarAction->isOn() && !(isFullScreen() && cfg->fullScreenHideStatusbar())); //applies back user's statusbar&toolbar preferences
+	statusbar->setShown(toggleStatusbarAction->isChecked() && !(isFullScreen() && cfg->fullScreenHideStatusbar())); //applies back user's statusbar&toolbar preferences
 	//toolbar->setShown(toggleToolbarAction->isOn() && !(isFullScreen() && cfg->fullScreenHideToolbar()));
 
         recentfiles->append(path);
@@ -614,7 +639,7 @@ void ComicMainWindow::sinkReady(const QString &path)
 
 void ComicMainWindow::sinkError(int code)
 {
-	statusbar->setShown(toggleStatusbarAction->isOn() && !(isFullScreen() && cfg->fullScreenHideStatusbar())); //applies back user's statusbar&toolbar preferences
+	statusbar->setShown(toggleStatusbarAction->isChecked() && !(isFullScreen() && cfg->fullScreenHideStatusbar())); //applies back user's statusbar&toolbar preferences
 	//toolbar->setShown(toggleToolbarAction->isOn() && !(isFullScreen() && cfg->fullScreenHideToolbar()));
 
         QString msg;
@@ -635,17 +660,14 @@ void ComicMainWindow::sinkError(int code)
 
 void ComicMainWindow::browseDirectory()
 {
-        const QString dir = QFileDialog::getExistingDirectory(lastdir, this, 
-                        NULL, tr("Choose a directory") );
+        const QString dir = QFileDialog::getExistingDirectory(this, tr("Choose a directory"), lastdir);
         if (!dir.isEmpty())
                 open(dir, 0);
 }
 
 void ComicMainWindow::browseArchive()
 {
-        const QString file = QFileDialog::getOpenFileName(lastdir,
-                        "Archives (" + ImgArchiveSink::supportedOpenExtensions() + ");;All files (*)",
-                        this, NULL, tr("Choose a file") );
+        const QString file = QFileDialog::getOpenFileName(this, tr("Choose a file"), lastdir, "Archives (" + ImgArchiveSink::supportedOpenExtensions().join(" ") + ");;All files (*)");
         if (!file.isEmpty())
                 open(file, 0);
 }
@@ -653,12 +675,12 @@ void ComicMainWindow::browseArchive()
 void ComicMainWindow::open(const QString &path, int page)
 {
         const QFileInfo f(path);
-        const QString fullname = f.absFilePath();
+        const QString fullname = f.absoluteFilePath();
 
         if (sink && sink->getFullName() == fullname) //trying to open same dir?
                 return;
 
-        lastdir = f.dirPath(true);
+        lastdir = f.absolutePath();
         currpage = page;
 
         closeSink();
@@ -721,7 +743,7 @@ void ComicMainWindow::exitFullscreen()
         if (isFullScreen())
         {
                 menuBar()->show();
-                if (toggleStatusbarAction->isOn())
+                if (toggleStatusbarAction->isChecked())
                         statusbar->show();
                 /*if (toggleToolbarAction->isOn())
                         toolbar->show();*/
@@ -733,7 +755,7 @@ void ComicMainWindow::nextPage()
 {
         if (sink)
         {
-                if (twoPagesAction->isOn() && cfg->twoPagesStep())
+                if (twoPagesAction->isChecked() && cfg->twoPagesStep())
                 {
                         if (currpage < sink->numOfImages() - 2) //do not change pages if last two pages are visible
                                 jumpToPage(currpage + 2);
@@ -747,14 +769,14 @@ void ComicMainWindow::nextPage()
 
 void ComicMainWindow::prevPage()
 {
-        jumpToPage(currpage - (twoPagesAction->isOn() && cfg->twoPagesStep() ? 2 : 1));
+        jumpToPage(currpage - (twoPagesAction->isChecked() && cfg->twoPagesStep() ? 2 : 1));
 }
 
 void ComicMainWindow::prevPageBottom()
 {
         if (currpage > 0)
         {
-                jumpToPage(currpage - (twoPagesAction->isOn() && cfg->twoPagesStep() ? 2 : 1));
+                jumpToPage(currpage - (twoPagesAction->isChecked() && cfg->twoPagesStep() ? 2 : 1));
                 view->scrollToBottom();
         }
 }
@@ -767,17 +789,17 @@ void ComicMainWindow::firstPage()
 void ComicMainWindow::lastPage()
 {
         if (sink)
-                jumpToPage(sink->numOfImages() - (twoPagesAction->isOn() && cfg->twoPagesStep() ? 2 : 1));
+                jumpToPage(sink->numOfImages() - (twoPagesAction->isChecked() && cfg->twoPagesStep() ? 2 : 1));
 }
 
 void ComicMainWindow::forwardPages()
 {
-        jumpToPage(currpage + (twoPagesAction->isOn() && cfg->twoPagesStep() ? 10 : 5));
+        jumpToPage(currpage + (twoPagesAction->isChecked() && cfg->twoPagesStep() ? 10 : 5));
 }
 
 void ComicMainWindow::backwardPages()
 {
-        jumpToPage(currpage - (twoPagesAction->isOn() && cfg->twoPagesStep() ? 10 : 5));
+        jumpToPage(currpage - (twoPagesAction->isChecked() && cfg->twoPagesStep() ? 10 : 5));
 }
 
 void ComicMainWindow::jumpToPage(int n, bool force)
@@ -791,15 +813,15 @@ void ComicMainWindow::jumpToPage(int n, bool force)
         if ((n != currpage) || force)
         {
                 int result1, result2;
-                const bool preserveangle = togglePreserveRotationAction->isOn();
+                const bool preserveangle = togglePreserveRotationAction->isChecked();
 
-                if (twoPagesAction->isOn())
+                if (twoPagesAction->isChecked())
                 {
                         ImlibImage *img1 = sink->getImage(currpage = n, result1);
                         ImlibImage *img2 = sink->getImage(currpage + 1, result2);
                         if (result2 == 0)
                         {
-                                if (mangaModeAction->isOn())
+                                if (mangaModeAction->isChecked())
                                 {
                                         view->setImage(img2, img1, preserveangle);
                                         statusbar->setImageInfo(img2, img1);
@@ -824,15 +846,15 @@ void ComicMainWindow::jumpToPage(int n, bool force)
                         view->setImage(img, preserveangle);
                         statusbar->setImageInfo(img);
                 }
-                if (mangaModeAction->isOn())
-                        view->ensureVisible(view->imageWidth(), 0);
+                //if (mangaModeAction->isChecked()) //TODO
+                  //      view->ensureVisible(view->imageWidth(), 0);
                 const QString page = tr("Page") + " " + QString::number(currpage + 1) + "/" + QString::number(sink->numOfImages());
                 pageinfo->setText(page);
                 statusbar->setPage(currpage + 1, sink->numOfImages());
                 thumbswin->view()->scrollToPage(currpage);
 		if (cfg->preloadPages())
 		{
-			if (!twoPagesAction->isOn())
+			if (!twoPagesAction->isChecked())
 			{
 				sink->preload(currpage + 1);
 			}
@@ -881,16 +903,17 @@ void ComicMainWindow::showAbout()
         win->show();
 }
 
-void ComicMainWindow::showHelp()
+void ComicMainWindow::showHelp() //TODO
 {
-        const QString helpdir = HelpBrowser::getLocaleHelpDir(DATADIR "/help");
+       /* const QString helpdir = HelpBrowser::getLocaleHelpDir(DATADIR "/help");
         if (!cfg->useInternalBrowser() && cfg->externalBrowser() != QString::null)
         {
                 QProcess *proc = new QProcess(this);
-                proc->addArgument(cfg->externalBrowser());
-                proc->addArgument(helpdir + "/index.html");
+                QString prg = cfg->externalBrowser();
+                QStringList args;
+                args << helpdir + "/index.html";
                 connect(proc, SIGNAL(processExited()), proc, SLOT(deleteLater()));
-                if (!proc->start())
+                if (!proc->start(prg, args))
                 {
                         proc->deleteLater();
                         cfg->useInternalBrowser(true);
@@ -900,7 +923,7 @@ void ComicMainWindow::showHelp()
         {
                 HelpBrowser *help = new HelpBrowser(tr("QComicBook Help"), helpdir);
                 help->show();
-        }
+        }*/
 }
 
 void ComicMainWindow::showConfigDialog()
@@ -966,9 +989,9 @@ void ComicMainWindow::openBookmarksManager()
         win->show();
 }
 
-void ComicMainWindow::openWithGimp()
+void ComicMainWindow::openWithGimp() //TODO
 {
-	if (!sink)
+	/*if (!sink)
 		return;
         QProcess *proc = new QProcess(this);
         proc->addArgument("gimp-remote");
@@ -977,7 +1000,7 @@ void ComicMainWindow::openWithGimp()
         if (!proc->start())
         {
                 proc->deleteLater();
-        }
+        }*/
 }
 
 void ComicMainWindow::savePageAs()
@@ -991,7 +1014,7 @@ void ComicMainWindow::savePageAs()
 			QString tmpmsg(msg);
 			if (cnt > 1)
 				tmpmsg += " (" + tr("page") + " " + QString::number(i) + ")";
-			QString fname = QFileDialog::getSaveFileName(QString::null, "Images (*.jpg *.png)", this, NULL, tmpmsg);
+			QString fname = QFileDialog::getSaveFileName(this, tmpmsg, QString::null, "Images (*.jpg *.png)");
 			if (!fname.isEmpty())
 			{
 				int result;
@@ -1043,14 +1066,14 @@ void ComicMainWindow::saveSettings()
 {
         cfg->geometry(frameGeometry());
         cfg->saveDockLayout(this);
-        cfg->scrollbarsVisible(settings_menu->isItemChecked(scrv_id));
-        cfg->twoPagesMode(twoPagesAction->isOn());
-        cfg->japaneseMode(mangaModeAction->isOn());
-        cfg->continuousScrolling(navi_menu->isItemChecked(contscr_id));
+        cfg->scrollbarsVisible(toggleScrollbarsAction->isChecked());
+        cfg->twoPagesMode(twoPagesAction->isChecked());
+        cfg->japaneseMode(mangaModeAction->isChecked());
+        cfg->continuousScrolling(contScrollAction->isChecked());
         cfg->lastDir(lastdir);
         cfg->recentlyOpened(*recentfiles);
         cfg->pageSize(view->getSize());
-        cfg->showStatusbar(toggleStatusbarAction->isOn());
+        cfg->showStatusbar(toggleStatusbarAction->isChecked());
 
         bookmarks->save();        
 }

@@ -13,7 +13,7 @@
 #include "imgview.h"
 #include "miscutil.h"
 #include "imlibimage.h"
-#include <qpopupmenu.h>
+#include <QMenu>
 #include <qpainter.h>
 #include <qbitmap.h>
 #include <qcursor.h>
@@ -27,9 +27,9 @@ const int ComicImageView::EXTRA_WHEEL_SPIN = 2;
 ComicImageView::ComicImageView(QWidget *parent, Size size, const QColor &color): QScrollView(parent), isize(size), iangle(0), xoff(0), yoff(0), lx(-1), wheelupcnt(0), wheeldowncnt(0), smallcursor(NULL)
 {
 	orgimage[0] = orgimage[1] = NULL;
-        context_menu = new QPopupMenu(this);
-        viewport()->setPaletteBackgroundColor(color);
-        setFocusPolicy(QWidget::StrongFocus);
+        context_menu = new QMenu(this);
+        //viewport()->setPaletteBackgroundColor(color);
+        //setFocusPolicy(QWidget::StrongFocus);
 }
 
 ComicImageView::~ComicImageView()
@@ -134,7 +134,7 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
 	}
 }
 
-QPopupMenu *ComicImageView::contextMenu() const
+QMenu *ComicImageView::contextMenu() const
 {
         return context_menu;
 }

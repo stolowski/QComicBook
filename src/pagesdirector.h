@@ -15,8 +15,8 @@
 
 /*! \file pagesdirector.h */
 
-#include <qlistview.h>
-#include <qvaluelist.h>
+#include <QListView>
+#include <QList>
 
 namespace QComicBook
 {
@@ -49,7 +49,7 @@ namespace QComicBook
 			PagesDirector(QWidget *parent, ImgDirSink *snk);
 			virtual ~PagesDirector();
 
-			QValueList<int> markedPages();
+			QList<int> markedPages();
 	};
 }
 

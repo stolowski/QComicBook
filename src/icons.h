@@ -13,20 +13,20 @@
 #ifndef __COMICBOOKICONS_H
 #define __COMICBOOKICONS_H
 
-#include <qiconset.h>
-#include <qdict.h>
+#include <QIcon>
+#include <QHash>
 
 namespace QComicBook
 {
 	class Icons
 	{
 		private:
-			static QDict<QIconSet> set;
+			static QHash<QString, QIcon*> set;
 			static QString iconpath;
 
 		public:
 			static bool init(const QString &path);
-			static const QIconSet& get(const QString &name);
+			static const QIcon& get(const QString &name);
 	};
 }
 

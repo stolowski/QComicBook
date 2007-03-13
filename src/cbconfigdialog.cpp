@@ -13,34 +13,33 @@
 #include "cbconfigdialog.h"
 #include "cbsettings.h"
 #include "imgview.h"
-#include <qlayout.h>
-#include <qbuttongroup.h>
-#include <qradiobutton.h>
-#include <qvbox.h>
-#include <qhbox.h>
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <qcheckbox.h>
-#include <qcolordialog.h>
-#include <qvgroupbox.h>
-#include <qspinbox.h>
-#include <qfontdialog.h>
-#include <qfiledialog.h>
-#include <qlineedit.h>
+#include <QLayout>
+#include <QButtonGroup>
+#include <QRadioButton>
+#include <QPushButton>
+#include <QLabel>
+#include <QCheckBox>
+#include <QColorDialog>
+#include <QGroupBox>
+#include <QSpinBox>
+#include <QFontDialog>
+#include <QFileDialog>
+#include <QLineEdit>
 
 using namespace QComicBook;
 
-ComicBookCfgDialog::ComicBookCfgDialog(QWidget *parent, ComicBookSettings *cfg): QTabDialog(parent), cfg(cfg)
+ComicBookCfgDialog::ComicBookCfgDialog(QWidget *parent, ComicBookSettings *cfg): QDialog(parent), cfg(cfg)
 {
-	setCaption("QComicBook Settings");
+	setWindowTitle("QComicBook Settings");
 	setModal(true);
 
 	setupDisplayTab();
 	setupMiscTab();
 	//setupEditTab();
 
-	setCancelButton();
-	setOkButton();
+	//FIXME: buttons
+	//setCancelButton();
+	//setOkButton();
 
 	connect(this, SIGNAL(applyButtonPressed()), this, SLOT(apply()));
 	connect(this, SIGNAL(cancelButtonPressed()), this, SLOT(cancel()));
@@ -55,7 +54,7 @@ void ComicBookCfgDialog::setupDisplayTab()
 	font = cfg->infoFont();
 
 	QWidget *w = new QWidget(this);
-	QVBoxLayout *lay = new QVBoxLayout(w, 5, 5);
+	QVBoxLayout *lay = new QVBoxLayout(w);
 
 	//
 	// background color
@@ -63,7 +62,7 @@ void ComicBookCfgDialog::setupDisplayTab()
 	lay1->addWidget(new QLabel(tr("Background color"), w));
 	lay1->addWidget(pb_color = new QPushButton(w));
 	pb_color->setFixedWidth(32);
-	pb_color->setPaletteBackgroundColor(bgcolor = cfg->background());
+	//pb_color->setPaletteBackgroundColor(bgcolor = cfg->background()); //FIXME: kolor
 	connect(pb_color, SIGNAL(clicked()), this, SLOT(showBackgroundDialog()));
 	lay->addLayout(lay1);
 
@@ -110,17 +109,17 @@ void ComicBookCfgDialog::setupDisplayTab()
 	lay->addStretch();
 	updateFontPreview();
 	
-	addTab(w, tr("Display"));
+	//addTab(w, tr("Display")); //FIXME
 }
 
 void ComicBookCfgDialog::setupMiscTab()
 {
-	bool f;
+	/*bool f; FIXME
 
 	QWidget *w = new QWidget(this);
-	QVBoxLayout *lay = new QVBoxLayout(w, 5, 5);
+	QVBoxLayout *lay = new QVBoxLayout(w);
 
-	QVGroupBox *grp0 = new QVGroupBox(tr("Cache"), w);
+	QGroupBox *grp0 = new QGroupBox(tr("Cache"), w);
 	QHBox *box1 = new QHBox(grp0);
 	new QLabel(tr("Cache size"), box1);
 	sb_cachesize = new QSpinBox(1, 128, 1, box1);
@@ -164,23 +163,25 @@ void ComicBookCfgDialog::setupMiscTab()
 	cb_splash = new QCheckBox(tr("Show splashscreen"), w);
 	cb_splash->setChecked(cfg->showSplash());
 	lay->addWidget(cb_splash);
+	*/
 	
 	/* TODO
 	cb_autobookmark = new QCheckBox(tr("Save bookmark for current comicbook on close/exit"), w);
 	cb_autobookmark->setChecked(cfg->confirmExit());
 	lay->addWidget(cb_autobookmark);*/
 
+	/* FIXME
 	cb_confirmexit = new QCheckBox(tr("Confirm exit"), w);
 	cb_confirmexit->setChecked(cfg->confirmExit());
 	lay->addWidget(cb_confirmexit);
 
 	lay->addStretch();
-	addTab(w, tr("Misc"));
+	addTab(w, tr("Misc"));*/
 }
 
 void ComicBookCfgDialog::setupEditTab()
 {
-	QWidget *w = new QWidget(this);
+	/*QWidget *w = new QWidget(this);
 	QVBoxLayout *lay = new QVBoxLayout(w, 5, 5);
 
 	cb_editing = new QCheckBox(tr("Enable editing"), w);
@@ -188,7 +189,7 @@ void ComicBookCfgDialog::setupEditTab()
 	lay->addWidget(cb_editing);
 
 	lay->addStretch();
-	addTab(w, tr("Editing"));
+	addTab(w, tr("Editing"));*/
 }
 
 void ComicBookCfgDialog::apply()
@@ -238,8 +239,8 @@ void ComicBookCfgDialog::updateFontPreview()
 void ComicBookCfgDialog::showBackgroundDialog()
 {
 	QColor c = QColorDialog::getColor(cfg->background(), this);
-	if (c.isValid())
-		pb_color->setPaletteBackgroundColor(bgcolor = c);
+//	if (c.isValid()) FIXME
+//		pb_color->setPaletteBackgroundColor(bgcolor = c);
 }
 
 void ComicBookCfgDialog::showFontDialog()
@@ -252,8 +253,8 @@ void ComicBookCfgDialog::showFontDialog()
 
 void ComicBookCfgDialog::browseExternalBrowser()
 {
-	const QString file = QFileDialog::getOpenFileName(QString::null,
-			"All files (*)", this, NULL, tr("Choose a file") );
+	const QString file = QFileDialog::getOpenFileName(this, tr("Choose a file"), QString::null, 
+			"All files (*)", NULL, NULL);
 	if (file != QString::null)
 		le_extbrowser->setText(file);
 }

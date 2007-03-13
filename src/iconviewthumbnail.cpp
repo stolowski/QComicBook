@@ -14,7 +14,7 @@
 
 using namespace QComicBook;
 
-IconViewThumbnail::IconViewThumbnail(QIconView *view, int page, const QPixmap &pixmap): QIconViewItem(view, QString::number(page+1), pixmap), ThumbnailItem(page)
+IconViewThumbnail::IconViewThumbnail(QListWidget *view, int page, const QPixmap &pixmap): QListWidgetItem(pixmap, QString::number(page+1), view), ThumbnailItem(page)
 {
 }
 

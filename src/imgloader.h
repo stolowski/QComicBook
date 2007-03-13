@@ -15,8 +15,9 @@
 #ifndef __IMGLOADERTHREAD_H
 #define __IMGLOADERTHREAD_H
 
-#include <qthread.h>
-#include <qvaluelist.h>
+#include <QThread>
+#include <QList>
+#include <QMutex>
 
 namespace QComicBook
 {
@@ -28,7 +29,7 @@ namespace QComicBook
 		protected:
 			volatile QThread::Priority prio; //!<thread priority
 			QMutex mtx; //!<mutex for serialization of class attributes
-			QValueList<int> requests; //!<the list of requested pages
+			QList<int> requests; //!<the list of requested pages
 			ImgDirSink *sink;
 
 			volatile bool stopped;

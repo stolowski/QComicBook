@@ -13,7 +13,7 @@
 #ifndef __CBCONFIGDIALOG_H
 #define __CBCONFIGDIALOG_H
 
-#include <qtabdialog.h>
+#include <QDialog>
 
 class QCheckBox;
 class QPushButton;
@@ -25,7 +25,7 @@ class QLineEdit;
 namespace QComicBook
 {
 	class ComicBookSettings;
-	class ComicBookCfgDialog: public QTabDialog
+	class ComicBookCfgDialog: public QDialog
 	{
 		Q_OBJECT
 

@@ -12,23 +12,28 @@
 
 #include "bookmarkmanager.h"
 #include "bookmarks.h"
-#include <qlistview.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qmessagebox.h>
+#include <Qt>
+#include <QTreeWidget>
+#include <QPushButton>
+#include <QLayout>
+#include <QMessageBox>
 
 using namespace QComicBook;
 
-BookmarkManager::BookmarkManager(QWidget *parent, Bookmarks *b): QWidget(parent, NULL, Qt::WType_TopLevel|Qt::WType_Dialog|Qt::WShowModal), bookmarks(b)
+BookmarkManager::BookmarkManager(QWidget *parent, Bookmarks *b): QWidget(parent, Qt::Dialog), bookmarks(b)
 {
-	QVBoxLayout *box0 = new QVBoxLayout(this, 5, 5);
-	lview = new QListView(this);
-	lview->addColumn(tr("Name"));
-	lview->addColumn(tr("Page"));
-	lview->setSelectionMode(QListView::Multi);
+
+	setWindowModality(Qt::WindowModal);
+
+	QVBoxLayout *box0 = new QVBoxLayout(this);
+	lview = new QTreeWidget(this);
+	QStringList labels;
+	labels << tr("Name") << tr("Page");
+	lview->setHeaderLabels(labels);
+	lview->setSelectionMode(QAbstractItemView::MultiSelection);
 	box0->addWidget(lview);
 	
-	QHBoxLayout *box1 = new QHBoxLayout(NULL, 0, 5);
+	QHBoxLayout *box1 = new QHBoxLayout(NULL);
 
 	QPushButton *b_selall = new QPushButton(tr("Select all"), this);
 	box1->addWidget(b_selall);
@@ -73,32 +78,35 @@ BookmarkManager::~BookmarkManager()
 
 void BookmarkManager::selectionChanged()
 {
-	QListViewItemIterator it(lview, QListViewItemIterator::Selected);
-	b_remsel->setDisabled(it.current() == 0);
+	//FIXME: wylaczenie przycisku usuwania jesli brak zaznaczen
+	
+	//QListViewItemIterator it(lview, QListViewItemIterator::Selected);
+	//b_remsel->setDisabled(it.current() == 0);
 }
 
 void BookmarkManager::initBookmarkView()
 {
 	lview->clear();
 	invalid.clear();
-	QValueList<Bookmark> blist = bookmarks->get();
-	for (QValueList<Bookmark>::iterator it = blist.begin(); it != blist.end(); it++)
+	QList<Bookmark> blist = bookmarks->get();
+	foreach (Bookmark bk, blist) //FIXME
 	{
-		QListViewItem *item = new QListViewItem(lview);
+/*		QListViewItem *item = new QListViewItem(lview);
 		item->setText(0, (*it).getName());
 		item->setText(1, QString::number((*it).getPage() + 1));
 
 		if (!(*it).isValid())
-			invalid.append(item);
+			invalid.append(item);*/
 	}
 
-	if (invalid.count() == 0)
-		b_selinv->setDisabled(true);
+//	if (invalid.count() == 0)
+//		b_selinv->setDisabled(true);
 }
 
 void BookmarkManager::removeSelected()
 {
-	QPtrList<QListViewItem> todel;
+	//FIXME
+	/*QPtrList<QListViewItem> todel;
 	for (QListViewItemIterator it(lview, QListViewItemIterator::Selected); it.current(); ++it)
 		todel.append(it.current());
 
@@ -111,22 +119,22 @@ void BookmarkManager::removeSelected()
 			delete item;
 		}
 		initBookmarkView(); //recreate the view
-	}
+	}*/
 }
 
 void BookmarkManager::selectAll()
 {
-	lview->selectAll(true);
+	//lview->selectAll(true); FIXME
 }
 
 void BookmarkManager::selectNone()
 {
-	lview->selectAll(false);
+	//lview->selectAll(false); FIXME
 }
 
 void BookmarkManager::selectInvalid()
-{
-	for (QListViewItem *item = invalid.first(); item; item = invalid.next())
-		item->setSelected(true);
+{//FIXME
+//	for (QListViewItem *item = invalid.first(); item; item = invalid.next())
+//		item->setSelected(true);
 }
 

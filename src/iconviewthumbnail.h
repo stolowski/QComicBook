@@ -15,15 +15,15 @@
 
 /*! \file iconviewthumbnail.h */
 
-#include <qiconview.h>
+#include <QListWidgetItem>
 #include "thumbnailitem.h"
 
 namespace QComicBook
 {
-	class IconViewThumbnail: public QIconViewItem, public ThumbnailItem
+	class IconViewThumbnail: public QListWidgetItem, public ThumbnailItem
 	{
 		public:
-			IconViewThumbnail(QIconView *view, int page, const QPixmap &pixmap);
+			IconViewThumbnail(QListWidget *view, int page, const QPixmap &pixmap);
 			virtual ~IconViewThumbnail();
 	};
 }

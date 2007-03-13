@@ -14,12 +14,12 @@
 #include "history.h"
 #include "miscutil.h"
 #include "enummap.h"
-#include <qsettings.h>
-#include <qrect.h>
-#include <qcolor.h>
-#include <qdir.h>
-#include <qtextstream.h>
-#include <qmainwindow.h>
+#include <QSettings>
+#include <QRect>
+#include <QColor>
+#include <QDir>
+#include <QTextStream>
+#include <QMainWindow>
 
 #define GRP_VIEW                     "/View"
 #define OPT_TWOPAGES                 "/TwoPages"
@@ -91,7 +91,7 @@ ComicBookSettings& ComicBookSettings::instance()
 ComicBookSettings::ComicBookSettings(): QObject()
 {
 	cfg = new QSettings();
-	cfg->insertSearchPath(QSettings::Unix, QDir::homeDirPath() + "/.qcomicbook");
+//	cfg->insertSearchPath(QSettings::Unix, QDir::homeDirPath() + "/.qcomicbook");
 	cfg->beginGroup("/QComicBook");
 }
 
@@ -103,7 +103,7 @@ ComicBookSettings::~ComicBookSettings()
 
 bool ComicBookSettings::checkDirs()
 {
-	dirsok = false;
+	/*dirsok = false; FIXME
 	bkpath = QDir::homeDirPath() + "/.qcomicbook";
 	QDir dir(bkpath);
 	if (!dir.exists())
@@ -113,7 +113,7 @@ bool ComicBookSettings::checkDirs()
 	dir.setPath(thpath = bkpath + "/cache");
 	if (!dir.exists())
 		if (!dir.mkdir(thpath))
-			return false;
+			return false;*/
 	return dirsok = true;
 }
 
@@ -133,33 +133,35 @@ void ComicBookSettings::load()
 	QString fontdesc;
 
 	const char *browsers[] = {"firefox", "mozilla", "konqueror", "opera", NULL};
-	for (int i=0; browsers[i]; i++)
+	/*for (int i=0; browsers[i]; i++) FIXME
+	{
 		if (QString path = QComicBook::which(browsers[i]))
 		{
 			defbrowser = path;
 			break;
 		}
+	}*/
 	
 	cfg->beginGroup(GRP_WINDOW);
-		x = cfg->readNumEntry(OPT_X, 0);
-		y = cfg->readNumEntry(OPT_Y, 0);
-		w = cfg->readNumEntry(OPT_WIDTH, 640);
-		h = cfg->readNumEntry(OPT_HEIGHT, 400);
-		docklayout = cfg->readEntry(OPT_DOCKLAYOUT, QString::null);
+		x = cfg->value(OPT_X, 0).toInt();
+		y = cfg->value(OPT_Y, 0).toInt();
+		w = cfg->value(OPT_WIDTH, 640).toInt();
+		h = cfg->value(OPT_HEIGHT, 400).toInt();
+		docklayout = cfg->value(OPT_DOCKLAYOUT, QString()).toString();
 	cfg->endGroup();
 	cfg->beginGroup(GRP_VIEW);
-		smallcursor = cfg->readBoolEntry(OPT_SMALLCURSOR, false);
-		twopages = cfg->readBoolEntry(OPT_TWOPAGES, false);
-		japanese = cfg->readBoolEntry(OPT_JAPANESEMODE, false);
-		scrollbars = cfg->readBoolEntry(OPT_SCROLLBARS, false);
+		smallcursor = cfg->value(OPT_SMALLCURSOR, false).toBool();
+		twopages = cfg->value(OPT_TWOPAGES, false).toBool();
+		japanese = cfg->value(OPT_JAPANESEMODE, false).toBool();
+		scrollbars = cfg->value(OPT_SCROLLBARS, false).toBool();
 		//scaling = convert(scaling2string, cfg->readEntry(OPT_SCALING, size2string[0].str));
-		pagesize = convert(size2string, cfg->readEntry(OPT_PAGESIZE, size2string[0].str));
-		bgcolor.setNamedColor(cfg->readEntry(OPT_BACKGROUND, "#000000"));
-		fscrhidemenu = cfg->readBoolEntry(OPT_FULLSCREENHIDEMENU, true);
-		fscrhidestatus = cfg->readBoolEntry(OPT_FULLSCREENHIDESTATUS, true);
-		fscrhidetoolbar = cfg->readBoolEntry(OPT_FULLSCREENHIDETOOLBAR, false);
-		statusbar = cfg->readBoolEntry(OPT_STATUSBAR, true);
-		fontdesc = cfg->readEntry(OPT_FONT, QString::null);
+		pagesize = convert(size2string, cfg->value(OPT_PAGESIZE, size2string[0].str).toString());
+		bgcolor = cfg->value(OPT_BACKGROUND).value<QColor>();
+		fscrhidemenu = cfg->value(OPT_FULLSCREENHIDEMENU, true).toBool();
+		fscrhidestatus = cfg->value(OPT_FULLSCREENHIDESTATUS, true).toBool();
+		fscrhidetoolbar = cfg->value(OPT_FULLSCREENHIDETOOLBAR, false).toBool();
+		statusbar = cfg->value(OPT_STATUSBAR, true).toBool();
+		fontdesc = cfg->value(OPT_FONT, QString()).toString();
 		if (fontdesc.isNull() || !font.fromString(fontdesc))
 		{
 			font.setFamily("Courier");
@@ -167,25 +169,25 @@ void ComicBookSettings::load()
 		}
 	cfg->endGroup();
 	cfg->beginGroup(GRP_NAVI);
-		contscroll = cfg->readBoolEntry(OPT_CONTSCROLL, true);
-		twopagesstep = cfg->readBoolEntry(OPT_TWOPAGESSTEP, true);
+		contscroll = cfg->value(OPT_CONTSCROLL, true).toBool();
+		twopagesstep = cfg->value(OPT_TWOPAGESSTEP, true).toBool();
 	cfg->endGroup();
 	cfg->beginGroup(GRP_MISC);
-		lastdir = cfg->readEntry(OPT_LASTDIR, QString::null);
-		recent = cfg->readListEntry(OPT_RECENT);
-		cachesize = cfg->readNumEntry(OPT_CACHESIZE, 3);
+		lastdir = cfg->value(OPT_LASTDIR, QString()).toString();
+		//recent = cfg->value(OPT_RECENT).toList(); //FIXME
+		cachesize = cfg->value(OPT_CACHESIZE, 3).toInt();
 		if (cachesize < 1)
 			cachesize = 1;
-		preload = cfg->readBoolEntry(OPT_PRELOAD, true);
-		confirmexit = cfg->readBoolEntry(OPT_CONFIRMEXIT, true);
-		intbrowser = cfg->readBoolEntry(OPT_INTBROWSER, true);
-		extbrowser = cfg->readEntry(OPT_EXTBROWSER, defbrowser);
-		autoinfo = cfg->readBoolEntry(OPT_AUTOINFO, false);
-		showsplash = cfg->readBoolEntry(OPT_SHOWSPLASH, true);
-		thumbsage = cfg->readNumEntry(OPT_THUMBSAGE, 7);
-		cachethumbs = cfg->readBoolEntry(OPT_CACHETHUMBS, true);
-		editsupport = cfg->readBoolEntry(OPT_EDITING, false);
-		tmpdir = cfg->readEntry(OPT_TMPDIR, QString::null);
+		preload = cfg->value(OPT_PRELOAD, true).toBool();
+		confirmexit = cfg->value(OPT_CONFIRMEXIT, true).toBool();
+		intbrowser = cfg->value(OPT_INTBROWSER, true).toBool();
+		extbrowser = cfg->value(OPT_EXTBROWSER, defbrowser).toString(); //FIXME
+		autoinfo = cfg->value(OPT_AUTOINFO, false).toBool();
+		showsplash = cfg->value(OPT_SHOWSPLASH, true).toBool();
+		thumbsage = cfg->value(OPT_THUMBSAGE, 7).toInt();
+		cachethumbs = cfg->value(OPT_CACHETHUMBS, true).toInt();
+		editsupport = cfg->value(OPT_EDITING, false).toInt();
+		tmpdir = cfg->value(OPT_TMPDIR, QString()).toString();
 		QDir dir(tmpdir);
 		if (tmpdir.isNull() || !dir.exists())
 			tmpdir = "/tmp";
@@ -324,8 +326,8 @@ bool ComicBookSettings::showSplash() const
 
 void ComicBookSettings::restoreDockLayout(QMainWindow *w)
 {
-	QTextStream str(&docklayout, IO_ReadOnly);
-	str >> *w;
+	//QTextStream str(&docklayout, QIODevice::ReadOnly); FIXME
+	//str >> *w;
 }
 
 bool ComicBookSettings::editSupport() const
@@ -342,7 +344,7 @@ void ComicBookSettings::smallCursor(bool f)
 {
 	if (f != smallcursor)
 	{
-		cfg->writeEntry(GRP_VIEW OPT_SMALLCURSOR, smallcursor = f);
+		cfg->setValue(GRP_VIEW OPT_SMALLCURSOR, smallcursor = f);
 		emit cursorChanged(f);
 	}
 }
@@ -350,31 +352,31 @@ void ComicBookSettings::smallCursor(bool f)
 void ComicBookSettings::twoPagesMode(bool f)
 {
 	if (f != twopages)
-		cfg->writeEntry(GRP_VIEW OPT_TWOPAGES, twopages = f);
+		cfg->setValue(GRP_VIEW OPT_TWOPAGES, twopages = f);
 }
 
 void ComicBookSettings::twoPagesStep(bool f)
 {
 	if (f != twopagesstep)
-		cfg->writeEntry(GRP_NAVI OPT_TWOPAGESSTEP, twopagesstep = f);
+		cfg->setValue(GRP_NAVI OPT_TWOPAGESSTEP, twopagesstep = f);
 }
 
 void ComicBookSettings::japaneseMode(bool f)
 {
 	if (f != japanese)
-		cfg->writeEntry(GRP_VIEW OPT_JAPANESEMODE, japanese = f);
+		cfg->setValue(GRP_VIEW OPT_JAPANESEMODE, japanese = f);
 }
 
 void ComicBookSettings::continuousScrolling(bool f)
 {
 	if (f != contscroll)
-		cfg->writeEntry(GRP_NAVI OPT_CONTSCROLL, contscroll = f);
+		cfg->setValue(GRP_NAVI OPT_CONTSCROLL, contscroll = f);
 }
 
 void ComicBookSettings::scrollbarsVisible(bool f)
 {
 	if (f != scrollbars)
-		cfg->writeEntry(GRP_VIEW OPT_SCROLLBARS, scrollbars = f);
+		cfg->setValue(GRP_VIEW OPT_SCROLLBARS, scrollbars = f);
 }
 
 void ComicBookSettings::geometry(const QRect g)
@@ -382,10 +384,10 @@ void ComicBookSettings::geometry(const QRect g)
 	if (x != g.x() || y != g.y() || w != g.width() || h != g.height())
 	{
 		cfg->beginGroup(GRP_WINDOW);
-		cfg->writeEntry(OPT_X, x = g.x());
-		cfg->writeEntry(OPT_Y, y = g.y());
-		cfg->writeEntry(OPT_WIDTH, w = g.width());
-		cfg->writeEntry(OPT_HEIGHT, h = g.height());
+		cfg->setValue(OPT_X, x = g.x());
+		cfg->setValue(OPT_Y, y = g.y());
+		cfg->setValue(OPT_WIDTH, w = g.width());
+		cfg->setValue(OPT_HEIGHT, h = g.height());
 		cfg->endGroup();
 	}
 }
@@ -393,14 +395,14 @@ void ComicBookSettings::geometry(const QRect g)
 void ComicBookSettings::pageSize(Size s)
 {
 	if (s != pagesize)
-		cfg->writeEntry(GRP_VIEW OPT_PAGESIZE, convert(size2string, pagesize = s));
+		cfg->setValue(GRP_VIEW OPT_PAGESIZE, convert(size2string, pagesize = s));
 }
 
 /*void ComicBookSettings::pageScaling(Scaling s)
 {
 	if (s != scaling)
 	{
-		cfg->writeEntry(GRP_VIEW OPT_SCALING, convert(scaling2string, scaling = s));
+		cfg->setValue(GRP_VIEW OPT_SCALING, convert(scaling2string, scaling = s));
 		emit scalingMethodChanged(scaling);
 	}
 }*/
@@ -408,13 +410,13 @@ void ComicBookSettings::pageSize(Size s)
 void ComicBookSettings::lastDir(const QString &d)
 {
 	if (lastdir != d)
-		cfg->writeEntry(GRP_MISC OPT_LASTDIR, lastdir = d);
+		cfg->setValue(GRP_MISC OPT_LASTDIR, lastdir = d);
 }
 
 void ComicBookSettings::recentlyOpened(const History &hist)
 {
 	recent = hist;
-	cfg->writeEntry(GRP_MISC OPT_RECENT, recent.getAll());
+	cfg->setValue(GRP_MISC OPT_RECENT, recent.getAll());
 }
 
 void ComicBookSettings::background(const QColor &color)
@@ -422,7 +424,7 @@ void ComicBookSettings::background(const QColor &color)
 	if (color != bgcolor)
 	{
 		bgcolor = color;
-		cfg->writeEntry(GRP_VIEW OPT_BACKGROUND, bgcolor.name());
+		cfg->setValue(GRP_VIEW OPT_BACKGROUND, bgcolor.name());
 		emit backgroundChanged(bgcolor);
 	}
 }
@@ -433,62 +435,62 @@ void ComicBookSettings::cacheSize(int s)
 	{
 		if (s < 1)
 			s = 1;
-		cfg->writeEntry(GRP_MISC OPT_CACHESIZE, cachesize = s);
+		cfg->setValue(GRP_MISC OPT_CACHESIZE, cachesize = s);
 	}
 }
 
 void ComicBookSettings::cacheThumbnails(bool f)
 {
 	if (f != cachethumbs)
-		cfg->writeEntry(GRP_MISC OPT_CACHETHUMBS, cachethumbs = f);
+		cfg->setValue(GRP_MISC OPT_CACHETHUMBS, cachethumbs = f);
 }
 
 void ComicBookSettings::thumbnailsAge(int n)
 {
 	if (n != thumbsage)
-		cfg->writeEntry(GRP_MISC OPT_THUMBSAGE, thumbsage = n);
+		cfg->setValue(GRP_MISC OPT_THUMBSAGE, thumbsage = n);
 }
 
 void ComicBookSettings::preloadPages(bool f)
 {
 	if (f != preload)
-		cfg->writeEntry(GRP_MISC OPT_PRELOAD, preload = f);
+		cfg->setValue(GRP_MISC OPT_PRELOAD, preload = f);
 }
 
 void ComicBookSettings::confirmExit(bool f)
 {
 	if (f != confirmexit)
-		cfg->writeEntry(GRP_MISC OPT_CONFIRMEXIT, confirmexit = f);
+		cfg->setValue(GRP_MISC OPT_CONFIRMEXIT, confirmexit = f);
 }
 
 void ComicBookSettings::autoInfo(bool f)
 {
 	if (f != autoinfo)
-		cfg->writeEntry(GRP_MISC OPT_AUTOINFO, autoinfo = f);
+		cfg->setValue(GRP_MISC OPT_AUTOINFO, autoinfo = f);
 }
 
 void ComicBookSettings::fullScreenHideMenu(bool f)
 {
 	if (f != fscrhidemenu)
-		cfg->writeEntry(GRP_VIEW OPT_FULLSCREENHIDEMENU, fscrhidemenu = f);
+		cfg->setValue(GRP_VIEW OPT_FULLSCREENHIDEMENU, fscrhidemenu = f);
 }
 
 void ComicBookSettings::fullScreenHideStatusbar(bool f)
 {
 	if (f != fscrhidestatus)
-		cfg->writeEntry(GRP_VIEW OPT_FULLSCREENHIDESTATUS, fscrhidestatus = f);
+		cfg->setValue(GRP_VIEW OPT_FULLSCREENHIDESTATUS, fscrhidestatus = f);
 }
 
 void ComicBookSettings::fullScreenHideToolbar(bool f)
 {
 	if (f != fscrhidetoolbar)
-		cfg->writeEntry(GRP_VIEW OPT_FULLSCREENHIDETOOLBAR, fscrhidetoolbar = f);
+		cfg->setValue(GRP_VIEW OPT_FULLSCREENHIDETOOLBAR, fscrhidetoolbar = f);
 }
 
 void ComicBookSettings::showStatusbar(bool f)
 {
 	if (f != statusbar)
-		cfg->writeEntry(GRP_VIEW OPT_STATUSBAR, statusbar = f);
+		cfg->setValue(GRP_VIEW OPT_STATUSBAR, statusbar = f);
 }
 
 void ComicBookSettings::infoFont(const QFont &s)
@@ -496,45 +498,45 @@ void ComicBookSettings::infoFont(const QFont &s)
 	if (s != font)
 	{
 		font = s;
-		cfg->writeEntry(GRP_VIEW OPT_FONT, font.toString());
+		cfg->setValue(GRP_VIEW OPT_FONT, font.toString());
 	}
 }
 
 void ComicBookSettings::useInternalBrowser(bool f)
 {
 	if (f != intbrowser)
-		cfg->writeEntry(GRP_MISC OPT_INTBROWSER, intbrowser = f);
+		cfg->setValue(GRP_MISC OPT_INTBROWSER, intbrowser = f);
 }
 
 void ComicBookSettings::externalBrowser(const QString& cmd)
 {
 	if (cmd != extbrowser)
-		cfg->writeEntry(GRP_MISC OPT_EXTBROWSER, extbrowser = cmd);
+		cfg->setValue(GRP_MISC OPT_EXTBROWSER, extbrowser = cmd);
 }
 
 void ComicBookSettings::saveDockLayout(QMainWindow *w)
 {
-	QString tmp;
-	QTextStream str(&tmp, IO_WriteOnly);
+	/*QString tmp; FIXME
+	QTextStream str(&tmp, QIODevice::WriteOnly);
 	str << *w;
-	cfg->writeEntry(GRP_WINDOW OPT_DOCKLAYOUT, tmp);
+	cfg->setValue(GRP_WINDOW OPT_DOCKLAYOUT, tmp);*/
 }
 
 void ComicBookSettings::editSupport(bool f)
 {
 	if (f != editsupport)
-		cfg->writeEntry(GRP_MISC OPT_EDITING, editsupport = f);
+		cfg->setValue(GRP_MISC OPT_EDITING, editsupport = f);
 }
 
 void ComicBookSettings::showSplash(bool f)
 {
 	if (f != showsplash)
-		cfg->writeEntry(GRP_MISC OPT_SHOWSPLASH, showsplash = f);
+		cfg->setValue(GRP_MISC OPT_SHOWSPLASH, showsplash = f);
 }
 
 void ComicBookSettings::tmpDir(const QString &dir)
 {
 	if (dir != tmpdir)
-		cfg->writeEntry(GRP_MISC OPT_TMPDIR, tmpdir = dir);
+		cfg->setValue(GRP_MISC OPT_TMPDIR, tmpdir = dir);
 }
 

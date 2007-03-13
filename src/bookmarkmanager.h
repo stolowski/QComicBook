@@ -15,10 +15,10 @@
 #ifndef __BOOKMARKMANAGER_H
 #define __BOOKMARKMANAGER_H
 
-#include <qwidget.h>
-#include <qptrlist.h>
+#include <QWidget>
+#include <QList>
 
-class QListView;
+class QTreeWidget;
 class QListViewItem;
 class QPushButton;
 
@@ -32,11 +32,11 @@ namespace QComicBook
 		Q_OBJECT
 
 		private:
-			QListView *lview;
+			QTreeWidget *lview;
 			QPushButton *b_selinv;
 			QPushButton *b_remsel;
 			Bookmarks *bookmarks;
-			QPtrList<QListViewItem> invalid; //!<the list of invalid bookmarks
+			QList<QListViewItem *> invalid; //!<the list of invalid bookmarks
 
 			void initBookmarkView();
 

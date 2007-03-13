@@ -16,8 +16,8 @@
 #include "imgview.h"
 #include "history.h"
 #include "enummap.h"
-#include <qobject.h>
-#include <qfont.h>
+#include <QObject>
+#include <QFont>
 
 class QSettings;
 class QRect;

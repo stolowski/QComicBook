@@ -15,7 +15,7 @@
 #ifndef __COMIC_MAIN_H
 #define __COMIC_MAIN_H
 
-#include <qmainwindow.h>
+#include <QMainWindow>
 #include "history.h"
 
 class QAction;
@@ -23,6 +23,7 @@ class QPopupMenu;
 class QLabel;
 class QToolBar;
 class QDockWindow;
+class QKeyEvent;
 
 namespace QComicBook
 {
@@ -48,26 +49,26 @@ namespace QComicBook
 			StatusBar *statusbar;
 			ComicBookSettings *cfg;
 			int currpage; //!<current page number
-			int scrv_id; //!<identifier of "Scrollbars visible" menu option
-			int contscr_id; //!<identifier of "Continous scrolling" menu option
-			int jumpto_id; //!<identifier of "Jump to" menu option
-			int setbookmark_id; //!<identifier of "Set bookmark" menu option
-			int rmvbookmark_id; //!<identifier of "Remove bookmark" menu option
-			int close_id; //!<identifier of "Close" menu option
-			int create_id; //!<identifier of "Create" menu option
-			int gimp_id; //<!identifier of "Open with Gimp" menu option
-			int reload_id; //<!identifier of "Reload page" menu option
+					
 			QToolBar *toolbar;
-			QPopupMenu *file_menu;
-			QPopupMenu *edit_menu;
-			QPopupMenu *context_menu;
-			QPopupMenu *view_menu;
-			QPopupMenu *navi_menu;
-			QPopupMenu *recent_menu;
-			QPopupMenu *bookmarks_menu;
-			QPopupMenu *settings_menu;
+			QMenu *file_menu;
+			QMenu *edit_menu;
+			QMenu *context_menu;
+			QMenu *view_menu;
+			QMenu *navi_menu;
+			QMenu *recent_menu;
+			QMenu *bookmarks_menu;
+			QMenu *settings_menu;
 			QLabel *pageinfo; //!<page info displayed in right-click context menu
 			QString lastdir; //!<last opened directory for Open File/Directory dialog
+			QAction *toggleScrollbarsAction;
+			QAction *setBookmarkAction;
+			QAction *removeBookmarkAction;
+			QAction *closeAction;
+			QAction *gimpAction;
+			QAction *reloadAction;
+			QAction *jumpToAction;
+			QAction *contScrollAction;
 			QAction *toggleThumbnailsAction;
 			QAction *toggleToolbarAction;
 			QAction *toggleStatusbarAction;
@@ -111,8 +112,8 @@ namespace QComicBook
 			QAction *savePageAction;
 
 		protected:
-			virtual void dragEnterEvent(QDragEnterEvent *e);
-			virtual void dropEvent(QDropEvent *e);
+			//virtual void dragEnterEvent(QDragEnterEvent *e);
+//			virtual void dropEvent(QDropEvent *e);
 			virtual void keyPressEvent(QKeyEvent *e);
 			virtual void closeEvent(QCloseEvent *e);
 

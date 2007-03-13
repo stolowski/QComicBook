@@ -14,18 +14,16 @@
 #include "imgdirsink.h"
 #include "imgarchiver.h"
 #include "pagesdirector.h"
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qfiledialog.h>
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <qframe.h>
-#include <qcombobox.h>
-#include <qhbox.h>
-#include <qvbox.h>
-#include <qprogressbar.h>
-#include <qsizepolicy.h>
-#include <qmessagebox.h>
+#include <QLayout>
+#include <QLineEdit>
+#include <QFileDialog>
+#include <QPushButton>
+#include <QLabel>
+#include <QFrame>
+#include <QComboBox>
+#include <QProgressBar>
+#include <QSizePolicy>
+#include <QMessageBox>
 
 using namespace QComicBook;
 

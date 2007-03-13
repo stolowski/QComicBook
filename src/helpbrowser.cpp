@@ -14,14 +14,13 @@
 #include <qtextbrowser.h>
 #include <qtextcodec.h>
 #include <qfileinfo.h>
-#include <qpopupmenu.h>
 #include <qmenubar.h>
 
 using namespace QComicBook;
 
 HelpBrowser::HelpBrowser(const QString &caption, const QString &path, const QString &file, const QString &imgpath, QWidget *parent): QMainWindow(parent)
 {
-	setCaption(caption);
+	/*setWindowTitle(caption);
 	txtb = new QTextBrowser(this);
 	setCentralWidget(txtb);
 
@@ -50,7 +49,7 @@ HelpBrowser::HelpBrowser(const QString &caption, const QString &path, const QStr
 	connect(txtb, SIGNAL(backwardAvailable(bool)), this, SLOT(enableBackward(bool)));
 	connect(txtb, SIGNAL(forwardAvailable(bool)), this, SLOT(enableForward(bool)));
 
-	resize(640, 480);
+	resize(640, 480);*/
 }
 
 HelpBrowser::~HelpBrowser()
@@ -59,17 +58,17 @@ HelpBrowser::~HelpBrowser()
 
 void HelpBrowser::enableBackward(bool f)
 {
-	go_menu->setItemEnabled(id_back, f);
+	//go_menu->setItemEnabled(id_back, f);
 }
 
 void HelpBrowser::enableForward(bool f)
 {
-	go_menu->setItemEnabled(id_forward, f);
+	//go_menu->setItemEnabled(id_forward, f);
 }
 
 QString HelpBrowser::getLocaleHelpDir(const QString &maindir, const QString &file)
 {
-	const QString locale = QTextCodec::locale();
+	/*const QString locale = QTextCodec::locale();
 	const QString paths[] = { maindir + "/" + locale,
 		                  maindir + "/" + locale.left(4),
 				  maindir + "/" + locale.left(2),
@@ -82,6 +81,6 @@ QString HelpBrowser::getLocaleHelpDir(const QString &maindir, const QString &fil
 		if (f.exists())
 			return f.absFilePath();
 	}
-	return QString::null;
+	return QString::null;*/
 }
 

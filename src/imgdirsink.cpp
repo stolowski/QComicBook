@@ -87,28 +87,28 @@ void ImgDirSink::recurseDir(const QString &s)
 {
         QDir dir(s);
         dir.setSorting(QDir::DirsFirst|QDir::Name);
-        dir.setMatchAllDirs(true);
+        dir.setFilter(QDir::AllDirs);
         const QStringList files = dir.entryList();
         for (QStringList::const_iterator it = files.begin(); it!=files.end(); ++it)
         {
                 if (*it == "." || *it == "..")
                         continue;
 
-                QFileInfo finf(dir.absFilePath(*it, false));
+                QFileInfo finf(dir.absoluteFilePath(*it));
                 if (finf.isFile())
                 {
 			if (knownImageExtension(*it))
-                                imgfiles.append(finf.absFilePath());
-                        else if ((*it).endsWith(".nfo", false) || (*it) == "file_id.diz")
-                                txtfiles.append(finf.absFilePath());
+                                imgfiles.append(finf.absoluteFilePath());
+                        else if ((*it).endsWith(".nfo", Qt::CaseInsensitive) || (*it) == "file_id.diz")
+                                txtfiles.append(finf.absoluteFilePath());
                         else
-                                otherfiles.append(finf.absFilePath());
-			timestamps.insert(finf.absFilePath(), FileStatus(finf.lastModified()));
+                                otherfiles.append(finf.absoluteFilePath());
+			timestamps.insert(finf.absoluteFilePath(), FileStatus(finf.lastModified()));
                 }
-                else if (finf.isDir() && (finf.absFilePath()!=s))
+                else if (finf.isDir() && (finf.absoluteFilePath()!=s))
                 {
-                        dirs.append(finf.absFilePath());
-                        recurseDir(finf.absFilePath());
+                        dirs.append(finf.absoluteFilePath());
+                        recurseDir(finf.absoluteFilePath());
                 }
         }
 }
@@ -188,7 +188,7 @@ QStringList ImgDirSink::getDescription() const
 		{
 			QFileInfo finfo(*it);
 			QFile f(*it);
-			if (f.open(IO_ReadOnly) && (f.size() < MAX_TEXTFILE_SIZE))
+			if (f.open(QIODevice::ReadOnly) && (f.size() < MAX_TEXTFILE_SIZE))
 			{
 				QString cont;
 				QTextStream str(&f);
@@ -348,7 +348,7 @@ bool ImgDirSink::hasModifiedFiles() const
 	for (QMap<QString, FileStatus>::ConstIterator it = timestamps.begin(); it != timestamps.end(); ++it)
 	{
 		QFileInfo finf(it.key());
-		if (it.data().isModified() || it.data() != finf.lastModified())
+		if ((*it).isModified() || *it != finf.lastModified())
 			return true;
 	}
 	return false;
@@ -380,7 +380,7 @@ void ImgDirSink::removeThumbnails(int days)
         const QStringList files = dir.entryList();
         for (QStringList::const_iterator it = files.begin(); it!=files.end(); it++)
         {
-                QFileInfo finfo(dir.absFilePath(*it));
+                QFileInfo finfo(dir.absoluteFilePath(*it));
                 if (finfo.lastModified().daysTo(currdate) > days)
                         dir.remove(*it);
         }
@@ -393,16 +393,16 @@ ThumbnailLoaderThread& ImgDirSink::thumbnailLoader()
 
 bool ImgDirSink::knownImageExtension(const QString &path)
 {
-	for (int i=0; imgext[i]; i++)
-		if (path.endsWith(imgext[i], false))
+	for (int i=0; imgext[i] != NULL; i++)
+		if (path.endsWith(imgext[i], Qt::CaseInsensitive))
 			return true;
 	return false;
 }
 
 QString ImgDirSink::getKnownImageExtension(const QString &path)
 {
-	for (int i=0; imgext[i]; i++)
-		if (path.endsWith(imgext[i], false))
+	for (int i=0; imgext[i] != NULL; i++)
+		if (path.endsWith(imgext[i], Qt::CaseInsensitive))
 			return imgext[i];
 	return false;
 }
@@ -410,7 +410,7 @@ QString ImgDirSink::getKnownImageExtension(const QString &path)
 QStringList ImgDirSink::getKnownImageExtensionsList()
 {
 	QStringList list;
-	for (int i=0; imgext[i]; i++)
+	for (int i=0; imgext[i] != NULL; i++)
 	{
 		QString p = "*" + imgext[i];
 		list << p;

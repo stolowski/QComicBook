@@ -13,13 +13,14 @@
 #ifndef __THUMBNAILSWIN_H
 #define __THUMBNAILSWIN_H
 
-#include <qdockwindow.h>
+#include <QDockWidget>
+#include <QEvent>
 
 namespace QComicBook
 {
 	class ThumbnailsView;
 
-	class ThumbnailsWindow: public QDockWindow
+	class ThumbnailsWindow: public QDockWidget
 	{
 		Q_OBJECT
 
@@ -31,13 +32,13 @@ namespace QComicBook
 			void requestedPage(int n, bool force);
 
 		protected:
-			void customEvent(QCustomEvent *e);
+			void customEvent(QEvent *e);
 
 		protected slots:
-			void onOrientationChanged(Orientation o);
+			//void onOrientationChanged(Orientation o); -- nie ma w Qt4
 
 		public:
-			ThumbnailsWindow(Place p=InDock, QWidget *parent=0);
+			ThumbnailsWindow(QWidget *parent=0);
 			virtual ~ThumbnailsWindow();
 			ThumbnailsView* view() const;
 	};

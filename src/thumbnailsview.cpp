@@ -22,7 +22,7 @@
 
 using namespace QComicBook;
 
-ThumbnailsView::ThumbnailsView(QWidget *parent): QIconView(parent), selected(NULL), numpages(0)
+ThumbnailsView::ThumbnailsView(QWidget *parent): QListWidget(parent), selected(NULL), numpages(0)
 {
 	setFocusPolicy(QWidget::NoFocus);
 	setItemsMovable(false);

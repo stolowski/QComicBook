@@ -13,7 +13,7 @@
 #ifndef __ABOUT_DIALOG_H
 #define __ABOUT_DIALOG_H
 
-#include <qdialog.h>
+#include <QDialog>
 
 class QLabel;
 class QPixmap;

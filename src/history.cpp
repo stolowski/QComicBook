@@ -30,10 +30,11 @@ History::~History()
 
 void History::append(const QString &txt)
 {
-	QStringList::iterator it = hlist.find(txt);
+	const int i = hlist.indexOf(txt);
+	
 	//
 	// text not found on the list - append it
-	if (it == hlist.end())
+	if (i < 0)
 	{
 		hlist.push_front(txt);
 		//
@@ -43,14 +44,16 @@ void History::append(const QString &txt)
 	}
 	else //put the item to the front
 	{
-		hlist.remove(it);
+		hlist.removeAt(i);
 		hlist.push_front(txt);
 	}
 }
 
 void History::remove(const QString &txt)
 {
-	hlist.remove(txt);
+	const int i = hlist.indexOf(txt);
+	if (i >= 0)
+		hlist.removeAt(i);
 }
 
 void History::set(const QStringList &l)
