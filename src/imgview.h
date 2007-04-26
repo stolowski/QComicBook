@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005-2006 Pawel Stolowski <yogin@linux.bydg.org>
+ * Copyright (C) 2005 Pawel Stolowski <yogin@linux.bydg.org>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -13,9 +13,10 @@
 #ifndef __IMGVIEW_H
 #define __IMGVIEW_H
 
-#include <QWidget>
+#include <qscrollview.h>
+#include <qwmatrix.h>
 
-class QMenu;
+class QPopupMenu;
 class QImage;
 class QPixmap;
 class QColor;
@@ -24,21 +25,21 @@ class QCursor;
 namespace QComicBook
 {
 	enum Size { Original, FitWidth, FitHeight, WholePage, BestFit };
-	//enum Scaling { Smooth, Fast };
+	enum Scaling { Smooth, Fast };
 	enum Rotation { None, Left, Right };
 
-	class ImlibImage;
-
-	class ComicImageView: public QWidget
+	class ComicImageView: public QScrollView
 	{
 		Q_OBJECT
 
 		private:
-			QMenu *context_menu;
-			ImlibImage *orgimage[2];
+			QPopupMenu *context_menu;
+			QImage *orgimage; //original 1:1 image
+			QPixmap *pixmap;
 			Size isize;
-			//Scaling iscaling;
+			Scaling iscaling;
 			int iangle; //rotation angle, 0..3, multipled by 90
+			QWMatrix rmtx; //rotation matrix
 			int spdx, spdy; //scroll speed
 			int xoff, yoff;
 			int lx, ly; //last mouse position when tracking mouse moves
@@ -46,15 +47,9 @@ namespace QComicBook
 			QCursor *smallcursor;
 			static const int EXTRA_WHEEL_SPIN; //number of extra wheel spins to flip the page
 
-			// test - na potrzeby imlib
-			double asp;
-			double w_asp;
-			double h_asp;
-
 		signals:
 			void bottomReached();
 			void topReached();
-			void doubleClick();
 
 		protected:
 			void resizeEvent(QResizeEvent *e);
@@ -63,14 +58,13 @@ namespace QComicBook
 			virtual void contentsWheelEvent(QWheelEvent *e);
 			virtual void contentsMouseMoveEvent(QMouseEvent *e);
 			virtual void contentsMousePressEvent(QMouseEvent *e);
-			virtual void contentsMouseDoubleClickEvent(QMouseEvent *e);
 			virtual void contentsMouseReleaseEvent(QMouseEvent *e);
 			virtual void drawContents(QPainter *p, int clipx, int clipy, int clipw, int cliph);
 
-		public slots:
-			void setImage(ImlibImage *img, bool preserveangle=false);
-			void setImage(ImlibImage *img1, ImlibImage *img2, bool preserveangle=false);
-			//void setScaling(Scaling s);
+			public slots:
+				void setImage(const QImage &img, bool preserveangle=false);
+			void setImage(const QImage &img1, const QImage &img2, bool preserveangle=false);
+			void setScaling(Scaling s);
 			void setRotation(Rotation r);
 			void setSize(Size s);
 			void setSizeOriginal();
@@ -99,14 +93,13 @@ namespace QComicBook
 			void setSmallCursor(bool f);
 
 		public:
-			ComicImageView(QWidget *parent, Size size=Original, const QColor &color=Qt::black);
+			ComicImageView(QWidget *parent, Size size=Original, Scaling scaling=Smooth, const QColor &color=Qt::black);
 			~ComicImageView();
 			bool onBottom();
 			bool onTop();
-			QMenu *contextMenu() const;
+			QPopupMenu *contextMenu() const;
 			Size getSize() const;
-			int imageWidth() const;
-			int visiblePages() const;
+			const QPixmap& image() const;
 	};
 }
 

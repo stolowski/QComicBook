@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005-2006 Pawel Stolowski <yogin@linux.bydg.org>
+ * Copyright (C) 2005 Pawel Stolowski <yogin@linux.bydg.org>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -12,51 +12,35 @@
 
 #include "imgview.h"
 #include "miscutil.h"
-#include "imlibimage.h"
-#include <QMenu>
+#include <qimage.h>
+#include <qpixmap.h>
+#include <qpopupmenu.h>
 #include <qpainter.h>
 #include <qbitmap.h>
 #include <qcursor.h>
 #include <algorithm>
-#include <cmath>
 
 using namespace QComicBook;
 
 const int ComicImageView::EXTRA_WHEEL_SPIN = 2;
 
-ComicImageView::ComicImageView(QWidget *parent, Size size, const QColor &color): QScrollView(parent), isize(size), iangle(0), xoff(0), yoff(0), lx(-1), wheelupcnt(0), wheeldowncnt(0), smallcursor(NULL)
+ComicImageView::ComicImageView(QWidget *parent, Size size, Scaling scaling, const QColor &color): QScrollView(parent), isize(size), iscaling(scaling), iangle(0), xoff(0), yoff(0), lx(-1), wheelupcnt(0), wheeldowncnt(0), smallcursor(NULL)
 {
-	orgimage[0] = orgimage[1] = NULL;
-        context_menu = new QMenu(this);
-        //viewport()->setPaletteBackgroundColor(color);
-        //setFocusPolicy(QWidget::StrongFocus);
+        orgimage = new QImage();
+        pixmap = new QPixmap();
+        context_menu = new QPopupMenu(this);
+        viewport()->setPaletteBackgroundColor(color);
+        setFocusPolicy(QWidget::StrongFocus);
 }
 
 ComicImageView::~ComicImageView()
 {
-	delete orgimage[0];
-	delete orgimage[1];
+        delete pixmap;
+        delete orgimage;
 }
 
 void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, int cliph)
 {
-	if (orgimage[0] == NULL)
-		return;
-
-	ImlibImage *image1, *image2;
-
-
-	if (iangle > 1 && orgimage[1]) //switch image pointers to reflect rotation angle
-	{
-		image1 = orgimage[1];
-		image2 = orgimage[0];
-	}
-	else
-	{
-		image1 = orgimage[0];
-		image2 = orgimage[1];
-	}
-
         int px = clipx - xoff;
         int py = clipy - yoff;
               
@@ -73,68 +57,10 @@ void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, 
        
         if (clipx + clipw < xoff || clipy + cliph < yoff)
                  return;
-
-	const double img1w = static_cast<double>(image1->width());
-	const double img1h = static_cast<double>(image1->height());
-
-	double sx = w_asp * px;
-	double sy = h_asp * py;
-
-	double sw = ceil(w_asp*clipw); //round up, so it's never 0
-	double sh = ceil(h_asp*cliph);
-
-	double dx = std::max(xoff, clipx) - contentsX();
-	double dy = std::max(yoff, clipy) - contentsY();
-
-        image1->draw(p->device(), static_cast<int>(sx), static_cast<int>(sy), static_cast<int>(sw), static_cast<int>(sh), static_cast<int>(dx), static_cast<int>(dy), clipw, cliph);
-
-	//
-	// number of painted pixels
-	double painted_w = std::min(static_cast<double>(clipw), (img1w - sx)/w_asp);
-	double painted_h = std::min(static_cast<double>(cliph), (img1h - sy)/h_asp);
-
-	if (painted_w < 0)
-		painted_w = 0;
-	if (painted_h < 0)
-		painted_h = 0;
-
-	if (image2)
-	{
-		bool draw = false;
-		if ((painted_w < clipw) && (iangle & 1) == 0) //angle is 0 or 180 - left-right orientation
-		{
-			dx += painted_w;
-			if (sx > img1w) //1st image was not drawn, part of 2nd image need to be painted only
-			{
-				sx = (static_cast<double>(clipx - xoff) - (img1w/w_asp))*w_asp;;
-				dx = std::max(static_cast<double>(xoff), static_cast<double>(clipx) - painted_w) - contentsX();
-			}
-			else //whole 2nd image to be painted
-			{
-				sx = 0.0f;
-			}
-			draw = true;
-		}
-		else if ((painted_h <  cliph) && (iangle & 1)) //angle is 90 or 270 - top-bottom orientation
-		{
-			dy += painted_h;
-			if (sy > img1h) //1st image was not drawn, part of 2nd image need to be painted only
-			{
-				sy = (static_cast<double>(clipy - yoff) - (img1h/h_asp))*h_asp;;
-				dy = std::max(static_cast<double>(yoff), static_cast<double>(clipy) - painted_h) - contentsY();
-			}
-			else //whole 2nd image to be painted
-			{
-				sy = 0.0f;
-			}
-			draw = true;
-		}
-		if (draw)
-			image2->draw(p->device(), static_cast<int>(sx), static_cast<int>(sy), static_cast<int>(sw), static_cast<int>(sh), static_cast<int>(dx), static_cast<int>(dy), clipw, cliph);
-	}
+        p->drawPixmap(std::max(xoff, clipx), std::max(yoff, clipy), *pixmap, px, py, clipw, cliph);
 }
 
-QMenu *ComicImageView::contextMenu() const
+QPopupMenu *ComicImageView::contextMenu() const
 {
         return context_menu;
 }
@@ -151,22 +77,16 @@ bool ComicImageView::onBottom()
 
 void ComicImageView::contentsContextMenuEvent(QContextMenuEvent *e)
 {
-	if (orgimage[0])
+        if (!pixmap->isNull())
                 context_menu->popup(e->globalPos());
 }
 
-void ComicImageView::setImage(ImlibImage *img, bool preserveangle)
+void ComicImageView::setImage(const QImage &img, bool preserveangle)
 {
         if (!preserveangle)
                 iangle = 0;
 
-	delete orgimage[0];
-	delete orgimage[1];
-        orgimage[0] = img;
-	orgimage[1] = NULL;
-
-	if (iangle != 0 && orgimage[0])
-		orgimage[0]->rotate(iangle);
+        *orgimage = img;
 
         updateImageSize();
         ensureVisible(1, 1);
@@ -174,24 +94,18 @@ void ComicImageView::setImage(ImlibImage *img, bool preserveangle)
         repaintContents(0, 0 , viewport()->width(), viewport()->height());
 }
 
-void ComicImageView::setImage(ImlibImage *img1, ImlibImage *img2, bool preserveangle)
+void ComicImageView::setImage(const QImage &img1, const QImage &img2, bool preserveangle)
 {
         if (!preserveangle)
                 iangle = 0;
+        //
+        // we need to recreate orgimage as it may refer to original image data in cache;
+        // we dont want to work on shallow copy; it is probably also better than detach()
+        delete orgimage;
+        orgimage = new QImage(img1.width() + img2.width(), std::max(img1.height(), img2.height()), 32);
 
-	delete orgimage[0];
-	delete orgimage[1];
-
-	orgimage[0] = img1;
-	orgimage[1] = img2;
-
-	if (iangle != 0)
-	{
-		if (orgimage[0])
-			orgimage[0]->rotate(iangle);
-		if (orgimage[1])
-			orgimage[1]->rotate(iangle);
-	}
+        bitBlt(orgimage, 0, 0, &img1, 0, 0, -1, -1, 0);
+        bitBlt(orgimage, img1.width(), 0, &img2, 0, 0, -1, -1, 0);
 
         updateImageSize();
         ensureVisible(1, 1);
@@ -266,46 +180,16 @@ void ComicImageView::contentsMouseReleaseEvent(QMouseEvent *e)
                 setCursor(Qt::ArrowCursor);
 }
 
-
-void ComicImageView::contentsMouseDoubleClickEvent(QMouseEvent *e)
-{
-	emit doubleClick();
-}
-
 void ComicImageView::updateImageSize()
 {
-	if (orgimage[0] == NULL)
-		return;
-        if (orgimage[0]->width() * orgimage[0]->height() == 0)
+        if (orgimage->width() * orgimage->height() == 0)
                 return;
 
         Size size = isize;
-
-	//
-	// calculate iw, ih - the size of total image(s) area without scaling;
-	// roatation angle of 2nd image is taken into account
-	double iw = orgimage[0]->width();
-	double ih = orgimage[0]->height();
-
-	if (orgimage[1])
-	{
-		if (iangle & 1)
-		{
-			ih += orgimage[1]->height();
-			if (orgimage[1]->width() > iw)
-				iw = orgimage[1]->width();
-		}
-		else
-		{
-			iw += orgimage[1]->width();
-			if (orgimage[1]->height() > ih)
-				ih = orgimage[1]->height();
-		}
-	}
         
         if (size == BestFit)
         {
-                if (iw > ih)
+                if (orgimage->width() > orgimage->height())
                 {
                         if (iangle&1)
                                 size = FitWidth;
@@ -320,42 +204,41 @@ void ComicImageView::updateImageSize()
                                 size = FitWidth;
                 }
         }
-
-	int dw, dh;
                 
-	w_asp = h_asp = 1.0f;
         if (size == Original)
         {
-		dw = static_cast<int>(iw);
-		dh = static_cast<int>(ih);
-	}
+                if (iangle == 0)
+                        pixmap->convertFromImage(*orgimage);
+                else
+                        pixmap->convertFromImage(orgimage->xForm(rmtx));
+        }
         else
         {       
-		asp = (double)iw / ih;
+                QImage img;
+                int w = viewport()->width();
+                int h = viewport()->height();
 
-		if (size == FitWidth)
-		{
-			w_asp = iw / viewport()->width();
-			h_asp = w_asp * asp;
-			h_asp = w_asp;
-		}
-		else if (size == FitHeight)
-		{
-			h_asp = ih / viewport()->height();
-			w_asp = h_asp;
-		}
-		else if (size == WholePage)
-		{
-			w_asp = iw / viewport()->width();
-			h_asp = ih / viewport()->height();
-			if (w_asp > h_asp)
-				h_asp = w_asp;
-			else
-				w_asp = h_asp;
-		}
+                if (size == FitWidth)
+                        h = 65535;
+                else if (size == FitHeight)
+                        w = 65535;
 
-		dw = static_cast<int>(iw / w_asp);
-		dh = static_cast<int>(ih / h_asp);
+                if (iangle&1) //for 90 and 270 angles w and h must be reversed
+                {
+                        int tmp = w;
+                        w = h;
+                        h = tmp;
+                }
+
+                if (iscaling == Smooth)
+                        img = orgimage->smoothScale(w, h, QImage::ScaleMin);
+                else if (iscaling == Fast)
+                        img = orgimage->scale(w, h, QImage::ScaleMin);
+        
+                if (iangle == 0)
+                        pixmap->convertFromImage(img);
+                else
+                        pixmap->convertFromImage(img.xForm(rmtx));
         }
 
         int d;
@@ -363,48 +246,41 @@ void ComicImageView::updateImageSize()
 
         //
         // calculate offsets for image centering
-        if ((d = viewport()->width() - dw) > 0)
+        if ((d = viewport()->width() - pixmap->width()) > 0)
                 xoff = d/2;
-        if ((d = viewport()->height() - dh) > 0)
+        if ((d = viewport()->height() - pixmap->height()) > 0)
                 yoff = d/2;
-          
-	resizeContents(dw + xoff, dh + yoff);
+                        
+        resizeContents(pixmap->width() + xoff, pixmap->height() + yoff);
                 
         //
         // update scrolling speeds
-        spdx = dw / 100;
-        spdy = dh / 100;
+        spdx = pixmap->width() / 100;
+        spdy = pixmap->height() / 100;
 }
 
-/*void ComicImageView::setScaling(Scaling s)
+void ComicImageView::setScaling(Scaling s)
 {
         iscaling = s;
-}*/
+}
 
 void ComicImageView::setRotation(Rotation r)
 {
-	if (r == QComicBook::Right)
-		++iangle;
-	else if (r == QComicBook::Left)
-		--iangle;
-	iangle &= 3;
+        if (r == QComicBook::Right)
+                ++iangle;
+        else if (r == QComicBook::Left)
+                --iangle;
+        else
+                iangle = 0; //None
+        iangle &= 3;            
+        if (iangle !=0)
+        {
+                rmtx.reset();
+                rmtx.rotate(iangle * 90.0f);
+        }
 
-	for (int i=0; i<2; i++)
-		if (orgimage[i])
-		{
-			if (r == QComicBook::Right)
-				orgimage[i]->rotate(1);
-			else if (r == QComicBook::Left)
-				orgimage[i]->rotate(3);
-			else if (r == QComicBook::None && iangle != 0)
-			{
-				orgimage[i]->rotate(4-iangle);
-				iangle = 0;
-			}
-		}
-
-	updateImageSize();
-	repaintContents(contentsX(), contentsY(), viewport()->width(), viewport()->height(), true);
+        updateImageSize();
+        repaintContents(contentsX(), contentsY(), viewport()->width(), viewport()->height(), true);
 }
 
 void ComicImageView::setSize(Size s)
@@ -582,10 +458,8 @@ void ComicImageView::setSmallCursor(bool f)
 
 void ComicImageView::clear()
 {
-	if (orgimage[0])
-		orgimage[0]->reset();
-	if (orgimage[1])
-		orgimage[1]->reset();
+        orgimage->reset();
+        pixmap->resize(0, 0);
         resizeContents(0, 0);
 }
 
@@ -594,20 +468,8 @@ Size ComicImageView::getSize() const
         return isize;
 }
 
-int ComicImageView::imageWidth() const
+const QPixmap& ComicImageView::image() const
 {
-	if (orgimage[0])
-		return orgimage[0]->width();
-	return 0;
-}
-
-int ComicImageView::visiblePages() const
-{
-	int v = 0;
-	if (orgimage[0])
-		++v;
-	if (orgimage[1])
-		++v;
-	return v;
+        return *pixmap;
 }
 
