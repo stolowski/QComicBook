@@ -22,7 +22,6 @@
 #include <QMap>
 #include <QMutex>
 #include "thumbnailloader.h"
-#include "imlibloader.h"
 
 class QImage;
 
@@ -45,7 +44,6 @@ namespace QComicBook
 	};
 
 	class Thumbnail;
-	class ImlibImage;
 
 	//! Comic book directory sink.
 	/*! Allows opening directories containing image files. */
@@ -102,7 +100,7 @@ namespace QComicBook
 		
 		private:
 			ThumbnailLoaderThread thloader;
-			ImlibLoaderThread imgloader;
+			//ImlibLoaderThread imgloader;
 			mutable QMutex listmtx; //!< mutex for imgfiles
 			bool dirsfirst; //!< visit directories first, then files
 			static const QString imgext[];
@@ -148,7 +146,7 @@ namespace QComicBook
 			 *  @param result contains 0 on succes or value greater than 0 for error
 			 *  @param preload number of pages to preload in preloading thread 
 			 *  @return an image */
-			virtual ImlibImage* getImage(unsigned int num, int &result);
+			virtual QImage getImage(unsigned int num, int &result);
 
 			virtual void preload(unsigned int num);
 

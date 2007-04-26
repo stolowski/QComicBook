@@ -12,10 +12,12 @@
 
 #include "imgview.h"
 #include "miscutil.h"
-#include <qimage.h>
-#include <qpixmap.h>
-#include <qpopupmenu.h>
-#include <qpainter.h>
+#include <QImage>
+#include <QPixmap>
+#include <QMenu>
+#include <QContextMenuEvent>
+#include <QLabel>
+#include <QPainter>
 #include <qbitmap.h>
 #include <qcursor.h>
 #include <algorithm>
@@ -24,74 +26,66 @@ using namespace QComicBook;
 
 const int ComicImageView::EXTRA_WHEEL_SPIN = 2;
 
-ComicImageView::ComicImageView(QWidget *parent, Size size, Scaling scaling, const QColor &color): QScrollView(parent), isize(size), iscaling(scaling), iangle(0), xoff(0), yoff(0), lx(-1), wheelupcnt(0), wheeldowncnt(0), smallcursor(NULL)
+ComicImageView::ComicImageView(QWidget *parent, Size size, const QColor &color): QWidget(parent), isize(size), iangle(0), xoff(0), yoff(0), lx(-1), wheelupcnt(0), wheeldowncnt(0), smallcursor(NULL)
 {
-        orgimage = new QImage();
-        pixmap = new QPixmap();
-        context_menu = new QPopupMenu(this);
-        viewport()->setPaletteBackgroundColor(color);
-        setFocusPolicy(QWidget::StrongFocus);
+        context_menu = new QMenu(this);
+        //viewport()->setPaletteBackgroundColor(color);
+        //setFocusPolicy(QWidget::StrongFocus);
+	//imgLabel = new QLabel();
+	//setWidget(imgLabel);
+	//setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 }
 
 ComicImageView::~ComicImageView()
 {
-        delete pixmap;
-        delete orgimage;
 }
 
-void ComicImageView::drawContents(QPainter *p, int clipx, int clipy, int clipw, int cliph)
+QSize ComicImageView::sizeHint() const
 {
-        int px = clipx - xoff;
-        int py = clipy - yoff;
-              
-        if (py < 0 ) //clear strip on the top
-        {
-                p->eraseRect(clipx, clipy, clipw, -py);
-                py = 0;
-        }
-        if (px < 0) //clear strip on the left
-        {
-                p->eraseRect(clipx, yoff, -px, cliph);
-                px = 0;
-        }
-       
-        if (clipx + clipw < xoff || clipy + cliph < yoff)
-                 return;
-        p->drawPixmap(std::max(xoff, clipx), std::max(yoff, clipy), *pixmap, px, py, clipw, cliph);
+	return QSize(orgimg[0].width(), orgimg[0].height());
 }
 
-QPopupMenu *ComicImageView::contextMenu() const
+void ComicImageView::paintEvent(QPaintEvent *e)
+{
+	QPainter p(this);
+	//p.rotate(iangle * 90.0f);
+	p.drawImage(e->rect(), orgimg[0], e->rect());
+	e->accept();
+}
+
+QMenu *ComicImageView::contextMenu() const
 {
         return context_menu;
 }
 
 bool ComicImageView::onTop()
 {
-        return contentsY() == 0;
+	return false;
+        //return contentsY() == 0;
 }
 
 bool ComicImageView::onBottom()
 {
-        return contentsY() + viewport()->height() >= contentsHeight();
+	return false;
+        //return contentsY() + viewport()->height() >= contentsHeight();
 }
 
-void ComicImageView::contentsContextMenuEvent(QContextMenuEvent *e)
+void ComicImageView::contextMenuEvent(QContextMenuEvent *e)
 {
-        if (!pixmap->isNull())
-                context_menu->popup(e->globalPos());
+        //if (!pixmap->isNull())
+          //      context_menu->popup(e->globalPos());
 }
 
-void ComicImageView::setImage(const QImage &img, bool preserveangle)
+void ComicImageView::setImage(const QImage &img1, bool preserveangle)
 {
         if (!preserveangle)
                 iangle = 0;
 
-        *orgimage = img;
+	orgimg[0] = img1;
 
         updateImageSize();
-        ensureVisible(1, 1);
 
-        repaintContents(0, 0 , viewport()->width(), viewport()->height());
+	update();
 }
 
 void ComicImageView::setImage(const QImage &img1, const QImage &img2, bool preserveangle)
@@ -99,30 +93,23 @@ void ComicImageView::setImage(const QImage &img1, const QImage &img2, bool prese
         if (!preserveangle)
                 iangle = 0;
         //
-        // we need to recreate orgimage as it may refer to original image data in cache;
-        // we dont want to work on shallow copy; it is probably also better than detach()
-        delete orgimage;
-        orgimage = new QImage(img1.width() + img2.width(), std::max(img1.height(), img2.height()), 32);
-
-        bitBlt(orgimage, 0, 0, &img1, 0, 0, -1, -1, 0);
-        bitBlt(orgimage, img1.width(), 0, &img2, 0, 0, -1, -1, 0);
-
+	//orgimage = QImage(img1.width() + img2.width(), std::max(img1.height(), img2.height()), QImage::Format_ARGB32);
         updateImageSize();
-        ensureVisible(1, 1);
+        //ensureVisible(1, 1);
 
-        repaintContents(0, 0 , viewport()->width(), viewport()->height());
+        //repaintContents(0, 0 , viewport()->width(), viewport()->height());
 }
 
 void ComicImageView::resizeEvent(QResizeEvent *e)
 {
-        QScrollView::resizeEvent(e);
+        //QScrollView::resizeEvent(e);
         updateImageSize();
 }
 
 void ComicImageView::contentsWheelEvent(QWheelEvent *e)
 {
         e->accept();
-        if (e->delta() > 0) //scrolling up
+/*        if (e->delta() > 0) //scrolling up
         {
                 if (contentsHeight()<=viewport()->height() || (onTop() && ++wheelupcnt > EXTRA_WHEEL_SPIN))
                 {
@@ -147,12 +134,12 @@ void ComicImageView::contentsWheelEvent(QWheelEvent *e)
                         scrollBy(0, 3*spdy);
                         wheelupcnt = 0; //reset opposite direction counter
                 }
-        }
+        }*/
 }
 
 void ComicImageView::contentsMouseMoveEvent(QMouseEvent *e)
 {
-        if (lx >= 0)
+/*        if (lx >= 0)
         {
                 const int dx = lx - e->x();
                 const int dy = ly - e->y();
@@ -164,7 +151,7 @@ void ComicImageView::contentsMouseMoveEvent(QMouseEvent *e)
         {
                 lx = e->x();
                 ly = e->y();
-        }
+        }*/
 }
 
 void ComicImageView::contentsMousePressEvent(QMouseEvent *e)
@@ -182,14 +169,18 @@ void ComicImageView::contentsMouseReleaseEvent(QMouseEvent *e)
 
 void ComicImageView::updateImageSize()
 {
-        if (orgimage->width() * orgimage->height() == 0)
+	QMatrix m;
+
+
+/*
+        if (orgimage.width() * orgimage.height() == 0)
                 return;
 
         Size size = isize;
         
         if (size == BestFit)
         {
-                if (orgimage->width() > orgimage->height())
+                if (orgimage.width() > orgimage.height())
                 {
                         if (iangle&1)
                                 size = FitWidth;
@@ -203,9 +194,9 @@ void ComicImageView::updateImageSize()
                         else
                                 size = FitWidth;
                 }
-        }
+        }*/
                 
-        if (size == Original)
+/*        if (size == Original)
         {
                 if (iangle == 0)
                         pixmap->convertFromImage(*orgimage);
@@ -256,7 +247,12 @@ void ComicImageView::updateImageSize()
         //
         // update scrolling speeds
         spdx = pixmap->width() / 100;
-        spdy = pixmap->height() / 100;
+        spdy = pixmap->height() / 100;*/
+
+	//QImage tmp = orgimage.transformed(rmtx, Qt::SmoothTransformation);
+	//imgLabel->setPixmap(QPixmap::fromImage(tmp));
+	//imgLabel->resize(tmp.width(), tmp.height());
+	resize(orgimg[0].width(), orgimg[0].height());
 }
 
 void ComicImageView::setScaling(Scaling s)
@@ -273,21 +269,21 @@ void ComicImageView::setRotation(Rotation r)
         else
                 iangle = 0; //None
         iangle &= 3;            
-        if (iangle !=0)
+        //if (iangle !=0)
         {
                 rmtx.reset();
                 rmtx.rotate(iangle * 90.0f);
         }
 
         updateImageSize();
-        repaintContents(contentsX(), contentsY(), viewport()->width(), viewport()->height(), true);
+        //repaintContents(contentsX(), contentsY(), viewport()->width(), viewport()->height(), true);
 }
 
 void ComicImageView::setSize(Size s)
 {
         isize = s;
         updateImageSize();
-        repaintContents(contentsX(), contentsY(), viewport()->width(), viewport()->height(), true);
+        //repaintContents(contentsX(), contentsY(), viewport()->width(), viewport()->height(), true);
 }
 
 void ComicImageView::setSizeOriginal()
@@ -317,32 +313,32 @@ void ComicImageView::setSizeBestFit()
 
 void ComicImageView::scrollToTop()
 {
-        ensureVisible(1, 1);
+        //ensureVisible(1, 1);
 }
 
 void ComicImageView::scrollToBottom()
 {
-        ensureVisible(1, contentsHeight());
+        //ensureVisible(1, contentsHeight());
 }
 
 void ComicImageView::scrollRight()
 {
-        scrollBy(spdx, 0);
+        //scrollBy(spdx, 0);
 }
 
 void ComicImageView::scrollLeft()
 {
-        scrollBy(-spdx, 0);
+        //scrollBy(-spdx, 0);
 }
 
 void ComicImageView::scrollRightFast()
 {
-        scrollBy(3*spdx, 0);
+        //scrollBy(3*spdx, 0);
 }
 
 void ComicImageView::scrollLeftFast()
 {
-        scrollBy(-3*spdx, 0);
+        //scrollBy(-3*spdx, 0);
 }
 
 void ComicImageView::scrollUp()
@@ -353,7 +349,7 @@ void ComicImageView::scrollUp()
                 emit topReached();
         }
         else
-                scrollBy(0, -spdy);
+           ;//     scrollBy(0, -spdy);
 }
 
 void ComicImageView::scrollDown()
@@ -364,7 +360,7 @@ void ComicImageView::scrollDown()
                 emit bottomReached();
         }
         else
-                scrollBy(0, spdy);
+             ;//   scrollBy(0, spdy);
 }
 
 void ComicImageView::scrollUpFast()
@@ -372,7 +368,7 @@ void ComicImageView::scrollUpFast()
         if (onTop())
                 emit topReached();
         else
-                scrollBy(0, -3*spdy);
+               ;// scrollBy(0, -3*spdy);
 }
 
 void ComicImageView::scrollDownFast()
@@ -380,7 +376,7 @@ void ComicImageView::scrollDownFast()
         if (onBottom())
                 emit bottomReached();
         else
-                scrollBy(0, 3*spdy);
+                ;//scrollBy(0, 3*spdy);
 }
 
 void ComicImageView::rotateRight()
@@ -403,7 +399,7 @@ void ComicImageView::jumpUp()
         if (onTop())
                 emit topReached();
         else
-                scrollBy(0, -viewport()->height());
+                ;//scrollBy(0, -viewport()->height());
 }
 
 void ComicImageView::jumpDown()
@@ -411,24 +407,24 @@ void ComicImageView::jumpDown()
         if (onBottom())
                 emit bottomReached();
         else
-                scrollBy(0, viewport()->height());
+                ;//scrollBy(0, viewport()->height());
 }
 
 void ComicImageView::enableScrollbars(bool f)
 {
-        ScrollBarMode s = f ? Auto : AlwaysOff;
+        /*ScrollBarMode s = f ? Auto : AlwaysOff;
         setVScrollBarMode(s);
-        setHScrollBarMode(s);
+        setHScrollBarMode(s);*/
 }
 
 void ComicImageView::setBackground(const QColor &color)
 {
-        viewport()->setPaletteBackgroundColor(color);
+        //viewport()->setPaletteBackgroundColor(color);
 }
 
 void ComicImageView::setSmallCursor(bool f)
 {
-        if (f)
+/*        if (f)
         {
                 static unsigned char bmp_bits[4*32];
                 static unsigned char msk_bits[4*32];
@@ -453,14 +449,12 @@ void ComicImageView::setSmallCursor(bool f)
                         delete smallcursor;
                 smallcursor = NULL;
                 setCursor(Qt::ArrowCursor);
-        }
+        }*/
 }
 
 void ComicImageView::clear()
 {
-        orgimage->reset();
-        pixmap->resize(0, 0);
-        resizeContents(0, 0);
+        //resizeContents(0, 0);
 }
 
 Size ComicImageView::getSize() const
@@ -470,6 +464,6 @@ Size ComicImageView::getSize() const
 
 const QPixmap& ComicImageView::image() const
 {
-        return *pixmap;
+        //return *pixmap;
 }
 

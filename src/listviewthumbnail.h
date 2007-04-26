@@ -15,15 +15,17 @@
 
 /*! \file thumbnaillistitem.h */
 
-#include <qlistview.h>
+#include <QListWidgetItem>
 #include "thumbnailitem.h"
+
+class QListWidget;
 
 namespace QComicBook
 {
-	class ListViewThumbnail: public QCheckListItem, public ThumbnailItem
+	class ListViewThumbnail: public QListWidgetItem, public ThumbnailItem
 	{
 		public:
-			ListViewThumbnail(QListView *parent, QListViewItem *after, int page);
+			ListViewThumbnail(QListWidget *parent, QListWidgetItem *after, int page);
 			virtual ~ListViewThumbnail();
 	};
 }

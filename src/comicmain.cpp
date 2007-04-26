@@ -34,6 +34,7 @@
 #include "suparchwin.h"
 #include "imlibimage.h"
 #include "jumptopagewin.h"
+#include <QScrollArea>
 #include <QImage>
 #include <QMenuBar>
 #include <QMenu>
@@ -211,7 +212,10 @@ void ComicMainWindow::setupActions()
 void ComicMainWindow::setupComicImageView()
 {
         view = new ComicImageView(this, cfg->pageSize(), cfg->background());
-        setCentralWidget(view);
+	QScrollArea *scroll = new QScrollArea(this);
+	scroll->setWidget(view);
+ //       setCentralWidget(view);
+ 	setCentralWidget(scroll);
         view->setFocus();
         view->setSmallCursor(cfg->smallCursor());
         connect(cfg, SIGNAL(backgroundChanged(const QColor&)), view, SLOT(setBackground(const QColor&)));
@@ -262,7 +266,8 @@ void ComicMainWindow::setupComicImageView()
 void ComicMainWindow::setupThumbnailsWindow()
 {
         thumbswin = new ThumbnailsWindow(this);
-        //moveDockWindow(thumbswin, Qt::DockLeft); //initial position of thumbnails window TODO
+	thumbswin->setAllowedAreas(Qt::AllDockWidgetAreas);
+	addDockWidget(Qt::LeftDockWidgetArea, thumbswin);
         connect(thumbswin, SIGNAL(requestedPage(int, bool)), this, SLOT(jumpToPage(int, bool)));
         connect(thumbswin, SIGNAL(visibilityChanged(bool)), this, SLOT(thumbnailsVisibilityChanged(bool)));
         connect(thumbswin, SIGNAL(visibilityChanged(bool)), toggleThumbnailsAction, SLOT(setOn(bool)));
@@ -298,6 +303,7 @@ void ComicMainWindow::setupToolbar()
         toolbar->addAction(rotateLeftAction);
         connect(toggleToolbarAction, SIGNAL(toggled(bool)), toolbar, SLOT(setShown(bool)));
         connect(toolbar, SIGNAL(visibilityChanged(bool)), this, SLOT(toolbarVisibilityChanged(bool)));
+	addToolBar(toolbar);
 }
 
 void ComicMainWindow::setupFileMenu()
@@ -411,6 +417,7 @@ void ComicMainWindow::setupHelpMenu()
 void ComicMainWindow::setupStatusbar()
 {
         statusbar = new StatusBar(this);      
+	setStatusBar(statusbar);
         connect(toggleStatusbarAction, SIGNAL(toggled(bool)), statusbar, SLOT(setShown(bool)));
         toggleStatusbarAction->setChecked(cfg->showStatusbar());
         statusbar->setShown(cfg->showStatusbar());
@@ -685,7 +692,7 @@ void ComicMainWindow::open(const QString &path, int page)
 
         closeSink();
 
-	ImlibImage::setCacheSize(cfg->cacheSize()*1024*1024);
+	//ImlibImage::setCacheSize(cfg->cacheSize()*1024*1024);
 
         sink = ImgSinkFactory::instance().createImgSink(path);
         sink->thumbnailLoader().setReciever(thumbswin);
@@ -817,34 +824,34 @@ void ComicMainWindow::jumpToPage(int n, bool force)
 
                 if (twoPagesAction->isChecked())
                 {
-                        ImlibImage *img1 = sink->getImage(currpage = n, result1);
-                        ImlibImage *img2 = sink->getImage(currpage + 1, result2);
+                        QImage img1 = sink->getImage(currpage = n, result1);
+                        QImage img2 = sink->getImage(currpage + 1, result2);
                         if (result2 == 0)
                         {
                                 if (mangaModeAction->isChecked())
                                 {
                                         view->setImage(img2, img1, preserveangle);
-                                        statusbar->setImageInfo(img2, img1);
+                                        statusbar->setImageInfo(&img2, &img1);
                                 }
                                 else
                                 {
                                         view->setImage(img1, img2, preserveangle);
-                                        statusbar->setImageInfo(img1, img2);
+                                        statusbar->setImageInfo(&img1, &img2);
                                 }
                         }
                         else
                         {
                                 view->setImage(img1, preserveangle);
-                                statusbar->setImageInfo(img1);
+                                statusbar->setImageInfo(&img1);
 				if (cfg->preloadPages())
 					sink->preload(currpage + 1);
                         }
                 }
                 else
                 {
-                        ImlibImage *img = sink->getImage(currpage = n, result1);
+                        QImage img = sink->getImage(currpage = n, result1);
                         view->setImage(img, preserveangle);
-                        statusbar->setImageInfo(img);
+                        statusbar->setImageInfo(&img);
                 }
                 //if (mangaModeAction->isChecked()) //TODO
                   //      view->ensureVisible(view->imageWidth(), 0);
@@ -884,12 +891,12 @@ void ComicMainWindow::showSysInfo()
 
 void ComicMainWindow::createArchive()
 {
-	if (sink)
+	/*if (sink)
 	{
 		ArchiverDialog *win = new ArchiverDialog(this, sink);
 		win->exec();
 		delete win;
-	}
+	}*/
 }
 
 void ComicMainWindow::showAbout()
@@ -1005,7 +1012,7 @@ void ComicMainWindow::openWithGimp() //TODO
 
 void ComicMainWindow::savePageAs()
 {
-	if (sink && (sink->numOfImages() > 0))
+	/*if (sink && (sink->numOfImages() > 0))
 	{
 		const QString msg = tr("Choose a filename to save under");
 		int cnt = view->visiblePages();
@@ -1031,7 +1038,7 @@ void ComicMainWindow::savePageAs()
 				}
 			}
 		}
-	}
+	}*/
 }
 
 void ComicMainWindow::bookmarkSelected(int id)

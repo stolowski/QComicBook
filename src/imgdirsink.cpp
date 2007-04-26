@@ -10,15 +10,15 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "imlibimage.h"
 #include "imgdirsink.h"
 #include "cbsettings.h"
 #include "thumbnail.h"
-#include <qstringlist.h>
-#include <qdir.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qtextstream.h>
+#include <QImage>
+#include <QStringList>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QTextStream>
 
 using namespace QComicBook;
 
@@ -87,7 +87,7 @@ void ImgDirSink::recurseDir(const QString &s)
 {
         QDir dir(s);
         dir.setSorting(QDir::DirsFirst|QDir::Name);
-        dir.setFilter(QDir::AllDirs);
+        dir.setFilter(QDir::AllDirs|QDir::Files);
         const QStringList files = dir.entryList();
         for (QStringList::const_iterator it = files.begin(); it!=files.end(); ++it)
         {
@@ -149,9 +149,9 @@ int ImgDirSink::open(const QString &path)
 void ImgDirSink::close()
 {
         thloader.stop();
-        imgloader.stop();
+        //imgloader.stop();
         thloader.wait(); //wait for thumbnail loader thread
-        imgloader.wait(); //wait for preload thread
+        //imgloader.wait(); //wait for preload thread
 
         listmtx.lock();
         dirpath = QString::null;
@@ -203,24 +203,23 @@ QStringList ImgDirSink::getDescription() const
         return desc;
 }
 
-ImlibImage* ImgDirSink::getImage(unsigned int num, int &result)
+QImage ImgDirSink::getImage(unsigned int num, int &result)
 {
         result = SINKERR_LOADERROR;
 
         listmtx.lock();
         const int imgcnt = imgfiles.count();
+	QImage im;
+
         if (num < imgcnt)
 	{
 		const QString fname = imgfiles[num];
 		listmtx.unlock();
 
-		ImlibImage *im = new ImlibImage();
-		if (!im->load(fname))
-		{
-			delete im;
-			im = NULL;
-		}
-		result = 0;
+		if (!im.load(fname))
+			result = 1;
+		else
+			result = 0;
 
 		/*const QFileInfo finf(fname);
 
@@ -234,18 +233,20 @@ ImlibImage* ImgDirSink::getImage(unsigned int num, int &result)
 	}
         else
                 listmtx.unlock();
-	return NULL;
+	result = 0;
+	return im;
 }
 
 void ImgDirSink::preload(unsigned int num)
 {
-	QString name;
+/*	QString name;
 	listmtx.lock();
 	if (num < imgfiles.count())
 		name = imgfiles[num];
 	listmtx.unlock();
 	if (!name.isEmpty())
 		imgloader.request(name);
+		*/
 }
 
 Thumbnail* ImgDirSink::getThumbnail(int num, bool thumbcache)

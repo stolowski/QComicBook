@@ -10,10 +10,10 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include <qapplication.h>
-#include <qmessagebox.h>
-#include <qsplashscreen.h>
-#include <qtimer.h>
+#include <QApplication>
+#include <QMessageBox>
+#include <QSplashScreen>
+#include <QTimer>
 #include "imgarchivesink.h"
 #include "icons.h"
 #include "comicmain.h"
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
 	ImgArchiveSink::autoconfArchivers();
 		
 	ComicMainWindow *win = new ComicMainWindow(NULL);
-	app.setMainWidget(win);
+	//app.setMainWidget(win);
 	win->show();
 
 	//
@@ -68,7 +68,8 @@ int main(int argc, char *argv[])
 	{
 		QTimer *timer = new QTimer(win);
 		QObject::connect(timer, SIGNAL(timeout()), splash, SLOT(close()));
-		timer->start(2000, true);
+		timer->setSingleShot(true);
+		timer->start(2000);
 		//splash->finish(win);
 	}
 

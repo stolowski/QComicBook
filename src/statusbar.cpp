@@ -11,10 +11,9 @@
  */
 
 #include "statusbar.h"
-#include <qlabel.h>
-#include <qstring.h>
-#include "imlibimage.h"
-#include <qprogressbar.h>
+#include <QLabel>
+#include <QImage>
+#include <QProgressBar>
 
 using namespace QComicBook;
 
@@ -82,7 +81,7 @@ void StatusBar::createProgressBar()
 	if (!pbar)
 	{
 		pbar = new QProgressBar(this);
-		pbar->setPercentageVisible(false);
+		//pbar->setPercentageVisible(false);
 		pbar->setFixedHeight(12); //this is a bit ugly... gives chance the
 		addWidget(pbar, 1);
 		pbar->show();
@@ -116,7 +115,7 @@ void StatusBar::setPage(int n, int total)
 	page->setText(tr("Page") + " " + QString::number(n) + " / " + QString::number(total));
 }
 
-void StatusBar::setImageInfo(const ImlibImage *img1, const ImlibImage *img2)
+void StatusBar::setImageInfo(const QImage *img1, const QImage *img2)
 {
 	if (!imginfo)
 	{
@@ -162,7 +161,9 @@ void StatusBar::setProgress(int n, int total)
 			removeInfoElements();
 			createProgressBar();
 		}
-		pbar->setProgress(n, total);
+		//pbar->setProgress(n, total);
+		pbar->setMaximum(total);
+		pbar->setValue(n);
 
 	}
 }

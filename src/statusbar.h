@@ -17,11 +17,10 @@
 
 class QLabel;
 class QProgressBar;
+class QImage;
 
 namespace QComicBook
 {
-	class ImlibImage;
-
 	class StatusBar: public QStatusBar
 	{
 		Q_OBJECT
@@ -35,7 +34,7 @@ namespace QComicBook
 		public slots:
 			void setPage(int n, int total);
 			void setName(const QString &n);
-			void setImageInfo(const ImlibImage *img1, const ImlibImage *img2=NULL);
+			void setImageInfo(const QImage *img1, const QImage *img2=NULL);
 			void setProgress(int n, int total);
 			void clear();
 

@@ -11,7 +11,7 @@
  */
 
 #include "pagenumberedit.h"
-#include <qvalidator.h>
+#include <QValidator>
 
 using namespace QComicBook;
 

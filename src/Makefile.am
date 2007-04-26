@@ -21,7 +21,7 @@ qcomicbook_SOURCES = aboutdialog.cpp bookmark.cpp bookmarkmanager.cpp\
 	bookmarks.cpp cbconfigdialog.cpp cbinfo.cpp cbsettings.cpp comicmain.cpp\
 	helpbrowser.cpp history.cpp icons.cpp iconviewthumbnail.cpp imgarchiver.cpp imgarchivesink.cpp \
 	imgdirsink.cpp imgloader.cpp imgsinkfactory.cpp imgtransform.cpp imgview.cpp\
-	imlibloader.cpp jumptopagewin.cpp listviewthumbnail.cpp main.cpp miscutil.cpp pagenumberedit.cpp\
+	jumptopagewin.cpp listviewthumbnail.cpp main.cpp miscutil.cpp pagenumberedit.cpp\
 	statusbar.cpp suparchwin.cpp thumbnail.cpp\
 	thumbnailevent.cpp thumbnailitem.cpp thumbnailloader.cpp\
 	thumbnailsview.cpp thumbnailswin.cpp
@@ -49,7 +49,6 @@ noinst_HEADERS = aboutdialog.h \
 		 imgsinkfactory.h \
 		 imgdirsink.h \
 		 imgarchivesink.h \
-		 imlibloader.h \
 		 imgloader.h \
 		 imgtransform.h \
 		 jumptopagewin.h \

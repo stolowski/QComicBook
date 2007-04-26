@@ -12,14 +12,14 @@
 
 #include "imgarchivesink.h"
 #include "miscutil.h"
-#include <qimage.h>
-#include <qstringlist.h>
+#include <QImage>
+#include <QStringList>
 #include <QProcess>
 #include <QTextStream>
-#include <qfileinfo.h>
-#include <qfile.h>
+#include <QFileInfo>
+#include <QFile>
 #include <QRegExp>
-#include <qapplication.h>
+#include <QApplication>
 #include <QDir>
 #include <stdlib.h>
 #include <stdio.h>
@@ -63,10 +63,10 @@ void ImgArchiveSink::init()
 {
 	pinf = new QProcess(this);
 	pext = new QProcess(this);
-	connect(pinf, SIGNAL(readyReadStdout()), this, SLOT(infoStdoutReady()));
-	connect(pinf, SIGNAL(processExited(int, QProcess::ExitStatus)), this, SLOT(infoExited(int, QProcess::ExitStatus)));
-	connect(pext, SIGNAL(readyReadStdout()), this, SLOT(extractStdoutReady()));
-	connect(pext, SIGNAL(processExited(int, QProcess::ExitStatus)), this, SLOT(extractExited(int, QProcess::ExitStatus)));
+	connect(pinf, SIGNAL(readyReadStandardOutput()), this, SLOT(infoStdoutReady()));
+	connect(pinf, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(infoExited(int, QProcess::ExitStatus)));
+	connect(pext, SIGNAL(readyReadStandardOutput()), this, SLOT(extractStdoutReady()));
+	connect(pext, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(extractExited(int, QProcess::ExitStatus)));
 }
 
 void ImgArchiveSink::doCleanup()
@@ -225,7 +225,7 @@ QString ImgArchiveSink::getFullName() const
 	return archivepath;
 }
 
-void ImgArchiveSink::infoExited()
+void ImgArchiveSink::infoExited(int code, QProcess::ExitStatus exitStatus)
 {
 	extcnt = 0;
 	pext->start(extprg, extargs);

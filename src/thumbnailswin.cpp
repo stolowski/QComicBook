@@ -20,9 +20,9 @@ using namespace QComicBook;
 
 ThumbnailsWindow::ThumbnailsWindow(QWidget *parent): QDockWidget(parent)
 {
-	setCaption(tr("Thumbnails"));
-	setResizeEnabled(true);
-	setCloseMode(QDockWindow::Always);
+	setWindowTitle(tr("Thumbnails"));
+	//setResizeEnabled(true);
+	//setCloseMode(QDockWindow::Always);
 
 	tview = new ThumbnailsView(this);
 	setWidget(tview);
@@ -42,7 +42,7 @@ void ThumbnailsWindow::customEvent(QEvent *e)
 		tview->setPage(*evt->getThumbnail());
 	}
 	else
-		QDockWindow::customEvent(e);
+		QDockWidget::customEvent(e);
 }
 
 /*void ThumbnailsWindow::onOrientationChanged(Orientation o)

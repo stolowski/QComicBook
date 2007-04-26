@@ -19,7 +19,6 @@ AC_C_CONST
 # Checks for library functions.
 #AC_PROG_GCC_TRADITIONAL
 
-BNV_HAVE_QT
 if test "x$have_qt" = "xno"
 then
 	AC_MSG_ERROR("Qt library is required to compile QComicBook!", 1)
@@ -28,21 +27,15 @@ fi
 #
 # custom test for correct Qt version
 AC_LANG(C++)
-#save_CPPFLAGS="$CPPFLAGS"
-#CPPFLAGS="$CPPFLAGS $QT_CXXFLAGS $QT_LIBS"
-#AC_MSG_CHECKING([for correct version of Qt (>=3.3.1)])
-#AC_RUN_IFELSE(
-#	      [AC_LANG_PROGRAM([[#include <qglobal.h> #include <stdlib.h>]],[[exit(QT_VERSION<0x030301);]])],
-#	      [AC_MSG_RESULT(yes)], [AC_MSG_ERROR(Too old!)],[])
-#CPPFLAGS="$save_CPPFLAGS"
 
-PKG_CHECK_MODULES(Imlib2,imlib2,ac_imlib=yes,ac_imlib=no)
-if test "x$ac_imlib" = "xno"
+PKG_CHECK_MODULES(QtGui,QtGui QtCore,ac_qtgui=yes,ac_qtgui=no)
+if test "x$ac_qtgui" = "xno"
 then
-	AC_MSG_ERROR("Imlib2 not found!", 1)
+	AC_MSG_ERROR("Qt4 GUI support missing!", 1)
 fi
-AC_SUBST(Imlib2_CFLAGS)
-AC_SUBST(Imlib2_LIBS)
+
+AC_SUBST(QtGui_CFLAGS)
+AC_SUBST(QtGui_LIBS)
 
 AC_CONFIG_FILES([Makefile src/Makefile icons/Makefile help/Makefile help/en/Makefile])
 AC_OUTPUT()

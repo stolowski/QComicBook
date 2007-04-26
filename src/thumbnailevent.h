@@ -15,7 +15,7 @@
 
 /*! \file thumbnailevent.h */
 
-#include <qevent.h>
+#include <QEvent>
 
 #define ThumbnailReady 65111
 
@@ -24,7 +24,7 @@ namespace QComicBook
 
 	class Thumbnail;
 
-	class ThumbnailEvent: public QCustomEvent
+	class ThumbnailEvent: public QEvent
 	{
 		private:
 			Thumbnail *thumbnail;
@@ -32,6 +32,8 @@ namespace QComicBook
 		public:
 			ThumbnailEvent(Thumbnail *t);
 			virtual ~ThumbnailEvent();
+
+			virtual Type type() const;
 
 			const Thumbnail *getThumbnail() const;
 	};

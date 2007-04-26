@@ -13,28 +13,31 @@
 #include "thumbnailsview.h"
 #include "iconviewthumbnail.h"
 #include "thumbnail.h"
-#include <qiconview.h>
 #include <qpixmap.h>
 #include <qstring.h>
 #include <qpainter.h>
-#include <qptrvector.h>
-#include <qpopupmenu.h>
+#include <QVector>
+#include <QMenu>
 
 using namespace QComicBook;
 
 ThumbnailsView::ThumbnailsView(QWidget *parent): QListWidget(parent), selected(NULL), numpages(0)
 {
-	setFocusPolicy(QWidget::NoFocus);
-	setItemsMovable(false);
-	arrangeItemsInGrid(true);
-	setAutoArrange(true);
-	setResizeMode(QIconView::Adjust);
-	setMaxItemWidth(Thumbnail::maxWidth());
+	//setFocusPolicy(QWidget::NoFocus);
+	setDragDropMode(QAbstractItemView::NoDragDrop);
+	setMovement(QListView::Static);
+	//arrangeItemsInGrid(true);
+	setViewMode(QListView::IconMode);
+	setIconSize(QSize(Thumbnail::maxWidth(), Thumbnail::maxHeight()));
+	setResizeMode(QListView::Adjust);
+	//setAutoArrange(true);
+	//setResizeMode(QIconView::Adjust);
+	//setMaxItemWidth(Thumbnail::maxWidth());
 
 	//
 	// context menu
-	menu = new QPopupMenu(this);
-	menu->insertItem(tr("Go to"), this, SLOT(goToPageAction()));
+	menu = new QMenu(this);
+	menu->addAction(tr("Go to"), this, SLOT(goToPageAction()));
 	
 	//
 	// create "empty page" image
@@ -45,8 +48,8 @@ ThumbnailsView::ThumbnailsView(QWidget *parent): QListWidget(parent), selected(N
 	paint.setPen(pen);
 	paint.drawRect(0, 0, Thumbnail::maxWidth(), Thumbnail::maxHeight());
 
-	connect(this, SIGNAL(doubleClicked(QIconViewItem *)), this, SLOT(onDoubleClick(QIconViewItem *)));
-	connect(this, SIGNAL(contextMenuRequested(QIconViewItem *, const QPoint&)), this, SLOT(showContextMenu(QIconViewItem *, const QPoint&)));
+	connect(this, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(onDoubleClick(QListWidgetItem *)));
+	connect(this, SIGNAL(contextMenuRequested(QListWidgetItem *, const QPoint&)), this, SLOT(showContextMenu(QListWidgetItem *, const QPoint&)));
 }
 
 ThumbnailsView::~ThumbnailsView()
@@ -54,7 +57,7 @@ ThumbnailsView::~ThumbnailsView()
 	delete emptypage;
 }
 
-void ThumbnailsView::onDoubleClick(QIconViewItem *item)
+void ThumbnailsView::onDoubleClick(QListWidgetItem *item)
 {
 	emit requestedPage(dynamic_cast<ThumbnailItem *>(item)->page(), false);
 }
@@ -70,24 +73,24 @@ void ThumbnailsView::setPages(int pages)
 	//setArrangement(visibleWidth() > visibleHeight() ? QIconView::LeftToRight : QIconView::TopToBottom);
 }
 
-void ThumbnailsView::setPage(int n, const QImage &img)
+void ThumbnailsView::setPage(int n, const QPixmap &img)
 {
 	if (n < icons.count())
 	{
 		IconViewThumbnail *th = icons[n];
-		th->setPixmap(img);
+		th->setIcon(img);
 		th->setLoaded(true);
 	}
 }
 
 void ThumbnailsView::setPage(const Thumbnail &t)
 {
-	setPage(t.page(), t.image());
+	setPage(t.page(), QPixmap::fromImage(t.image()));
 }
 
 void ThumbnailsView::clear()
 {
-	QIconView::clear();
+	QListWidget::clear();
 	icons.clear();
 	numpages = 0;
 	selected = NULL;
@@ -98,13 +101,14 @@ void ThumbnailsView::scrollToPage(int n)
 	if (n < icons.count())
 	{
 		IconViewThumbnail *th = icons[n];
-		setSelected(th, true);
+		setCurrentItem(th);
 		if (isVisible())
-			ensureVisible(th->x(), th->y());
+			scrollToItem(th);
+			//ensureVisible(th->x(), th->y());
 	}
 }
 
-void ThumbnailsView::showContextMenu(QIconViewItem *item, const QPoint &p)
+void ThumbnailsView::showContextMenu(QListWidgetItem *item, const QPoint &p)
 {
 	if (item)
 	{

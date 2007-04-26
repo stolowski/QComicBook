@@ -13,8 +13,8 @@
 #include "imgsinkfactory.h"
 #include "imgdirsink.h"
 #include "imgarchivesink.h"
-#include <qstring.h>
-#include <qfileinfo.h>
+#include <QString>
+#include <QFileInfo>
 
 using namespace QComicBook;
 

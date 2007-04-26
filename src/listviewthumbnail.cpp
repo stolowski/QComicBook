@@ -14,7 +14,7 @@
 
 using namespace QComicBook;
 
-ListViewThumbnail::ListViewThumbnail(QListView *parent, QListViewItem *after, int page): QCheckListItem(parent, after, QString::number(page+1), QCheckListItem::CheckBox), ThumbnailItem(page)
+ListViewThumbnail::ListViewThumbnail(QListWidget *parent, QListWidgetItem *after, int page) : ThumbnailItem(page) //: QListWidgetItem(parent, after, QString::number(page+1), QCheckListItem::CheckBox), ThumbnailItem(page)
 {
 }
 

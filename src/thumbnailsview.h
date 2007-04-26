@@ -18,8 +18,8 @@
 #include <iconviewthumbnail.h>
 
 class QPixmap;
-class QIconViewItem;
-class QPopupMenu;
+class QMenu;
+class QListWidgetItem;
  
 namespace QComicBook
 {
@@ -33,15 +33,15 @@ namespace QComicBook
 			int numpages;
 			QPixmap *emptypage;
 			QVector<IconViewThumbnail *> icons;
-			QPopupMenu *menu;
-			QIconViewItem *selected;
+			QMenu *menu;
+			QListWidgetItem *selected;
 
 		signals:
 			void requestedPage(int n, bool force);
 
 		protected slots:
-			void onDoubleClick(QIconViewItem *item);
-			void showContextMenu(QIconViewItem *item, const QPoint &p);
+			void onDoubleClick(QListWidgetItem *item);
+			void showContextMenu(QListWidgetItem *item, const QPoint &p);
 			void goToPageAction();
 
 		public:
@@ -51,7 +51,7 @@ namespace QComicBook
 
 		public slots:
 			void setPages(int pages);
-			void setPage(int n, const QImage &img);
+			void setPage(int n, const QPixmap &img);
 			void setPage(const Thumbnail &t);
 			void clear();
 			void scrollToPage(int n);

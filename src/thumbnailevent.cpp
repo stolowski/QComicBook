@@ -15,13 +15,18 @@
 
 using namespace QComicBook;
 
-ThumbnailEvent::ThumbnailEvent(Thumbnail *t): QCustomEvent(ThumbnailReady), thumbnail(t)
+ThumbnailEvent::ThumbnailEvent(Thumbnail *t): QEvent(QEvent::User), thumbnail(t)
 {
 }
 
 ThumbnailEvent::~ThumbnailEvent()
 {
 	delete thumbnail;
+}
+
+QEvent::Type ThumbnailEvent::type() const
+{
+	return (QEvent::Type)ThumbnailReady;
 }
 
 const Thumbnail *ThumbnailEvent::getThumbnail() const

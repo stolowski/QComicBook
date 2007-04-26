@@ -10,10 +10,9 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include <qpushbutton.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QPushButton>
+#include <QLabel>
+#include <QHBoxLayout>
 #include "jumptopagewin.h"
 #include "pagenumberedit.h"
 
@@ -21,23 +20,25 @@ using namespace QComicBook;
 
 JumpToPageWindow::JumpToPageWindow(QWidget *parent, int value, int max): QDialog(parent)
 {
-	setCaption(tr("Jump to page..."));
+	setWindowTitle(tr("Jump to page..."));
 	setModal(true);
 	
-	QHBoxLayout *lay = new QHBoxLayout(this, 5, 5);
+	QHBoxLayout *lay = new QHBoxLayout(this);
 	
-	QHBox *box = new QHBox(this);
-	lay->addWidget(box);
-	box->setSpacing(5);
-	new QLabel(tr("Page number"), box);
-	pedit = new PageNumberEdit(box, value, max);
-	new QLabel(QString("/") + QString::number(max), box);
-	QPushButton *b_ok = new QPushButton(tr("Jump"), box);
+	//QHBox *box = new QHBox(this);
+	//lay->addWidget(box);
+	//box->setSpacing(5);
+	lay->addWidget(new QLabel(tr("Page number"), this));
+	pedit = new PageNumberEdit(this, value, max);
+	lay->addWidget(pedit);
+	lay->addWidget(new QLabel(QString("/") + QString::number(max), this));
+	QPushButton *b_ok = new QPushButton(tr("Jump"), this);
+	lay->addWidget(b_ok);
 	connect(b_ok, SIGNAL(clicked()), this, SLOT(jumpPressed()));
 	connect(b_ok, SIGNAL(clicked()), this, SLOT(close()));
 	b_ok->setDefault(true);
 	connect(pedit, SIGNAL(pageSelected(int)), this, SIGNAL(pageSelected(int)));
-	pedit->setFocusPolicy(QWidget::StrongFocus);
+	//pedit->setFocusPolicy(QWidget::StrongFocus);
 	pedit->setFocus();
 	pedit->deselect();
 	setFixedWidth(280);

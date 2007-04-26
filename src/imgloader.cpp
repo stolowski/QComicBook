@@ -12,7 +12,7 @@
 
 #include "imgloader.h"
 #include "imgdirsink.h"
-#include <qimage.h>
+#include <QPixmap>
 
 using namespace QComicBook;
 

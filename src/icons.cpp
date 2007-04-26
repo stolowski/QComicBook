@@ -11,7 +11,7 @@
  */
 
 #include "icons.h"
-#include <qdir.h>
+#include <QDir>
 
 using namespace QComicBook;
 
@@ -27,9 +27,10 @@ bool Icons::init(const QString& path)
 
 const QIcon& Icons::get(const QString &name)
 {
-	QIcon *icon = *set.find(name);
-	if (icon)
-		return *icon;
+	QHash<QString, QIcon *>::iterator it = set.find(name);
+	if (it != set.end())
+		return **it;
+	QIcon *icon;
 	QPixmap pixmap(iconpath + "/" + name);
 	set.insert(name, icon = new QIcon(pixmap));
 	return *icon;

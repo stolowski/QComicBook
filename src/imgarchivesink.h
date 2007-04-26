@@ -97,7 +97,7 @@ namespace QComicBook
 			void extractExited(int code, QProcess::ExitStatus exitStatus);
 			void extractStdoutReady();
 			void infoStdoutReady();
-			void infoExited();
+			void infoExited(int code, QProcess::ExitStatus exitStatus);
 
 		public:
 			ImgArchiveSink();

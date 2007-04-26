@@ -14,7 +14,7 @@
 #include "imgdirsink.h"
 #include "thumbnail.h"
 #include "thumbnailevent.h"
-#include <qapplication.h>
+#include <QApplication>
  
 using namespace QComicBook;
 

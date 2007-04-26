@@ -43,7 +43,7 @@ const QImage& Thumbnail::image() const
 
 void Thumbnail::touch(const QString &fname)
 {
-	utime(fname.local8Bit(), NULL);
+	utime(fname.toLocal8Bit(), NULL);
 }
 
 bool Thumbnail::tryLoad(const QString &fname)
@@ -65,7 +65,7 @@ bool Thumbnail::save(const QString &fname)
 void Thumbnail::setImage(const QImage &i)
 {
 	if (i.width() > thwidth || i.height() > thheight)
-		img = i.smoothScale(thwidth, thheight, QImage::ScaleMin);
+		img = i.scaled(thwidth, thheight, Qt::KeepAspectRatio);
 	else
 		img = i.copy();
 }

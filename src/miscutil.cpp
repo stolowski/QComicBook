@@ -11,19 +11,19 @@
  */
 
 #include "miscutil.h"
-#include <qstringlist.h>
-#include <qfileinfo.h>
+#include <QStringList>
+#include <QFileInfo>
 #include <stdlib.h>
 
 QString Utility::which(const QString &command)
 {
 	const QString paths = QString(getenv("PATH"));
-	QStringList plist = QStringList::split(":", paths, false);
+	QStringList plist = paths.split(":");
 	for (QStringList::const_iterator it = plist.begin(); it != plist.end(); it++)
 	{
 		QFileInfo finfo(*it + "/" + command);
 		if (finfo.isExecutable())
-			return finfo.absFilePath();
+			return finfo.absoluteFilePath();
 	}
 	return QString::null;
 }
