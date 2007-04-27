@@ -44,6 +44,7 @@ namespace QComicBook
 	};
 
 	class Thumbnail;
+	class ImgCache;
 
 	//! Comic book directory sink.
 	/*! Allows opening directories containing image files. */
@@ -99,8 +100,9 @@ namespace QComicBook
 			static const int MAX_TEXTFILE_SIZE;
 		
 		private:
+			ImgCache *cache;
 			ThumbnailLoaderThread thloader;
-			//ImlibLoaderThread imgloader;
+			ImgLoaderThread imgloader;
 			mutable QMutex listmtx; //!< mutex for imgfiles
 			bool dirsfirst; //!< visit directories first, then files
 			static const QString imgext[];
@@ -125,10 +127,12 @@ namespace QComicBook
 
 
 		public:
-			ImgDirSink(bool dirs=false);
-			ImgDirSink(const QString &path, bool dirs=false);
-			ImgDirSink(const ImgDirSink &sink);
+			ImgDirSink(bool dirs=false, int cacheSize=0);
+			ImgDirSink(const QString &path, bool dirs=false, int cacheSize=0);
+			ImgDirSink(const ImgDirSink &sink, int cacheSize=0);
 			virtual ~ImgDirSink();
+
+			void setCacheSize(int cacheSize);
 
 			//! Opens this comic book sink with specifiled path.
 			/*! @param path comic book location
@@ -140,7 +144,7 @@ namespace QComicBook
 			virtual void close();
 
 			//! Returns an image for specifiled page.
-			/*! The imgcache is first checked for image. If not found, the image is loaded. Optionally,
+			/*! The cache is first checked for image. If not found, the image is loaded. Optionally,
 			 *  the preload thread is started to preload next images.
 			 *  @param num page number
 			 *  @param result contains 0 on succes or value greater than 0 for error

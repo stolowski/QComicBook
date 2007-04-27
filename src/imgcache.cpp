@@ -11,13 +11,12 @@
  */
 
 #include "imgcache.h"
-#include <qptrcollection.h>
+#include <iostream>
 
 using namespace QComicBook;
 
-ImgCache::ImgCache(int size): QCache<QImage>(size)
+ImgCache::ImgCache(int size): QCache<int, QImage>(size)
 {
-        setAutoDelete(true);
 }
 
 ImgCache::~ImgCache()
@@ -26,35 +25,14 @@ ImgCache::~ImgCache()
 
 void ImgCache::setSize(int size)
 {
+	std::cout << "cache size=" << size << std::endl;
         if (size < 0)
                 size = 0;
         setMaxCost(size);
 }
 
-QPtrCollection::Item ImgCache::newItem(QPtrCollection::Item d)
+void ImgCache::insertImage(int page, QImage *img)
 {
-        QImage *img = new QImage(*(QImage *)d);
-        img->detach();
-        return img;
-}
-
-bool ImgCache::exists(const QString & key)
-{
-        return find(key) != NULL;
-}
-
-bool ImgCache::get(const QString &key, QImage &img)
-{
-        if (QImage *tmp = find(key))
-        {
-                img = tmp->copy(); //get deep copy
-                return true;
-        }
-        return false;
-}
-
-QImage* ImgCache::find(const QString &k, bool ref)
-{
-        return QCache<QImage>::find(k, ref);
+	insert(page, img, img->numBytes());
 }
 

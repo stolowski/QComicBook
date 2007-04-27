@@ -42,7 +42,9 @@ void ThumbnailsWindow::customEvent(QEvent *e)
 		tview->setPage(*evt->getThumbnail());
 	}
 	else
+	{
 		QDockWidget::customEvent(e);
+	}
 }
 
 /*void ThumbnailsWindow::onOrientationChanged(Orientation o)

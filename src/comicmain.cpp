@@ -692,9 +692,8 @@ void ComicMainWindow::open(const QString &path, int page)
 
         closeSink();
 
-	//ImlibImage::setCacheSize(cfg->cacheSize()*1024*1024);
-
         sink = ImgSinkFactory::instance().createImgSink(path);
+	sink->setCacheSize(cfg->cacheSize()*1024*1024);
         sink->thumbnailLoader().setReciever(thumbswin);
         sink->thumbnailLoader().setUseCache(cfg->cacheThumbnails());
 

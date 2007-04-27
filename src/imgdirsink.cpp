@@ -11,6 +11,7 @@
  */
 
 #include "imgdirsink.h"
+#include "imgcache.h"
 #include "cbsettings.h"
 #include "thumbnail.h"
 #include <QImage>
@@ -19,6 +20,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QTextStream>
+#include <iostream>
 
 using namespace QComicBook;
 
@@ -28,19 +30,23 @@ const int ImgDirSink::MAX_TEXTFILE_SIZE = 65535;
                         
 const QString ImgDirSink::imgext[] = {".jpg", ".jpeg", ".png", ".gif", ".xpm", ".bmp", NULL};
 
-ImgDirSink::ImgDirSink(bool dirs): QObject(), dirpath(QString::null), dirsfirst(dirs)
+ImgDirSink::ImgDirSink(bool dirs, int cacheSize): QObject(), dirpath(QString::null), dirsfirst(dirs)
 {
+	cache = new ImgCache(cacheSize);
         thloader.setSink(this);
 }
 
-ImgDirSink::ImgDirSink(const QString &path, bool dirs): QObject(), dirpath(QString::null), dirsfirst(dirs)
+ImgDirSink::ImgDirSink(const QString &path, bool dirs, int cacheSize): QObject(), dirpath(QString::null), dirsfirst(dirs)
 {
+	cache = new ImgCache(cacheSize);
         thloader.setSink(this);
         open(path);
 }
 
-ImgDirSink::ImgDirSink(const ImgDirSink &sink): QObject()
+ImgDirSink::ImgDirSink(const ImgDirSink &sink, int cacheSize): QObject()
 {
+	cache = new ImgCache(cacheSize);
+
         thloader.setSink(this);
 
 	dirpath = sink.dirpath;
@@ -56,6 +62,12 @@ ImgDirSink::ImgDirSink(const ImgDirSink &sink): QObject()
 ImgDirSink::~ImgDirSink()
 {
         close();
+	delete cache;
+}
+
+void ImgDirSink::setCacheSize(int cacheSize)
+{
+	cache->setSize(cacheSize);
 }
 
 void ImgDirSink::setComicBookName(const QString &name)
@@ -149,9 +161,9 @@ int ImgDirSink::open(const QString &path)
 void ImgDirSink::close()
 {
         thloader.stop();
-        //imgloader.stop();
+        imgloader.stop();
         thloader.wait(); //wait for thumbnail loader thread
-        //imgloader.wait(); //wait for preload thread
+        imgloader.wait(); //wait for preload thread
 
         listmtx.lock();
         dirpath = QString::null;
@@ -211,6 +223,13 @@ QImage ImgDirSink::getImage(unsigned int num, int &result)
         const int imgcnt = imgfiles.count();
 	QImage im;
 
+	if (cache->contains(num)) //TODO: mutex
+	{
+		listmtx.unlock();
+		result = 1;
+		std::cout << "from cache: " << num << std::endl;
+		return QImage(*cache->object(num));
+	}
         if (num < imgcnt)
 	{
 		const QString fname = imgfiles[num];
@@ -223,12 +242,15 @@ QImage ImgDirSink::getImage(unsigned int num, int &result)
 
 		/*const QFileInfo finf(fname);
 
-		if (rimg.load(fname))
+		f (rimg.load(fname))
 		{
 			result = 0;
 			if (timestamps[fname] != finf.lastModified())
 				timestamps[fname].set(finf.lastModified(), true);
 		}*/
+
+		cache->insertImage(num, new QImage(im));
+		std::cout << "to cache: " << num << std::endl;
 		return im;
 	}
         else
@@ -239,14 +261,16 @@ QImage ImgDirSink::getImage(unsigned int num, int &result)
 
 void ImgDirSink::preload(unsigned int num)
 {
-/*	QString name;
 	listmtx.lock();
-	if (num < imgfiles.count())
-		name = imgfiles[num];
-	listmtx.unlock();
-	if (!name.isEmpty())
-		imgloader.request(name);
-		*/
+	if (num >= imgfiles.count())
+	{
+		listmtx.unlock();
+	}
+	else
+	{
+		listmtx.unlock();
+		imgloader.request(num);
+	}
 }
 
 Thumbnail* ImgDirSink::getThumbnail(int num, bool thumbcache)

@@ -33,8 +33,6 @@ namespace QComicBook
 			ThumbnailEvent(Thumbnail *t);
 			virtual ~ThumbnailEvent();
 
-			virtual Type type() const;
-
 			const Thumbnail *getThumbnail() const;
 	};
 }
