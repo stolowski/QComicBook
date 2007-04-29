@@ -148,7 +148,6 @@ namespace QComicBook
 			 *  the preload thread is started to preload next images.
 			 *  @param num page number
 			 *  @param result contains 0 on succes or value greater than 0 for error
-			 *  @param preload number of pages to preload in preloading thread 
 			 *  @return an image */
 			virtual QImage getImage(unsigned int num, int &result);
 

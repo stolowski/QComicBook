@@ -12,6 +12,7 @@
 
 #include "imgloader.h"
 #include "imgdirsink.h"
+#include <iostream>
 #include <QPixmap>
 
 using namespace QComicBook;
@@ -95,6 +96,7 @@ void ImgLoaderThread::run()
 		if (sink)
 		{
 			int result;
+			std::cout << "preloading: " << n << std::endl;
 			sink->getImage(n, result);
 		}
 		mtx.unlock();

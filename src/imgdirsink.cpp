@@ -33,12 +33,14 @@ const QString ImgDirSink::imgext[] = {".jpg", ".jpeg", ".png", ".gif", ".xpm", "
 ImgDirSink::ImgDirSink(bool dirs, int cacheSize): QObject(), dirpath(QString::null), dirsfirst(dirs)
 {
 	cache = new ImgCache(cacheSize);
+	imgloader.setSink(this);
         thloader.setSink(this);
 }
 
 ImgDirSink::ImgDirSink(const QString &path, bool dirs, int cacheSize): QObject(), dirpath(QString::null), dirsfirst(dirs)
 {
 	cache = new ImgCache(cacheSize);
+	imgloader.setSink(this);
         thloader.setSink(this);
         open(path);
 }
@@ -47,6 +49,7 @@ ImgDirSink::ImgDirSink(const ImgDirSink &sink, int cacheSize): QObject()
 {
 	cache = new ImgCache(cacheSize);
 
+	imgloader.setSink(this);
         thloader.setSink(this);
 
 	dirpath = sink.dirpath;
@@ -223,14 +226,13 @@ QImage ImgDirSink::getImage(unsigned int num, int &result)
         const int imgcnt = imgfiles.count();
 	QImage im;
 
-	if (cache->contains(num)) //TODO: mutex
+	if (cache->get(num, im))
 	{
 		listmtx.unlock();
 		result = 1;
 		std::cout << "from cache: " << num << std::endl;
-		return QImage(*cache->object(num));
 	}
-        if (num < imgcnt)
+	else if (num < imgcnt)
 	{
 		const QString fname = imgfiles[num];
 		listmtx.unlock();
@@ -249,13 +251,15 @@ QImage ImgDirSink::getImage(unsigned int num, int &result)
 				timestamps[fname].set(finf.lastModified(), true);
 		}*/
 
-		cache->insertImage(num, new QImage(im));
+		cache->insertImage(num, im);
 		std::cout << "to cache: " << num << std::endl;
-		return im;
 	}
         else
+	{
                 listmtx.unlock();
-	result = 0;
+		result = 0;
+	}
+
 	return im;
 }
 

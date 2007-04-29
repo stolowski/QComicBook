@@ -15,19 +15,25 @@
 #ifndef __IMGCACHE_H
 #define __IMGCACHE_H
 
-#include <qcache.h>
-#include <qimage.h>
+#include <QCache>
+#include <QImage>
+#include <QMutex>
 
 namespace QComicBook
 {
-	class ImgCache: public QCache<int, QImage>
+	class ImgCache
 	{
+		private:
+			QCache<int, QImage> cache;
+			QMutex mtx;
+
 		public:
 			ImgCache(int size=1);
 			virtual ~ImgCache();
 
 			virtual void setSize(int size);
-			void insertImage(int page, QImage *img);
+			void insertImage(int page, const QImage &img);
+			bool get(int num, QImage &img);
 	};
 }
 
