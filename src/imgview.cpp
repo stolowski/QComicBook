@@ -18,6 +18,8 @@
 #include <QContextMenuEvent>
 #include <QLabel>
 #include <QPainter>
+#include <QPalette>
+#include <QScrollBar>
 #include <qbitmap.h>
 #include <qcursor.h>
 #include <algorithm>
@@ -26,31 +28,23 @@ using namespace QComicBook;
 
 const int ComicImageView::EXTRA_WHEEL_SPIN = 2;
 
-ComicImageView::ComicImageView(QWidget *parent, Size size, const QColor &color): QWidget(parent), isize(size), iangle(0), xoff(0), yoff(0), lx(-1), wheelupcnt(0), wheeldowncnt(0), smallcursor(NULL)
+ComicImageView::ComicImageView(QWidget *parent, Size size, const QColor &color): QScrollArea(parent),
+	isize(size), iangle(0), xoff(0), yoff(0), imgs(0), totalWidth(0), totalHeight(0),
+	lx(-1),	wheelupcnt(0), wheeldowncnt(0), smallcursor(NULL)
 {
         context_menu = new QMenu(this);
-        //viewport()->setPaletteBackgroundColor(color);
         //setFocusPolicy(QWidget::StrongFocus);
-	//imgLabel = new QLabel();
-	//setWidget(imgLabel);
-	//setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+	imgLabel = new QLabel();
+	imgLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+	imgLabel->setScaledContents(true);
+	setWidget(imgLabel);
+
+	setBackground(color);
+	//setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 }
 
 ComicImageView::~ComicImageView()
 {
-}
-
-QSize ComicImageView::sizeHint() const
-{
-	return QSize(orgimg[0].width(), orgimg[0].height());
-}
-
-void ComicImageView::paintEvent(QPaintEvent *e)
-{
-	QPainter p(this);
-	//p.rotate(iangle * 90.0f);
-	p.drawImage(e->rect(), orgimg[0], e->rect());
-	e->accept();
 }
 
 QMenu *ComicImageView::contextMenu() const
@@ -60,20 +54,19 @@ QMenu *ComicImageView::contextMenu() const
 
 bool ComicImageView::onTop()
 {
-	return false;
-        //return contentsY() == 0;
+        return horizontalScrollBar()->value() == 0;
 }
 
 bool ComicImageView::onBottom()
 {
-	return false;
+        return horizontalScrollBar()->value() >= viewport()->height();
         //return contentsY() + viewport()->height() >= contentsHeight();
 }
 
 void ComicImageView::contextMenuEvent(QContextMenuEvent *e)
 {
-        //if (!pixmap->isNull())
-          //      context_menu->popup(e->globalPos());
+	if (imgs > 0)
+		context_menu->popup(e->globalPos());
 }
 
 void ComicImageView::setImage(const QImage &img1, bool preserveangle)
@@ -81,28 +74,27 @@ void ComicImageView::setImage(const QImage &img1, bool preserveangle)
         if (!preserveangle)
                 iangle = 0;
 
+	imgs = 1;
 	orgimg[0] = img1;
 
-        updateImageSize();
-
-	update();
+        redrawImages();
 }
 
 void ComicImageView::setImage(const QImage &img1, const QImage &img2, bool preserveangle)
 {
         if (!preserveangle)
                 iangle = 0;
-        //
-	//orgimage = QImage(img1.width() + img2.width(), std::max(img1.height(), img2.height()), QImage::Format_ARGB32);
-        updateImageSize();
-        //ensureVisible(1, 1);
 
-        //repaintContents(0, 0 , viewport()->width(), viewport()->height());
+	imgs = 2;
+	orgimg[0] = img1;
+	orgimg[1] = img2;
+
+	redrawImages();
 }
 
 void ComicImageView::resizeEvent(QResizeEvent *e)
 {
-        //QScrollView::resizeEvent(e);
+        QScrollArea::resizeEvent(e);
         updateImageSize();
 }
 
@@ -169,90 +161,120 @@ void ComicImageView::contentsMouseReleaseEvent(QMouseEvent *e)
 
 void ComicImageView::updateImageSize()
 {
-	QMatrix m;
+	if (totalWidth * totalHeight  * imgs == 0)
+		return;
 
+	Size size = isize;
 
-/*
-        if (orgimage.width() * orgimage.height() == 0)
-                return;
+	const double hRatio = double(height()) / totalHeight;
+	const double wRatio = double(width()) / totalWidth;
 
-        Size size = isize;
-        
+	int w, h;
+
         if (size == BestFit)
         {
-                if (orgimage.width() > orgimage.height())
-                {
-                        if (iangle&1)
-                                size = FitWidth;
-                        else
-                                size = FitHeight;
-                }
-                else
-                {
-                        if (iangle&1)
-                                size = FitHeight;
-                        else
-                                size = FitWidth;
-                }
-        }*/
-                
-/*        if (size == Original)
+		if (totalWidth > totalHeight)
+			size = FitWidth;
+		else
+			size = FitHeight;
+        }
+       	if (size == Original)
         {
-                if (iangle == 0)
-                        pixmap->convertFromImage(*orgimage);
-                else
-                        pixmap->convertFromImage(orgimage->xForm(rmtx));
+		w = totalWidth;
+		h = totalHeight;
         }
-        else
-        {       
-                QImage img;
-                int w = viewport()->width();
-                int h = viewport()->height();
+	else if (size == FitWidth)
+	{
+		w = width();
+		h = (double)totalHeight*wRatio;
+	}
+	else if (size == FitHeight)
+	{
+		w = (double)totalWidth*hRatio;
+		h = height();
+	}
+	else if (size == WholePage)
+	{
+		const double ratio = std::min(wRatio, hRatio);
+		w = ratio * totalWidth;
+		h = ratio * totalHeight;
+	}
 
-                if (size == FitWidth)
-                        h = 65535;
-                else if (size == FitHeight)
-                        w = 65535;
+	xoff = (width() - w) /2 ;
+	yoff = (height() - h) /2;
 
-                if (iangle&1) //for 90 and 270 angles w and h must be reversed
-                {
-                        int tmp = w;
-                        w = h;
-                        h = tmp;
-                }
+	if (xoff < 0)
+		xoff = 0;
+	if (yoff < 0)
+		yoff = 0;
+	imgLabel->setContentsMargins(xoff, yoff, 0, 0);
+	imgLabel->setFixedSize(w + xoff, h + yoff);
+}
 
-                if (iscaling == Smooth)
-                        img = orgimage->smoothScale(w, h, QImage::ScaleMin);
-                else if (iscaling == Fast)
-                        img = orgimage->scale(w, h, QImage::ScaleMin);
-        
-                if (iangle == 0)
-                        pixmap->convertFromImage(img);
-                else
-                        pixmap->convertFromImage(img.xForm(rmtx));
-        }
+void ComicImageView::redrawImages()
+{
+	if (imgs < 1)
+		return;
 
-        int d;
-        xoff = yoff = 0;
+	QPixmap *pixmap;
 
-        //
-        // calculate offsets for image centering
-        if ((d = viewport()->width() - pixmap->width()) > 0)
-                xoff = d/2;
-        if ((d = viewport()->height() - pixmap->height()) > 0)
-                yoff = d/2;
-                        
-        resizeContents(pixmap->width() + xoff, pixmap->height() + yoff);
-                
-        //
-        // update scrolling speeds
-        spdx = pixmap->width() / 100;
-        spdy = pixmap->height() / 100;*/
+	if (imgs  == 1)
+	{
+		if (iangle == 0 || iangle == 2)
+		{
+			totalWidth = orgimg[0].width();
+			totalHeight = orgimg[0].height();
+		}
+		else
+		{
+			totalWidth = orgimg[0].height();
+			totalHeight = orgimg[0].width();
+		}
+	}
+	else
+	{
+		if (iangle == 0 || iangle == 2)
+		{
+			totalWidth = orgimg[0].width() + orgimg[1].width();
+			totalHeight = std::max(orgimg[0].height(), orgimg[1].height());
+		}
+		else
+		{
+			totalWidth = std::max(orgimg[0].height(), orgimg[1].height());
+			totalHeight = orgimg[0].width() + orgimg[1].width();
+		}
+	}
+	
+	pixmap = new QPixmap(totalWidth, totalHeight);
+	QPainter p(pixmap);
+	if (iangle > 0)
+	{
+		rmtx.reset();
+		if (iangle == 1)
+			rmtx.translate(totalWidth, 0);
+		else if (iangle == 3)
+			rmtx.translate(0, totalHeight);
+		else
+			rmtx.translate(totalWidth, totalHeight);
+		rmtx.rotate(iangle * 90.0f);
+		p.setWorldMatrix(rmtx);
+		p.setWorldMatrixEnabled(true);
+	}
+	if (imgs  == 1)
+	{
+		p.drawImage(0, 0, orgimg[0], 0, 0);
+	}
+	else
+	{
+		p.drawImage(0, 0, orgimg[0], 0, 0);
+		p.drawImage(orgimg[0].width(), 0, orgimg[1], 0, 0);
+	}
+	p.end();
+	imgLabel->setPixmap(*pixmap);
+	imgLabel->adjustSize();
+	delete pixmap;
 
-	//QImage tmp = orgimage.transformed(rmtx, Qt::SmoothTransformation);
-	//imgLabel->setPixmap(QPixmap::fromImage(tmp));
-	//imgLabel->resize(tmp.width(), tmp.height());
-	resize(orgimg[0].width(), orgimg[0].height());
+	updateImageSize();
 }
 
 void ComicImageView::setScaling(Scaling s)
@@ -262,6 +284,9 @@ void ComicImageView::setScaling(Scaling s)
 
 void ComicImageView::setRotation(Rotation r)
 {
+	if (r == QComicBook::None && iangle == 0)
+		return;
+
         if (r == QComicBook::Right)
                 ++iangle;
         else if (r == QComicBook::Left)
@@ -269,21 +294,14 @@ void ComicImageView::setRotation(Rotation r)
         else
                 iangle = 0; //None
         iangle &= 3;            
-        //if (iangle !=0)
-        {
-                rmtx.reset();
-                rmtx.rotate(iangle * 90.0f);
-        }
 
-        updateImageSize();
-        //repaintContents(contentsX(), contentsY(), viewport()->width(), viewport()->height(), true);
+	redrawImages();
 }
 
 void ComicImageView::setSize(Size s)
 {
         isize = s;
         updateImageSize();
-        //repaintContents(contentsX(), contentsY(), viewport()->width(), viewport()->height(), true);
 }
 
 void ComicImageView::setSizeOriginal()
@@ -419,7 +437,9 @@ void ComicImageView::enableScrollbars(bool f)
 
 void ComicImageView::setBackground(const QColor &color)
 {
-        //viewport()->setPaletteBackgroundColor(color);
+	QPalette palette;
+	palette.setColor(backgroundRole(), color);
+	setPalette(palette);
 }
 
 void ComicImageView::setSmallCursor(bool f)
@@ -454,6 +474,7 @@ void ComicImageView::setSmallCursor(bool f)
 
 void ComicImageView::clear()
 {
+	imgs = 0;
         //resizeContents(0, 0);
 }
 

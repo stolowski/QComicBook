@@ -29,7 +29,7 @@ namespace QComicBook
 	enum Scaling { Smooth, Fast };
 	enum Rotation { None, Left, Right };
 
-	class ComicImageView: public QWidget
+	class ComicImageView: public QScrollArea
 	{
 		Q_OBJECT
 
@@ -38,6 +38,7 @@ namespace QComicBook
 			Size isize;
 			Scaling iscaling;
 			QImage orgimg[2];
+			int imgs; //number of images in orgimg array
 			int iangle; //rotation angle, 0..3, multipled by 90
 			QMatrix rmtx; //rotation matrix
 			int spdx, spdy; //scroll speed
@@ -46,6 +47,9 @@ namespace QComicBook
 			int wheelupcnt, wheeldowncnt;
 			QCursor *smallcursor;
 			static const int EXTRA_WHEEL_SPIN; //number of extra wheel spins to flip the page
+			QLabel *imgLabel;
+			int totalWidth;
+			int totalHeight;
 
 		signals:
 			void bottomReached();
@@ -54,7 +58,7 @@ namespace QComicBook
 		protected:
 			void resizeEvent(QResizeEvent *e);
 			void updateImageSize();
-			virtual void paintEvent(QPaintEvent *e);
+			void redrawImages();
 			virtual void contextMenuEvent(QContextMenuEvent *e);
 			virtual void contentsWheelEvent(QWheelEvent *e);
 			virtual void contentsMouseMoveEvent(QMouseEvent *e);
@@ -101,7 +105,6 @@ namespace QComicBook
 			QMenu *contextMenu() const;
 			Size getSize() const;
 			const QPixmap& image() const;
-			virtual QSize sizeHint() const;
 	};
 }
 

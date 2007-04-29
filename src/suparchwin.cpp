@@ -15,24 +15,22 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QLayout>
-#include <QPushButton>
-#include <QLabel>
+#include <QDialogButtonBox>
 
 using namespace QComicBook;
 
-SupportedArchivesWindow::SupportedArchivesWindow(QWidget *parent): QWidget(parent, Qt::Dialog) //|Qt::WDestructiveClose)
+SupportedArchivesWindow::SupportedArchivesWindow(QWidget *parent): QDialog(parent)
 {
-	setWindowTitle("QComicBook System Information");
+	setWindowTitle(tr("QComicBook System Information"));
 	setWindowModality(Qt::WindowModal);
 	resize(560, 400);
 	QVBoxLayout *lay0 = new QVBoxLayout(this);
 
 	QTreeWidget *list = new QTreeWidget(this);
-	//list->header()->hide();
-	//list->setRootIsDecorated(true);
+	list->setColumnCount(2);
+	list->setItemHidden(list->headerItem(), true);
+	list->setRootIsDecorated(true);
 	lay0->addWidget(list);
-	//list->addColumn(tr("Archive Type"));
-	//list->addColumn(tr("Support"));
 
 	const QString yes = tr("Yes");
 	const QString no = tr("No");
@@ -51,13 +49,16 @@ SupportedArchivesWindow::SupportedArchivesWindow(QWidget *parent): QWidget(paren
 		new QTreeWidgetItem(aitem, opsw);
 		aitem->setExpanded(true);
 	}
-	QTreeWidgetItem *tools = new QTreeWidgetItem(list, QStringList(tr("External tools")));
-	arch->setExpanded(true);
-	tools->setExpanded(true);
+	//QTreeWidgetItem *tools = new QTreeWidgetItem(list, QStringList(tr("External tools")));
 
-	QPushButton *b_close = new QPushButton(tr("Close"), this);
-	connect(b_close, SIGNAL(clicked()), this, SLOT(close()));
-	lay0->addWidget(b_close);
+	list->expandAll();
+
+	list->resizeColumnToContents(0);
+	list->resizeColumnToContents(1);
+
+	QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok);
+	lay0->addWidget(buttons);
+	connect(buttons, SIGNAL(accepted()), this, SLOT(accept()));
 }
 
 SupportedArchivesWindow::~SupportedArchivesWindow()

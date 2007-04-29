@@ -48,6 +48,7 @@
 #include <QFrame>
 #include <QProcess>
 #include <QKeyEvent>
+#include <QWidgetAction>
 #include <typeinfo>
 
 using namespace QComicBook;
@@ -212,10 +213,7 @@ void ComicMainWindow::setupActions()
 void ComicMainWindow::setupComicImageView()
 {
         view = new ComicImageView(this, cfg->pageSize(), cfg->background());
-	QScrollArea *scroll = new QScrollArea(this);
-	scroll->setWidget(view);
- //       setCentralWidget(view);
- 	setCentralWidget(scroll);
+        setCentralWidget(view);
         view->setFocus();
         view->setSmallCursor(cfg->smallCursor());
         connect(cfg, SIGNAL(backgroundChanged(const QColor&)), view, SLOT(setBackground(const QColor&)));
@@ -430,6 +428,9 @@ void ComicMainWindow::setupContextMenu()
         pageinfo->setMargin(3);
         pageinfo->setAlignment(Qt::AlignHCenter);
         pageinfo->setFrameStyle(QFrame::Box | QFrame::Raised);
+	QWidgetAction *pageinfoAction = new QWidgetAction(this);
+	pageinfoAction->setDefaultWidget(pageinfo);
+
         cmenu->addAction(nextPageAction);
         cmenu->addAction(prevPageAction);
         cmenu->addSeparator();
@@ -447,8 +448,7 @@ void ComicMainWindow::setupContextMenu()
         cmenu->addAction(mangaModeAction);
         cmenu->addSeparator();
         cmenu->addAction(fullScreenAction);
-        cmenu->addSeparator();
-        //cmenu->Item(pageinfo); TODO
+	cmenu->addAction(pageinfoAction);
 }
 
 void ComicMainWindow::enableComicBookActions(bool f)
@@ -810,8 +810,31 @@ void ComicMainWindow::backwardPages()
 
 void ComicMainWindow::jumpToPage(int n, bool force)
 {
-        if (!sink)
-                return;
+	//
+	// enable or disable next/prev/backward/forward page actions if first/last page shown
+        if (sink == NULL || n == sink->numOfImages() - (twoPagesAction->isChecked() ? 2 : 1))
+	{
+		nextPageAction->setDisabled(true);
+		forwardPageAction->setDisabled(true);
+	}
+	else
+	{
+		nextPageAction->setDisabled(false);
+		forwardPageAction->setDisabled(false);
+	}
+        if (sink == NULL || n == (twoPagesAction->isChecked() ? 1 : 0))
+	{
+		prevPageAction->setDisabled(true);
+		backwardPageAction->setDisabled(true);
+	}
+	else
+	{
+		prevPageAction->setDisabled(false);
+		backwardPageAction->setDisabled(false);
+	}
+
+	if (!sink)
+		return;
         if (n >= sink->numOfImages())
                 n = sink->numOfImages()-1;
         if (n < 0)

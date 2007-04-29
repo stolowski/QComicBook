@@ -15,11 +15,11 @@
 
 /*! \file suparchwin.h */
 
-#include <qdialog.h>
+#include <QDialog>
 
 namespace QComicBook
 {
-	class SupportedArchivesWindow: public QWidget
+	class SupportedArchivesWindow: public QDialog
 	{
 		Q_OBJECT
 

@@ -21,6 +21,7 @@ class QRadioButton;
 class QSpinBox;
 class QLabel;
 class QLineEdit;
+class QTabWidget;
 
 namespace QComicBook
 {
@@ -30,6 +31,7 @@ namespace QComicBook
 		Q_OBJECT
 
 		private:
+			QTabWidget *tabs;
 			ComicBookSettings *cfg;
 			QCheckBox *cb_twopagesstep;
 			QCheckBox *cb_smallcursor;
@@ -59,8 +61,7 @@ namespace QComicBook
 			void updateFontPreview();
 
 		protected slots:
-			void apply();
-			void cancel();
+			virtual void accept();
 			void showBackgroundDialog();
 			void showFontDialog();
 			void browseExternalBrowser();

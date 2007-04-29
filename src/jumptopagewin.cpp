@@ -25,9 +25,6 @@ JumpToPageWindow::JumpToPageWindow(QWidget *parent, int value, int max): QDialog
 	
 	QHBoxLayout *lay = new QHBoxLayout(this);
 	
-	//QHBox *box = new QHBox(this);
-	//lay->addWidget(box);
-	//box->setSpacing(5);
 	lay->addWidget(new QLabel(tr("Page number"), this));
 	pedit = new PageNumberEdit(this, value, max);
 	lay->addWidget(pedit);
@@ -38,8 +35,8 @@ JumpToPageWindow::JumpToPageWindow(QWidget *parent, int value, int max): QDialog
 	connect(b_ok, SIGNAL(clicked()), this, SLOT(close()));
 	b_ok->setDefault(true);
 	connect(pedit, SIGNAL(pageSelected(int)), this, SIGNAL(pageSelected(int)));
-	//pedit->setFocusPolicy(QWidget::StrongFocus);
 	pedit->setFocus();
+	pedit->setFocusPolicy(Qt::StrongFocus);
 	pedit->deselect();
 	setFixedWidth(280);
 }
