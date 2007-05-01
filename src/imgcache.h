@@ -25,13 +25,15 @@ namespace QComicBook
 	{
 		private:
 			QCache<int, QImage> cache;
+			bool autoAdjust;
+			int maxItemSizeSoFar;
 			QMutex mtx;
 
 		public:
 			ImgCache(int size=1);
 			virtual ~ImgCache();
 
-			virtual void setSize(int size);
+			virtual void setSize(int size, bool autoAdjust=false);
 			void insertImage(int page, const QImage &img);
 			bool get(int num, QImage &img);
 	};

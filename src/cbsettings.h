@@ -52,6 +52,7 @@ namespace QComicBook
 			History recent;
 			int cachesize;
 			int thumbsage;
+			bool cacheadjust;
 			bool cachethumbs;
 			bool autoinfo;
 			bool confirmexit;
@@ -96,6 +97,7 @@ namespace QComicBook
 			const History& recentlyOpened() const;
 			QColor background() const;
 			int cacheSize() const;
+			bool cacheAutoAdjust() const;
 			bool cacheThumbnails() const;
 			int thumbnailsAge() const;
 			bool preloadPages() const;
@@ -126,6 +128,7 @@ namespace QComicBook
 			void recentlyOpened(const History &hist);
 			void background(const QColor &color);
 			void cacheSize(int s);
+			void cacheAutoAdjust(bool f);
 			void cacheThumbnails(bool f);
 			void thumbnailsAge(int n);
 			void preloadPages(bool f);

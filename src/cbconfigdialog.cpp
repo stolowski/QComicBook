@@ -136,6 +136,9 @@ void ComicBookCfgDialog::setupMiscTab()
 	sb_cachesize->setValue(cfg->cacheSize());
 	box11->addWidget(sb_cachesize);
 	box1->addLayout(box11);
+	cb_cacheadjust = new QCheckBox(tr("Auto adjust cache size"), grp0);
+	cb_cacheadjust->setChecked(cfg->cacheAutoAdjust());
+	box1->addWidget(cb_cacheadjust);
 	cb_preload = new QCheckBox(tr("Preload next page"), grp0);
 	cb_preload->setChecked(cfg->preloadPages());
 	box1->addWidget(cb_preload);
@@ -216,7 +219,7 @@ void ComicBookCfgDialog::accept()
 	cfg->background(bgcolor);
 	cfg->fullScreenHideMenu(cb_hidemenu->isChecked());
 	cfg->fullScreenHideStatusbar(cb_hidestatus->isChecked());
-	//cfg->fullScreenHideToolbar(cb_hidetoolbar->isChecked());
+	cfg->fullScreenHideToolbar(cb_hidetoolbar->isChecked());
 	cfg->smallCursor(cb_smallcursor->isChecked());
 	/*if (rb_smooth->isChecked())
 		cfg->pageScaling(Smooth);
@@ -228,6 +231,7 @@ void ComicBookCfgDialog::accept()
 	//
 	// misc
 	cfg->cacheSize(sb_cachesize->value());
+	cfg->cacheAutoAdjust(cb_cacheadjust->isChecked());
 	cfg->preloadPages(cb_preload->isChecked());
 	cfg->cacheThumbnails(cb_thumbs->isChecked());
 	cfg->thumbnailsAge(sb_thumbsage->value());

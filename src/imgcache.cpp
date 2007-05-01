@@ -11,10 +11,11 @@
  */
 
 #include "imgcache.h"
+#include <iostream>
 
 using namespace QComicBook;
 
-ImgCache::ImgCache(int size)
+ImgCache::ImgCache(int size): maxItemSizeSoFar(0)
 {
 	setSize(size);
 }
@@ -23,18 +24,26 @@ ImgCache::~ImgCache()
 {
 }
 
-void ImgCache::setSize(int size)
+void ImgCache::setSize(int size, bool autoAdjust)
 {
 	mtx.lock();
         if (size < 0)
                 size = 0;
         cache.setMaxCost(size);
+	this->autoAdjust = autoAdjust;
 	mtx.unlock();
 }
 
 void ImgCache::insertImage(int page, const QImage &img)
 {
 	mtx.lock();
+	if (autoAdjust && (img.numBytes() + maxItemSizeSoFar > cache.maxCost()))
+	{
+		cache.setMaxCost(img.numBytes() + maxItemSizeSoFar);
+		if (img.numBytes() > maxItemSizeSoFar)
+			maxItemSizeSoFar = img.numBytes();
+		std::cout << "cache size now " << cache.maxCost() << std::endl;
+	}
 	cache.insert(page, new QImage(img), img.numBytes());
 	mtx.unlock();
 }

@@ -132,7 +132,7 @@ namespace QComicBook
 			ImgDirSink(const ImgDirSink &sink, int cacheSize=0);
 			virtual ~ImgDirSink();
 
-			void setCacheSize(int cacheSize);
+			void setCacheSize(int cacheSize, bool autoAdjust);
 
 			//! Opens this comic book sink with specifiled path.
 			/*! @param path comic book location

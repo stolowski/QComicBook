@@ -68,9 +68,9 @@ ImgDirSink::~ImgDirSink()
 	delete cache;
 }
 
-void ImgDirSink::setCacheSize(int cacheSize)
+void ImgDirSink::setCacheSize(int cacheSize, bool autoAdjust)
 {
-	cache->setSize(cacheSize);
+	cache->setSize(cacheSize, autoAdjust);
 }
 
 void ImgDirSink::setComicBookName(const QString &name)

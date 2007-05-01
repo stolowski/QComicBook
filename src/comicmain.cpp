@@ -80,7 +80,11 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent/*, Qt::Win
         setupBookmarksMenu();
 	setupSettingsMenu();
         setupHelpMenu();
-        setupContextMenu();    
+        setupContextMenu();
+
+	//
+	// copy all menu actions; this is needed for fullscreen mode if menubar is hidden
+	addActions(menuBar()->actions());
 
         lastdir = cfg->lastDir();
         recentfiles = new History(10);
@@ -693,7 +697,7 @@ void ComicMainWindow::open(const QString &path, int page)
         closeSink();
 
         sink = ImgSinkFactory::instance().createImgSink(path);
-	sink->setCacheSize(cfg->cacheSize()*1024*1024);
+	sink->setCacheSize(cfg->cacheSize()*1024*1024, cfg->cacheAutoAdjust());
         sink->thumbnailLoader().setReciever(thumbswin);
         sink->thumbnailLoader().setUseCache(cfg->cacheThumbnails());
 
@@ -738,8 +742,8 @@ void ComicMainWindow::toggleFullScreen()
                         menuBar()->hide();
                 if (cfg->fullScreenHideStatusbar())
                         statusbar->hide();
-                /*if (cfg->fullScreenHideToolbar())
-                        toolbar->hide();*/
+                if (cfg->fullScreenHideToolbar())
+                        toolbar->hide();
                 showFullScreen();
         }
 }
@@ -753,7 +757,7 @@ void ComicMainWindow::exitFullscreen()
                         statusbar->show();
                 /*if (toggleToolbarAction->isOn())
                         toolbar->show();*/
-                showNormal();
+		showNormal();
         }
 }
 

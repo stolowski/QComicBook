@@ -51,6 +51,7 @@
 #define OPT_LASTDIR     "/LastDir"
 #define OPT_RECENT      "/RecentlyOpened"
 #define OPT_CACHESIZE   "/CacheSize"
+#define OPT_CACHEADJUST "/CacheAutoAdjust"
 #define OPT_THUMBSAGE   "/ThumbnailsAge"
 #define OPT_CACHETHUMBS "/CacheThumbnails"
 #define OPT_PRELOAD     "/Preload"
@@ -178,6 +179,7 @@ void ComicBookSettings::load()
 		cachesize = cfg->value(OPT_CACHESIZE, 3).toInt();
 		if (cachesize < 1)
 			cachesize = 1;
+		cacheadjust = cfg->value(OPT_CACHEADJUST, true).toBool();
 		preload = cfg->value(OPT_PRELOAD, true).toBool();
 		confirmexit = cfg->value(OPT_CONFIRMEXIT, true).toBool();
 		intbrowser = cfg->value(OPT_INTBROWSER, true).toBool();
@@ -257,6 +259,11 @@ QColor ComicBookSettings::background() const
 int ComicBookSettings::cacheSize() const
 {
 	return cachesize;
+}
+
+bool ComicBookSettings::cacheAutoAdjust() const
+{
+	return cacheadjust;
 }
 
 bool ComicBookSettings::cacheThumbnails() const
@@ -436,6 +443,15 @@ void ComicBookSettings::cacheSize(int s)
 		if (s < 1)
 			s = 1;
 		cfg->setValue(GRP_MISC OPT_CACHESIZE, cachesize = s);
+	}
+}
+
+void ComicBookSettings::cacheAutoAdjust(bool f)
+{
+	if (f != cacheadjust)
+	{
+		cacheadjust = f;
+		cfg->setValue(GRP_MISC OPT_CACHEADJUST, cacheadjust = f);
 	}
 }
 
