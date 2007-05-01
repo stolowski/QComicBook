@@ -755,8 +755,8 @@ void ComicMainWindow::exitFullscreen()
                 menuBar()->show();
                 if (toggleStatusbarAction->isChecked())
                         statusbar->show();
-                /*if (toggleToolbarAction->isOn())
-                        toolbar->show();*/
+                if (toggleToolbarAction->isChecked())
+                        toolbar->show();
 		showNormal();
         }
 }
