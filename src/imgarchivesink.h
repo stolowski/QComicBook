@@ -56,7 +56,6 @@ namespace QComicBook
 
 		protected:
 
-			ArchiveType archivetype; ///< the type of currently opened archive
 			QProcess *pext; ///< extracting process
 			QProcess *pinf; ///< file list extracing process
 			QString archivename; ///< archive file name, without path
@@ -66,10 +65,6 @@ namespace QComicBook
 			QStringList archdirs; ///< list of archive dirs
 			int filesnum; ///< number of files gathered from parsing archiver output, used for progress bar
 			int extcnt; ///< extracted files counter for progress bar
-			QString extprg;
-			QStringList extargs;
-			QString infprg;
-			QStringList infargs;
 
 			static QList<ArchiveTypeInfo> archinfo;
 			
@@ -88,11 +83,13 @@ namespace QComicBook
 			/*! Determines archive type basing on filename extension. As a last effort, if
 			 *  the check fails, tries to guess archive type basing on well known magic bytes.
 			 *  @param filename name of the archive, with path */
-			static ArchiveType archiveType(const QString &filename);
-			int extract(const QString &filename, const QString &destdir);
+			static ArchiveType getArchiveType(const QString &filename);
+			int extract(const QString &filename, const QString &destdir, ArchiveType archiveType=ImgArchiveSink::UNKNOWN_ARCHIVE);
 			void init();
 			virtual void doCleanup();
 			
+			virtual bool fileHandler(const QFileInfo &finfo);
+
 		protected slots:
 			void extractExited(int code, QProcess::ExitStatus exitStatus);
 			void extractStdoutReady();
@@ -121,7 +118,7 @@ namespace QComicBook
 			static bool supportsSave(ArchiveType t);
 			static QStringList supportedOpenExtensions();
 			static QStringList supportedSaveExtensions();
-			static QString makeTempDir();
+			static QString makeTempDir(const QString &parent = QDir::tempPath());
 	};
 }
 

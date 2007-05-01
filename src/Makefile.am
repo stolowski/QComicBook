@@ -18,7 +18,7 @@ BUILT_SOURCES = \
 		moc_thumbnailsview.cpp
 
 qcomicbook_SOURCES = aboutdialog.cpp bookmark.cpp bookmarkmanager.cpp\
-	bookmarks.cpp cbconfigdialog.cpp cbinfo.cpp cbsettings.cpp comicmain.cpp\
+	bookmarks.cpp cbconfigdialog.cpp cbinfo.cpp cbsettings.cpp comicmain.cpp dirreader.cpp \
 	helpbrowser.cpp history.cpp icons.cpp iconviewthumbnail.cpp imgarchiver.cpp imgarchivesink.cpp \
 	imgcache.cpp \
 	imgdirsink.cpp imgloader.cpp imgsinkfactory.cpp imgview.cpp\
@@ -40,6 +40,7 @@ noinst_HEADERS = aboutdialog.h \
 		 cbinfo.h \
 		 cbsettings.h \
 		 comicmain.h \
+		 dirreader.h \
 		 enummap.h \
 		 helpbrowser.h \
 		 history.h \

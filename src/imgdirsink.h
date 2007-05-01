@@ -21,6 +21,7 @@
 #include <QDateTime>
 #include <QMap>
 #include <QMutex>
+#include "dirreader.h"
 #include "thumbnailloader.h"
 
 class QImage;
@@ -48,20 +49,11 @@ namespace QComicBook
 
 	//! Comic book directory sink.
 	/*! Allows opening directories containing image files. */
-	class ImgDirSink: public QObject
+	class ImgDirSink: public QObject, protected DirReader
 	{
 		Q_OBJECT
 		
 		signals:
-			//! Emited when comic book is ready for reading.
-			/*! @param path path of the opened comic book */
-			void sinkReady(const QString &path);
-
-			//! Emited on error.
-			/*! @param code error number, as defined in SinkError.
-			 *  @see SinkError */
-			void sinkError(int code);
-
 			//! Emited to report progress of comic book reading.
 			/*! This signal may be used in conjunction with QProgressBar class.
 			 *  @param current current progress value
@@ -93,18 +85,19 @@ namespace QComicBook
 			 *  @see txtfiles
 			 *  @see otherfiles
 			 *  @see dirs */
-			void recurseDir(const QString &s);
+			//void recurseDir(const QString &s);
 			static QString memPrefix(int &s);
 			void setComicBookName(const QString &name);
 
 			static const int MAX_TEXTFILE_SIZE;
+		
+			virtual bool fileHandler(const QFileInfo &finfo);
 		
 		private:
 			ImgCache *cache;
 			ThumbnailLoaderThread thloader;
 			ImgLoaderThread imgloader;
 			mutable QMutex listmtx; //!< mutex for imgfiles
-			bool dirsfirst; //!< visit directories first, then files
 			static const QString imgext[];
 			QStringList imgfiles; //!< list of images files in directory
 			QStringList txtfiles; //!< text files (.nfo, file_id.diz)

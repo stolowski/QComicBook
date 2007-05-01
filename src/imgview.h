@@ -36,7 +36,6 @@ namespace QComicBook
 		private:
 			QMenu *context_menu;
 			Size isize;
-			Scaling iscaling;
 			QImage orgimg[2];
 			int imgs; //number of images in orgimg array
 			int iangle; //rotation angle, 0..3, multipled by 90
@@ -69,7 +68,6 @@ namespace QComicBook
 			
 			void setImage(const QImage &img1, bool preserveangle=false);
 			void setImage(const QImage &img1, const QImage &img2, bool preserveangle=false);
-			void setScaling(Scaling s);
 			void setRotation(Rotation r);
 			void setSize(Size s);
 			void setSizeOriginal();
@@ -104,7 +102,8 @@ namespace QComicBook
 			bool onTop();
 			QMenu *contextMenu() const;
 			Size getSize() const;
-			const QPixmap& image() const;
+			int visiblePages() const;
+			const QPixmap image() const;
 	};
 }
 

@@ -701,13 +701,15 @@ void ComicMainWindow::open(const QString &path, int page)
         sink->thumbnailLoader().setReciever(thumbswin);
         sink->thumbnailLoader().setUseCache(cfg->cacheThumbnails());
 
-        connect(sink, SIGNAL(sinkReady(const QString&)), this, SLOT(sinkReady(const QString&)));
-        connect(sink, SIGNAL(sinkError(int)), this, SLOT(sinkError(int)));
         connect(sink, SIGNAL(progress(int, int)), statusbar, SLOT(setProgress(int, int)));
 
         statusbar->setShown(true); //ensures status bar is visible when opening regardless of user settings
 
-        sink->open(fullname);
+        int status = sink->open(fullname);
+	if (status)
+		sinkError(status);
+	else
+		sinkReady(fullname);
 }
 
 void ComicMainWindow::openNext()
@@ -1038,9 +1040,9 @@ void ComicMainWindow::openWithGimp() //TODO
 
 void ComicMainWindow::savePageAs()
 {
-	/*if (sink && (sink->numOfImages() > 0))
+	if (sink && (sink->numOfImages() > 0))
 	{
-		const QString msg = tr("Choose a filename to save under");
+		const QString msg = tr("Save image as");
 		int cnt = view->visiblePages();
 		for (int i = 1; i<=cnt; i++)
 		{
@@ -1051,20 +1053,15 @@ void ComicMainWindow::savePageAs()
 			if (!fname.isEmpty())
 			{
 				int result;
-				ImlibImage *img = sink->getImage(currpage, result);
-				if (img)
+				QImage img = sink->getImage(currpage, result);
+				if (result != 0 || !img.save(fname)) //TODO: overwrite and default format (jpeg)
 				{
-					if (!img->save(fname))
-					{
-						QMessageBox::critical(this, tr("QComicBook error"), tr("Error saving image"), QMessageBox::Ok, QMessageBox::NoButton);
-						delete img;
-						break; //do not attempt to save second image
-					}
-					delete img;
+					QMessageBox::critical(this, tr("QComicBook error"), tr("Error saving image"), QMessageBox::Ok, QMessageBox::NoButton);
+					break; //do not attempt to save second image
 				}
 			}
 		}
-	}*/
+	}
 }
 
 void ComicMainWindow::bookmarkSelected(int id)

@@ -30,14 +30,14 @@ const int ImgDirSink::MAX_TEXTFILE_SIZE = 65535;
                         
 const QString ImgDirSink::imgext[] = {".jpg", ".jpeg", ".png", ".gif", ".xpm", ".bmp", NULL};
 
-ImgDirSink::ImgDirSink(bool dirs, int cacheSize): QObject(), dirpath(QString::null), dirsfirst(dirs)
+ImgDirSink::ImgDirSink(bool dirs, int cacheSize): QObject(), dirpath(QString::null), DirReader(QDir::DirsFirst|QDir::Name, 6)
 {
 	cache = new ImgCache(cacheSize);
 	imgloader.setSink(this);
         thloader.setSink(this);
 }
 
-ImgDirSink::ImgDirSink(const QString &path, bool dirs, int cacheSize): QObject(), dirpath(QString::null), dirsfirst(dirs)
+ImgDirSink::ImgDirSink(const QString &path, bool dirs, int cacheSize): QObject(), dirpath(QString::null), DirReader(QDir::DirsFirst|QDir::Name, 6)
 {
 	cache = new ImgCache(cacheSize);
 	imgloader.setSink(this);
@@ -45,7 +45,7 @@ ImgDirSink::ImgDirSink(const QString &path, bool dirs, int cacheSize): QObject()
         open(path);
 }
 
-ImgDirSink::ImgDirSink(const ImgDirSink &sink, int cacheSize): QObject()
+ImgDirSink::ImgDirSink(const ImgDirSink &sink, int cacheSize): QObject(), DirReader(QDir::DirsFirst|QDir::Name, 6)
 {
 	cache = new ImgCache(cacheSize);
 
@@ -59,7 +59,6 @@ ImgDirSink::ImgDirSink(const ImgDirSink &sink, int cacheSize): QObject()
 	otherfiles = sink.otherfiles;
 	dirs = sink.dirs;
 	timestamps = sink.timestamps;
-	dirsfirst = sink.dirsfirst;
 }
 
 ImgDirSink::~ImgDirSink()
@@ -98,34 +97,22 @@ QString ImgDirSink::memPrefix(int &s)
         return mempfix;
 }
 
-void ImgDirSink::recurseDir(const QString &s)
+bool ImgDirSink::fileHandler(const QFileInfo &finfo)
 {
-        QDir dir(s);
-        dir.setSorting(QDir::DirsFirst|QDir::Name);
-        dir.setFilter(QDir::AllDirs|QDir::Files);
-        const QStringList files = dir.entryList();
-        for (QStringList::const_iterator it = files.begin(); it!=files.end(); ++it)
-        {
-                if (*it == "." || *it == "..")
-                        continue;
-
-                QFileInfo finf(dir.absoluteFilePath(*it));
-                if (finf.isFile())
-                {
-			if (knownImageExtension(*it))
-                                imgfiles.append(finf.absoluteFilePath());
-                        else if ((*it).endsWith(".nfo", Qt::CaseInsensitive) || (*it) == "file_id.diz")
-                                txtfiles.append(finf.absoluteFilePath());
-                        else
-                                otherfiles.append(finf.absoluteFilePath());
-			timestamps.insert(finf.absoluteFilePath(), FileStatus(finf.lastModified()));
-                }
-                else if (finf.isDir() && (finf.absoluteFilePath()!=s))
-                {
-                        dirs.append(finf.absoluteFilePath());
-                        recurseDir(finf.absoluteFilePath());
-                }
-        }
+	const QString fname = finfo.fileName();
+	if (knownImageExtension(fname))
+	{
+		imgfiles.append(finfo.absoluteFilePath());
+		timestamps.insert(finfo.absoluteFilePath(), FileStatus(finfo.lastModified()));
+		return true;
+	}
+	if (fname.endsWith(".nfo", Qt::CaseInsensitive) || fname == "file_id.diz")
+	{
+		txtfiles.append(finfo.absoluteFilePath());
+		return true;
+	}
+	otherfiles.append(finfo.absoluteFilePath());
+	return false;
 }
 
 int ImgDirSink::open(const QString &path)
@@ -142,7 +129,7 @@ int ImgDirSink::open(const QString &path)
                         if (info.isReadable() && info.isExecutable())
                         {
                                 dirpath = path;
-                                recurseDir(path);
+				visit(path);
                                 status = (numOfImages() > 0) ? 0 : SINKERR_EMPTY;
                         }
                         else
@@ -152,12 +139,7 @@ int ImgDirSink::open(const QString &path)
         }
         setComicBookName(path);
         if (status == 0)
-        {
                 emit progress(1, 1);
-                emit sinkReady(path);
-        }
-        else
-                emit sinkError(status);
         return status;
 }
 
@@ -229,7 +211,7 @@ QImage ImgDirSink::getImage(unsigned int num, int &result)
 	if (cache->get(num, im))
 	{
 		listmtx.unlock();
-		result = 1;
+		result = 0;
 		std::cout << "from cache: " << num << std::endl;
 	}
 	else if (num < imgcnt)

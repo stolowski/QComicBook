@@ -166,8 +166,8 @@ void ComicImageView::updateImageSize()
 
 	Size size = isize;
 
-	const double hRatio = double(height()) / totalHeight;
-	const double wRatio = double(width()) / totalWidth;
+	const double hRatio = static_cast<double>(height()) / totalHeight;
+	const double wRatio = static_cast<double>(width()) / totalWidth;
 
 	int w, h;
 
@@ -186,18 +186,18 @@ void ComicImageView::updateImageSize()
 	else if (size == FitWidth)
 	{
 		w = width();
-		h = (double)totalHeight*wRatio;
+		h = static_cast<int>(static_cast<double>(totalHeight) * wRatio);
 	}
 	else if (size == FitHeight)
 	{
-		w = (double)totalWidth*hRatio;
+		w = static_cast<int>(static_cast<double>(totalWidth) * hRatio);
 		h = height();
 	}
 	else if (size == WholePage)
 	{
 		const double ratio = std::min(wRatio, hRatio);
-		w = ratio * totalWidth;
-		h = ratio * totalHeight;
+		w = static_cast<int>(static_cast<double>(ratio) * totalWidth);
+		h = static_cast<int>(static_cast<double>(ratio) * totalHeight);
 	}
 
 	xoff = (width() - w) /2 ;
@@ -256,7 +256,7 @@ void ComicImageView::redrawImages()
 			rmtx.translate(0, totalHeight);
 		else
 			rmtx.translate(totalWidth, totalHeight);
-		rmtx.rotate(iangle * 90.0f);
+		rmtx.rotate(static_cast<double>(iangle) * 90.0f);
 		p.setWorldMatrix(rmtx);
 		p.setWorldMatrixEnabled(true);
 	}
@@ -275,11 +275,6 @@ void ComicImageView::redrawImages()
 	delete pixmap;
 
 	updateImageSize();
-}
-
-void ComicImageView::setScaling(Scaling s)
-{
-        iscaling = s;
 }
 
 void ComicImageView::setRotation(Rotation r)
@@ -475,16 +470,22 @@ void ComicImageView::setSmallCursor(bool f)
 void ComicImageView::clear()
 {
 	imgs = 0;
-        //resizeContents(0, 0);
+	imgLabel->setFixedSize(0, 0);
 }
 
 Size ComicImageView::getSize() const
 {
         return isize;
 }
-
-const QPixmap& ComicImageView::image() const
+			
+int ComicImageView::visiblePages() const
 {
-        //return *pixmap;
+	return imgs;
+}
+
+const QPixmap ComicImageView::image() const
+{
+	QPixmap p(*imgLabel->pixmap());
+	return p;
 }
 

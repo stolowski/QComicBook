@@ -12,7 +12,6 @@
 
 #include "imgarchivesink.h"
 #include "miscutil.h"
-#include <QImage>
 #include <QStringList>
 #include <QProcess>
 #include <QTextStream>
@@ -59,6 +58,45 @@ ImgArchiveSink::~ImgArchiveSink()
 	ImgArchiveSink::close();
 }
 
+bool ImgArchiveSink::fileHandler(const QFileInfo &finfo)
+{
+	const QString fname = finfo.fileName();
+	const QString fullname = finfo.absoluteFilePath();
+	std::cout << fullname.toStdString() << std::endl;
+
+	if (finfo.isDir())
+		archdirs.prepend(fullname);
+
+	if (ImgDirSink::fileHandler(finfo))
+	{
+		archfiles.append(fullname);
+		return true;
+	}
+
+	if (finfo.isFile())
+	{
+		ArchiveType archiveType = getArchiveType(fullname);
+		if (archiveType != UNKNOWN_ARCHIVE)
+		{
+			std::cout << "got nested archive, extracting it!" << std::endl;
+			const QString tmp = makeTempDir(finfo.absolutePath());
+			archdirs.prepend(tmp);
+			extract(fullname, tmp, archiveType); //TODO: errors
+
+			//
+			// remove cb archive we just extracted, no need to waste space
+			QDir dir(finfo.absolutePath());
+			dir.remove(fname);
+			visit(tmp);
+
+			return true;
+		}
+		archfiles.append(fullname);
+	}
+
+	return false;
+}
+
 void ImgArchiveSink::init()
 {
 	pinf = new QProcess(this);
@@ -76,15 +114,18 @@ void ImgArchiveSink::doCleanup()
 		QDir dir(tmppath);
 		//
 		// remove temporary files and dirs
-		for (QStringList::const_iterator it = archfiles.begin(); it != archfiles.end(); ++it)
-			dir.remove(*it);
-		for (QStringList::const_iterator it = archdirs.begin(); it != archdirs.end(); ++it)
-			dir.rmdir(*it);
+		foreach (const QString f, archfiles)
+			dir.remove(f);
+		foreach (const QString f, archdirs)
+		{
+			std::cout << f.toStdString() << std::endl;
+			dir.rmdir(f);
+		}
 		dir.rmdir(tmppath);
 	}
 }
 
-ImgArchiveSink::ArchiveType ImgArchiveSink::archiveType(const QString &filename)
+ImgArchiveSink::ArchiveType ImgArchiveSink::getArchiveType(const QString &filename)
 {
 	static const struct {
 		int offset; //the first byte to compare
@@ -124,12 +165,11 @@ ImgArchiveSink::ArchiveType ImgArchiveSink::archiveType(const QString &filename)
 
 	//
 	// try to match filename extension
-	for (QList<ArchiveTypeInfo>::const_iterator it = archinfo.begin(); it!=archinfo.end(); it++)
+	foreach (const ArchiveTypeInfo inf, archinfo)
 	{
-		const ArchiveTypeInfo &inf = *it;
-		for (QStringList::const_iterator sit = inf.extensions.begin(); sit!=inf.extensions.end(); sit++)
+		foreach (const QString s, inf.extensions)
 		{
-			if (filename.endsWith(*sit, Qt::CaseInsensitive))
+			if (filename.endsWith(s, Qt::CaseInsensitive))
 				return inf.type;
 		}
 	}
@@ -137,22 +177,32 @@ ImgArchiveSink::ArchiveType ImgArchiveSink::archiveType(const QString &filename)
 	return UNKNOWN_ARCHIVE;
 }
 
-int ImgArchiveSink::extract(const QString &filename, const QString &destdir)
+int ImgArchiveSink::extract(const QString &filename, const QString &destdir, ArchiveType archiveType)
 {
-	archivetype = archiveType(filename);
-	filesnum = 0;
+	if (archiveType== UNKNOWN_ARCHIVE)
+		archiveType = getArchiveType(filename);
 
-	if (archivetype == UNKNOWN_ARCHIVE)
+	if (archiveType == UNKNOWN_ARCHIVE)
 		return SINKERR_UNKNOWNFILE;
-	if (!supportsOpen(archivetype))
+	if (!supportsOpen(archiveType))
 		return SINKERR_NOTSUPPORTED;	
+
+	const QFileInfo finf(filename);
+	if (!finf.isReadable())
+		return SINKERR_ACCESS;
+
+	std::cout << "extract: " << filename.toStdString() << " dir=" << destdir.toStdString() << std::endl;
+
+	QStringList extargs;
+	QStringList infargs;
+	QString extprg;
+	QString infprg;
 
 	//
 	// match archive type, set subprocess extract and list options
-	for (QList<ArchiveTypeInfo>::const_iterator it = archinfo.begin(); it!=archinfo.end(); it++)
+	foreach (const ArchiveTypeInfo inf, archinfo)
 	{
-		const ArchiveTypeInfo &inf = *it;
-		if (archivetype == inf.type)
+		if (archiveType == inf.type)
 		{
 			extargs = inf.extractopts;
 			extprg = extargs.takeFirst();
@@ -169,39 +219,49 @@ int ImgArchiveSink::extract(const QString &filename, const QString &destdir)
 	//
 	// extract archive file list first
 	pinf->start(infprg, infargs);
+	if (!pinf->waitForFinished(-1))
+		return SINKERR_ARCHEXIT;
+	
+	extcnt = 0;
+	pext->start(extprg, extargs);
+	if (!pext->waitForFinished(-1))
+		return SINKERR_ARCHEXIT;
+
 	return 0;
 }
 
-int ImgArchiveSink::open(const QString &path)
+int ImgArchiveSink::open(const QString &path) //TODO: cleanup if already opened?
 {
+	filesnum = 0;
+	archfiles.clear();
+
 	QFileInfo info(path);
 	archivepath = path;
 	archivename = info.fileName();
 	if (!info.exists())
-	{
-		emit sinkError(SINKERR_NOTFOUND);
 		return SINKERR_NOTFOUND;
-	}
 	if (info.isFile())
 	{
 		if (info.isReadable())
 		{
 			tmppath = makeTempDir();
+			archdirs.prepend(tmppath);
 			int status = extract(path, tmppath);
 			if (status != 0)
 			{
-				emit sinkError(status);
 				close();
+				return status;
 			}
-			return status;
+			visit(tmppath);
+			emit progress(1, 1);
+			setComicBookName(archivename);
+			return 0;
 		}
 		else
 		{
-			emit sinkError(SINKERR_ACCESS);
 			return SINKERR_ACCESS;
 		}
 	}
-	emit sinkError(SINKERR_NOTFILE);
 	return SINKERR_NOTFILE;
 }
 
@@ -227,45 +287,18 @@ QString ImgArchiveSink::getFullName() const
 
 void ImgArchiveSink::infoExited(int code, QProcess::ExitStatus exitStatus)
 {
-	extcnt = 0;
-	pext->start(extprg, extargs);
 }
 
 void ImgArchiveSink::extractExited(int code, QProcess::ExitStatus exitStatus)
 {
 	//
-	// open temporary directory using ImgDirSink::open()
-	ImgDirSink::blockSignals(true);
-	int status = ImgDirSink::open(tmppath);
-	ImgDirSink::blockSignals(false);
-
-	archfiles = ImgDirSink::getAllfiles();
-	archdirs = ImgDirSink::getAlldirs();
-	setComicBookName(archivename);
-
-	if (exitStatus != QProcess::NormalExit)
+	// fix permissions of files; this is needed for ace archives as unace
+	// is buggy and sets empty permissions.
+	foreach (const QString f, archfiles)
 	{
-		emit sinkError(SINKERR_ARCHEXIT);
-		close();
-	}
-	else if (status != 0)
-	{
-		emit sinkError(status);
-		close();
-	}
-	else
-	{
-		emit progress(1, 1);
-		//
-		// fix permissions of files; this is needed for ace archives as unace
-		// is buggy and sets empty permissions.
-		for (QStringList::const_iterator it = archfiles.begin(); it!=archfiles.end(); ++it)
-		{
-			QFileInfo finfo(*it);
-			if (!finfo.isReadable())
-				chmod((*it).toLocal8Bit(), S_IRUSR|S_IWUSR);
-		}
-		emit sinkReady(archivepath);
+		QFileInfo finfo(f);
+		if (!finfo.isReadable())
+			chmod(f.toLocal8Bit(), S_IRUSR|S_IWUSR);
 	}
 }
 
@@ -449,27 +482,27 @@ void ImgArchiveSink::autoconfArchivers()
 	openext.clear();
 	saveext.clear();
 
-	for (QList<ArchiveTypeInfo>::const_iterator it = archinfo.begin(); it!=archinfo.end(); it++)
+	foreach (const ArchiveTypeInfo inf, archinfo)
 	{
-		const ArchiveTypeInfo &inf = *it;
 		if (inf.reading)
 			suppopen |= inf.type;
 		if (inf.writing)
 			suppsave |= inf.type;
-		for (QStringList::const_iterator sit = inf.extensions.begin(); sit!=inf.extensions.end(); sit++)
+		foreach (const QString ext, inf.extensions)
 		{
 			if (inf.reading)
-				openext.append("*" + *sit);
+				openext.append("*" + ext);
 			if (inf.writing)
-				saveext.append("*" + *sit);
+				saveext.append("*" + ext);
 		}
 	}
 }
 
-QString ImgArchiveSink::makeTempDir()
+QString ImgArchiveSink::makeTempDir(const QString &parent)
 {
-	char tmpd[19];
-	strcpy(tmpd, "/tmp/qcomic-XXXXXX");
+	char tmpd[1024];
+	const QString pattern = parent + QDir::separator() + "qcomic-XXXXXX";
+	strcpy(tmpd, pattern.toLatin1());
 	mkdtemp(tmpd);
 	return QString(tmpd);
 }
