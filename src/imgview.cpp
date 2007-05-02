@@ -231,8 +231,6 @@ void ComicImageView::redrawImages()
 	if (imgs < 1)
 		return;
 
-	QPixmap *pixmap;
-
 	if (imgs  == 1)
 	{
 		if (iangle == 0 || iangle == 2)
@@ -260,8 +258,8 @@ void ComicImageView::redrawImages()
 		}
 	}
 	
-	pixmap = new QPixmap(totalWidth, totalHeight);
-	QPainter p(pixmap);
+	QPixmap pixmap(totalWidth, totalHeight);
+	QPainter p(&pixmap);
 	if (iangle > 0)
 	{
 		rmtx.reset();
@@ -285,9 +283,8 @@ void ComicImageView::redrawImages()
 		p.drawImage(orgimg[0].width(), 0, orgimg[1], 0, 0);
 	}
 	p.end();
-	imgLabel->setPixmap(*pixmap);
+	imgLabel->setPixmap(pixmap);
 	imgLabel->adjustSize();
-	delete pixmap;
 
 	updateImageSize();
 }
