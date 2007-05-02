@@ -15,6 +15,7 @@
 #include <QImage>
 #include <QPixmap>
 #include <QMenu>
+#include <QScrollBar>
 #include <QContextMenuEvent>
 #include <QLabel>
 #include <QPainter>
@@ -26,7 +27,7 @@
 
 using namespace QComicBook;
 
-const int ComicImageView::EXTRA_WHEEL_SPIN = 2;
+const int ComicImageView::EXTRA_WHEEL_SPIN = 3;
 
 ComicImageView::ComicImageView(QWidget *parent, Size size, const QColor &color): QScrollArea(parent),
 	isize(size), iangle(0), xoff(0), yoff(0), imgs(0), totalWidth(0), totalHeight(0),
@@ -47,6 +48,15 @@ ComicImageView::~ComicImageView()
 {
 }
 
+void ComicImageView::scrollByDelta(int dx, int dy)
+{
+	QScrollBar *vbar = verticalScrollBar();
+	QScrollBar *hbar = horizontalScrollBar();
+
+	vbar->setValue(vbar->value() + dy);
+	hbar->setValue(hbar->value() + dx);
+}
+
 QMenu *ComicImageView::contextMenu() const
 {
         return context_menu;
@@ -54,13 +64,12 @@ QMenu *ComicImageView::contextMenu() const
 
 bool ComicImageView::onTop()
 {
-        return horizontalScrollBar()->value() == 0;
+        return verticalScrollBar()->value() == verticalScrollBar()->minimum();
 }
 
 bool ComicImageView::onBottom()
 {
-        return horizontalScrollBar()->value() >= viewport()->height();
-        //return contentsY() + viewport()->height() >= contentsHeight();
+        return verticalScrollBar()->value() == verticalScrollBar()->maximum();
 }
 
 void ComicImageView::contextMenuEvent(QContextMenuEvent *e)
@@ -98,63 +107,64 @@ void ComicImageView::resizeEvent(QResizeEvent *e)
         updateImageSize();
 }
 
-void ComicImageView::contentsWheelEvent(QWheelEvent *e)
+void ComicImageView::wheelEvent(QWheelEvent *e)
 {
         e->accept();
-/*        if (e->delta() > 0) //scrolling up
+        if (e->delta() > 0) //scrolling up
         {
-                if (contentsHeight()<=viewport()->height() || (onTop() && ++wheelupcnt > EXTRA_WHEEL_SPIN))
+                if (imgLabel->height() <= height() || (onTop() && ++wheelupcnt > EXTRA_WHEEL_SPIN))
                 {
-                        emit topReached();
                         wheelupcnt = 0;
+                        emit topReached();
                 }
                 else
                 {
-                        scrollBy(0, -3*spdy);
+                        scrollByDelta(0, -3*spdy);
                         wheeldowncnt = 0; //reset opposite direction counter
                 }
         }
         else //scrolling down
         {
-                if (contentsHeight()<=viewport()->height() || (onBottom() && ++wheeldowncnt > EXTRA_WHEEL_SPIN))
+                if (imgLabel->height() <= height() || (onBottom() && ++wheeldowncnt > EXTRA_WHEEL_SPIN))
                 {
-                        emit bottomReached();
                         wheeldowncnt = 0;
+                        emit bottomReached();
                 }
                 else
                 {
-                        scrollBy(0, 3*spdy);
+                        scrollByDelta(0, 3*spdy);
                         wheelupcnt = 0; //reset opposite direction counter
                 }
-        }*/
+        }
 }
 
-void ComicImageView::contentsMouseMoveEvent(QMouseEvent *e)
+void ComicImageView::mouseMoveEvent(QMouseEvent *e)
 {
-/*        if (lx >= 0)
+        if (lx >= 0)
         {
                 const int dx = lx - e->x();
                 const int dy = ly - e->y();
-                scrollBy(dx, dy);
-                lx = e->x() + dx; //need to add delta because e->x() is the old position
-                ly = e->y() + dy;
+
+		QScrollBar *vbar = verticalScrollBar();
+		QScrollBar *hbar = horizontalScrollBar();
+
+		vbar->setValue(vbar->value() + dy);
+		hbar->setValue(hbar->value() + dx);
         }
-        else 
-        {
-                lx = e->x();
-                ly = e->y();
-        }*/
+        lx = e->x();
+        ly = e->y();
 }
 
-void ComicImageView::contentsMousePressEvent(QMouseEvent *e)
+void ComicImageView::mousePressEvent(QMouseEvent *e)
 {
         if (!smallcursor)
                 setCursor(Qt::PointingHandCursor);
 }
 
-void ComicImageView::contentsMouseReleaseEvent(QMouseEvent *e)
+void ComicImageView::mouseReleaseEvent(QMouseEvent *e)
 {
         lx = -1;
+	ly = -1;
         if (!smallcursor)
                 setCursor(Qt::ArrowCursor);
 }
@@ -209,6 +219,11 @@ void ComicImageView::updateImageSize()
 		yoff = 0;
 	imgLabel->setContentsMargins(xoff, yoff, 0, 0);
 	imgLabel->setFixedSize(w + xoff, h + yoff);
+	
+	//
+        // update scrolling speeds
+        spdx = w / 100;
+        spdy = h / 100;
 }
 
 void ComicImageView::redrawImages()
@@ -326,32 +341,32 @@ void ComicImageView::setSizeBestFit()
 
 void ComicImageView::scrollToTop()
 {
-        //ensureVisible(1, 1);
+	verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
 }
 
 void ComicImageView::scrollToBottom()
 {
-        //ensureVisible(1, contentsHeight());
+	verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMaximum);
 }
 
 void ComicImageView::scrollRight()
 {
-        //scrollBy(spdx, 0);
+        scrollByDelta(spdx, 0);
 }
 
 void ComicImageView::scrollLeft()
 {
-        //scrollBy(-spdx, 0);
+        scrollByDelta(-spdx, 0);
 }
 
 void ComicImageView::scrollRightFast()
 {
-        //scrollBy(3*spdx, 0);
+        scrollByDelta(3*spdx, 0);
 }
 
 void ComicImageView::scrollLeftFast()
 {
-        //scrollBy(-3*spdx, 0);
+        scrollByDelta(-3*spdx, 0);
 }
 
 void ComicImageView::scrollUp()
@@ -362,7 +377,7 @@ void ComicImageView::scrollUp()
                 emit topReached();
         }
         else
-           ;//     scrollBy(0, -spdy);
+		scrollByDelta(0, -spdy);
 }
 
 void ComicImageView::scrollDown()
@@ -373,7 +388,7 @@ void ComicImageView::scrollDown()
                 emit bottomReached();
         }
         else
-             ;//   scrollBy(0, spdy);
+		scrollByDelta(0, spdy);
 }
 
 void ComicImageView::scrollUpFast()
@@ -381,7 +396,7 @@ void ComicImageView::scrollUpFast()
         if (onTop())
                 emit topReached();
         else
-               ;// scrollBy(0, -3*spdy);
+		scrollByDelta(0, -3*spdy);
 }
 
 void ComicImageView::scrollDownFast()
@@ -389,7 +404,7 @@ void ComicImageView::scrollDownFast()
         if (onBottom())
                 emit bottomReached();
         else
-                ;//scrollBy(0, 3*spdy);
+		scrollByDelta(0, 3*spdy);
 }
 
 void ComicImageView::rotateRight()
@@ -411,23 +426,23 @@ void ComicImageView::jumpUp()
 {
         if (onTop())
                 emit topReached();
-        else
-                ;//scrollBy(0, -viewport()->height());
+        else 
+		scrollByDelta(0, -viewport()->height());
 }
 
 void ComicImageView::jumpDown()
 {
         if (onBottom())
                 emit bottomReached();
-        else
-                ;//scrollBy(0, viewport()->height());
+        else 
+		scrollByDelta(0, viewport()->height());
 }
 
 void ComicImageView::enableScrollbars(bool f)
 {
-        /*ScrollBarMode s = f ? Auto : AlwaysOff;
-        setVScrollBarMode(s);
-        setHScrollBarMode(s);*/
+        const Qt::ScrollBarPolicy s = f ? Qt::ScrollBarAsNeeded : Qt::ScrollBarAlwaysOff;
+        setVerticalScrollBarPolicy(s);
+        setHorizontalScrollBarPolicy(s);
 }
 
 void ComicImageView::setBackground(const QColor &color)
@@ -485,7 +500,14 @@ int ComicImageView::visiblePages() const
 
 const QPixmap ComicImageView::image() const
 {
-	QPixmap p(*imgLabel->pixmap());
-	return p;
+	if (imgs > 0)
+		return QPixmap(*imgLabel->pixmap());
+	return QPixmap(); //fallback
 }
+
+int ComicImageView::viewWidth() const
+{
+	return (imgs > 0) ? imgLabel->width() : 0;
+}
+
 

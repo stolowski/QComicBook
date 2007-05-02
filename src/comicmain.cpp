@@ -398,6 +398,7 @@ void ComicMainWindow::setupSettingsMenu()
 {
         settings_menu = menuBar()->addMenu(tr("&Settings"));
         toggleScrollbarsAction = settings_menu->addAction(tr("Scrollbars"), this, SLOT(toggleScrollbars()));
+	toggleScrollbarsAction->setCheckable(true);
         toggleScrollbarsAction->setChecked(cfg->scrollbarsVisible());
         settings_menu->addAction(toggleToolbarAction);
         settings_menu->addAction(toggleStatusbarAction);
@@ -551,8 +552,8 @@ void ComicMainWindow::toolbarVisibilityChanged(bool f)
 void ComicMainWindow::toggleScrollbars()
 {
         bool f = toggleScrollbarsAction->isChecked();
-        toggleScrollbarsAction->setChecked(!f); //???? potrzebne?
-        view->enableScrollbars(!f);
+        //toggleScrollbarsAction->setChecked(!f); //???? potrzebne?
+        view->enableScrollbars(f);
 }
 
 void ComicMainWindow::toggleContinousScroll()
@@ -881,8 +882,10 @@ void ComicMainWindow::jumpToPage(int n, bool force)
                         view->setImage(img, preserveangle);
                         statusbar->setImageInfo(&img);
                 }
-                //if (mangaModeAction->isChecked()) //TODO
-                  //      view->ensureVisible(view->imageWidth(), 0);
+                if (mangaModeAction->isChecked())
+                        view->ensureVisible(view->viewWidth(), 0);
+		else
+			view->ensureVisible(0, 0);
                 const QString page = tr("Page") + " " + QString::number(currpage + 1) + "/" + QString::number(sink->numOfImages());
                 pageinfo->setText(page);
                 statusbar->setPage(currpage + 1, sink->numOfImages());

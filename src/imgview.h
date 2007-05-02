@@ -59,10 +59,11 @@ namespace QComicBook
 			void updateImageSize();
 			void redrawImages();
 			virtual void contextMenuEvent(QContextMenuEvent *e);
-			virtual void contentsWheelEvent(QWheelEvent *e);
-			virtual void contentsMouseMoveEvent(QMouseEvent *e);
-			virtual void contentsMousePressEvent(QMouseEvent *e);
-			virtual void contentsMouseReleaseEvent(QMouseEvent *e);
+			virtual void wheelEvent(QWheelEvent *e);
+			virtual void mouseMoveEvent(QMouseEvent *e);
+			virtual void mousePressEvent(QMouseEvent *e);
+			virtual void mouseReleaseEvent(QMouseEvent *e);
+			void scrollByDelta(int dx, int dy);
 
 		public slots:
 			
@@ -104,6 +105,7 @@ namespace QComicBook
 			Size getSize() const;
 			int visiblePages() const;
 			const QPixmap image() const;
+			int viewWidth() const;
 	};
 }
 
