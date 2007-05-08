@@ -18,6 +18,7 @@
 #include "enummap.h"
 #include <QObject>
 #include <QFont>
+#include <QByteArray>
 
 class QSettings;
 class QRect;
@@ -46,7 +47,6 @@ namespace QComicBook
 			bool fscrhidetoolbar;
 			Size pagesize;
 			//Scaling scaling;
-			int x, y, w, h;
 			QString lastdir;
 			QColor bgcolor;
 			History recent;
@@ -61,7 +61,8 @@ namespace QComicBook
 			bool intbrowser;
 			bool showsplash;
 			QString extbrowser;
-			QString docklayout;
+			QByteArray docklayout;
+			QByteArray geometry;
 			QString tmpdir;
 			QFont font;
 
@@ -90,7 +91,6 @@ namespace QComicBook
 			bool japaneseMode() const;
 			bool continuousScrolling() const;
 			bool scrollbarsVisible() const;
-			QRect geometry() const;
 			Size pageSize() const;
 			//Scaling pageScaling() const;
 			QString lastDir() const;
@@ -110,6 +110,7 @@ namespace QComicBook
 			bool useInternalBrowser() const;
 			const QFont& infoFont() const;
 			QString externalBrowser() const;
+			void restoreGeometry(QMainWindow *w) const;
 			void restoreDockLayout(QMainWindow *w);
 			bool editSupport() const;
 			bool showSplash() const;
@@ -121,7 +122,6 @@ namespace QComicBook
 			void japaneseMode(bool f);
 			void continuousScrolling(bool f);
 			void scrollbarsVisible(bool f);
-			void geometry(const QRect g);
 			void pageSize(Size s);
 			//void pageScaling(Scaling s);
 			void lastDir(const QString &d);
@@ -142,6 +142,7 @@ namespace QComicBook
 			void infoFont(const QFont &f);
 			void externalBrowser(const QString &cmd);
 			void saveDockLayout(QMainWindow *w);
+			void saveGeometry(QMainWindow *w);
 			void editSupport(bool f);
 			void showSplash(bool f);
 			void tmpDir(const QString &dir);

@@ -54,9 +54,10 @@
 using namespace QComicBook;
 using namespace Utility;
 
-ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent/*, Qt::Window|Qt::WA_DeleteOnClose*/), sink(NULL), currpage(0), edit_menu(NULL)
+ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), sink(NULL), currpage(0), edit_menu(NULL)
 {
         updateCaption();
+	setAttribute(Qt::WA_DeleteOnClose);
         setWindowIcon(Icons::get(ICON_APPICON));
         setMinimumSize(320, 200);
 
@@ -64,7 +65,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent/*, Qt::Win
 
         cfg = &ComicBookSettings::instance();
 
-        setGeometry(cfg->geometry());
+	cfg->restoreGeometry(this);
 
         setupActions();
         setupToolbar();
@@ -268,6 +269,7 @@ void ComicMainWindow::setupComicImageView()
 void ComicMainWindow::setupThumbnailsWindow()
 {
         thumbswin = new ThumbnailsWindow(this);
+	thumbswin->setObjectName("ThumbnailsWindow");
 	thumbswin->setAllowedAreas(Qt::AllDockWidgetAreas);
 	addDockWidget(Qt::LeftDockWidgetArea, thumbswin);
         connect(thumbswin, SIGNAL(requestedPage(int, bool)), this, SLOT(jumpToPage(int, bool)));
@@ -279,6 +281,7 @@ void ComicMainWindow::setupThumbnailsWindow()
 void ComicMainWindow::setupToolbar()
 {
         toolbar = new QToolBar(tr("Toolbar"), this);
+	toolbar->setObjectName("MainToolbar");
         toolbar->addAction(openArchiveAction);
 	toolbar->addAction(openDirAction);
         toolbar->addSeparator();
@@ -1097,7 +1100,7 @@ void ComicMainWindow::bookmarkSelected(int id)
 
 void ComicMainWindow::saveSettings()
 {
-        cfg->geometry(frameGeometry());
+        cfg->saveGeometry(this);
         cfg->saveDockLayout(this);
         cfg->scrollbarsVisible(toggleScrollbarsAction->isChecked());
         cfg->twoPagesMode(twoPagesAction->isChecked());

@@ -40,10 +40,7 @@
 #define OPT_TWOPAGESSTEP             "/TwoPagesStep"
 
 #define GRP_WINDOW      "/Window"
-#define OPT_X           "/X"
-#define OPT_Y           "/Y"
-#define OPT_WIDTH       "/Width"
-#define OPT_HEIGHT      "/Height"
+#define OPT_GEOMETRY    "/Geometry"
 #define OPT_DOCKLAYOUT  "/DockLayout"
 
 #define GRP_MISC        "/Misc"
@@ -144,11 +141,8 @@ void ComicBookSettings::load()
 	}*/
 	
 	cfg->beginGroup(GRP_WINDOW);
-		x = cfg->value(OPT_X, 0).toInt();
-		y = cfg->value(OPT_Y, 0).toInt();
-		w = cfg->value(OPT_WIDTH, 640).toInt();
-		h = cfg->value(OPT_HEIGHT, 400).toInt();
-		docklayout = cfg->value(OPT_DOCKLAYOUT, QString()).toString();
+		geometry = cfg->value(OPT_GEOMETRY).toByteArray();
+		docklayout = cfg->value(OPT_DOCKLAYOUT).toByteArray();
 	cfg->endGroup();
 	cfg->beginGroup(GRP_VIEW);
 		smallcursor = cfg->value(OPT_SMALLCURSOR, false).toBool();
@@ -226,9 +220,9 @@ bool ComicBookSettings::scrollbarsVisible() const
 	return scrollbars;
 }
 
-QRect ComicBookSettings::geometry() const
+void ComicBookSettings::restoreGeometry(QMainWindow *w) const
 {
-	return QRect(x, y, w, h);
+	w->restoreGeometry(geometry);
 }
 
 Size ComicBookSettings::pageSize() const
@@ -333,8 +327,7 @@ bool ComicBookSettings::showSplash() const
 
 void ComicBookSettings::restoreDockLayout(QMainWindow *w)
 {
-	//QTextStream str(&docklayout, QIODevice::ReadOnly); FIXME
-	//str >> *w;
+	w->restoreState(docklayout);
 }
 
 bool ComicBookSettings::editSupport() const
@@ -386,17 +379,9 @@ void ComicBookSettings::scrollbarsVisible(bool f)
 		cfg->setValue(GRP_VIEW OPT_SCROLLBARS, scrollbars = f);
 }
 
-void ComicBookSettings::geometry(const QRect g)
+void ComicBookSettings::saveGeometry(QMainWindow *w)
 {
-	if (x != g.x() || y != g.y() || w != g.width() || h != g.height())
-	{
-		cfg->beginGroup(GRP_WINDOW);
-		cfg->setValue(OPT_X, x = g.x());
-		cfg->setValue(OPT_Y, y = g.y());
-		cfg->setValue(OPT_WIDTH, w = g.width());
-		cfg->setValue(OPT_HEIGHT, h = g.height());
-		cfg->endGroup();
-	}
+	cfg->setValue(GRP_WINDOW OPT_GEOMETRY, w->saveGeometry());
 }
 
 void ComicBookSettings::pageSize(Size s)
@@ -532,10 +517,7 @@ void ComicBookSettings::externalBrowser(const QString& cmd)
 
 void ComicBookSettings::saveDockLayout(QMainWindow *w)
 {
-	/*QString tmp; FIXME
-	QTextStream str(&tmp, QIODevice::WriteOnly);
-	str << *w;
-	cfg->setValue(GRP_WINDOW OPT_DOCKLAYOUT, tmp);*/
+	cfg->setValue(GRP_WINDOW OPT_DOCKLAYOUT, w->saveState());
 }
 
 void ComicBookSettings::editSupport(bool f)
