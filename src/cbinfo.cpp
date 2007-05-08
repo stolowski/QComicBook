@@ -11,11 +11,13 @@
  */
 
 #include "cbinfo.h"
-#include <qstringlist.h>
-#include <qtextedit.h>
-#include <qlayout.h>
-#include <qfont.h>
 #include "imgdirsink.h"
+#include <QTabWidget>
+#include <QStringList>
+#include <QTextEdit>
+#include <QLayout>
+#include <QFont>
+#include <QDialogButtonBox>
 
 using namespace QComicBook;
 
@@ -25,13 +27,23 @@ ComicBookInfo::ComicBookInfo(QWidget *parent, ImgDirSink &sink, const QFont &f):
 	setWindowTitle("QComicBook info");
 	resize(640, 480);
 
+	QVBoxLayout *lay = new QVBoxLayout(this);
+	tabs = new QTabWidget(this);
+	lay->addWidget(tabs);
+
 	setupDescriptionTabs(sink);
 	//setupGeneralTab(sink);
+	
+	//
+	// setup buttons
+	QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Close, Qt::Horizontal, this);
+	lay->addWidget(buttons);
+	connect(buttons, SIGNAL(rejected()), this, SLOT(accept()));
 }
 
 void ComicBookInfo::setupDescriptionTabs(const ImgDirSink &sink)
 {
-/*	const QStringList desc = sink.getDescription(); FIXME
+	const QStringList desc = sink.getDescription(); 
 	QStringList::const_iterator it = desc.begin();
 	while (it != desc.end())
 	{
@@ -39,30 +51,28 @@ void ComicBookInfo::setupDescriptionTabs(const ImgDirSink &sink)
 		QVBoxLayout *l = new QVBoxLayout(w);
 		QTextEdit *txt = new QTextEdit(w);
 		l->addWidget(txt);
-		addTab(w, *it);
+		tabs->addTab(w, *it);
 		it++;
 		if (it == desc.end())
 			break;
-		txt->setTextFormat(Qt::PlainText);
 		txt->setReadOnly(true);
 		txt->setFont(font);
-		txt->setText(*it);
+		txt->setPlainText(*it);
 		it++;
-	}*/
+	}
 }
 
 void ComicBookInfo::setupGeneralTab(ImgDirSink &sink)
 {
-	/*QWidget *w = new QWidget(this); FIXME
+	/*QWidget *w = new QWidget(this);
 	QVBoxLayout *l = new QVBoxLayout(w);
 	QTextEdit *txt = new QTextEdit(w);
 	l->addWidget(txt);
-	txt->setTextFormat(Qt::PlainText);
 	txt->setReadOnly(true);
 	txt->setFont(font);
 	//txt->setText(sink.getStats());
 
-	addTab(w, tr("General info"));*/
+	tabs->addTab(w, tr("General info"));*/
 }
 
 ComicBookInfo::~ComicBookInfo()

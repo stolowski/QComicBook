@@ -17,6 +17,7 @@
 #include <QFont>
 
 class QStringList;
+class QTabWidget;
 
 namespace QComicBook
 {
@@ -24,6 +25,9 @@ namespace QComicBook
 	
 	class ComicBookInfo: public QDialog
 	{
+		private:
+			QTabWidget *tabs;
+
 		protected:
 			QFont font;
 
