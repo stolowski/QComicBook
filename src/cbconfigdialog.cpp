@@ -68,7 +68,11 @@ void ComicBookCfgDialog::setupDisplayTab()
 	lay1->addWidget(new QLabel(tr("Background color"), w));
 	lay1->addWidget(pb_color = new QPushButton(w));
 	pb_color->setFixedWidth(32);
-	//pb_color->setPaletteBackgroundColor(bgcolor = cfg->background()); //FIXME: kolor
+
+	QPalette palette;
+	palette.setColor(pb_color->backgroundRole(), bgcolor = cfg->background());
+	pb_color->setPalette(palette);
+	
 	connect(pb_color, SIGNAL(clicked()), this, SLOT(showBackgroundDialog()));
 	lay->addLayout(lay1);
 
@@ -258,8 +262,12 @@ void ComicBookCfgDialog::updateFontPreview()
 void ComicBookCfgDialog::showBackgroundDialog()
 {
 	QColor c = QColorDialog::getColor(cfg->background(), this);
-//	if (c.isValid()) FIXME
-//		pb_color->setPaletteBackgroundColor(bgcolor = c);
+	if (c.isValid())
+	{
+		QPalette palette;
+		palette.setColor(pb_color->backgroundRole(), bgcolor = c);
+		pb_color->setPalette(palette);
+	}
 }
 
 void ComicBookCfgDialog::showFontDialog()

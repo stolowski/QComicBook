@@ -24,7 +24,7 @@ using namespace QComicBook;
 ComicBookInfo::ComicBookInfo(QWidget *parent, ImgDirSink &sink, const QFont &f): QDialog(parent), font(f)
 {
 	setModal(true);
-	setWindowTitle("QComicBook info");
+	setWindowTitle(tr("QComicBook info"));
 	resize(640, 480);
 
 	QVBoxLayout *lay = new QVBoxLayout(this);
