@@ -451,7 +451,7 @@ void ComicImageView::setBackground(const QColor &color)
 
 void ComicImageView::setSmallCursor(bool f)
 {
-/*        if (f)
+        if (f)
         {
                 static unsigned char bmp_bits[4*32];
                 static unsigned char msk_bits[4*32];
@@ -465,8 +465,8 @@ void ComicImageView::setSmallCursor(bool f)
                 bmp_bits[4] = 0xa0;
                 msk_bits[4] = 0xe0;
                 bmp_bits[8] = msk_bits[8] = 0xe0;
-                const QBitmap bmp(32, 32, bmp_bits, false);
-                const QBitmap msk(32, 32, msk_bits, false);
+                const QBitmap bmp = QBitmap::fromData(QSize(32, 32), bmp_bits, QImage::Format_Mono);
+                const QBitmap msk = QBitmap::fromData(QSize(32, 32), msk_bits, QImage::Format_Mono);
                 smallcursor = new QCursor(bmp, msk, 0, 0);
                 setCursor(*smallcursor);
         }
@@ -475,8 +475,8 @@ void ComicImageView::setSmallCursor(bool f)
                 if (smallcursor)
                         delete smallcursor;
                 smallcursor = NULL;
-                setCursor(Qt::ArrowCursor);
-        }*/
+		unsetCursor();
+        }
 }
 
 void ComicImageView::clear()
