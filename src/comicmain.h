@@ -70,7 +70,6 @@ namespace QComicBook
 			QAction *jumpToAction;
 			QAction *contScrollAction;
 			QAction *toggleThumbnailsAction;
-			QAction *toggleToolbarAction;
 			QAction *toggleStatusbarAction;
 			QAction *showInfoAction;
 			QAction *nextPageAction;
@@ -112,8 +111,8 @@ namespace QComicBook
 			QAction *savePageAction;
 
 		protected:
-			//virtual void dragEnterEvent(QDragEnterEvent *e);
-//			virtual void dropEvent(QDropEvent *e);
+			virtual void dragEnterEvent(QDragEnterEvent *e);
+			virtual void dropEvent(QDropEvent *e);
 			virtual void keyPressEvent(QKeyEvent *e);
 			virtual void closeEvent(QCloseEvent *e);
 
@@ -143,7 +142,6 @@ namespace QComicBook
 			void recentSelected(int id);
 			void bookmarkSelected(int id);
 			void thumbnailsVisibilityChanged(bool f);
-			void toolbarVisibilityChanged(bool f);
 			void openWithGimp();
 			void savePageAs();
 

@@ -10,6 +10,7 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
+#include <iostream>
 #include "config.h"
 #include "bookmarks.h"
 #include "comicmain.h"
@@ -49,6 +50,8 @@
 #include <QProcess>
 #include <QKeyEvent>
 #include <QWidgetAction>
+#include <QList>
+#include <QUrl>
 #include <typeinfo>
 
 using namespace QComicBook;
@@ -61,17 +64,17 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), sink(NUL
         setWindowIcon(Icons::get(ICON_APPICON));
         setMinimumSize(320, 200);
 
-	setAcceptDrops(true); //???
+	setAcceptDrops(true); 
 
         cfg = &ComicBookSettings::instance();
 
 	cfg->restoreGeometry(this);
 
+        setupThumbnailsWindow();
         setupActions();
         setupToolbar();
         setupStatusbar();
         setupComicImageView();
-        setupThumbnailsWindow();
 
         setupFileMenu();  
         if (cfg->editSupport())
@@ -194,11 +197,11 @@ void ComicMainWindow::setupActions()
         exitFullScreenAction->setShortcut(tr("Escape")); //????
         toggleStatusbarAction = new QAction(tr("Statusbar"), this);
         toggleStatusbarAction->setCheckable(true);
-        toggleThumbnailsAction = new QAction(Icons::get(ICON_THUMBNAILS), tr("Thumbnails"), this);
+        //toggleThumbnailsAction = new QAction(Icons::get(ICON_THUMBNAILS), tr("Thumbnails"), this);
+        toggleThumbnailsAction = thumbswin->toggleViewAction();
+	toggleThumbnailsAction->setIcon(Icons::get(ICON_THUMBNAILS));
         toggleThumbnailsAction->setShortcut(tr("Alt+t"));
         toggleThumbnailsAction->setCheckable(true);
-        toggleToolbarAction = new QAction(tr("Toolbar"), this);
-        toggleToolbarAction->setCheckable(true);
 
         connect(openArchiveAction, SIGNAL(activated()), this, SLOT(browseArchive()));
         connect(openDirAction, SIGNAL(activated()), this, SLOT(browseDirectory()));
@@ -273,9 +276,9 @@ void ComicMainWindow::setupThumbnailsWindow()
 	thumbswin->setAllowedAreas(Qt::AllDockWidgetAreas);
 	addDockWidget(Qt::LeftDockWidgetArea, thumbswin);
         connect(thumbswin, SIGNAL(requestedPage(int, bool)), this, SLOT(jumpToPage(int, bool)));
-        connect(thumbswin, SIGNAL(visibilityChanged(bool)), this, SLOT(thumbnailsVisibilityChanged(bool)));
-        connect(thumbswin, SIGNAL(visibilityChanged(bool)), toggleThumbnailsAction, SLOT(setOn(bool)));
-        connect(toggleThumbnailsAction, SIGNAL(toggled(bool)), thumbswin, SLOT(setShown(bool)));       
+//        connect(thumbswin, SIGNAL(visibilityChanged(bool)), this, SLOT(thumbnailsVisibilityChanged(bool)));
+  //      connect(thumbswin, SIGNAL(visibilityChanged(bool)), toggleThumbnailsAction, SLOT(setOn(bool)));
+   //     connect(toggleThumbnailsAction, SIGNAL(toggled(bool)), thumbswin, SLOT(setShown(bool)));       
 }
 
 void ComicMainWindow::setupToolbar()
@@ -286,7 +289,8 @@ void ComicMainWindow::setupToolbar()
 	toolbar->addAction(openDirAction);
         toolbar->addSeparator();
         toolbar->addAction(showInfoAction);
-        toolbar->addAction(toggleThumbnailsAction);
+        //toolbar->addAction(toggleThumbnailsAction);
+        toolbar->addAction(thumbswin->toggleViewAction());
         toolbar->addSeparator();
         toolbar->addAction(twoPagesAction);
         toolbar->addAction(mangaModeAction);
@@ -306,8 +310,6 @@ void ComicMainWindow::setupToolbar()
         toolbar->addSeparator();
         toolbar->addAction(rotateRightAction);
         toolbar->addAction(rotateLeftAction);
-        connect(toggleToolbarAction, SIGNAL(toggled(bool)), toolbar, SLOT(setShown(bool)));
-        connect(toolbar, SIGNAL(visibilityChanged(bool)), this, SLOT(toolbarVisibilityChanged(bool)));
 	addToolBar(toolbar);
 }
 
@@ -359,7 +361,7 @@ void ComicMainWindow::setupViewMenu()
         view_menu->addSeparator();
         view_menu->addAction(twoPagesAction);
         view_menu->addAction(mangaModeAction);
-        view_menu->addAction(toggleThumbnailsAction);
+        view_menu->addAction(thumbswin->toggleViewAction());
 }
 
 void ComicMainWindow::setupNavigationMenu()
@@ -403,7 +405,7 @@ void ComicMainWindow::setupSettingsMenu()
         toggleScrollbarsAction = settings_menu->addAction(tr("Scrollbars"), this, SLOT(toggleScrollbars()));
 	toggleScrollbarsAction->setCheckable(true);
         toggleScrollbarsAction->setChecked(cfg->scrollbarsVisible());
-        settings_menu->addAction(toggleToolbarAction);
+      	settings_menu->addAction(toolbar->toggleViewAction());
         settings_menu->addAction(toggleStatusbarAction);
 	settings_menu->addSeparator();
         settings_menu->addAction(fullScreenAction);
@@ -503,17 +505,18 @@ void ComicMainWindow::enableComicBookActions(bool f)
         removeBookmarkAction->setEnabled(f);
 }
 
-/*void ComicMainWindow::dragEnterEvent(QDragEnterEvent *e)
+void ComicMainWindow::dragEnterEvent(QDragEnterEvent *e)
 {
-	e->accept(QUriDrag::canDecode(e));
-}*/
+	if (e->mimeData()->hasUrls())
+		e->acceptProposedAction();
+}
 
-/*void ComicMainWindow::dropEvent(QDropEvent *e)
+void ComicMainWindow::dropEvent(QDropEvent *e)
 {
-	QStringList files;
-	if (QUriDrag::decodeLocalFiles(e, files))
-		open(files[0], 0);
-}*/
+	const QList<QUrl> urls = e->mimeData()->urls();
+	if (!urls.isEmpty())
+		open(urls.at(0).toLocalFile(), 0);
+}
 
 void ComicMainWindow::keyPressEvent(QKeyEvent *e)
 {
@@ -545,11 +548,6 @@ void ComicMainWindow::thumbnailsVisibilityChanged(bool f)
                         if (!thumbswin->view()->isLoaded(i))
                                 sink->requestThumbnail(i);
         }
-}
-
-void ComicMainWindow::toolbarVisibilityChanged(bool f)
-{
-        toggleToolbarAction->setChecked(f);
 }
 
 void ComicMainWindow::toggleScrollbars()
@@ -761,8 +759,8 @@ void ComicMainWindow::exitFullscreen()
                 menuBar()->show();
                 if (toggleStatusbarAction->isChecked())
                         statusbar->show();
-                if (toggleToolbarAction->isChecked())
-                        toolbar->show();
+                //if (toggleToolbarAction->isChecked())
+                  //      toolbar->show();
 		showNormal();
         }
 }
