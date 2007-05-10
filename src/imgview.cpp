@@ -169,6 +169,12 @@ void ComicImageView::mouseReleaseEvent(QMouseEvent *e)
                 setCursor(Qt::ArrowCursor);
 }
 
+void ComicImageView::mouseDoubleClickEvent(QMouseEvent *e)
+{
+	e->accept();
+	emit doubleClick();
+}
+
 void ComicImageView::updateImageSize()
 {
 	if (totalWidth * totalHeight  * imgs == 0)

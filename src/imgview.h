@@ -53,6 +53,7 @@ namespace QComicBook
 		signals:
 			void bottomReached();
 			void topReached();
+			void doubleClick();
 
 		protected:
 			void resizeEvent(QResizeEvent *e);
@@ -63,6 +64,7 @@ namespace QComicBook
 			virtual void mouseMoveEvent(QMouseEvent *e);
 			virtual void mousePressEvent(QMouseEvent *e);
 			virtual void mouseReleaseEvent(QMouseEvent *e);
+			virtual void mouseDoubleClickEvent(QMouseEvent *e);
 			void scrollByDelta(int dx, int dy);
 
 		public slots:
