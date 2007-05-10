@@ -30,9 +30,11 @@ namespace QComicBook
 		signals:
 			void requestedThumbnail(int n);
 			void requestedPage(int n, bool force);
+			void shown();
 
 		protected:
-			void customEvent(QEvent *e);
+			virtual void customEvent(QEvent *e);
+			virtual void showEvent(QShowEvent *e);
 
 		protected slots:
 			//void onOrientationChanged(Orientation o); -- nie ma w Qt4

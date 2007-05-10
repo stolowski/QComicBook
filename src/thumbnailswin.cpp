@@ -47,6 +47,12 @@ void ThumbnailsWindow::customEvent(QEvent *e)
 	}
 }
 
+void ThumbnailsWindow::showEvent(QShowEvent *e)
+{
+	QDockWidget::showEvent(e);
+	emit shown();
+}
+
 /*void ThumbnailsWindow::onOrientationChanged(Orientation o)
 {
 	tview->setArrangement(o == Qt::Horizontal ? QIconView::TopToBottom : QIconView::LeftToRight);

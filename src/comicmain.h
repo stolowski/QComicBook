@@ -141,7 +141,7 @@ namespace QComicBook
 			void setRecentFilesMenu(const History &hist);
 			void recentSelected(int id);
 			void bookmarkSelected(int id);
-			void thumbnailsVisibilityChanged(bool f);
+			void thumbnailsWindowShown();
 			void openWithGimp();
 			void savePageAs();
 

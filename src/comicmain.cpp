@@ -10,7 +10,6 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include <iostream>
 #include "config.h"
 #include "bookmarks.h"
 #include "comicmain.h"
@@ -89,6 +88,8 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), sink(NUL
 	//
 	// copy all menu actions; this is needed for fullscreen mode if menubar is hidden
 	addActions(menuBar()->actions());
+	addAction(jumpDownAction);
+	addAction(jumpUpAction);
 
         lastdir = cfg->lastDir();
         recentfiles = new History(10);
@@ -132,7 +133,7 @@ void ComicMainWindow::setupActions()
         forwardPageAction = new QAction(Icons::get(ICON_FORWARD), tr("5 pages forward"), this);
         backwardPageAction = new QAction(Icons::get (ICON_BACKWARD), tr("5 pages backward"), this);
         jumpDownAction = new QAction(QString::null, this);
-        jumpDownAction->setShortcut(tr("Space"));
+        jumpDownAction->setShortcut(Qt::Key_Space);
         jumpUpAction = new QAction(QString::null, this);
         jumpUpAction->setShortcut(tr("Backspace"));
         prevPageAction = new QAction(Icons::get(ICON_PREVPAGE), tr("&Previous page"), this);
@@ -197,7 +198,6 @@ void ComicMainWindow::setupActions()
         exitFullScreenAction->setShortcut(tr("Escape")); //????
         toggleStatusbarAction = new QAction(tr("Statusbar"), this);
         toggleStatusbarAction->setCheckable(true);
-        //toggleThumbnailsAction = new QAction(Icons::get(ICON_THUMBNAILS), tr("Thumbnails"), this);
         toggleThumbnailsAction = thumbswin->toggleViewAction();
 	toggleThumbnailsAction->setIcon(Icons::get(ICON_THUMBNAILS));
         toggleThumbnailsAction->setShortcut(tr("Alt+t"));
@@ -276,9 +276,7 @@ void ComicMainWindow::setupThumbnailsWindow()
 	thumbswin->setAllowedAreas(Qt::AllDockWidgetAreas);
 	addDockWidget(Qt::LeftDockWidgetArea, thumbswin);
         connect(thumbswin, SIGNAL(requestedPage(int, bool)), this, SLOT(jumpToPage(int, bool)));
-//        connect(thumbswin, SIGNAL(visibilityChanged(bool)), this, SLOT(thumbnailsVisibilityChanged(bool)));
-  //      connect(thumbswin, SIGNAL(visibilityChanged(bool)), toggleThumbnailsAction, SLOT(setOn(bool)));
-   //     connect(toggleThumbnailsAction, SIGNAL(toggled(bool)), thumbswin, SLOT(setShown(bool)));       
+        connect(thumbswin, SIGNAL(shown()), this, SLOT(thumbnailsWindowShown()));
 }
 
 void ComicMainWindow::setupToolbar()
@@ -289,7 +287,6 @@ void ComicMainWindow::setupToolbar()
 	toolbar->addAction(openDirAction);
         toolbar->addSeparator();
         toolbar->addAction(showInfoAction);
-        //toolbar->addAction(toggleThumbnailsAction);
         toolbar->addAction(thumbswin->toggleViewAction());
         toolbar->addSeparator();
         toolbar->addAction(twoPagesAction);
@@ -539,9 +536,9 @@ bool ComicMainWindow::confirmExit()
         return QMessageBox::question(this, tr("Leave QComicBook?"), tr("Do you really want to quit QComicBook?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes;
 }
 
-void ComicMainWindow::thumbnailsVisibilityChanged(bool f)
+void ComicMainWindow::thumbnailsWindowShown()
 {
-        if (f && sink)
+        if (sink)
         {
                 int max = sink->numOfImages();
                 for (int i=0; i<max; i++)
