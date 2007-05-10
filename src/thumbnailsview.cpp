@@ -18,6 +18,7 @@
 #include <qpainter.h>
 #include <QVector>
 #include <QMenu>
+#include <QContextMenuEvent>
 
 using namespace QComicBook;
 
@@ -49,7 +50,6 @@ ThumbnailsView::ThumbnailsView(QWidget *parent): QListWidget(parent), selected(N
 	paint.drawRect(0, 0, Thumbnail::maxWidth(), Thumbnail::maxHeight());
 
 	connect(this, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(onDoubleClick(QListWidgetItem *)));
-	connect(this, SIGNAL(contextMenuRequested(QListWidgetItem *, const QPoint&)), this, SLOT(showContextMenu(QListWidgetItem *, const QPoint&)));
 }
 
 ThumbnailsView::~ThumbnailsView()
@@ -108,12 +108,14 @@ void ThumbnailsView::scrollToPage(int n)
 	}
 }
 
-void ThumbnailsView::showContextMenu(QListWidgetItem *item, const QPoint &p)
+void ThumbnailsView::contextMenuEvent(QContextMenuEvent *e)
 {
-	if (item)
+	e->accept();
+	QListWidgetItem *cur = itemAt(e->pos());
+	if (cur)
 	{
-		selected = item;
-		menu->popup(p);
+		selected = cur;
+		menu->popup(e->globalPos());
 	}
 }
 

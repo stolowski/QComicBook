@@ -41,8 +41,8 @@ namespace QComicBook
 
 		protected slots:
 			void onDoubleClick(QListWidgetItem *item);
-			void showContextMenu(QListWidgetItem *item, const QPoint &p);
 			void goToPageAction();
+			virtual void contextMenuEvent(QContextMenuEvent *e);
 
 		public:
 			ThumbnailsView(QWidget *parent);
