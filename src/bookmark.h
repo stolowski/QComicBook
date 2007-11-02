@@ -17,6 +17,8 @@
 
 #include <qstring.h>
 
+class QAction;
+
 namespace QComicBook
 {
 	class Bookmark
@@ -24,7 +26,7 @@ namespace QComicBook
 		private:
 			QString name; //!<comic book full path
 			int page; //!<page number
-			int id; //!<item identifier in popup menu
+			QAction *id; //!<item identifier in popup menu
 
 		public:
 			Bookmark();
@@ -32,10 +34,10 @@ namespace QComicBook
 			~Bookmark();
 			const QString& getName() const;
 			int getPage() const;
-			int getId() const;
+			QAction* getId() const;
 			void setName(const QString &cbname);
 			void setPage(int cbpage);
-			void setId(int n);
+			void setId(QAction *n);
 			bool isValid();
 			QString menuItemName();
 	};

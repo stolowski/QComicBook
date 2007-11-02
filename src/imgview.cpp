@@ -28,6 +28,7 @@
 using namespace QComicBook;
 
 const int ComicImageView::EXTRA_WHEEL_SPIN = 3;
+const float ComicImageView::JUMP_FACTOR = 0.85f;
 
 ComicImageView::ComicImageView(QWidget *parent, Size size, const QColor &color): QScrollArea(parent),
 	isize(size), iangle(0), xoff(0), yoff(0), imgs(0), totalWidth(0), totalHeight(0),
@@ -430,7 +431,7 @@ void ComicImageView::jumpUp()
         if (onTop())
                 emit topReached();
         else 
-		scrollByDelta(0, -viewport()->height());
+		scrollByDelta(0, -static_cast<int>(JUMP_FACTOR * viewport()->height()));
 }
 
 void ComicImageView::jumpDown()
@@ -438,7 +439,7 @@ void ComicImageView::jumpDown()
         if (onBottom())
                 emit bottomReached();
         else 
-		scrollByDelta(0, viewport()->height());
+		scrollByDelta(0, static_cast<int>(JUMP_FACTOR * viewport()->height()));
 }
 
 void ComicImageView::enableScrollbars(bool f)

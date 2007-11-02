@@ -22,7 +22,7 @@
 #include "aboutdialog.h"
 #include "cbsettings.h"
 #include "history.h"
-#include "helpbrowser.h"
+//#include "helpbrowser.h"
 #include "cbconfigdialog.h"
 #include "statusbar.h"
 #include "thumbnailswin.h"
@@ -203,19 +203,19 @@ void ComicMainWindow::setupActions()
         toggleThumbnailsAction->setShortcut(tr("Alt+t"));
         toggleThumbnailsAction->setCheckable(true);
 
-        connect(openArchiveAction, SIGNAL(activated()), this, SLOT(browseArchive()));
-        connect(openDirAction, SIGNAL(activated()), this, SLOT(browseDirectory()));
-        connect(openNextAction, SIGNAL(activated()), this, SLOT(openNext()));
-        connect(openPrevAction, SIGNAL(activated()), this, SLOT(openPrevious()));
-	connect(savePageAction, SIGNAL(activated()), this, SLOT(savePageAs()));
-        connect(showInfoAction, SIGNAL(activated()), this, SLOT(showInfo()));
-        connect(exitFullScreenAction, SIGNAL(activated()), this, SLOT(exitFullscreen()));
-        connect(nextPageAction, SIGNAL(activated()), this, SLOT(nextPage()));
-        connect(forwardPageAction, SIGNAL(activated()), this, SLOT(forwardPages()));
-	connect(firstPageAction, SIGNAL(activated()), this, SLOT(firstPage()));
-	connect(lastPageAction, SIGNAL(activated()), this, SLOT(lastPage()));
-        connect(backwardPageAction, SIGNAL(activated()), this, SLOT(backwardPages())); 
-	connect(quitAction, SIGNAL(activated()), this, SLOT(close()));
+        connect(openArchiveAction, SIGNAL(triggered(bool)), this, SLOT(browseArchive()));
+        connect(openDirAction, SIGNAL(triggered(bool)), this, SLOT(browseDirectory()));
+        connect(openNextAction, SIGNAL(triggered(bool)), this, SLOT(openNext()));
+        connect(openPrevAction, SIGNAL(triggered(bool)), this, SLOT(openPrevious()));
+	connect(savePageAction, SIGNAL(triggered(bool)), this, SLOT(savePageAs()));
+        connect(showInfoAction, SIGNAL(triggered(bool)), this, SLOT(showInfo()));
+        connect(exitFullScreenAction, SIGNAL(triggered(bool)), this, SLOT(exitFullscreen()));
+        connect(nextPageAction, SIGNAL(triggered(bool)), this, SLOT(nextPage()));
+        connect(forwardPageAction, SIGNAL(triggered(bool)), this, SLOT(forwardPages()));
+	connect(firstPageAction, SIGNAL(triggered(bool)), this, SLOT(firstPage()));
+	connect(lastPageAction, SIGNAL(triggered(bool)), this, SLOT(lastPage()));
+        connect(backwardPageAction, SIGNAL(triggered(bool)), this, SLOT(backwardPages())); 
+	connect(quitAction, SIGNAL(triggered(bool)), this, SLOT(close()));
 }
 
 void ComicMainWindow::setupComicImageView()
@@ -226,30 +226,30 @@ void ComicMainWindow::setupComicImageView()
         view->setSmallCursor(cfg->smallCursor());
         connect(cfg, SIGNAL(backgroundChanged(const QColor&)), view, SLOT(setBackground(const QColor&)));
         connect(cfg, SIGNAL(cursorChanged(bool)), view, SLOT(setSmallCursor(bool)));
-        connect(fullScreenAction, SIGNAL(activated()), this, SLOT(toggleFullScreen()));
-        connect(pageTopAction, SIGNAL(activated()), view, SLOT(scrollToTop()));
-        connect(pageBottomAction, SIGNAL(activated()), view, SLOT(scrollToBottom()));
-        connect(scrollRightAction, SIGNAL(activated()), view, SLOT(scrollRight()));
-        connect(scrollLeftAction, SIGNAL(activated()), view, SLOT(scrollLeft()));
-        connect(scrollRightFastAction, SIGNAL(activated()), view, SLOT(scrollRightFast()));
-        connect(scrollLeftFastAction, SIGNAL(activated()), view, SLOT(scrollLeftFast()));
-        connect(scrollUpAction, SIGNAL(activated()), view, SLOT(scrollUp()));
-        connect(scrollDownAction, SIGNAL(activated()), view, SLOT(scrollDown()));       
-        connect(scrollUpFastAction, SIGNAL(activated()), view, SLOT(scrollUpFast()));        
-        connect(scrollDownFastAction, SIGNAL(activated()), view, SLOT(scrollDownFast()));
-        connect(fitWidthAction, SIGNAL(activated()), view, SLOT(setSizeFitWidth()));        
-        connect(fitHeightAction, SIGNAL(activated()), view, SLOT(setSizeFitHeight()));        
-        connect(wholePageAction, SIGNAL(activated()), view, SLOT(setSizeWholePage()));        
-        connect(originalSizeAction, SIGNAL(activated()), view, SLOT(setSizeOriginal()));        
-        connect(bestFitAction, SIGNAL(activated()), view, SLOT(setSizeBestFit()));        
+        connect(fullScreenAction, SIGNAL(triggered(bool)), this, SLOT(toggleFullScreen()));
+        connect(pageTopAction, SIGNAL(triggered(bool)), view, SLOT(scrollToTop()));
+        connect(pageBottomAction, SIGNAL(triggered(bool)), view, SLOT(scrollToBottom()));
+        connect(scrollRightAction, SIGNAL(triggered(bool)), view, SLOT(scrollRight()));
+        connect(scrollLeftAction, SIGNAL(triggered(bool)), view, SLOT(scrollLeft()));
+        connect(scrollRightFastAction, SIGNAL(triggered(bool)), view, SLOT(scrollRightFast()));
+        connect(scrollLeftFastAction, SIGNAL(triggered(bool)), view, SLOT(scrollLeftFast()));
+        connect(scrollUpAction, SIGNAL(triggered(bool)), view, SLOT(scrollUp()));
+        connect(scrollDownAction, SIGNAL(triggered(bool)), view, SLOT(scrollDown()));       
+        connect(scrollUpFastAction, SIGNAL(triggered(bool)), view, SLOT(scrollUpFast()));        
+        connect(scrollDownFastAction, SIGNAL(triggered(bool)), view, SLOT(scrollDownFast()));
+        connect(fitWidthAction, SIGNAL(triggered(bool)), view, SLOT(setSizeFitWidth()));        
+        connect(fitHeightAction, SIGNAL(triggered(bool)), view, SLOT(setSizeFitHeight()));        
+        connect(wholePageAction, SIGNAL(triggered(bool)), view, SLOT(setSizeWholePage()));        
+        connect(originalSizeAction, SIGNAL(triggered(bool)), view, SLOT(setSizeOriginal()));        
+        connect(bestFitAction, SIGNAL(triggered(bool)), view, SLOT(setSizeBestFit()));        
         connect(mangaModeAction, SIGNAL(toggled(bool)), this, SLOT(toggleJapaneseMode(bool)));        
         connect(twoPagesAction, SIGNAL(toggled(bool)), this, SLOT(toggleTwoPages(bool)));
-        connect(prevPageAction, SIGNAL(activated()), this, SLOT(prevPage()));       
-        connect(rotateRightAction, SIGNAL(activated()), view, SLOT(rotateRight()));        
-        connect(rotateLeftAction, SIGNAL(activated()), view, SLOT(rotateLeft()));
-        connect(rotateResetAction, SIGNAL(activated()), view, SLOT(resetRotation()));
-        connect(jumpDownAction, SIGNAL(activated()), view, SLOT(jumpDown()));
-        connect(jumpUpAction, SIGNAL(activated()), view, SLOT(jumpUp()));
+        connect(prevPageAction, SIGNAL(triggered(bool)), this, SLOT(prevPage()));       
+        connect(rotateRightAction, SIGNAL(triggered(bool)), view, SLOT(rotateRight()));        
+        connect(rotateLeftAction, SIGNAL(triggered(bool)), view, SLOT(rotateLeft()));
+        connect(rotateResetAction, SIGNAL(triggered(bool)), view, SLOT(resetRotation()));
+        connect(jumpDownAction, SIGNAL(triggered(bool)), view, SLOT(jumpDown()));
+        connect(jumpUpAction, SIGNAL(triggered(bool)), view, SLOT(jumpUp()));
         if (cfg->continuousScrolling())
         {
                 connect(view, SIGNAL(bottomReached()), this, SLOT(nextPage()));
@@ -318,7 +318,7 @@ void ComicMainWindow::setupFileMenu()
         file_menu->addAction(openNextAction);
         file_menu->addAction(openPrevAction);
         recent_menu = file_menu->addMenu(tr("Recently opened"));
-        connect(recent_menu, SIGNAL(activated(int)), this, SLOT(recentSelected(int)));
+        connect(recent_menu, SIGNAL(triggered(QAction *)), this, SLOT(recentSelected(QAction *)));
         file_menu->addSeparator();
 	file_menu->addAction(savePageAction);
         file_menu->addSeparator();
@@ -359,6 +359,8 @@ void ComicMainWindow::setupViewMenu()
         view_menu->addAction(twoPagesAction);
         view_menu->addAction(mangaModeAction);
         view_menu->addAction(thumbswin->toggleViewAction());
+        view_menu->addSeparator();
+        view_menu->addAction(fullScreenAction);
 }
 
 void ComicMainWindow::setupNavigationMenu()
@@ -393,7 +395,7 @@ void ComicMainWindow::setupBookmarksMenu()
         bookmarks_menu->addAction(tr("Manage bookmarks"), this, SLOT(openBookmarksManager()));
         bookmarks_menu->addSeparator();
         bookmarks->load();
-        connect(bookmarks_menu, SIGNAL(activated(int)), this, SLOT(bookmarkSelected(int)));
+        connect(bookmarks_menu, SIGNAL(triggered(QAction *)), this, SLOT(bookmarkSelected(QAction *)));
 }
 
 void ComicMainWindow::setupSettingsMenu()
@@ -405,8 +407,6 @@ void ComicMainWindow::setupSettingsMenu()
       	settings_menu->addAction(toolbar->toggleViewAction());
         settings_menu->addAction(toggleStatusbarAction);
 	settings_menu->addSeparator();
-        settings_menu->addAction(fullScreenAction);
-	settings_menu->addSeparator();
         settings_menu->addAction(Icons::get(ICON_SETTINGS), tr("Configure QComicBook"), this, SLOT(showConfigDialog()));
 }
 
@@ -415,7 +415,7 @@ void ComicMainWindow::setupHelpMenu()
         QMenu *help_menu = menuBar()->addMenu(tr("&Help"));
 	help_menu->addAction(tr("System information"), this, SLOT(showSysInfo()));
 	help_menu->addSeparator();
-        help_menu->addAction(tr("Index"), this, SLOT(showHelp()));
+        //help_menu->addAction(tr("Index"), this, SLOT(showHelp()));
         help_menu->addAction(tr("About"), this, SLOT(showAbout()));
 }
 
@@ -423,7 +423,7 @@ void ComicMainWindow::setupStatusbar()
 {
         statusbar = new StatusBar(this);      
 	setStatusBar(statusbar);
-        connect(toggleStatusbarAction, SIGNAL(toggled(bool)), statusbar, SLOT(setShown(bool)));
+        connect(toggleStatusbarAction, SIGNAL(toggled(bool)), statusbar, SLOT(setVisible(bool)));
         toggleStatusbarAction->setChecked(cfg->showStatusbar());
         statusbar->setShown(cfg->showStatusbar());
 }
@@ -604,19 +604,19 @@ void ComicMainWindow::setRecentFilesMenu(const History &hist)
                 recent_menu->addAction(*it);
 }
 
-void ComicMainWindow::recentSelected(int id) //TODO
+void ComicMainWindow::recentSelected(QAction *action) 
 {
-        /*const QString &fname = recent_menu->text(id);
+        const QString &fname = action->text();
         if (fname != QString::null)
         {
                 QFileInfo finfo(fname);
                 if (!finfo.exists())
                 {
                         recentfiles->remove(fname);
-                        recent_menu->removeItem(id);
+                        recent_menu->removeAction(action);
                 }
                 open(fname, 0);
-        }*/
+        }
 }
 
 void ComicMainWindow::sinkReady(const QString &path)
@@ -1065,10 +1065,10 @@ void ComicMainWindow::savePageAs()
 	}
 }
 
-void ComicMainWindow::bookmarkSelected(int id)
+void ComicMainWindow::bookmarkSelected(QAction *action) 
 {
         Bookmark b;
-        if (bookmarks->get(id, b))
+        if (bookmarks->get(action, b))
         {
                 if (b.getName() != QString::null)
                 {
@@ -1085,7 +1085,7 @@ void ComicMainWindow::bookmarkSelected(int id)
                                 if (QMessageBox::question(this, tr("Comic book not found"),
                                                         tr("Selected bookmark points to\nnon-existing comic book\nDo you want to remove it?"),
                                                         QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
-                                        bookmarks->remove(id);
+                                        bookmarks->remove(action);
                                 return;
                         }
                         open(fname, b.getPage());

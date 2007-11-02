@@ -139,8 +139,8 @@ namespace QComicBook
 			void sinkError(int code);
 			void updateCaption();
 			void setRecentFilesMenu(const History &hist);
-			void recentSelected(int id);
-			void bookmarkSelected(int id);
+			void recentSelected(QAction *action);
+			void bookmarkSelected(QAction *action);
 			void thumbnailsWindowShown();
 			void openWithGimp();
 			void savePageAs();

@@ -11,7 +11,8 @@
  */
 
 #include "bookmark.h"
-#include <qfileinfo.h>
+#include <QFileInfo>
+#include <QAction>
 
 using namespace QComicBook;
 
@@ -19,7 +20,7 @@ Bookmark::Bookmark()
 {
 }
 
-Bookmark::Bookmark(const QString &cbname, int cbpage): name(cbname), page(cbpage), id(0)
+Bookmark::Bookmark(const QString &cbname, int cbpage): name(cbname), page(cbpage), id(NULL)
 {
 }
 
@@ -37,7 +38,7 @@ int Bookmark::getPage() const
 	return page; 
 }
 
-int Bookmark::getId() const
+QAction* Bookmark::getId() const
 {
 	return id; 
 }
@@ -52,7 +53,7 @@ void Bookmark::setPage(int cbpage)
 	page = cbpage;
 }
 
-void Bookmark::setId(int n)
+void Bookmark::setId(QAction *n)
 {
 	id = n;
 }

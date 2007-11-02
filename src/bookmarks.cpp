@@ -21,7 +21,6 @@ using namespace QComicBook;
 
 Bookmarks::Bookmarks(QMenu *menu): bmenu(menu), changed(false)
 {
-	//blist.setAutoDelete(true); //FIXME
 	fname = ComicBookSettings::bookmarksDir() + "/bookmarks";
 }
 
@@ -71,68 +70,82 @@ bool Bookmarks::save()
 
 void Bookmarks::set(const QString &cbname, int page)
 {
-/*	int id;
+	QAction *action;
 	foreach (Bookmark *b, blist)
+	{
 		if ((b->getName() == cbname))
 		{
 			if (b->getPage() == page) //same page, do nothing
 				return;
-			id = b->getId();
-			bmenu->removeItem(id);
-			bmap.remove(id);
+			action = b->getId();
+			bmenu->removeAction(action);
+			bmap.remove(action);
 			b->setName(cbname);
 			b->setPage(page);
-			id = bmenu->insertItem(b->menuItemName());
-			b->setId(id);
-			bmap.insert(id, b);
+			action = bmenu->addAction(b->menuItemName());
+			b->setId(action);
+			bmap.insert(action, b);
 			changed = true;
 			return;
 		}
+	}
 	Bookmark *b = new Bookmark(cbname, page);
 	blist.append(b);
-	id = bmenu->insertItem(b->menuItemName());
-	b->setId(id);
-	bmap.insert(id, b);
+	action = bmenu->addAction(b->menuItemName());
+	b->setId(action);
+	bmap.insert(action, b);
 	changed = true;
-	return;*/
+	return;
 }
 
 bool Bookmarks::remove(const QString &cbname)
 {
-/*	for (Bookmark *b = blist.first(); b; b = blist.next())
+	foreach (Bookmark *b, blist)
+	{
 		if ((b->getName() == cbname))
 		{
-			bmenu->removeItem(b->getId());
+			bmenu->removeAction(b->getId());
 			bmap.remove(b->getId());
-			blist.remove();
+			int idx = blist.indexOf(b);
+			if (idx >= 0)
+			{
+				blist.removeAt(idx);
+				delete b;
+			}
 			return true;
 		}
-	return false;*/
+	}
+	return false;
 }
 
-bool Bookmarks::remove(int id)
-{
-/*	if (bmap.contains(id))
-	{
-		Bookmark *b = bmap[id];
-		bmenu->removeItem(id);
-		bmap.remove(id);
-		blist.remove(b);
-		changed = true;
-	}*/
-}
-
-bool Bookmarks::get(int id, Bookmark &b)
+bool Bookmarks::remove(QAction *id)
 {
 	if (bmap.contains(id))
 	{
-		b = *bmap[id];
+		Bookmark *b = bmap[id];
+		bmenu->removeAction(id);
+		bmap.remove(id);
+		int idx = blist.indexOf(b);
+		if (idx >= 0)
+		{
+			blist.removeAt(idx);
+			delete b;
+		}
+		changed = true;
+	}
+}
+
+bool Bookmarks::get(QAction *action, Bookmark &b)
+{
+	if (bmap.contains(action))
+	{
+		b = *bmap[action];
 		return true;
 	}
 	return false;
 }
 
-QList<Bookmark> Bookmarks::get()
+QList<Bookmark> Bookmarks::get() const
 {
 	QList<Bookmark> res;
 	foreach (Bookmark *b, blist)

@@ -46,6 +46,7 @@ namespace QComicBook
 			int wheelupcnt, wheeldowncnt;
 			QCursor *smallcursor;
 			static const int EXTRA_WHEEL_SPIN; //number of extra wheel spins to flip the page
+			static const float JUMP_FACTOR; //factor used to calculate the amount of space to scroll when scrolling page with space
 			QLabel *imgLabel;
 			int totalWidth;
 			int totalHeight;

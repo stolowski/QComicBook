@@ -18,6 +18,7 @@
 #include <QString>
 #include <QList>
 #include <QMap>
+#include <QAction>
 #include "bookmark.h"
 
 class QMenu;
@@ -28,7 +29,7 @@ namespace QComicBook
 	{
 		private:
 			QList<Bookmark *> blist; //!<pointers to bookmark objects
-			QMap<int, Bookmark *> bmap; //!<for fast id->bookmark lookup
+			QMap<QAction *, Bookmark *> bmap; //!<for fast action->bookmark lookup
 			QMenu *bmenu; //!<popup menu containing bookmarks
 			bool changed; //!<flag indicator to decide if bookmarks should be saved
 			QString fname; //!<bookmarks file
@@ -41,9 +42,9 @@ namespace QComicBook
 
 			void set(const QString &cbname, int page);
 			bool remove(const QString &cbname);
-			bool remove(int id);
-			bool get(int id, Bookmark &b);
-			QList<Bookmark> get();
+			bool remove(QAction *action);
+			bool get(QAction *action, Bookmark &b);
+			QList<Bookmark> get() const;
 			bool exists(const QString &cbname);
 	};
 }
