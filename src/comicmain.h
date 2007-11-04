@@ -51,6 +51,7 @@ namespace QComicBook
 			int currpage; //!<current page number
 					
 			QToolBar *toolbar;
+			bool savedToolbarState;
 			QMenu *file_menu;
 			QMenu *edit_menu;
 			QMenu *context_menu;

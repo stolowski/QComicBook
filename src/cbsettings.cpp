@@ -101,8 +101,8 @@ ComicBookSettings::~ComicBookSettings()
 
 bool ComicBookSettings::checkDirs()
 {
-	/*dirsok = false; FIXME
-	bkpath = QDir::homeDirPath() + "/.qcomicbook";
+	dirsok = false; 
+	bkpath = QDir::homePath() + "/.qcomicbook";
 	QDir dir(bkpath);
 	if (!dir.exists())
 		if (!dir.mkdir(bkpath))
@@ -111,7 +111,7 @@ bool ComicBookSettings::checkDirs()
 	dir.setPath(thpath = bkpath + "/cache");
 	if (!dir.exists())
 		if (!dir.mkdir(thpath))
-			return false;*/
+			return false;
 	return dirsok = true;
 }
 
@@ -169,7 +169,7 @@ void ComicBookSettings::load()
 	cfg->endGroup();
 	cfg->beginGroup(GRP_MISC);
 		lastdir = cfg->value(OPT_LASTDIR, QString()).toString();
-		//recent = cfg->value(OPT_RECENT).toList(); //FIXME
+		recent = cfg->value(OPT_RECENT).toStringList(); 
 		cachesize = cfg->value(OPT_CACHESIZE, 3).toInt();
 		if (cachesize < 1)
 			cachesize = 1;

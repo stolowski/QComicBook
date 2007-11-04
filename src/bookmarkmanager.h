@@ -19,7 +19,7 @@
 #include <QList>
 
 class QTreeWidget;
-class QListViewItem;
+class QTreeWidgetItem;
 class QPushButton;
 
 namespace QComicBook
@@ -36,7 +36,7 @@ namespace QComicBook
 			QPushButton *b_selinv;
 			QPushButton *b_remsel;
 			Bookmarks *bookmarks;
-			QList<QListViewItem *> invalid; //!<the list of invalid bookmarks
+			QList<QTreeWidgetItem *> invalid; //!<the list of invalid bookmarks
 
 			void initBookmarkView();
 
@@ -46,8 +46,7 @@ namespace QComicBook
 		public slots:
 			void removeSelected();
 			void selectInvalid();
-			void selectAll();
-			void selectNone();
+			void invertSelection();
 
 		public:
 			BookmarkManager(QWidget *parent, Bookmarks *b);

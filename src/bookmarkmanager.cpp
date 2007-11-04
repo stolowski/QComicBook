@@ -61,12 +61,12 @@ BookmarkManager::BookmarkManager(QWidget *parent, Bookmarks *b): QWidget(parent,
 
 	initBookmarkView();
 
-	connect(lview, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+	connect(lview, SIGNAL(itemSelectionChanged()), this, SLOT(selectionChanged()));
 	connect(b_remsel, SIGNAL(clicked()), this, SLOT(removeSelected()));
 	connect(b_selinv, SIGNAL(clicked()), this, SLOT(selectInvalid()));
-	connect(b_selall, SIGNAL(clicked()), this, SLOT(selectAll()));
-	connect(b_selnone, SIGNAL(clicked()), this, SLOT(selectNone()));
-	connect(b_selrev, SIGNAL(clicked()), lview, SLOT(invertSelection()));
+	connect(b_selall, SIGNAL(clicked()), lview, SLOT(selectAll()));
+	connect(b_selnone, SIGNAL(clicked()), lview, SLOT(clearSelection()));
+	connect(b_selrev, SIGNAL(clicked()), this, SLOT(invertSelection()));
 	connect(b_ok, SIGNAL(clicked()), this, SLOT(close()));
 
 	selectionChanged();
@@ -78,10 +78,7 @@ BookmarkManager::~BookmarkManager()
 
 void BookmarkManager::selectionChanged()
 {
-	//FIXME: wylaczenie przycisku usuwania jesli brak zaznaczen
-	
-	//QListViewItemIterator it(lview, QListViewItemIterator::Selected);
-	//b_remsel->setDisabled(it.current() == 0);
+	b_remsel->setDisabled(lview->selectedItems().size() == 0);
 }
 
 void BookmarkManager::initBookmarkView()
@@ -89,52 +86,48 @@ void BookmarkManager::initBookmarkView()
 	lview->clear();
 	invalid.clear();
 	QList<Bookmark> blist = bookmarks->get();
-	foreach (Bookmark bk, blist) //FIXME
+	foreach (Bookmark bk, blist) 
 	{
-/*		QListViewItem *item = new QListViewItem(lview);
-		item->setText(0, (*it).getName());
-		item->setText(1, QString::number((*it).getPage() + 1));
+		QTreeWidgetItem *item = new QTreeWidgetItem(lview);
+		item->setText(0, bk.getName());
+		item->setText(1, QString::number(bk.getPage() + 1));
 
-		if (!(*it).isValid())
-			invalid.append(item);*/
+		if (!bk.isValid())
+			invalid.append(item);
 	}
 
-//	if (invalid.count() == 0)
-//		b_selinv->setDisabled(true);
+	lview->resizeColumnToContents(0); // make sure entire path is visible
+
+	if (invalid.count() == 0)
+		b_selinv->setDisabled(true);
+}
+
+void BookmarkManager::invertSelection()
+{
+	for (QTreeWidgetItemIterator it(lview); *it; ++it)
+	{
+		(*it)->setSelected(! (*it)->isSelected());
+	}
 }
 
 void BookmarkManager::removeSelected()
 {
-	//FIXME
-	/*QPtrList<QListViewItem> todel;
-	for (QListViewItemIterator it(lview, QListViewItemIterator::Selected); it.current(); ++it)
-		todel.append(it.current());
-
+	QList<QTreeWidgetItem *> todel(lview->selectedItems());
 	if (todel.count() && QMessageBox::question(this, tr("Deleting bookmarks"), tr("Delete selected bookmarks?"),
 						   QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
 	{
-		for (QListViewItem *item = todel.first(); item; item = todel.next())
+		foreach (QTreeWidgetItem *item, todel)
 		{
 			bookmarks->remove(item->text(0));
 			delete item;
 		}
 		initBookmarkView(); //recreate the view
-	}*/
-}
-
-void BookmarkManager::selectAll()
-{
-	//lview->selectAll(true); FIXME
-}
-
-void BookmarkManager::selectNone()
-{
-	//lview->selectAll(false); FIXME
+	}
 }
 
 void BookmarkManager::selectInvalid()
-{//FIXME
-//	for (QListViewItem *item = invalid.first(); item; item = invalid.next())
-//		item->setSelected(true);
+{
+	foreach (QTreeWidgetItem *item, invalid)
+		item->setSelected(true);
 }
 

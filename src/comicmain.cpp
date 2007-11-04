@@ -22,7 +22,6 @@
 #include "aboutdialog.h"
 #include "cbsettings.h"
 #include "history.h"
-//#include "helpbrowser.h"
 #include "cbconfigdialog.h"
 #include "statusbar.h"
 #include "thumbnailswin.h"
@@ -739,12 +738,17 @@ void ComicMainWindow::toggleFullScreen()
         }
         else
         {
+		savedToolbarState = toolbar->toggleViewAction()->isChecked();
+
                 if (cfg->fullScreenHideMenu())
                         menuBar()->hide();
                 if (cfg->fullScreenHideStatusbar())
                         statusbar->hide();
                 if (cfg->fullScreenHideToolbar())
+		{
+			toolbar->toggleViewAction()->setChecked(false);
                         toolbar->hide();
+		}
                 showFullScreen();
         }
 }
@@ -756,8 +760,11 @@ void ComicMainWindow::exitFullscreen()
                 menuBar()->show();
                 if (toggleStatusbarAction->isChecked())
                         statusbar->show();
-                //if (toggleToolbarAction->isChecked())
-                  //      toolbar->show();
+		toolbar->toggleViewAction()->setChecked(savedToolbarState);
+		if (savedToolbarState)
+			toolbar->show();
+		else
+			toolbar->hide();
 		showNormal();
         }
 }
