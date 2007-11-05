@@ -1,6 +1,7 @@
 2007-xx-yy:  0.4.0       -- ported to Qt4
                          -- Imlib2 library is (temporarily) removed
-			 -- support for nested cbr archives
+			 -- added support for nested cbr archives
+			 -- added support for 7z archives
                          -- new option: "Save page as"
 			 -- new option: Auto-adjust cache size
 			 -- added small (15 pct) overlap when scrolling page with

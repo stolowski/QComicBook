@@ -39,6 +39,7 @@ namespace QComicBook
 				ACE_ARCHIVE = 4,
 				TARGZ_ARCHIVE = 8,
 				TARBZ2_ARCHIVE = 16,
+				SEVENZIP_ARCHIVE = 32,
 				UNKNOWN_ARCHIVE = 2<<31
 			};
 
@@ -78,6 +79,7 @@ namespace QComicBook
 			static void autoconfACE();
 			static void autoconfTARGZ();
 			static void autoconfTARBZ2();
+			static void autoconfSEVENZIP();
 
 			//! Determines archive type
 			/*! Determines archive type basing on filename extension. As a last effort, if

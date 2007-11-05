@@ -471,6 +471,24 @@ void ImgArchiveSink::autoconfTARBZ2()
 	archinfo.append(inf);
 }
 
+void ImgArchiveSink::autoconfSEVENZIP()
+{
+	ArchiveTypeInfo inf;
+	inf.type = SEVENZIP_ARCHIVE;
+	inf.name = "7z";
+	inf.extensions.append(".7z");
+	if (which("7z") != QString::null)
+	{
+		inf.extractopts.append("7z");
+		inf.extractopts.append("x");
+		inf.listopts.append("7z");
+		inf.listopts.append("l");
+		inf.reading = true;
+		inf.writing = false;
+	}
+	archinfo.append(inf);
+}
+
 void ImgArchiveSink::autoconfArchivers()
 {
 	autoconfRAR();
@@ -478,6 +496,7 @@ void ImgArchiveSink::autoconfArchivers()
 	autoconfACE();
 	autoconfTARGZ();
 	autoconfTARBZ2();
+	autoconfSEVENZIP();
 	
 	openext.clear();
 	saveext.clear();
