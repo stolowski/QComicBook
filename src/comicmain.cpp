@@ -414,7 +414,6 @@ void ComicMainWindow::setupHelpMenu()
         QMenu *help_menu = menuBar()->addMenu(tr("&Help"));
 	help_menu->addAction(tr("System information"), this, SLOT(showSysInfo()));
 	help_menu->addSeparator();
-        //help_menu->addAction(tr("Index"), this, SLOT(showHelp()));
         help_menu->addAction(tr("About"), this, SLOT(showAbout()));
 }
 
@@ -939,34 +938,11 @@ void ComicMainWindow::showAbout()
 {
         AboutDialog *win = new AboutDialog(this, "About QComicBook",
                         "QComicBook " VERSION " - comic book viewer for GNU/Linux\n"
-                        "(c)by Pawel Stolowski 2005-2006\n"
+                        "(c)by Pawel Stolowski 2005-2007\n"
                         "released under terms of GNU General Public License\n\n"
                         "http://linux.bydg.org/~yogin\n"
                         "pawel.stolowski@wp.pl", QPixmap(DATADIR "qcomicbook-splash.png"));
         win->show();
-}
-
-void ComicMainWindow::showHelp() //TODO
-{
-       /* const QString helpdir = HelpBrowser::getLocaleHelpDir(DATADIR "/help");
-        if (!cfg->useInternalBrowser() && cfg->externalBrowser() != QString::null)
-        {
-                QProcess *proc = new QProcess(this);
-                QString prg = cfg->externalBrowser();
-                QStringList args;
-                args << helpdir + "/index.html";
-                connect(proc, SIGNAL(processExited()), proc, SLOT(deleteLater()));
-                if (!proc->start(prg, args))
-                {
-                        proc->deleteLater();
-                        cfg->useInternalBrowser(true);
-                }
-        }
-        if (cfg->useInternalBrowser())
-        {
-                HelpBrowser *help = new HelpBrowser(tr("QComicBook Help"), helpdir);
-                help->show();
-        }*/
 }
 
 void ComicMainWindow::showConfigDialog()

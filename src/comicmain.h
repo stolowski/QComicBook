@@ -163,7 +163,6 @@ namespace QComicBook
 			void openNext();
 			void openPrevious();
 			void showAbout();
-			void showHelp();
 			void showInfo();
 			void showSysInfo();
 			void showConfigDialog();
