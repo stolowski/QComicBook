@@ -35,7 +35,7 @@ void StatusBar::createInfoElements()
 	if (!page)
         {
                 page = new QLabel(this);
-                page->setFixedWidth(80);
+                page->setFixedWidth(100);
                 addWidget(page, 0);
         }
         if (!imginfo)

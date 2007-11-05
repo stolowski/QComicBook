@@ -30,14 +30,14 @@ const int ImgDirSink::MAX_TEXTFILE_SIZE = 65535;
                         
 const QString ImgDirSink::imgext[] = {".jpg", ".jpeg", ".png", ".gif", ".xpm", ".bmp", NULL};
 
-ImgDirSink::ImgDirSink(bool dirs, int cacheSize): QObject(), dirpath(QString::null), DirReader(QDir::DirsFirst|QDir::Name, 6)
+ImgDirSink::ImgDirSink(bool dirs, int cacheSize): QObject(), dirpath(QString::null), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
 {
 	cache = new ImgCache(cacheSize);
 	imgloader.setSink(this);
         thloader.setSink(this);
 }
 
-ImgDirSink::ImgDirSink(const QString &path, bool dirs, int cacheSize): QObject(), dirpath(QString::null), DirReader(QDir::DirsFirst|QDir::Name, 6)
+ImgDirSink::ImgDirSink(const QString &path, bool dirs, int cacheSize): QObject(), dirpath(QString::null), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
 {
 	cache = new ImgCache(cacheSize);
 	imgloader.setSink(this);
@@ -45,7 +45,7 @@ ImgDirSink::ImgDirSink(const QString &path, bool dirs, int cacheSize): QObject()
         open(path);
 }
 
-ImgDirSink::ImgDirSink(const ImgDirSink &sink, int cacheSize): QObject(), DirReader(QDir::DirsFirst|QDir::Name, 6)
+ImgDirSink::ImgDirSink(const ImgDirSink &sink, int cacheSize): QObject(), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
 {
 	cache = new ImgCache(cacheSize);
 
