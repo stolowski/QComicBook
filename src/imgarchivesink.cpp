@@ -25,7 +25,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <iostream>
 
 using namespace QComicBook;
 using Utility::which;
@@ -62,7 +61,6 @@ bool ImgArchiveSink::fileHandler(const QFileInfo &finfo)
 {
 	const QString fname = finfo.fileName();
 	const QString fullname = finfo.absoluteFilePath();
-	std::cout << fullname.toStdString() << std::endl;
 
 	if (finfo.isDir())
 		archdirs.prepend(fullname);
@@ -78,7 +76,6 @@ bool ImgArchiveSink::fileHandler(const QFileInfo &finfo)
 		ArchiveType archiveType = getArchiveType(fullname);
 		if (archiveType != UNKNOWN_ARCHIVE)
 		{
-			std::cout << "got nested archive, extracting it!" << std::endl;
 			const QString tmp = makeTempDir(finfo.absolutePath());
 			archdirs.prepend(tmp);
 			extract(fullname, tmp, archiveType); //TODO: errors
@@ -118,7 +115,6 @@ void ImgArchiveSink::doCleanup()
 			dir.remove(f);
 		foreach (const QString f, archdirs)
 		{
-			std::cout << f.toStdString() << std::endl;
 			dir.rmdir(f);
 		}
 		dir.rmdir(tmppath);
@@ -190,8 +186,6 @@ int ImgArchiveSink::extract(const QString &filename, const QString &destdir, Arc
 	const QFileInfo finf(filename);
 	if (!finf.isReadable())
 		return SINKERR_ACCESS;
-
-	std::cout << "extract: " << filename.toStdString() << " dir=" << destdir.toStdString() << std::endl;
 
 	QStringList extargs;
 	QStringList infargs;

@@ -11,7 +11,6 @@
  */
 
 #include "imgcache.h"
-#include <iostream>
 
 using namespace QComicBook;
 
@@ -42,7 +41,6 @@ void ImgCache::insertImage(int page, const QImage &img)
 		cache.setMaxCost(img.numBytes() + maxItemSizeSoFar);
 		if (img.numBytes() > maxItemSizeSoFar)
 			maxItemSizeSoFar = img.numBytes();
-		std::cout << "cache size now " << cache.maxCost() << std::endl;
 	}
 	cache.insert(page, new QImage(img), img.numBytes());
 	mtx.unlock();

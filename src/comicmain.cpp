@@ -29,9 +29,7 @@
 #include "thumbnailloader.h"
 #include "bookmarkmanager.h"
 #include "miscutil.h"
-#include "archiverdialog.h"
 #include "suparchwin.h"
-#include "imlibimage.h"
 #include "jumptopagewin.h"
 #include <QScrollArea>
 #include <QImage>
