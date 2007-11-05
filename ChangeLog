@@ -1,4 +1,4 @@
-2007-xx-yy:  0.4.0       -- ported to Qt4
+2007-11-05:  0.4.0       -- ported to Qt4
                          -- Imlib2 library is (temporarily) removed
 			 -- added support for nested cbr archives
 			 -- added support for 7z archives
@@ -6,7 +6,7 @@
 			 -- new option: Auto-adjust cache size
 			 -- added small (15 pct) overlap when scrolling page with
 			    Space/Backspace
-			 -- chanhge in files sorting: it is not
+			 -- change in files sorting: it is now
 			    case-insenstivie, with directories being last
 			 -- In-built help was removed
 
