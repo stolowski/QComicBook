@@ -37,6 +37,6 @@ fi
 AC_SUBST(QtGui_CFLAGS)
 AC_SUBST(QtGui_LIBS)
 
-AC_CONFIG_FILES([Makefile src/Makefile icons/Makefile help/Makefile help/en/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile icons/Makefile help/Makefile])
 AC_OUTPUT()
 
