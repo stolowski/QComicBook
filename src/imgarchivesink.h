@@ -56,7 +56,6 @@ namespace QComicBook
 			};
 
 		protected:
-
 			QProcess *pext; ///< extracting process
 			QProcess *pinf; ///< file list extracing process
 			QString archivename; ///< archive file name, without path
@@ -86,6 +85,7 @@ namespace QComicBook
 			 *  the check fails, tries to guess archive type basing on well known magic bytes.
 			 *  @param filename name of the archive, with path */
 			static ArchiveType getArchiveType(const QString &filename);
+                        static int waitForFinished(QProcess *p);
 			int extract(const QString &filename, const QString &destdir, ArchiveType archiveType=ImgArchiveSink::UNKNOWN_ARCHIVE);
 			void init();
 			virtual void doCleanup();
