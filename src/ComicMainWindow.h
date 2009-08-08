@@ -126,7 +126,6 @@ namespace QComicBook
 			void setupThumbnailsWindow();
 			void setupToolbar();
 			void setupFileMenu();
-			void setupEditMenu();
 			void setupViewMenu();
 			void setupNavigationMenu();
 			void setupBookmarksMenu();
@@ -143,7 +142,6 @@ namespace QComicBook
 			void recentSelected(QAction *action);
 			void bookmarkSelected(QAction *action);
 			void thumbnailsWindowShown();
-			void openWithGimp();
 			void savePageAs();
 
 		public slots:

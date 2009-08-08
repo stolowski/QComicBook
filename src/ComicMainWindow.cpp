@@ -73,8 +73,6 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), sink(NUL
         setupComicImageView();
 
         setupFileMenu();  
-        if (cfg->editSupport())
-              setupEditMenu();
         setupViewMenu();
         setupNavigationMenu();
         setupBookmarksMenu();
@@ -326,16 +324,6 @@ void ComicMainWindow::setupFileMenu()
         closeAction = file_menu->addAction(tr("Close"), this, SLOT(closeSink()));
         file_menu->addSeparator();
 	file_menu->addAction(quitAction);
-}
-
-void ComicMainWindow::setupEditMenu()
-{
-        edit_menu = menuBar()->addMenu(tr("&Edit"));
-        gimpAction = edit_menu->addAction(tr("Open with Gimp"), this, SLOT(openWithGimp()));
-        //edit_menu->insertItem(tr("Open with Kolour Paint"), this, SLOT(openWithGimp()));
-        //edit_menu->insertItem(tr("Open with ImageMagick"), this, SLOT(openWithGimp()));
-	edit_menu->addSeparator();
-	reloadAction = edit_menu->addAction(tr("Reload page"), this, SLOT(reloadPage()));
 }
 
 void ComicMainWindow::setupViewMenu()
@@ -1004,20 +992,6 @@ void ComicMainWindow::openBookmarksManager()
 {
         BookmarkManager *win = new BookmarkManager(this, bookmarks);
         win->show();
-}
-
-void ComicMainWindow::openWithGimp() //TODO
-{
-	/*if (!sink)
-		return;
-        QProcess *proc = new QProcess(this);
-        proc->addArgument("gimp-remote");
-	proc->addArgument(sink->getFullFileName(currpage));
-        connect(proc, SIGNAL(processExited()), proc, SLOT(deleteLater()));
-        if (!proc->start())
-        {
-                proc->deleteLater();
-        }*/
 }
 
 void ComicMainWindow::savePageAs()

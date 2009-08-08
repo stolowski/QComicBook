@@ -54,9 +54,6 @@
 #define OPT_PRELOAD     "/Preload"
 #define OPT_CONFIRMEXIT "/ConfirmExit"
 #define OPT_SHOWSPLASH  "/ShowSplashscreen"
-#define OPT_INTBROWSER  "/UseIntBrowser"
-#define OPT_EXTBROWSER  "/ExtBrowserCmd"
-#define OPT_EDITING     "/Editing"
 #define OPT_TMPDIR      "/TmpDir"
 
 using namespace QComicBook;
@@ -176,13 +173,10 @@ void ComicBookSettings::load()
 		cacheadjust = cfg->value(OPT_CACHEADJUST, true).toBool();
 		preload = cfg->value(OPT_PRELOAD, true).toBool();
 		confirmexit = cfg->value(OPT_CONFIRMEXIT, true).toBool();
-		intbrowser = cfg->value(OPT_INTBROWSER, true).toBool();
-		extbrowser = cfg->value(OPT_EXTBROWSER, defbrowser).toString(); //FIXME
 		autoinfo = cfg->value(OPT_AUTOINFO, false).toBool();
 		showsplash = cfg->value(OPT_SHOWSPLASH, true).toBool();
 		thumbsage = cfg->value(OPT_THUMBSAGE, 7).toInt();
 		cachethumbs = cfg->value(OPT_CACHETHUMBS, true).toInt();
-		editsupport = cfg->value(OPT_EDITING, false).toInt();
 		tmpdir = cfg->value(OPT_TMPDIR, QString()).toString();
 		QDir dir(tmpdir);
 		if (tmpdir.isNull() || !dir.exists())
@@ -328,11 +322,6 @@ bool ComicBookSettings::showSplash() const
 void ComicBookSettings::restoreDockLayout(QMainWindow *w)
 {
 	w->restoreState(docklayout);
-}
-
-bool ComicBookSettings::editSupport() const
-{
-	return editsupport;
 }
 
 QString ComicBookSettings::tmpDir() const
@@ -503,27 +492,9 @@ void ComicBookSettings::infoFont(const QFont &s)
 	}
 }
 
-void ComicBookSettings::useInternalBrowser(bool f)
-{
-	if (f != intbrowser)
-		cfg->setValue(GRP_MISC OPT_INTBROWSER, intbrowser = f);
-}
-
-void ComicBookSettings::externalBrowser(const QString& cmd)
-{
-	if (cmd != extbrowser)
-		cfg->setValue(GRP_MISC OPT_EXTBROWSER, extbrowser = cmd);
-}
-
 void ComicBookSettings::saveDockLayout(QMainWindow *w)
 {
 	cfg->setValue(GRP_WINDOW OPT_DOCKLAYOUT, w->saveState());
-}
-
-void ComicBookSettings::editSupport(bool f)
-{
-	if (f != editsupport)
-		cfg->setValue(GRP_MISC OPT_EDITING, editsupport = f);
 }
 
 void ComicBookSettings::showSplash(bool f)

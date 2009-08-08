@@ -57,7 +57,6 @@ namespace QComicBook
 			bool autoinfo;
 			bool confirmexit;
 			bool statusbar;
-			bool editsupport;
 			bool intbrowser;
 			bool showsplash;
 			QString extbrowser;
@@ -112,7 +111,6 @@ namespace QComicBook
 			QString externalBrowser() const;
 			void restoreGeometry(QMainWindow *w) const;
 			void restoreDockLayout(QMainWindow *w);
-			bool editSupport() const;
 			bool showSplash() const;
 			QString tmpDir() const;
 
@@ -143,7 +141,6 @@ namespace QComicBook
 			void externalBrowser(const QString &cmd);
 			void saveDockLayout(QMainWindow *w);
 			void saveGeometry(QMainWindow *w);
-			void editSupport(bool f);
 			void showSplash(bool f);
 			void tmpDir(const QString &dir);
 
