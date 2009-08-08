@@ -1,86 +1,93 @@
-dnl @synopsis BNV_HAVE_QT [--with-Qt-dir=DIR] [--with-Qt-lib-dir=DIR] [--with-Qt-lib=LIB]
-dnl @synopsis BNV_HAVE_QT [--with-Qt-include-dir=DIR] [--with-Qt-bin-dir=DIR] [--with-Qt-lib-dir=DIR] [--with-Qt-lib=LIB]
-dnl
-dnl @summary Search for Trolltech's Qt GUI framework.
-dnl
-dnl Searches common directories for Qt include files, libraries and Qt
-dnl binary utilities. The macro supports several different versions of
-dnl the Qt framework being installed on the same machine. Without
-dnl options, the macro is designed to look for the latest library,
-dnl i.e., the highest definition of QT_VERSION in qglobal.h. By use of
-dnl one or more options a different library may be selected. There are
-dnl two different sets of options. Both sets contain the option
-dnl --with-Qt-lib=LIB which can be used to force the use of a
-dnl particular version of the library file when more than one are
-dnl available. LIB must be in the form as it would appear behind the
-dnl "-l" option to the compiler. Examples for LIB would be "qt-mt" for
-dnl the multi-threaded version and "qt" for the regular version. In
-dnl addition to this, the first set consists of an option
-dnl --with-Qt-dir=DIR which can be used when the installation conforms
-dnl to Trolltech's standard installation, which means that header files
-dnl are in DIR/include, binary utilities are in DIR/bin and the library
-dnl is in DIR/lib. The second set of options can be used to indicate
-dnl individual locations for the header files, the binary utilities and
-dnl the library file, in addition to the specific version of the
-dnl library file.
-dnl
-dnl The following shell variable is set to either "yes" or "no":
-dnl
-dnl   have_qt
-dnl
-dnl Additionally, the following variables are exported:
-dnl
-dnl   QT_CXXFLAGS
-dnl   QT_LIBS
-dnl   QT_MOC
-dnl   QT_UIC
-dnl   QT_DIR
-dnl
-dnl which respectively contain an "-I" flag pointing to the Qt include
-dnl directory (and "-DQT_THREAD_SUPPORT" when LIB is "qt-mt"), link
-dnl flags necessary to link with Qt and X, the name of the meta object
-dnl compiler and the user interface compiler both with full path, and
-dnl finaly the variable QTDIR as Trolltech likes to see it defined (if
-dnl possible).
-dnl
-dnl Example lines for Makefile.in:
-dnl
-dnl   CXXFLAGS = @QT_CXXFLAGS@
-dnl   MOC      = @QT_MOC@
-dnl
-dnl After the variables have been set, a trial compile and link is
-dnl performed to check the correct functioning of the meta object
-dnl compiler. This test may fail when the different detected elements
-dnl stem from different releases of the Qt framework. In that case, an
-dnl error message is emitted and configure stops.
-dnl
-dnl No common variables such as $LIBS or $CFLAGS are polluted.
-dnl
-dnl Options:
-dnl
-dnl --with-Qt-dir=DIR: DIR is equal to $QTDIR if you have followed the
-dnl installation instructions of Trolltech. Header files are in
-dnl DIR/include, binary utilities are in DIR/bin and the library is in
-dnl DIR/lib.
-dnl
-dnl --with-Qt-include-dir=DIR: Qt header files are in DIR.
-dnl
-dnl --with-Qt-bin-dir=DIR: Qt utilities such as moc and uic are in DIR.
-dnl
-dnl --with-Qt-lib-dir=DIR: The Qt library is in DIR.
-dnl
-dnl --with-Qt-lib=LIB: Use -lLIB to link with the Qt library.
-dnl
-dnl If some option "=no" or, equivalently, a --without-Qt-* version is
-dnl given in stead of a --with-Qt-*, "have_qt" is set to "no" and the
-dnl other variables are set to the empty string.
-dnl
-dnl @category InstalledPackages
-dnl @author Bastiaan Veelo <Bastiaan@Veelo.net>
-dnl @version 2006-03-12
-dnl @license AllPermissive
+# ===========================================================================
+#              http://autoconf-archive.cryp.to/bnv_have_qt.html
+# ===========================================================================
+#
+# SYNOPSIS
+#
+#   BNV_HAVE_QT [--with-Qt-dir=DIR] [--with-Qt-lib-dir=DIR] [--with-Qt-lib=LIB]
+#   BNV_HAVE_QT [--with-Qt-include-dir=DIR] [--with-Qt-bin-dir=DIR] [--with-Qt-lib-dir=DIR] [--with-Qt-lib=LIB]
+#
+# DESCRIPTION
+#
+#   Searches common directories for Qt include files, libraries and Qt
+#   binary utilities. The macro supports several different versions of the
+#   Qt framework being installed on the same machine. Without options, the
+#   macro is designed to look for the latest library, i.e., the highest
+#   definition of QT_VERSION in qglobal.h. By use of one or more options a
+#   different library may be selected. There are two different sets of
+#   options. Both sets contain the option --with-Qt-lib=LIB which can be
+#   used to force the use of a particular version of the library file when
+#   more than one are available. LIB must be in the form as it would appear
+#   behind the "-l" option to the compiler. Examples for LIB would be
+#   "qt-mt" for the multi-threaded version and "qt" for the regular version.
+#   In addition to this, the first set consists of an option
+#   --with-Qt-dir=DIR which can be used when the installation conforms to
+#   Trolltech's standard installation, which means that header files are in
+#   DIR/include, binary utilities are in DIR/bin and the library is in
+#   DIR/lib. The second set of options can be used to indicate individual
+#   locations for the header files, the binary utilities and the library
+#   file, in addition to the specific version of the library file.
+#
+#   The following shell variable is set to either "yes" or "no":
+#
+#     have_qt
+#
+#   Additionally, the following variables are exported:
+#
+#     QT_CXXFLAGS
+#     QT_LIBS
+#     QT_MOC
+#     QT_UIC
+#     QT_LRELEASE
+#     QT_LUPDATE
+#     QT_DIR
+#
+#   which respectively contain an "-I" flag pointing to the Qt include
+#   directory (and "-DQT_THREAD_SUPPORT" when LIB is "qt-mt"), link flags
+#   necessary to link with Qt and X, the name of the meta object compiler
+#   and the user interface compiler both with full path, and finaly the
+#   variable QTDIR as Trolltech likes to see it defined (if possible).
+#
+#   Example lines for Makefile.in:
+#
+#     CXXFLAGS = @QT_CXXFLAGS@
+#     MOC      = @QT_MOC@
+#
+#   After the variables have been set, a trial compile and link is performed
+#   to check the correct functioning of the meta object compiler. This test
+#   may fail when the different detected elements stem from different
+#   releases of the Qt framework. In that case, an error message is emitted
+#   and configure stops.
+#
+#   No common variables such as $LIBS or $CFLAGS are polluted.
+#
+#   Options:
+#
+#   --with-Qt-dir=DIR: DIR is equal to $QTDIR if you have followed the
+#   installation instructions of Trolltech. Header files are in DIR/include,
+#   binary utilities are in DIR/bin and the library is in DIR/lib.
+#
+#   --with-Qt-include-dir=DIR: Qt header files are in DIR.
+#
+#   --with-Qt-bin-dir=DIR: Qt utilities such as moc and uic are in DIR.
+#
+#   --with-Qt-lib-dir=DIR: The Qt library is in DIR.
+#
+#   --with-Qt-lib=LIB: Use -lLIB to link with the Qt library.
+#
+#   If some option "=no" or, equivalently, a --without-Qt-* version is given
+#   in stead of a --with-Qt-*, "have_qt" is set to "no" and the other
+#   variables are set to the empty string.
+#
+# LICENSE
+#
+#   Copyright (c) 2008 Bastiaan Veelo <Bastiaan@Veelo.net>
+#
+#   Copying and distribution of this file, with or without modification, are
+#   permitted in any medium without royalty provided the copyright notice
+#   and this notice are preserved.
 
-dnl Copyright (C) 2001, 2002, 2003, 2005, 2006 Bastiaan Veelo
+dnl Copyright (C) 2001, 2002, 2003, 2005, 2006, 2007 Bastiaan Veelo
 
 dnl THANKS! This code includes bug fixes and contributions made by:
 dnl Tim McClarren,
@@ -90,20 +97,22 @@ dnl Brian Mingus,
 dnl Jens Hannemann,
 dnl Pavel Roskin,
 dnl Scott J. Bertin.
+dnl Pierre Hebert
 
 dnl ChangeLog
-dnl 2006-03-12  * Hide output of ls and fix an m4 quoting problem (due to Scott J. Bertin).
-dnl 2006-02-13  * Check compiler return value instead of parsing the error stream,
+dnl 2008-04-12  * Add QT_LRELEASE and QT_LUPDATE (due to Pierre Hebert)
+dnl 2008-04-12  * Hide output of ls and fix an m4 quoting problem (due to Scott J. Bertin).
+dnl 2008-04-12  * Check compiler return value instead of parsing the error stream,
 dnl               which detected warnings as false negatives (due to Jens Hannemann).
-dnl 2006-02-02  * Spelling of "Success".
+dnl 2008-04-12  * Spelling of "Success".
 dnl             * Fixed unsave test for $bnv_qt_lib without quotes.
 dnl             * Put dnl in front of all comments.
 dnl             * Changed -l$bnv_qt_lib_dir into -L$bnv_qt_lib_dir (all due to Pavel Roskin).
-dnl 2006-01-19  * Support for 64bit architectures.
+dnl 2008-04-12  * Support for 64bit architectures.
 dnl             * Updated documentation.
-dnl 2006-01-18: * Fix "cat: bnv_qt_test.c: No such file or directory" (due to Jens Hannemann).
+dnl 2008-04-12: * Fix "cat: bnv_qt_test.c: No such file or directory" (due to Jens Hannemann).
 dnl             * Hide output of failing ls.
-dnl 2006-01-11: * Check in /Developer on Mac OS X; Check in $QTDIR (due to Brian Mingus).
+dnl 2008-04-12: * Check in /Developer on Mac OS X; Check in $QTDIR (due to Brian Mingus).
 
 dnl Calls BNV_PATH_QT_DIRECT (contained in this file) as a subroutine.
 AC_DEFUN([BNV_HAVE_QT],
@@ -220,6 +229,8 @@ AC_DEFUN([BNV_HAVE_QT],
           QT_UIC=
         fi
       QT_MOC="$bnv_qt_dir/bin/moc"
+      QT_LRELEASE="$bnv_qt_dir/bin/lrelease"
+      QT_LUPDATE="$bnv_qt_dir/bin/lupdate"
     else
       # Or maybe we are told where to look for the utilities
       if test x"$bnv_qt_bin_dir" != x; then
@@ -230,10 +241,14 @@ AC_DEFUN([BNV_HAVE_QT],
           QT_UIC=
         fi
         QT_MOC="$bnv_qt_bin_dir/moc"
+        QT_LRELEASE="$bnv_qt_bin_dir/lrelease"
+        QT_LUPDATE="$bnv_qt_bin_dir/lupdate"
       else
       # Last possibility is that they are in $PATH
         QT_UIC="`which uic`"
         QT_MOC="`which moc`"
+        QT_LRELEASE="`which lrelease`"
+        QT_LUPDATE="`which lupdate`"
       fi
     fi
     # All variables are defined, report the result
@@ -242,7 +257,9 @@ AC_DEFUN([BNV_HAVE_QT],
     QT_DIR=$QT_DIR
     QT_LIBS=$QT_LIBS
     QT_UIC=$QT_UIC
-    QT_MOC=$QT_MOC])
+    QT_MOC=$QT_MOC
+    QT_LRELEASE=$QT_LRELEASE
+    QT_LUPDATE=$QT_LUPDATE])
   else
     # Qt was not found
     QT_CXXFLAGS=
@@ -250,6 +267,8 @@ AC_DEFUN([BNV_HAVE_QT],
     QT_LIBS=
     QT_UIC=
     QT_MOC=
+    QT_LRELEASE=
+    QT_LUPDATE=
     AC_MSG_RESULT($have_qt)
   fi
   AC_SUBST(QT_CXXFLAGS)
@@ -257,6 +276,8 @@ AC_DEFUN([BNV_HAVE_QT],
   AC_SUBST(QT_LIBS)
   AC_SUBST(QT_UIC)
   AC_SUBST(QT_MOC)
+  AC_SUBST(QT_LRELEASE)
+  AC_SUBST(QT_LUPDATE)
 
   #### Being paranoid:
   if test x"$have_qt" = xyes; then
