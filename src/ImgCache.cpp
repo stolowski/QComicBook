@@ -10,7 +10,7 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "imgcache.h"
+#include "ImgCache.h"
 
 using namespace QComicBook;
 

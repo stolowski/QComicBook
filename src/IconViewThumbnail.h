@@ -16,7 +16,7 @@
 /*! \file iconviewthumbnail.h */
 
 #include <QListWidgetItem>
-#include "thumbnailitem.h"
+#include "ThumbnailItem.h"
 
 namespace QComicBook
 {

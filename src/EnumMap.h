@@ -13,7 +13,7 @@
 #ifndef __ENUMMAP_H
 #define __ENUMMAP_H
 
-#include <qstring.h>
+#include <QString>
 
 namespace Utility
 {

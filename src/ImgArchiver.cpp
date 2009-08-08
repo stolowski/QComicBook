@@ -10,7 +10,7 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "imgarchiver.h"
+#include "ImgArchiver.h"
 #include <QProcess>
 #include <QApplication>
 #include <QDir>

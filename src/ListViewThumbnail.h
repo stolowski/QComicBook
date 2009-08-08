@@ -16,7 +16,7 @@
 /*! \file thumbnaillistitem.h */
 
 #include <QListWidgetItem>
-#include "thumbnailitem.h"
+#include "ThumbnailItem.h"
 
 class QListWidget;
 

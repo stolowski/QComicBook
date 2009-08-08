@@ -20,7 +20,7 @@
 #include <QStringList>
 #include <QList>
 #include <QProcess>
-#include "imgdirsink.h"
+#include "ImgDirSink.h"
 
 class QImage;
 

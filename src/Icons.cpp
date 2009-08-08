@@ -10,7 +10,7 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "icons.h"
+#include "Icons.h"
 #include <QDir>
 
 using namespace QComicBook;

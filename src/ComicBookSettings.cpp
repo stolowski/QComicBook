@@ -10,10 +10,10 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "cbsettings.h"
-#include "history.h"
-#include "miscutil.h"
-#include "enummap.h"
+#include "ComicBookSettings.h"
+#include "History.h"
+#include "Utility.h"
+#include "EnumMap.h"
 #include <QSettings>
 #include <QRect>
 #include <QColor>

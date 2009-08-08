@@ -14,10 +14,10 @@
 #include <QMessageBox>
 #include <QSplashScreen>
 #include <QTimer>
-#include "imgarchivesink.h"
-#include "icons.h"
-#include "comicmain.h"
-#include "cbsettings.h"
+#include "ImgArchiveSink.h"
+#include "Icons.h"
+#include "ComicMainWindow.h"
+#include "ComicBookSettings.h"
 
 int main(int argc, char *argv[])
 {

@@ -10,7 +10,7 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "listviewthumbnail.h"
+#include "ListViewThumbnail.h"
 
 using namespace QComicBook;
 

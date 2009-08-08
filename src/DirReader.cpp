@@ -10,7 +10,7 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "dirreader.h"
+#include "DirReader.h"
 
 DirReader::DirReader(QDir::SortFlags sortFlags, int maxDepth): flags(sortFlags), maxDirDepth(maxDepth), curDepth(0)
 {

@@ -15,7 +15,7 @@
 #ifndef __THUMBNAILLOADER_H
 #define __THUMBNAILLOADER_H
 
-#include "imgloader.h"
+#include "ImgLoader.h"
 
 class QObject;
 

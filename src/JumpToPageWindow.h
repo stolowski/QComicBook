@@ -13,7 +13,7 @@
 #ifndef __JUMPTOPAGEWIN_H
 #define __JUMPTOPAGEWIN_H
 
-#include <qdialog.h>
+#include <QDialog>
 
 namespace QComicBook
 {

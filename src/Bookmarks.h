@@ -19,7 +19,7 @@
 #include <QList>
 #include <QMap>
 #include <QAction>
-#include "bookmark.h"
+#include "Bookmark.h"
 
 class QMenu;
 

@@ -10,7 +10,7 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "miscutil.h"
+#include "Utility.h"
 #include <QStringList>
 #include <QFileInfo>
 #include <stdlib.h>

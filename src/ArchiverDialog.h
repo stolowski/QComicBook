@@ -13,7 +13,7 @@
 #ifndef __ARCHIVERWIN_H
 #define __ARCHIVERWIN_H
 
-#include <qdialog.h>
+#include <QDialog>
 
 /*! \file archiverwin.h */
 

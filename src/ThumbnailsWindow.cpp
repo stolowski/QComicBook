@@ -10,11 +10,11 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "thumbnailswin.h"
-#include "thumbnailsview.h"
-#include "thumbnailloader.h"
-#include "thumbnail.h"
-#include "thumbnailevent.h"
+#include "ThumbnailsWindow.h"
+#include "ThumbnailsView.h"
+#include "ThumbnailLoader.h"
+#include "Thumbnail.h"
+#include "ThumbnailEvent.h"
 
 using namespace QComicBook;
 

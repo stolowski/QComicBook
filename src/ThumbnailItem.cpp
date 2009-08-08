@@ -10,8 +10,8 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "thumbnailitem.h"
-#include "thumbnail.h"
+#include "ThumbnailItem.h"
+#include "Thumbnail.h"
 
 using namespace QComicBook;
 

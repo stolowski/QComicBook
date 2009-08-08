@@ -10,7 +10,7 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "pagenumberedit.h"
+#include "PageNumberEdit.h"
 #include <QValidator>
 
 using namespace QComicBook;

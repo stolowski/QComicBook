@@ -10,10 +10,10 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "thumbnailloader.h"
-#include "imgdirsink.h"
-#include "thumbnail.h"
-#include "thumbnailevent.h"
+#include "ThumbnailLoader.h"
+#include "ImgDirSink.h"
+#include "Thumbnail.h"
+#include "ThumbnailEvent.h"
 #include <QApplication>
  
 using namespace QComicBook;

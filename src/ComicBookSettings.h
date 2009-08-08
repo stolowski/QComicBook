@@ -13,9 +13,9 @@
 #ifndef __SETTINGS_H
 #define __SETTINGS_H
 
-#include "imgview.h"
-#include "history.h"
-#include "enummap.h"
+#include "ComicImageView.h"
+#include "History.h"
+#include "EnumMap.h"
 #include <QObject>
 #include <QFont>
 #include <QByteArray>

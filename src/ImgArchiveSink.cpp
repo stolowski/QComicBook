@@ -10,8 +10,8 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "imgarchivesink.h"
-#include "miscutil.h"
+#include "ImgArchiveSink.h"
+#include "Utility.h"
 #include <QStringList>
 #include <QProcess>
 #include <QTextStream>

@@ -10,8 +10,8 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "suparchwin.h"
-#include "imgarchivesink.h"
+#include "SupportedArchivesWindow.h"
+#include "ImgArchiveSink.h"
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QLayout>

@@ -13,7 +13,7 @@
 #ifndef __PAGENUMBEREDIT_H
 #define __PAGENUMBEREDIT_H
 
-#include <qlineedit.h>
+#include <QLineEdit>
 
 class QIntValidator;
 

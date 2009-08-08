@@ -10,7 +10,7 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "history.h"
+#include "History.h"
 
 using namespace Utility;
 

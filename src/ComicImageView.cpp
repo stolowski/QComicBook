@@ -10,8 +10,8 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "imgview.h"
-#include "miscutil.h"
+#include "ComicImageView.h"
+#include "Utility.h"
 #include <QImage>
 #include <QPixmap>
 #include <QMenu>

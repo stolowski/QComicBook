@@ -10,9 +10,9 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "imgsinkfactory.h"
-#include "imgdirsink.h"
-#include "imgarchivesink.h"
+#include "ImgSinkFactory.h"
+#include "ImgDirSink.h"
+#include "ImgArchiveSink.h"
 #include <QString>
 #include <QFileInfo>
 

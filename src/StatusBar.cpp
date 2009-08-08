@@ -10,7 +10,7 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "statusbar.h"
+#include "StatusBar.h"
 #include <QLabel>
 #include <QImage>
 #include <QProgressBar>

@@ -10,8 +10,8 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "cbinfo.h"
-#include "imgdirsink.h"
+#include "ComicBookInfo.h"
+#include "ImgDirSink.h"
 #include <QTabWidget>
 #include <QStringList>
 #include <QTextEdit>

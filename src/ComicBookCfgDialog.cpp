@@ -10,9 +10,9 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "cbconfigdialog.h"
-#include "cbsettings.h"
-#include "imgview.h"
+#include "ComicBookCfgDialog.h"
+#include "ComicBookSettings.h"
+#include "ComicImageView.h"
 #include <QTabWidget>
 #include <QDialogButtonBox>
 #include <QLayout>

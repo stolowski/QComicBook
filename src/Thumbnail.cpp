@@ -10,7 +10,7 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "thumbnail.h"
+#include "Thumbnail.h"
 #include <utime.h>
 
 using namespace QComicBook;

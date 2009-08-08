@@ -13,8 +13,8 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QHBoxLayout>
-#include "jumptopagewin.h"
-#include "pagenumberedit.h"
+#include "JumpToPageWindow.h"
+#include "PageNumberEdit.h"
 
 using namespace QComicBook;
 

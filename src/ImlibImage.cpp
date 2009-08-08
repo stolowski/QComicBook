@@ -10,7 +10,7 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "imlibimage.h"
+#include "ImlibImage.h"
 #include <qpaintdevice.h>
 #include <qfile.h>
 #include <X11/Xlib.h>

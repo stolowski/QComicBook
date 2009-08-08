@@ -10,8 +10,8 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "bookmarkmanager.h"
-#include "bookmarks.h"
+#include "BookmarkManager.h"
+#include "Bookmarks.h"
 #include <Qt>
 #include <QTreeWidget>
 #include <QPushButton>

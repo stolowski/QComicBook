@@ -10,10 +10,10 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "imgdirsink.h"
-#include "imgcache.h"
-#include "cbsettings.h"
-#include "thumbnail.h"
+#include "ImgDirSink.h"
+#include "ImgCache.h"
+#include "ComicBookSettings.h"
+#include "Thumbnail.h"
 #include <QImage>
 #include <QStringList>
 #include <QDir>

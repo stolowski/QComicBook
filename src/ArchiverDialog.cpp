@@ -10,10 +10,10 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "archiverdialog.h"
-#include "imgdirsink.h"
-#include "imgarchiver.h"
-#include "pagesdirector.h"
+#include "ArchiverDialog.h"
+#include "ImgDirSink.h"
+#include "ImgArchiver.h"
+#include "PagesDirector.h"
 #include <QLayout>
 #include <QLineEdit>
 #include <QFileDialog>

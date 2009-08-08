@@ -10,8 +10,8 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "imgloader.h"
-#include "imgdirsink.h"
+#include "ImgLoader.h"
+#include "ImgDirSink.h"
 #include <iostream>
 #include <QPixmap>
 

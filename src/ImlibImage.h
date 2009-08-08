@@ -15,7 +15,7 @@
 
 /*! \file imlibimage.h */
 
-#include <qmutex.h>
+#include <QMutex>
 
 class QPaintDevice;
 class QString;

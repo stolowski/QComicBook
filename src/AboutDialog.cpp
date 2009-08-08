@@ -10,7 +10,7 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "aboutdialog.h"
+#include "AboutDialog.h"
 #include <QLayout>
 #include <QLabel>
 #include <QFrame>

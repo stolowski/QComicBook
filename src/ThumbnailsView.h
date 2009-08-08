@@ -15,7 +15,7 @@
 
 #include <QListWidget>
 #include <QVector>
-#include <iconviewthumbnail.h>
+#include <IconViewThumbnail.h>
 
 class QPixmap;
 class QMenu;

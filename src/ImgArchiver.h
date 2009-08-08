@@ -15,7 +15,7 @@
 
 /*! \file imgarchiver.h */
 
-#include "imgarchivesink.h"
+#include "ImgArchiveSink.h"
 #include <QList>
 #include <QProcess>
 

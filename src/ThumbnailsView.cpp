@@ -10,9 +10,9 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "thumbnailsview.h"
-#include "iconviewthumbnail.h"
-#include "thumbnail.h"
+#include "ThumbnailsView.h"
+#include "IconViewThumbnail.h"
+#include "Thumbnail.h"
 #include <qpixmap.h>
 #include <qstring.h>
 #include <qpainter.h>

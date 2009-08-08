@@ -16,7 +16,7 @@
 #define __COMIC_MAIN_H
 
 #include <QMainWindow>
-#include "history.h"
+#include "History.h"
 
 class QAction;
 class QPopupMenu;

@@ -15,7 +15,7 @@
 #ifndef __BOOKMARK_H
 #define __BOOKMARK_H
 
-#include <qstring.h>
+#include <QString>
 
 class QAction;
 

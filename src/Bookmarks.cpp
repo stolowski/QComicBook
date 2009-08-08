@@ -10,8 +10,8 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "bookmarks.h"
-#include "cbsettings.h"
+#include "Bookmarks.h"
+#include "ComicBookSettings.h"
 #include <QMenu>
 #include <QFile>
 #include <QDir>

@@ -10,11 +10,11 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "pagesdirector.h"
-#include "imgdirsink.h"
-#include "thumbnail.h"
-#include "thumbnailevent.h"
-#include "listviewthumbnail.h"
+#include "PagesDirector.h"
+#include "ImgDirSink.h"
+#include "Thumbnail.h"
+#include "ThumbnailEvent.h"
+#include "ListViewThumbnail.h"
 
 using namespace QComicBook;
 

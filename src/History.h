@@ -13,7 +13,7 @@
 #ifndef __HISTORY_H
 #define __HISTORY_H
 
-#include <qstringlist.h>
+#include <QStringList>
 
 namespace Utility
 {

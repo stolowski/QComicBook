@@ -10,7 +10,7 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "bookmark.h"
+#include "Bookmark.h"
 #include <QFileInfo>
 #include <QAction>
 

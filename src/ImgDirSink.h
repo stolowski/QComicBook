@@ -21,8 +21,8 @@
 #include <QDateTime>
 #include <QMap>
 #include <QMutex>
-#include "dirreader.h"
-#include "thumbnailloader.h"
+#include "DirReader.h"
+#include "ThumbnailLoader.h"
 
 class QImage;
 

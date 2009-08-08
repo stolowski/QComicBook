@@ -13,7 +13,7 @@
 #ifndef __STATUSBAR_H
 #define __STATUSBAR_H
 
-#include <qstatusbar.h>
+#include <QStatusBar>
 
 class QLabel;
 class QProgressBar;
