@@ -272,33 +272,30 @@ Thumbnail* ImgDirSink::getThumbnail(int num, bool thumbcache)
         }
         listmtx.unlock();
 
-        Thumbnail *t = new Thumbnail(num);
-        QString thname;
+        Thumbnail *t = new Thumbnail(num, cbname.remove('/'));
 
         //
         // try to load cached thumbnail
         if (thumbcache)
         {
-                thname = ComicBookSettings::thumbnailsDir() + "/" + cbname.remove('/') + QString::number(num) + ".jpg";
-                if (t->tryLoad(thname))
-                {
-                        t->touch(thname);
-                        return t;
-                }
+            if (t->tryLoad())
+            {
+                return t;
+            }
         }
-        
+
         //
         // try to load image
-        if (!t->tryLoad(fname))
+        if (!t->fromOriginalImage(fname))
         {
-                delete t;
-                return NULL;
+            delete t;
+            return NULL;
         }
 
         //
         // save thumbnail if caching enabled
         if (thumbcache)
-                t->save(thname);
+                t->save();
         return t;
 }
 

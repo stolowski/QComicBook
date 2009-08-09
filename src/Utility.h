@@ -18,6 +18,7 @@ class QString;
 namespace Utility
 {
 	QString which(const QString &command); //similiar to shell 'which' command
+        void touch(const QString &path);
 }
 
 #endif

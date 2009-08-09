@@ -14,6 +14,7 @@
 #include <QStringList>
 #include <QFileInfo>
 #include <stdlib.h>
+#include <utime.h>
 
 QString Utility::which(const QString &command)
 {
@@ -28,3 +29,7 @@ QString Utility::which(const QString &command)
 	return QString::null;
 }
 
+void Utility::touch(const QString &fname)
+{
+    utime(fname.toLocal8Bit(), NULL);
+}

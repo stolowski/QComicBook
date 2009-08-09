@@ -11,15 +11,21 @@
  */
 
 #include "Thumbnail.h"
-#include <utime.h>
+#include <QCryptographicHash>
+#include <ComicBookSettings.h>
+#include <Utility.h>
 
 using namespace QComicBook;
 
 int Thumbnail::thwidth = 100;
 int Thumbnail::thheight = 120;
 
-Thumbnail::Thumbnail(int n): num(n)
+Thumbnail::Thumbnail(int n, const QString &comicbookName)
+  : num(n)
+    //  , hash(QCryptographicHash::hash((comicbookName + "." + QString::number(n)).toAscii(), QCryptographicHash::Sha1))    
+
 {
+    hash = getScrambledName(comicbookName + "." + QString::number(n));
 }
 
 Thumbnail::Thumbnail(int n, const QImage &i): num(n)
@@ -41,25 +47,31 @@ const QImage& Thumbnail::image() const
 	return img;
 }
 
-void Thumbnail::touch(const QString &fname)
+bool Thumbnail::tryLoad()
 {
-	utime(fname.toLocal8Bit(), NULL);
+    QImage tmp;
+    const QString fname(getFullPath());
+    if (tmp.load(fname))
+    {
+        Utility::touch(fname);
+        setImage(tmp);
+        return true;
+    }
+    return false;
 }
 
-bool Thumbnail::tryLoad(const QString &fname)
+bool Thumbnail::fromOriginalImage(const QString &fname)
 {
-	QImage tmp;
-	if (tmp.load(fname))
-	{
-		setImage(tmp);
-		return true;
-	}
-	return false;
+    const QImage i(fname);
+    if (i.isNull())
+        return false;
+    setImage(i);
+    return true;
 }
 
-bool Thumbnail::save(const QString &fname)
+bool Thumbnail::save()
 {
-	img.save(fname, "JPEG", 75);
+    img.save(getFullPath(), "JPEG", 75);
 }
 
 void Thumbnail::setImage(const QImage &i)
@@ -80,3 +92,12 @@ int Thumbnail::maxHeight()
 	return thheight;
 }
 
+QString Thumbnail::getFullPath() const
+{
+    return ComicBookSettings::thumbnailsDir() + "/" + hash.toHex() + ".jpg";
+}
+
+QByteArray Thumbnail::getScrambledName(const QString &in)
+{
+    return QCryptographicHash::hash( in.toAscii(), QCryptographicHash::Sha1 );
+}

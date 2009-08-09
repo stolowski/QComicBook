@@ -13,7 +13,8 @@
 #ifndef __THUMBNAIL_H
 #define __THUMBNAIL_H
 
-#include <qimage.h>
+#include <QImage>
+#include <QByteArray>
 
 namespace QComicBook
 {
@@ -21,20 +22,23 @@ namespace QComicBook
 	{
 		private:
 			int num;
+                        QByteArray hash;
 			QImage img;
 			static int thwidth, thheight; //default thumbnail width and height
+                        static QByteArray getScrambledName(const QString &in);
 
 		public:
-			Thumbnail(int n);
+			Thumbnail(int n, const QString &comicbookName);
 			Thumbnail(int n, const QImage &i);
 			~Thumbnail();
 
 			int page() const;
 			const QImage& image() const;
-			void touch(const QString &fname);
-			bool tryLoad(const QString &fname);
-			bool save(const QString &fname);
+                        bool tryLoad();
+                        bool fromOriginalImage(const QString &fname);
+			bool save();
 			void setImage(const QImage &i);
+                        QString getFullPath() const;
 
 			static int maxWidth();
 			static int maxHeight();
