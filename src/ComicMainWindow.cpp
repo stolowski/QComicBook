@@ -53,7 +53,7 @@
 using namespace QComicBook;
 using namespace Utility;
 
-ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), sink(NULL), currpage(0), edit_menu(NULL)
+ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), sink(NULL), currpage(0)
 {
         updateCaption();
 	setAttribute(Qt::WA_DeleteOnClose);
@@ -454,14 +454,6 @@ void ComicMainWindow::enableComicBookActions(bool f)
         openPrevAction->setEnabled(x);
 	savePageAction->setEnabled(x);
 
-	//
-	// edit menu
-	if (edit_menu)
-	{
-		gimpAction->setEnabled(f);
-		reloadAction->setEnabled(f);
-	}
-	
         //
         // view menu
         rotateRightAction->setEnabled(f);
@@ -953,18 +945,6 @@ void ComicMainWindow::closeSink()
 
         if (sink)
         {
-		/*if (typeid(*sink) == typeid(ImgArchiveSink) && cfg->editSupport() && sink->hasModifiedFiles()) 
-		{
-        		if (QMessageBox::warning(this, tr("Create archive?"),
-				tr("Warning! Some files were modified in this comic book\nDo you want to create new archive file?"),
-                                QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
-			{
-				ArchiverDialog *win = new ArchiverDialog(this, sink);
-				win->exec();
-				delete win;
-			}
-
-		}*/
                 sink->deleteLater();
                 sink = NULL;
         }
