@@ -317,8 +317,6 @@ void ComicMainWindow::setupFileMenu()
         file_menu->addSeparator();
 	file_menu->addAction(savePageAction);
         file_menu->addSeparator();
-	//create_id = file_menu->insertItem(tr("Create archive"), this, SLOT(createArchive()));
-        //file_menu->insertSeparator();
        	file_menu->addAction(showInfoAction);
         file_menu->addSeparator();
         closeAction = file_menu->addAction(tr("Close"), this, SLOT(closeSink()));
@@ -448,7 +446,6 @@ void ComicMainWindow::enableComicBookActions(bool f)
         // file menu
         const bool x = f && sink && sink->supportsNext();
         closeAction->setEnabled(f);
-        //createAction->setEnabled(f);
         showInfoAction->setEnabled(f);
         openNextAction->setEnabled(x);
         openPrevAction->setEnabled(x);
@@ -900,16 +897,6 @@ void ComicMainWindow::showSysInfo()
 {
 	SupportedArchivesWindow *win = new SupportedArchivesWindow(this);
 	win->show();
-}
-
-void ComicMainWindow::createArchive()
-{
-	/*if (sink)
-	{
-		ArchiverDialog *win = new ArchiverDialog(this, sink);
-		win->exec();
-		delete win;
-	}*/
 }
 
 void ComicMainWindow::showAbout()

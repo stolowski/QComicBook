@@ -155,7 +155,6 @@ namespace QComicBook
 			void exitFullscreen();
 			void browseDirectory();
 			void browseArchive();
-			void createArchive();
 			void open(const QString &path, int page=0);
 			void openNext();
 			void openPrevious();
