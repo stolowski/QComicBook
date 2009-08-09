@@ -53,7 +53,6 @@ namespace QComicBook
 			QToolBar *toolbar;
 			bool savedToolbarState;
 			QMenu *file_menu;
-			QMenu *edit_menu;
 			QMenu *context_menu;
 			QMenu *view_menu;
 			QMenu *navi_menu;
