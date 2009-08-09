@@ -173,6 +173,21 @@ ImgArchiveSink::ArchiveType ImgArchiveSink::getArchiveType(const QString &filena
 	return UNKNOWN_ARCHIVE;
 }
 
+int ImgArchiveSink::waitForFinished(QProcess *p)
+{
+        //
+        // an ugly busy-loop with 1s sleep.
+        // waitForFinished(-1) hangs when used with processEvents().
+        for (;;)
+        {
+            if (p->waitForFinished(1000) == true)
+                break;
+            if (p->state() == QProcess::NotRunning)
+                break;
+        }
+        return p->exitStatus() == QProcess::NormalExit && p->exitCode() == 0;
+}
+
 int ImgArchiveSink::extract(const QString &filename, const QString &destdir, ArchiveType archiveType)
 {
 	if (archiveType== UNKNOWN_ARCHIVE)
@@ -213,15 +228,13 @@ int ImgArchiveSink::extract(const QString &filename, const QString &destdir, Arc
 	//
 	// extract archive file list first
 	pinf->start(infprg, infargs);
-	if (!pinf->waitForFinished(-1))
-		return SINKERR_ARCHEXIT;
+
+	if (!waitForFinished(pinf))
+            return SINKERR_ARCHEXIT;
 	
 	extcnt = 0;
 	pext->start(extprg, extargs);
-	if (!pext->waitForFinished(-1))
-		return SINKERR_ARCHEXIT;
-
-	return 0;
+        return waitForFinished(pext) ? 0 : SINKERR_ARCHEXIT;
 }
 
 int ImgArchiveSink::open(const QString &path) //TODO: cleanup if already opened?
@@ -311,7 +324,7 @@ void ImgArchiveSink::extractStdoutReady()
 		if (b[i] == '\n' && extcnt < filesnum)
 			++extcnt;
 	emit progress(extcnt, filesnum);
-	qApp->processEvents();
+	qApp->processEvents(QEventLoop::ExcludeSocketNotifiers | QEventLoop::ExcludeUserInputEvents);
 }
 
 void ImgArchiveSink::autoconfRAR()
