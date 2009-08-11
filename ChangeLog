@@ -1,3 +1,10 @@
+2009-08-11:  0.4.1       -- fixed freezing when unpacking some archives (in particular zip)
+			 -- fixed crash when opening archives via 'Recently opened' menu
+	                 -- thumbnails are now saved with sha1-hashed file names
+			 -- updated autoconf bnv_have_qt macro
+	                 -- QComicBook requires Qt>=4.3.0 now
+			 -- internal cleanups
+
 2007-11-05:  0.4.0       -- ported to Qt4
                          -- Imlib2 library is (temporarily) removed
 			 -- added support for nested cbr archives

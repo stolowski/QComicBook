@@ -1,5 +1,5 @@
-QComicBook v0.4.0
-(c)by Pawel Stolowski 2005-2007
+QComicBook v0.4.1
+(c)by Pawel Stolowski 2005-2009
 released under terms of GNU General Public License v2
 
 1. Introduction
@@ -12,18 +12,17 @@ navigation etc.
 
 2. Requirements
 ---------------
-QComicBook requires Qt library version >=4.2.0 and pkg-config.
+QComicBook requires Qt library version >=4.3.0 and pkg-config.
 It *may* work with earlier versions of Qt (from 4.x family), but it was not
-tested. You will also need unzip, rar (or unrar), unace and tar (with gzip and
+tested. You will also need unzip, rar (or unra  r), unace and tar (with gzip and
 bzip2 support compiled in) somewhere in your path to handle archives. If one of
 these tools is missing you can still use QComicBook, but you won't be able to
 open some archives.
 
 3. Installation
 ---------------
-To compile QComicBook, you will need Qt and Imlib2 developement packages
-(usually named -devel- in many distros) and pkg-config. Compilation include
-three steps:
+To compile QComicBook, you will need Qt developement packages (usually named
+-devel- in many distros) and pkg-config. Compilation include three steps:
 ./configure --prefix=/usr/local
 make
 make install
@@ -35,9 +34,9 @@ archive, which names contain non-ascii characters (like special characters for y
 language). As a result they won't be decompressed and qcomicbook may show
 "No images found" error box.
 * the free (opensource) unrar doesn't currently support 3.0 rar archives. Such archives are reported
-as empty by QComicBook. It is recommended to use non-free rar/unrar.
+as empty by QComicBook. It is *recommended* to use non-free rar/unrar.
 
 5. Bugs
 -------
-Please report any bugs to: pawel.stolowski@wp.pl. Ideas are welcome too!
+Please report any bugs to: stolowski@gmail.com. Ideas are welcome too!
 

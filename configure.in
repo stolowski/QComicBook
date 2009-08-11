@@ -1,6 +1,6 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(QComicBook, 0.4.0, pawel.stolowski@wp.pl)
-AM_INIT_AUTOMAKE(qcomicbook, 0.4.0)
+AC_INIT(QComicBook, 0.4.1, stolowski@gmail.com)
+AM_INIT_AUTOMAKE(qcomicbook, 0.4.1)
 AC_CONFIG_HEADERS([src/config.h])
 AC_PREFIX_DEFAULT([/usr/local])
 
