@@ -572,7 +572,13 @@ void ComicMainWindow::updateCaption()
 void ComicMainWindow::setRecentFilesMenu(const History &hist)
 {
         QStringList list = hist.getAll();
-        recent_menu->clear();
+        // recent_menu->clear();
+        //workaround for crash when removing recent items via clear()
+        //when it's called from recentSelected handler.
+        QList<QAction *> actions = recent_menu->actions();
+        foreach (QAction *a, actions) {
+            a->deleteLater();
+        }
         for (QStringList::const_iterator it = list.begin(); it != list.end(); it++)
                 recent_menu->addAction(*it);
 }
