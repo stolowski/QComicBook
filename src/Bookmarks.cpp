@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005-2006 Pawel Stolowski <pawel.stolowski@wp.pl>
+ * Copyright (C) 2005-2009 Pawel Stolowski <pawel.stolowski@wp.pl>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -63,6 +63,7 @@ bool Bookmarks::save()
 		foreach (Bookmark *b, blist)
 			str << b->getName() << endl << b->getPage() << endl;
 		f.close();
+                changed = false;
 		return true;
 	}
 	return false;
@@ -102,18 +103,8 @@ bool Bookmarks::remove(const QString &cbname)
 {
 	foreach (Bookmark *b, blist)
 	{
-		if ((b->getName() == cbname))
-		{
-			bmenu->removeAction(b->getId());
-			bmap.remove(b->getId());
-			int idx = blist.indexOf(b);
-			if (idx >= 0)
-			{
-				blist.removeAt(idx);
-				delete b;
-			}
-			return true;
-		}
+            if ((b->getName() == cbname))
+                return remove(b->getId());
 	}
 	return false;
 }
@@ -123,16 +114,18 @@ bool Bookmarks::remove(QAction *id)
 	if (bmap.contains(id))
 	{
 		Bookmark *b = bmap[id];
-		bmenu->removeAction(id);
-		bmap.remove(id);
-		int idx = blist.indexOf(b);
+		const int idx = blist.indexOf(b);
 		if (idx >= 0)
 		{
-			blist.removeAt(idx);
-			delete b;
+                    bmenu->removeAction(id);
+                    bmap.remove(id);
+                    blist.removeAt(idx);
+                    delete b;
 		}
-		changed = true;
+                changed = true;
+                return true;
 	}
+        return false;
 }
 
 bool Bookmarks::get(QAction *action, Bookmark &b)
