@@ -1,4 +1,4 @@
-m/*
+/*
  * This file is a part of QComicBook.
  *
  * Copyright (C) 2005-2009 Pawel Stolowski <pawel.stolowski@wp.pl>
