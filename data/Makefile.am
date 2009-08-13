@@ -23,3 +23,8 @@ icons_DATA = bestfit.png \
 	     wholepage.png \
 	     qcomicbook-splash.png
 
+appicondir = $(datadir)/pixmaps
+appicon_DATA = qcomicbook.png
+
+appsdir = $(datadir)/applications
+apps_DATA = qcomicbook.desktop
