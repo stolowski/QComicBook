@@ -19,21 +19,30 @@ AC_C_CONST
 # Checks for library functions.
 #AC_PROG_GCC_TRADITIONAL
 
-if test "x$have_qt" = "xno"
-then
-	AC_MSG_ERROR("Qt library is required to compile QComicBook!", 1)
-fi
-
 #
 # custom test for correct Qt version
 AC_LANG(C++)
 
-PKG_CHECK_MODULES(QtGui,QtGui QtCore,ac_qtgui=yes,ac_qtgui=no)
-if test "x$ac_qtgui" = "xno"
+PKG_PROG_PKG_CONFIG
+PKG_CHECK_MODULES(QtCore,QtCore,ac_qt=yes,ac_qt=no)
+PKG_CHECK_MODULES(QtGui,QtGui,ac_qt=$ac_qt,ac_qt=no)
+if test "x$ac_qt" = "xno"
 then
 	AC_MSG_ERROR("Qt4 GUI support missing!", 1)
 fi
 
+AC_MSG_CHECKING(moc location)
+MOC=`$PKG_CONFIG --variable moc_location QtCore`
+if test -x $MOC
+then
+        AC_MSG_RESULT($MOC)
+else
+        AC_MSG_ERROR([moc not found!])
+fi
+
+AC_SUBST(MOC)
+AC_SUBST(QtCore_CFLAGS)
+AC_SUBST(QtCore_LIBS)
 AC_SUBST(QtGui_CFLAGS)
 AC_SUBST(QtGui_LIBS)
 

@@ -66,11 +66,11 @@ noinst_HEADERS = AboutDialog.h \
 		 
 MOSTLYCLEANFILES =+ $(BUILT_SOURCES)
 
-qcomicbook_LDFLAGS = $(QtGui_LIBS)
-qcomicbook_CPPFLAGS = -DDATADIR=\"$(datadir)/qcomicbook/\" -DQT_THREAD_SUPPORT $(QtGui_CFLAGS)
+qcomicbook_LDFLAGS = $(QtCore_LIBS) $(QtGui_LIBS)
+qcomicbook_CPPFLAGS = -DDATADIR=\"$(datadir)/qcomicbook/\" -DQT_THREAD_SUPPORT $(QtCore_CFLAGS) $(QtGui_CFLAGS)
 qcomicbook_CXXFLAGS = $(qcomicbook_CPPFLAGS)
 
 moc_%.cpp: %.h
-	moc-qt4 $< -o $@
+	$(MOC) $< -o $@
 
 
