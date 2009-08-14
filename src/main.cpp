@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 	QSplashScreen *splash = NULL;
 	if (ComicBookSettings::instance().showSplash())
 	{
-		QPixmap splashpix(DATADIR "qcomicbook-splash.png");
+		QPixmap splashpix(DATADIR "/qcomicbook-splash.png");
 		if (!splashpix.isNull())
 		{
 			splash = new QSplashScreen(splashpix);

@@ -912,7 +912,7 @@ void ComicMainWindow::showAbout()
                         "(c)by Pawel Stolowski 2005-2009\n"
                         "released under terms of GNU General Public License\n\n"
                         "http://linux.bydg.org/~yogin\n"
-                        "stolowski@gmail.com", QPixmap(DATADIR "qcomicbook-splash.png"));
+                        "stolowski@gmail.com", QPixmap(DATADIR "/qcomicbook-splash.png"));
         win->show();
 }
 
