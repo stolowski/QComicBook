@@ -12,20 +12,27 @@ navigation etc.
 
 2. Requirements
 ---------------
-QComicBook requires Qt library version >=4.3.0 and pkg-config.
+QComicBook requires Qt library version >=4.3.0 and cmake.
 It *may* work with earlier versions of Qt (from 4.x family), but it was not
-tested. You will also need unzip, rar (or unra  r), unace and tar (with gzip and
+tested. You will also need unzip, rar (or unrar), unace and tar (with gzip and
 bzip2 support compiled in) somewhere in your path to handle archives. If one of
 these tools is missing you can still use QComicBook, but you won't be able to
 open some archives.
 
 3. Installation
 ---------------
-To compile QComicBook, you will need Qt developement packages (usually named
--devel- in many distros) and pkg-config. Compilation include three steps:
-./configure --prefix=/usr/local
-make
-make install
+To compile QComicBook, you will need Qt4 developement packages (usually named
+-devel- in many distros). Compilation includes three steps:
+
+$ cmake . -DCMAKE_INSTALL_PREFIX=/usr
+$ make
+$ make install
+(the -D... argument is optional; if not specified, qcomicbook will be installed in
+/usr/local directory).
+
+If you want to compile qcomicbook with e.g. /usr prefix, but install it to a temporary
+location for packaging, then pass DESTDIR variable to 'make install', e.g.
+$ make install DESTDIR=/tmp/package_root
 
 4. Known issues
 ---------------
