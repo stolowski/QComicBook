@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/src)
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR})
 SET(qcomicbook_src AboutDialog.cpp Bookmark.cpp BookmarkManager.cpp
 	Bookmarks.cpp ComicBookCfgDialog.cpp ComicBookInfo.cpp ComicBookSettings.cpp ComicMainWindow.cpp DirReader.cpp
 	History.cpp Icons.cpp IconViewThumbnail.cpp ImgArchiver.cpp ImgArchiveSink.cpp
@@ -28,3 +28,4 @@ SET(qcomicbook_moc_hdrs
 QT4_WRAP_CPP(qcomicbook_moc_src ${qcomicbook_moc_hdrs})
 ADD_EXECUTABLE(qcomicbook ${qcomicbook_src} ${qcomicbook_moc_src})
 TARGET_LINK_LIBRARIES(qcomicbook ${QT_LIBRARIES})
+INSTALL(TARGETS qcomicbook DESTINATION bin)
