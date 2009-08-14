@@ -23,6 +23,7 @@
 #include <QMutex>
 #include "DirReader.h"
 #include "ThumbnailLoader.h"
+#include "Page.h"
 
 class QImage;
 
@@ -136,13 +137,13 @@ namespace QComicBook
 			//! Closes this comic book sink cleaning resources.
 			virtual void close();
 
-			//! Returns an image for specifiled page.
+			//! Returns an image for specified page.
 			/*! The cache is first checked for image. If not found, the image is loaded. Optionally,
 			 *  the preload thread is started to preload next images.
 			 *  @param num page number
 			 *  @param result contains 0 on succes or value greater than 0 for error
 			 *  @return an image */
-			virtual QImage getImage(unsigned int num, int &result);
+			virtual Page getImage(unsigned int num, int &result);
 
 			virtual void preload(unsigned int num);
 

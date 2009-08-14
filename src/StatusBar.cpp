@@ -11,8 +11,8 @@
  */
 
 #include "StatusBar.h"
+#include "Page.h"
 #include <QLabel>
-#include <QImage>
 #include <QProgressBar>
 
 using namespace QComicBook;
@@ -115,7 +115,7 @@ void StatusBar::setPage(int n, int total)
 	page->setText(tr("Page") + " " + QString::number(n) + " / " + QString::number(total));
 }
 
-void StatusBar::setImageInfo(const QImage *img1, const QImage *img2)
+void StatusBar::setImageInfo(const Page *img1, const Page *img2)
 {
 	if (!imginfo)
 	{
@@ -124,9 +124,9 @@ void StatusBar::setImageInfo(const QImage *img1, const QImage *img2)
 	}
 	QString txt;
 	if (img1)
-		txt = QString::number(img1->width()) + "x" + QString::number(img1->height()) + " ";
+            txt = QString::number(img1->getImage().width()) + "x" + QString::number(img1->getImage().height()) + " ";
 	if (img2)
-		txt += QString::number(img2->width()) + "x" + QString::number(img2->height());
+            txt += QString::number(img2->getImage().width()) + "x" + QString::number(img2->getImage().height());
 	imginfo->setText(txt);
 }
 

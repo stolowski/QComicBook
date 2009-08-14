@@ -15,7 +15,7 @@
 
 #include <QScrollArea>
 #include <QMatrix>
-#include <QImage>
+#include "Page.h"
 
 class QMenu;
 class QPixmap;
@@ -36,7 +36,7 @@ namespace QComicBook
 		private:
 			QMenu *context_menu;
 			Size isize;
-			QImage orgimg[2];
+			Page *orgimg[2];
 			int imgs; //number of images in orgimg array
 			int iangle; //rotation angle, 0..3, multipled by 90
 			QMatrix rmtx; //rotation matrix
@@ -59,6 +59,7 @@ namespace QComicBook
 			void doubleClick();
 
 		protected:
+                        void deletePages();
 			void resizeEvent(QResizeEvent *e);
 			void updateImageSize();
 			void redrawImages();
@@ -73,8 +74,8 @@ namespace QComicBook
 
 		public slots:
 			
-			void setImage(const QImage &img1, bool preserveangle=false);
-			void setImage(const QImage &img1, const QImage &img2, bool preserveangle=false);
+			void setImage(const Page &img1, bool preserveangle=false);
+			void setImage(const Page &img1, const Page &img2, bool preserveangle=false);
 			void setRotation(Rotation r);
 			void setSize(Size s);
 			void setSizeOriginal();

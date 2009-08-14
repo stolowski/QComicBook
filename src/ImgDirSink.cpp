@@ -200,7 +200,7 @@ QStringList ImgDirSink::getDescription() const
         return desc;
 }
 
-QImage ImgDirSink::getImage(unsigned int num, int &result)
+Page ImgDirSink::getImage(unsigned int num, int &result)
 {
         result = SINKERR_LOADERROR;
 
@@ -242,7 +242,8 @@ QImage ImgDirSink::getImage(unsigned int num, int &result)
 		result = 0;
 	}
 
-	return im;
+        const Page page(num, im);
+	return page;
 }
 
 void ImgDirSink::preload(unsigned int num)

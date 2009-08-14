@@ -13,6 +13,7 @@
 #include "config.h"
 #include "Bookmarks.h"
 #include "ComicMainWindow.h"
+#include "Page.h"
 #include "Icons.h"
 #include "cbicons.h"
 #include "ComicBookInfo.h"
@@ -837,8 +838,8 @@ void ComicMainWindow::jumpToPage(int n, bool force)
 
                 if (twoPagesAction->isChecked())
                 {
-                        QImage img1 = sink->getImage(currpage = n, result1);
-                        QImage img2 = sink->getImage(currpage + 1, result2);
+                        Page img1 = sink->getImage(currpage = n, result1);
+                        Page img2 = sink->getImage(currpage + 1, result2);
                         if (result2 == 0)
                         {
                                 if (mangaModeAction->isChecked())
@@ -862,7 +863,7 @@ void ComicMainWindow::jumpToPage(int n, bool force)
                 }
                 else
                 {
-                        QImage img = sink->getImage(currpage = n, result1);
+                        Page img = sink->getImage(currpage = n, result1);
                         view->setImage(img, preserveangle);
                         statusbar->setImageInfo(&img);
                 }
@@ -981,8 +982,8 @@ void ComicMainWindow::savePageAs()
 			if (!fname.isEmpty())
 			{
 				int result;
-				QImage img = sink->getImage(currpage, result);
-				if (result != 0 || !img.save(fname)) //TODO: overwrite and default format (jpeg)
+				const Page img = sink->getImage(currpage, result);
+				if (result != 0 || !img.getImage().save(fname)) //TODO: overwrite and default format (jpeg)
 				{
 					QMessageBox::critical(this, tr("QComicBook error"), tr("Error saving image"), QMessageBox::Ok, QMessageBox::NoButton);
 					break; //do not attempt to save second image

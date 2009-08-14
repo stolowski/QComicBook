@@ -35,19 +35,21 @@ ComicImageView::ComicImageView(QWidget *parent, Size size, const QColor &color)
     isize(size), iangle(0), xoff(0), yoff(0), imgs(0), totalWidth(0), totalHeight(0),
     lx(-1), wheelupcnt(0), wheeldowncnt(0), smallcursor(NULL), pagenumbers(false)
 {
-        context_menu = new QMenu(this);
-        //setFocusPolicy(QWidget::StrongFocus);
-	imgLabel = new QLabel();
-	imgLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-	imgLabel->setScaledContents(true);
-	setWidget(imgLabel);
-
-	setBackground(color);
-	//setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    orgimg[0] = orgimg[1] = NULL;
+    context_menu = new QMenu(this);
+    //setFocusPolicy(QWidget::StrongFocus);
+    imgLabel = new QLabel();
+    imgLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    imgLabel->setScaledContents(true);
+    setWidget(imgLabel);
+    
+    setBackground(color);
+    //setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 }
 
 ComicImageView::~ComicImageView()
 {
+    deletePages();
 }
 
 void ComicImageView::scrollByDelta(int dx, int dy)
@@ -80,25 +82,39 @@ void ComicImageView::contextMenuEvent(QContextMenuEvent *e)
 		context_menu->popup(e->globalPos());
 }
 
-void ComicImageView::setImage(const QImage &img1, bool preserveangle)
+void ComicImageView::deletePages()
+{
+    for (int i=0; i<2; i++)
+    {
+        if (orgimg[i])
+        {
+            delete orgimg[i];
+            orgimg[i] = NULL;
+        }
+    }
+}
+
+void ComicImageView::setImage(const Page &img1, bool preserveangle)
 {
         if (!preserveangle)
                 iangle = 0;
 
 	imgs = 1;
-	orgimg[0] = img1;
+        deletePages();
+	orgimg[0] = new Page(img1);
 
         redrawImages();
 }
 
-void ComicImageView::setImage(const QImage &img1, const QImage &img2, bool preserveangle)
+void ComicImageView::setImage(const Page &img1, const Page &img2, bool preserveangle)
 {
         if (!preserveangle)
                 iangle = 0;
 
 	imgs = 2;
-	orgimg[0] = img1;
-	orgimg[1] = img2;
+        deletePages();
+	orgimg[0] = new Page(img1);
+	orgimg[1] = new Page(img2);
 
 	redrawImages();
 }
@@ -253,26 +269,26 @@ void ComicImageView::redrawImages()
 	{
 		if (iangle == 0 || iangle == 2)
 		{
-			totalWidth = orgimg[0].width();
-			totalHeight = orgimg[0].height();
+			totalWidth = orgimg[0]->width();
+			totalHeight = orgimg[0]->height();
 		}
 		else
 		{
-			totalWidth = orgimg[0].height();
-			totalHeight = orgimg[0].width();
+			totalWidth = orgimg[0]->height();
+			totalHeight = orgimg[0]->width();
 		}
 	}
 	else
 	{
 		if (iangle == 0 || iangle == 2)
 		{
-			totalWidth = orgimg[0].width() + orgimg[1].width();
-			totalHeight = std::max(orgimg[0].height(), orgimg[1].height());
+			totalWidth = orgimg[0]->width() + orgimg[1]->width();
+			totalHeight = std::max(orgimg[0]->height(), orgimg[1]->height());
 		}
 		else
 		{
-			totalWidth = std::max(orgimg[0].height(), orgimg[1].height());
-			totalHeight = orgimg[0].width() + orgimg[1].width();
+			totalWidth = std::max(orgimg[0]->height(), orgimg[1]->height());
+			totalHeight = orgimg[0]->width() + orgimg[1]->width();
 		}
 	}
 	
@@ -294,31 +310,31 @@ void ComicImageView::redrawImages()
 	}
 	if (imgs == 1)
 	{
-		p.drawImage(0, 0, orgimg[0], 0, 0);
-                if (pagenumbers)
-                {
-                    p.setWorldMatrixEnabled(false);
-                    drawPageNumber(0, p, pixmap.width(), pixmap.height()); //FIXME - page num
-                }
+            p.drawImage(0, 0, orgimg[0]->getImage(), 0, 0);
+            if (pagenumbers)
+            {
+                p.setWorldMatrixEnabled(false);
+                drawPageNumber(orgimg[0]->getNumber(), p, pixmap.width(), pixmap.height());
+            }
 	}
 	else
 	{
             // clear areas not covered by page (if pages sizes differ)
             for (int i=0; i<2; i++)
             {
-                if (orgimg[i].height() < std::max(orgimg[0].height(), orgimg[1].height()))
+                if (orgimg[i]->height() < std::max(orgimg[0]->height(), orgimg[1]->height()))
                 {
-                    p.fillRect(i*orgimg[0].width(), orgimg[i].height(), orgimg[i].width(), totalHeight - orgimg[i].height(), background);
+                    p.fillRect(i*orgimg[0]->width(), orgimg[i]->height(), orgimg[i]->width(), totalHeight - orgimg[i]->height(), background);
                     break; //only one page may be smaller
                 }
             }
             
-            p.drawImage(0, 0, orgimg[0], 0, 0);
-            p.drawImage(orgimg[0].width(), 0, orgimg[1], 0, 0);
+            p.drawImage(0, 0, orgimg[0]->getImage(), 0, 0);
+            p.drawImage(orgimg[0]->width(), 0, orgimg[1]->getImage(), 0, 0);
             if (pagenumbers)
             {
                 p.setWorldMatrixEnabled(false);
-                drawPageNumber(0, p, pixmap.width(), pixmap.height()); //FIXME - page num
+                drawPageNumber(std::max(orgimg[0]->getNumber(), orgimg[1]->getNumber()), p, pixmap.width(), pixmap.height());
             }
 	}
         
