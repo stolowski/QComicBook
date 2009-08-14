@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005 Pawel Stolowski <pawel.stolowski@wp.pl>
+ * Copyright (C) 2005-2009 Pawel Stolowski <pawel.stolowski@wp.pl>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -21,8 +21,8 @@
 #include <QPainter>
 #include <QPalette>
 #include <QScrollBar>
-#include <qbitmap.h>
-#include <qcursor.h>
+#include <QBitmap>
+#include <QCursor>
 #include <algorithm>
 
 using namespace QComicBook;
@@ -30,9 +30,10 @@ using namespace QComicBook;
 const int ComicImageView::EXTRA_WHEEL_SPIN = 3;
 const float ComicImageView::JUMP_FACTOR = 0.85f;
 
-ComicImageView::ComicImageView(QWidget *parent, Size size, const QColor &color): QScrollArea(parent),
-	isize(size), iangle(0), xoff(0), yoff(0), imgs(0), totalWidth(0), totalHeight(0),
-	lx(-1),	wheelupcnt(0), wheeldowncnt(0), smallcursor(NULL)
+ComicImageView::ComicImageView(QWidget *parent, Size size, const QColor &color)
+  : QScrollArea(parent),
+    isize(size), iangle(0), xoff(0), yoff(0), imgs(0), totalWidth(0), totalHeight(0),
+    lx(-1), wheelupcnt(0), wheeldowncnt(0), smallcursor(NULL), pagenumbers(false)
 {
         context_menu = new QMenu(this);
         //setFocusPolicy(QWidget::StrongFocus);
@@ -233,6 +234,16 @@ void ComicImageView::updateImageSize()
         spdy = h / 100;
 }
 
+void ComicImageView::drawPageNumber(int page, QPainter &p, int x, int y)
+{
+    const QString pagestr(QString::number(page));
+    const QFontMetrics mtr(p.fontMetrics());
+    const int txtw(mtr.width(pagestr));
+    p.setPen(Qt::black);
+    p.fillRect(x - txtw - 5, y - 2 - mtr.height(), txtw + 5, mtr.height() + 4, Qt::white);
+    p.drawText(x - txtw - 4, y - 4, pagestr);
+}
+
 void ComicImageView::redrawImages()
 {
 	if (imgs < 1)
@@ -266,8 +277,9 @@ void ComicImageView::redrawImages()
 	}
 	
 	QPixmap pixmap(totalWidth, totalHeight);
-	QPainter p(&pixmap);
-	if (iangle > 0)
+        QPainter p(&pixmap);
+      
+      	if (iangle > 0)
 	{
 		rmtx.reset();
 		if (iangle == 1)
@@ -280,15 +292,36 @@ void ComicImageView::redrawImages()
 		p.setWorldMatrix(rmtx);
 		p.setWorldMatrixEnabled(true);
 	}
-	if (imgs  == 1)
+	if (imgs == 1)
 	{
 		p.drawImage(0, 0, orgimg[0], 0, 0);
+                if (pagenumbers)
+                {
+                    p.setWorldMatrixEnabled(false);
+                    drawPageNumber(0, p, pixmap.width(), pixmap.height()); //FIXME - page num
+                }
 	}
 	else
 	{
-		p.drawImage(0, 0, orgimg[0], 0, 0);
-		p.drawImage(orgimg[0].width(), 0, orgimg[1], 0, 0);
+            // clear areas not covered by page (if pages sizes differ)
+            for (int i=0; i<2; i++)
+            {
+                if (orgimg[i].height() < std::max(orgimg[0].height(), orgimg[1].height()))
+                {
+                    p.fillRect(i*orgimg[0].width(), orgimg[i].height(), orgimg[i].width(), totalHeight - orgimg[i].height(), background);
+                    break; //only one page may be smaller
+                }
+            }
+            
+            p.drawImage(0, 0, orgimg[0], 0, 0);
+            p.drawImage(orgimg[0].width(), 0, orgimg[1], 0, 0);
+            if (pagenumbers)
+            {
+                p.setWorldMatrixEnabled(false);
+                drawPageNumber(0, p, pixmap.width(), pixmap.height()); //FIXME - page num
+            }
 	}
+        
 	p.end();
 	imgLabel->setPixmap(pixmap);
 	imgLabel->adjustSize();
@@ -451,9 +484,10 @@ void ComicImageView::enableScrollbars(bool f)
 
 void ComicImageView::setBackground(const QColor &color)
 {
-	QPalette palette;
-	palette.setColor(backgroundRole(), color);
-	setPalette(palette);
+    background = color;
+    QPalette palette;
+    palette.setColor(backgroundRole(), color);
+    setPalette(palette);
 }
 
 void ComicImageView::setSmallCursor(bool f)
@@ -484,6 +518,15 @@ void ComicImageView::setSmallCursor(bool f)
                 smallcursor = NULL;
 		unsetCursor();
         }
+}
+
+void ComicImageView::showPageNumbers(bool f)
+{
+    if (pagenumbers != f)
+    {
+        pagenumbers = f;
+    }
+    redrawImages();
 }
 
 void ComicImageView::clear()

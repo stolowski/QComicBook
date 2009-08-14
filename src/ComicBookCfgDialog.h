@@ -35,6 +35,7 @@ namespace QComicBook
 			ComicBookSettings *cfg;
 			QCheckBox *cb_twopagesstep;
 			QCheckBox *cb_smallcursor;
+                        QCheckBox *cb_embedpagenumbers;
 			QCheckBox *cb_hidemenu;
 			QCheckBox *cb_hidestatus;
 			QCheckBox *cb_hidetoolbar;

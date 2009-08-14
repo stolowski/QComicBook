@@ -93,6 +93,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), sink(NUL
 
         cfg->restoreDockLayout(this);
 
+        connect(cfg, SIGNAL(displaySettingsChanged()), this, SLOT(reconfigureDisplay()));
         enableComicBookActions(false);
 }
 
@@ -218,9 +219,7 @@ void ComicMainWindow::setupComicImageView()
         view = new ComicImageView(this, cfg->pageSize(), cfg->background());
         setCentralWidget(view);
         view->setFocus();
-        view->setSmallCursor(cfg->smallCursor());
-        connect(cfg, SIGNAL(backgroundChanged(const QColor&)), view, SLOT(setBackground(const QColor&)));
-        connect(cfg, SIGNAL(cursorChanged(bool)), view, SLOT(setSmallCursor(bool)));
+        reconfigureDisplay();
         connect(fullScreenAction, SIGNAL(triggered(bool)), this, SLOT(toggleFullScreen()));
         connect(pageTopAction, SIGNAL(triggered(bool)), view, SLOT(scrollToTop()));
         connect(pageBottomAction, SIGNAL(triggered(bool)), view, SLOT(scrollToBottom()));
@@ -1037,3 +1036,9 @@ void ComicMainWindow::saveSettings()
         bookmarks->save();        
 }
 
+void ComicMainWindow::reconfigureDisplay()
+{
+    view->setSmallCursor(cfg->smallCursor());
+    view->showPageNumbers(cfg->embedPageNumbers());
+    view->setBackground(cfg->background());
+}

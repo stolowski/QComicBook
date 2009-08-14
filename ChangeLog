@@ -1,3 +1,8 @@
+2009-08-xx:  0.4.2       -- fixed compilation warnings (no return values in two methods)
+	                 -- fixed compilation problems due to hardcoded moc-qt4 name
+	                 -- removed duplicated code in bookmarks handling
+	                 -- removed bnv_have_qt as it was no longer really used
+
 2009-08-11:  0.4.1       -- fixed freezing when unpacking some archives (in particular zip)
 			 -- fixed crash when opening archives via 'Recently opened' menu
 	                 -- thumbnails are now saved with sha1-hashed file names

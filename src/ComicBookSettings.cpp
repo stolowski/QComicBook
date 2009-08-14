@@ -34,6 +34,7 @@
 #define OPT_STATUSBAR                "/Statusbar"
 #define OPT_FONT                     "/InfoFont"
 #define OPT_SMALLCURSOR              "/SmallCursor"
+#define OPT_EMBEDPAGENUMBERS         "/EmbedPageNumbers"
 
 #define GRP_NAVI                     "/Navigation"
 #define OPT_CONTSCROLL               "/ContinuousScroll"
@@ -142,6 +143,7 @@ void ComicBookSettings::load()
 		docklayout = cfg->value(OPT_DOCKLAYOUT).toByteArray();
 	cfg->endGroup();
 	cfg->beginGroup(GRP_VIEW);
+                embedpagenumbers = cfg->value(OPT_EMBEDPAGENUMBERS, false).toBool();
 		smallcursor = cfg->value(OPT_SMALLCURSOR, false).toBool();
 		twopages = cfg->value(OPT_TWOPAGES, false).toBool();
 		japanese = cfg->value(OPT_JAPANESEMODE, false).toBool();
@@ -182,6 +184,11 @@ void ComicBookSettings::load()
 		if (tmpdir.isNull() || !dir.exists())
 			tmpdir = "/tmp";
 	cfg->endGroup();
+}
+
+bool ComicBookSettings::embedPageNumbers() const
+{
+    return embedpagenumbers;
 }
 
 bool ComicBookSettings::smallCursor() const
@@ -329,12 +336,21 @@ QString ComicBookSettings::tmpDir() const
 	return tmpdir;
 }
 
+void ComicBookSettings::embedPageNumbers(bool f)
+{
+	if (f != embedpagenumbers)
+	{
+		cfg->setValue(GRP_VIEW OPT_EMBEDPAGENUMBERS, embedpagenumbers = f);
+                emit displaySettingsChanged();
+	}
+}
+
 void ComicBookSettings::smallCursor(bool f)
 {
 	if (f != smallcursor)
 	{
 		cfg->setValue(GRP_VIEW OPT_SMALLCURSOR, smallcursor = f);
-		emit cursorChanged(f);
+		emit displaySettingsChanged();
 	}
 }
 
@@ -406,7 +422,7 @@ void ComicBookSettings::background(const QColor &color)
 	{
 		bgcolor = color;
 		cfg->setValue(GRP_VIEW OPT_BACKGROUND, bgcolor.name());
-		emit backgroundChanged(bgcolor);
+		emit displaySettingsChanged();
 	}
 }
 

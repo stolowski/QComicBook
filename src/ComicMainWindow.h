@@ -142,6 +142,7 @@ namespace QComicBook
 			void bookmarkSelected(QAction *action);
 			void thumbnailsWindowShown();
 			void savePageAs();
+                        void reconfigureDisplay();
 
 		public slots:
 			void firstPage();

@@ -42,9 +42,11 @@ namespace QComicBook
 			QMatrix rmtx; //rotation matrix
 			int spdx, spdy; //scroll speed
 			int xoff, yoff;
-			int lx, ly; //last mouse position when tracking mouse moves
+			int lx, ly; //last mouse position when tracking mouse movements
 			int wheelupcnt, wheeldowncnt;
 			QCursor *smallcursor;
+                        QColor background; //background color
+                        bool pagenumbers; //if page numbers should be embedded
 			static const int EXTRA_WHEEL_SPIN; //number of extra wheel spins to flip the page
 			static const float JUMP_FACTOR; //factor used to calculate the amount of space to scroll when scrolling page with space
 			QLabel *imgLabel;
@@ -67,6 +69,7 @@ namespace QComicBook
 			virtual void mouseReleaseEvent(QMouseEvent *e);
 			virtual void mouseDoubleClickEvent(QMouseEvent *e);
 			void scrollByDelta(int dx, int dy);
+                        void drawPageNumber(int page, QPainter &p, int x, int y);
 
 		public slots:
 			
@@ -98,6 +101,7 @@ namespace QComicBook
 			void enableScrollbars(bool f);
 			void setBackground(const QColor &color);
 			void setSmallCursor(bool f);
+                        void showPageNumbers(bool f);
 
 		public:
 			ComicImageView(QWidget *parent, Size size=Original, const QColor &color=Qt::black);

@@ -90,6 +90,10 @@ void ComicBookCfgDialog::setupDisplayTab()
 	cb_smallcursor = new QCheckBox(tr("Small mouse cursor"), w);
 	cb_smallcursor->setChecked(cfg->smallCursor());
 	lay->addWidget(cb_smallcursor);
+
+        cb_embedpagenumbers = new QCheckBox(tr("Embed page numbers"), w);
+        cb_embedpagenumbers->setChecked(cfg->embedPageNumbers());
+        lay->addWidget(cb_embedpagenumbers);
 		
 	//
 	// scaling method
@@ -197,6 +201,7 @@ void ComicBookCfgDialog::accept()
 	cfg->fullScreenHideStatusbar(cb_hidestatus->isChecked());
 	cfg->fullScreenHideToolbar(cb_hidetoolbar->isChecked());
 	cfg->smallCursor(cb_smallcursor->isChecked());
+        cfg->embedPageNumbers(cb_embedpagenumbers->isChecked());
 	/*if (rb_smooth->isChecked())
 		cfg->pageScaling(Smooth);
 	else

@@ -35,6 +35,7 @@ namespace QComicBook
 
 		private:
 			QSettings *cfg;
+                        bool embedpagenumbers;
 			bool smallcursor;
 			bool twopages;
 			bool twopagesstep;
@@ -73,17 +74,17 @@ namespace QComicBook
 			//static const EnumMap<Scaling> scaling2string[];
 
 		signals:
-			void backgroundChanged(const QColor &color);
 			//void scalingMethodChanged(Scaling s);
-			void cursorChanged(bool f);
+                        void displaySettingsChanged();
 
 		private:
 			ComicBookSettings();
-			~ComicBookSettings();
+			virtual ~ComicBookSettings();
 
 		public:
 			void load();
 
+                        bool embedPageNumbers() const;
 			bool smallCursor() const;
 			bool twoPagesMode() const;
 			bool twoPagesStep() const;
@@ -114,6 +115,7 @@ namespace QComicBook
 			bool showSplash() const;
 			QString tmpDir() const;
 
+                        void embedPageNumbers(bool f);
 			void smallCursor(bool f);
 			void twoPagesMode(bool f);
 			void twoPagesStep(bool f);
