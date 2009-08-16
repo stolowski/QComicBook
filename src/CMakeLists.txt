@@ -25,7 +25,10 @@ SET(qcomicbook_moc_hdrs
 		 ThumbnailsWindow.h 
 		 ThumbnailsView.h)
 
+SET(qcomicbook_ui ConfigDialog.ui BookmarkManager.ui)
+
 QT4_WRAP_CPP(qcomicbook_moc_src ${qcomicbook_moc_hdrs})
-ADD_EXECUTABLE(qcomicbook ${qcomicbook_src} ${qcomicbook_moc_src})
+QT4_WRAP_UI(qcomicbook_ui_src ${qcomicbook_ui})
+ADD_EXECUTABLE(qcomicbook ${qcomicbook_src} ${qcomicbook_moc_src} ${qcomicbook_ui_src})
 TARGET_LINK_LIBRARIES(qcomicbook ${QT_LIBRARIES})
 INSTALL(TARGETS qcomicbook DESTINATION bin)

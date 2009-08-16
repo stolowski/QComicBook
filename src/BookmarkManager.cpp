@@ -22,43 +22,8 @@ using namespace QComicBook;
 
 BookmarkManager::BookmarkManager(QWidget *parent, Bookmarks *b): QWidget(parent, Qt::Dialog), bookmarks(b)
 {
-    setWindowTitle(tr("QComicBook Bookmarks"));
-    setWindowModality(Qt::WindowModal);
-    
-    QVBoxLayout *box0 = new QVBoxLayout(this);
-    lview = new QTreeWidget(this);
-    QStringList labels;
-    labels << tr("Name") << tr("Page");
-    lview->setHeaderLabels(labels);
-    lview->setSelectionMode(QAbstractItemView::MultiSelection);
-    box0->addWidget(lview);
-	
-    QHBoxLayout *box1 = new QHBoxLayout(NULL);
-    
-    QPushButton *b_selall = new QPushButton(tr("Select all"), this);
-    box1->addWidget(b_selall);
-    box1->addStretch();
-    
-    QPushButton *b_selrev = new QPushButton(tr("Invert selection"), this);
-    box1->addWidget(b_selrev);
-    box1->addStretch(0);
-		
-    b_selinv = new QPushButton(tr("Select invalid"), this);
-    box1->addWidget(b_selinv);
-    box1->addStretch();
-    
-    QPushButton *b_selnone = new QPushButton(tr("Clear selection"), this);
-    box1->addWidget(b_selnone);
-    box1->addStretch(1);
-    
-    b_remsel = new QPushButton(tr("Remove selected"), this);
-    box1->addWidget(b_remsel);
-    box1->addStretch();
-    
-    QPushButton *b_ok = new QPushButton(tr("Close"), this);
-    box1->addWidget(b_ok);
-    box0->addLayout(box1);
-    
+    setupUi(this);
+
     initBookmarkView();
     
     connect(lview, SIGNAL(itemSelectionChanged()), this, SLOT(selectionChanged()));
