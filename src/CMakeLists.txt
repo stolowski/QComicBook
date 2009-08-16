@@ -25,7 +25,7 @@ SET(qcomicbook_moc_hdrs
 		 ThumbnailsWindow.h 
 		 ThumbnailsView.h)
 
-SET(qcomicbook_ui ConfigDialog.ui BookmarkManager.ui)
+SET(qcomicbook_ui AboutDialog.ui ConfigDialog.ui BookmarkManager.ui)
 
 QT4_WRAP_CPP(qcomicbook_moc_src ${qcomicbook_moc_hdrs})
 QT4_WRAP_UI(qcomicbook_ui_src ${qcomicbook_ui})
