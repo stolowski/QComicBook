@@ -23,7 +23,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -204,8 +204,11 @@
             </item>
             <item>
              <widget class="QSpinBox" name="sb_cachesize">
+              <property name="suffix">
+               <string notr="true">Mb</string>
+              </property>
               <property name="prefix">
-               <string>Mb</string>
+               <string notr="true"/>
               </property>
               <property name="minimum">
                <number>1</number>
