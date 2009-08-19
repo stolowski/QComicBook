@@ -1,0 +1,29 @@
+<RCC>
+  <qresource prefix="icons" >
+    <file>bestfit.png</file>
+    <file>bookmark.png</file>
+    <file>fbackward.png</file>
+    <file>fforward.png</file>
+    <file>fitheight.png</file>
+    <file>fitwidth.png</file>
+    <file>prevpage.png</file>
+    <file>pagetop.png</file>
+    <file>pagebottom.png</file>
+    <file>orgsize.png</file>
+    <file>opendir.png</file>
+    <file>openarch.png</file>
+    <file>nextpage.png</file>
+    <file>japanese.png</file>
+    <file>info.png</file>
+    <file>qcomicbook.png</file>
+    <file>rleft.png</file>
+    <file>rright.png</file>
+    <file>settings.png</file>
+    <file>thumbnails.png</file>
+    <file>twopages.png</file>
+    <file>wholepage.png</file>
+  </qresource>
+  <qresource prefix="images" >
+    <file>qcomicbook-splash.png</file>
+  </qresource>
+</RCC>

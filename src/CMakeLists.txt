@@ -1,7 +1,7 @@
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR})
 SET(qcomicbook_src AboutDialog.cpp Bookmark.cpp BookmarkManager.cpp
 	Bookmarks.cpp ComicBookCfgDialog.cpp ComicBookInfo.cpp ComicBookSettings.cpp ComicMainWindow.cpp DirReader.cpp
-	History.cpp Icons.cpp IconViewThumbnail.cpp ImgArchiver.cpp ImgArchiveSink.cpp
+	History.cpp IconViewThumbnail.cpp ImgArchiver.cpp ImgArchiveSink.cpp
 	ImgCache.cpp
 	ImgDirSink.cpp ImgLoader.cpp ImgSinkFactory.cpp ComicImageView.cpp
 	JumpToPageWindow.cpp ListViewThumbnail.cpp main.cpp Utility.cpp Page.cpp PageNumberEdit.cpp
@@ -25,10 +25,11 @@ SET(qcomicbook_moc_hdrs
 		 ThumbnailsWindow.h 
 		 ThumbnailsView.h)
 
-SET(qcomicbook_ui AboutDialog.ui ConfigDialog.ui BookmarkManager.ui)
+SET(qcomicbook_ui AboutDialog.ui ConfigDialog.ui BookmarkManager.ui ComicMainWindow.ui)
 
+QT4_ADD_RESOURCES(qcomicbook_res ../data/qcomicbook.qrc)
 QT4_WRAP_CPP(qcomicbook_moc_src ${qcomicbook_moc_hdrs})
 QT4_WRAP_UI(qcomicbook_ui_src ${qcomicbook_ui})
-ADD_EXECUTABLE(qcomicbook ${qcomicbook_src} ${qcomicbook_moc_src} ${qcomicbook_ui_src})
+ADD_EXECUTABLE(qcomicbook ${qcomicbook_src} ${qcomicbook_moc_src} ${qcomicbook_ui_src} ${qcomicbook_res})
 TARGET_LINK_LIBRARIES(qcomicbook ${QT_LIBRARIES})
 INSTALL(TARGETS qcomicbook DESTINATION bin)

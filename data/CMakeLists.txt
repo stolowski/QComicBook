@@ -1,4 +1,4 @@
-INSTALL(FILES bestfit.png 
+SET(DATA_FILES bestfit.png 
 	     bookmark.png 
 	     fitheight.png 
 	     fitwidth.png 
@@ -20,10 +20,9 @@ INSTALL(FILES bestfit.png
 	     thumbnails.png 
 	     twopages.png 
 	     wholepage.png 
-	     qcomicbook-splash.png
-             DESTINATION share/${PACKAGE})
+	     qcomicbook-splash.png)
 
+INSTALL(FILES ${DATA_FILES} DESTINATION share/${PACKAGE})
 INSTALL(FILES qcomicbook.png DESTINATION share/pixmaps)
-
 INSTALL(FILES qcomicbook.desktop DESTINATION share/applications)
 

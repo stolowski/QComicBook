@@ -16,14 +16,13 @@
 #define __COMIC_MAIN_H
 
 #include <QMainWindow>
+#include "ui_ComicMainWindow.h"
 #include "History.h"
 
-class QAction;
-class QPopupMenu;
+class QMenu;
 class QLabel;
-class QToolBar;
-class QDockWindow;
 class QKeyEvent;
+class QAction;
 
 namespace QComicBook
 {
@@ -36,7 +35,7 @@ namespace QComicBook
 	using Utility::History;
 
 	//! The main window of QComicBook.
-	class ComicMainWindow: public QMainWindow
+	class ComicMainWindow: public QMainWindow, private Ui::ComicMainWindow
 	{
 		Q_OBJECT
 
@@ -50,66 +49,14 @@ namespace QComicBook
 			ComicBookSettings *cfg;
 			int currpage; //!<current page number
 					
-			QToolBar *toolbar;
 			bool savedToolbarState;
-			QMenu *file_menu;
 			QMenu *context_menu;
-			QMenu *view_menu;
-			QMenu *navi_menu;
-			QMenu *recent_menu;
-			QMenu *bookmarks_menu;
-			QMenu *settings_menu;
+			QMenu *menuRecentFiles;
+                        QAction *actionToggleThumbnails;
+                        QAction *actionExitFullScreen;
 			QLabel *pageinfo; //!<page info displayed in right-click context menu
 			QString lastdir; //!<last opened directory for Open File/Directory dialog
-			QAction *toggleScrollbarsAction;
-			QAction *setBookmarkAction;
-			QAction *removeBookmarkAction;
-			QAction *closeAction;
-			QAction *gimpAction;
-			QAction *reloadAction;
-			QAction *jumpToAction;
-			QAction *contScrollAction;
-			QAction *toggleThumbnailsAction;
-			QAction *toggleStatusbarAction;
-			QAction *showInfoAction;
-			QAction *nextPageAction;
-			QAction *prevPageAction;
-			QAction *firstPageAction;
-			QAction *lastPageAction;
-			QAction *fullScreenAction;
-			QAction *exitFullScreenAction;
-			QAction *bestFitAction;
-			QAction *fitWidthAction;
-			QAction *fitHeightAction;
-			QAction *wholePageAction;
-			QAction *originalSizeAction;
-			QAction *forwardPageAction;
-			QAction *backwardPageAction;
-			QAction *pageTopAction;
-			QAction *pageBottomAction;
-			QAction *mangaModeAction;
-			QAction *twoPagesAction;
-			QAction *openNextAction;
-			QAction *openPrevAction;
-			QAction *rotateRightAction;
-			QAction *rotateLeftAction;
-			QAction *rotateResetAction;
-			QAction *scrollLeftFastAction;
-			QAction *scrollRightFastAction;
-			QAction *scrollUpFastAction; 
-			QAction *scrollDownFastAction;
-			QAction *scrollLeftAction;
-			QAction *scrollRightAction;   
-			QAction *scrollUpAction;
-			QAction *scrollDownAction;
-			QAction *jumpDownAction;
-			QAction *jumpUpAction;
-			QAction *togglePreserveRotationAction;
-			QAction *openArchiveAction;
-			QAction *openDirAction;
-			QAction *quitAction;
-			QAction *savePageAction;
-
+		
 		protected:
 			virtual void dragEnterEvent(QDragEnterEvent *e);
 			virtual void dropEvent(QDropEvent *e);
@@ -123,7 +70,6 @@ namespace QComicBook
 			void setupActions();
 			void setupComicImageView();
 			void setupThumbnailsWindow();
-			void setupToolbar();
 			void setupFileMenu();
 			void setupViewMenu();
 			void setupNavigationMenu();

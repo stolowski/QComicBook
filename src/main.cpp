@@ -15,7 +15,6 @@
 #include <QSplashScreen>
 #include <QTimer>
 #include "ImgArchiveSink.h"
-#include "Icons.h"
 #include "ComicMainWindow.h"
 #include "ComicBookSettings.h"
 #include "config.h"
@@ -34,7 +33,7 @@ int main(int argc, char *argv[])
 	QSplashScreen *splash = NULL;
 	if (ComicBookSettings::instance().showSplash())
 	{
-		QPixmap splashpix(DATADIR "/qcomicbook-splash.png");
+		QPixmap splashpix(":/images/qcomicbook-splash.png");
 		if (!splashpix.isNull())
 		{
 			splash = new QSplashScreen(splashpix);
@@ -42,10 +41,6 @@ int main(int argc, char *argv[])
 		}
 	}
 	
-	if (!Icons::init(DATADIR))
-		QMessageBox::critical(NULL, errcaption, ComicMainWindow::tr("Can't initialize icons path") + ":\n" DATADIR,
-				QMessageBox::Ok, QMessageBox::NoButton);
-
 	if (!ComicBookSettings::checkDirs())
 		QMessageBox::critical(NULL, errcaption, ComicMainWindow::tr("Can't initialize QComicBook directories"),
 				QMessageBox::Ok, QMessageBox::NoButton);
