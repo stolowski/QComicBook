@@ -16,6 +16,7 @@
 #include "Page.h"
 #include "ComicBookInfo.h"
 #include "ComicImageView.h"
+#include "ArchiversConfiguration.h"
 #include "ImgArchiveSink.h"
 #include "ImgSinkFactory.h"
 #include "AboutDialog.h"
@@ -503,7 +504,7 @@ void ComicMainWindow::browseDirectory()
 
 void ComicMainWindow::browseArchive()
 {
-        const QString file = QFileDialog::getOpenFileName(this, tr("Choose a file"), lastdir, "Archives (" + ImgArchiveSink::supportedOpenExtensions().join(" ") + ");;All files (*)");
+    const QString file = QFileDialog::getOpenFileName(this, tr("Choose a file"), lastdir, "Archives (" + ArchiversConfiguration::instance().supportedOpenExtensions().join(" ") + ");;All files (*)");
         if (!file.isEmpty())
                 open(file, 0);
 }

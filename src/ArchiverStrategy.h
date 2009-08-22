@@ -18,12 +18,14 @@ namespace QComicBook
         virtual bool canOpen(QFile *f) const;
         virtual bool canOpen(const QString &filename) const;
         QStringList getExtractArguments(const QString &filename) const;
+        QStringList getExtractArguments() const;
         QStringList getListArguments(const QString &filename) const;
+        QStringList getListArguments() const;
         QStringList getExtensions() const;
+        static QStringList fillTemplateArguments(const QStringList &args, const QString &filename);
         virtual void configure() = 0;
 
     protected:
-        static QStringList getArguments(const QStringList & inargs, const QString &filename);
         void setFileMagic(const FileSignature &sig);
         void setExtractArguments(const QString &command);
         void setListArguments(const QString &command);

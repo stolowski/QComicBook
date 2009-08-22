@@ -1,5 +1,6 @@
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR})
 SET(qcomicbook_src
+        ArchiversConfiguration.cpp
         ArchiverStrategy.cpp
         AceArchiverStrategy.cpp
         P7zipArchiverStrategy.cpp
@@ -10,7 +11,7 @@ SET(qcomicbook_src
         FileSignature.cpp 
         AboutDialog.cpp Bookmark.cpp BookmarkManager.cpp
 	Bookmarks.cpp ComicBookCfgDialog.cpp ComicBookInfo.cpp ComicBookSettings.cpp ComicMainWindow.cpp DirReader.cpp
-	History.cpp IconViewThumbnail.cpp ImgArchiver.cpp ImgArchiveSink.cpp
+	History.cpp IconViewThumbnail.cpp ImgArchiveSink.cpp
 	ImgCache.cpp
 	ImgDirSink.cpp ImgLoader.cpp ImgSinkFactory.cpp ComicImageView.cpp
 	JumpToPageWindow.cpp ListViewThumbnail.cpp main.cpp Utility.cpp Page.cpp PageNumberEdit.cpp
@@ -23,7 +24,6 @@ SET(qcomicbook_moc_hdrs
 		 ComicBookCfgDialog.h 
 		 ComicBookSettings.h 
 		 ComicMainWindow.h 
-		 ImgArchiver.h 
 		 ComicImageView.h 
 		 ImgDirSink.h 
 		 ImgArchiveSink.h 

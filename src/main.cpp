@@ -14,7 +14,6 @@
 #include <QMessageBox>
 #include <QSplashScreen>
 #include <QTimer>
-#include "ImgArchiveSink.h"
 #include "ComicMainWindow.h"
 #include "ComicBookSettings.h"
 #include "config.h"
@@ -45,10 +44,6 @@ int main(int argc, char *argv[])
 		QMessageBox::critical(NULL, errcaption, ComicMainWindow::tr("Can't initialize QComicBook directories"),
 				QMessageBox::Ok, QMessageBox::NoButton);
 	
-	//
-	// initialize unpackers
-	ImgArchiveSink::autoconfArchivers();
-		
 	ComicMainWindow *win = new ComicMainWindow(NULL);
 	//app.setMainWidget(win);
 	win->show();

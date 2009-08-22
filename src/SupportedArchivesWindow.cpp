@@ -36,7 +36,7 @@ SupportedArchivesWindow::SupportedArchivesWindow(QWidget *parent): QDialog(paren
 	const QString no = tr("No");
 	
 	QTreeWidgetItem *arch = new QTreeWidgetItem(list, QStringList(tr("Archivers")));
-	const QList<ImgArchiveSink::ArchiveTypeInfo> ainf = ImgArchiveSink::supportedArchivesInfo();
+	/*const QList<ImgArchiveSink::ArchiveTypeInfo> ainf = ImgArchiveSink::supportedArchivesInfo(); FIXME !!!
 	for (QList<ImgArchiveSink::ArchiveTypeInfo>::const_iterator it = ainf.begin(); it!=ainf.end(); it++)
 	{
 		const ImgArchiveSink::ArchiveTypeInfo &inf = *it;
@@ -48,7 +48,7 @@ SupportedArchivesWindow::SupportedArchivesWindow(QWidget *parent): QDialog(paren
 		new QTreeWidgetItem(aitem, opsr);
 		new QTreeWidgetItem(aitem, opsw);
 		aitem->setExpanded(true);
-	}
+                }*/
 	//QTreeWidgetItem *tools = new QTreeWidgetItem(list, QStringList(tr("External tools")));
 
 	list->expandAll();

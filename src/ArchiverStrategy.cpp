@@ -44,7 +44,7 @@ void ArchiverStrategy::setFileMagic(const FileSignature &sig)
     signature = sig;
 }
 
-QStringList ArchiverStrategy::getArguments(const QStringList & inargs, const QString &filename)
+QStringList ArchiverStrategy::fillTemplateArguments(const QStringList & inargs, const QString &filename)
 {
     QStringList args;
     foreach (QString s, inargs)
@@ -73,12 +73,22 @@ void ArchiverStrategy::setListArguments(const QString &command)
 
 QStringList ArchiverStrategy::getExtractArguments(const QString &filename) const
 {
-    return getArguments(extractArgs, filename);
+    return fillTemplateArguments(extractArgs, filename);
+}
+
+QStringList ArchiverStrategy::getExtractArguments() const
+{
+    return extractArgs;
 }
 
 QStringList ArchiverStrategy::getListArguments(const QString &filename) const
 {
-    return getArguments(listArgs, filename);
+    return fillTemplateArguments(listArgs, filename);
+}
+
+QStringList ArchiverStrategy::getListArguments() const
+{
+    return listArgs;
 }
 
 QStringList ArchiverStrategy::getExtensions() const
@@ -88,7 +98,7 @@ QStringList ArchiverStrategy::getExtensions() const
 
 bool ArchiverStrategy::canOpen(QFile *f) const
 {
-    return signature.matches(f);
+    return supported && signature.matches(f);
 }
 
 bool ArchiverStrategy::canOpen(const QString &filename) const
