@@ -10,3 +10,21 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
+#ifndef __P7ZIP_ARCHIVER_STRATEGY_H
+#define __P7ZIP_ARCHIVER_STRATEGY_H
+
+#include "ArchiverStrategy.h"
+
+namespace QComicBook
+{
+    class P7zipArchiverStrategy: public ArchiverStrategy
+    {
+    public:
+        P7zipArchiverStrategy();
+        virtual ~P7zipArchiverStrategy();
+
+        virtual void configure();
+    };
+}
+
+#endif

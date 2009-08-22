@@ -10,3 +10,21 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
+#ifndef __RAR_ARCHIVER_STRATEGY_H
+#define __RAR_ARCHIVER_STRATEGY_H
+
+#include "ArchiverStrategy.h"
+
+namespace QComicBook
+{
+    class RarArchiverStrategy: public ArchiverStrategy
+    {
+    public:
+        RarArchiverStrategy();
+        virtual ~RarArchiverStrategy();
+
+        virtual void configure();
+    };
+}
+
+#endif

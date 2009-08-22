@@ -1,5 +1,14 @@
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR})
-SET(qcomicbook_src AboutDialog.cpp Bookmark.cpp BookmarkManager.cpp
+SET(qcomicbook_src
+        ArchiverStrategy.cpp
+        AceArchiverStrategy.cpp
+        P7zipArchiverStrategy.cpp
+        RarArchiverStrategy.cpp
+        TargzArchiverStrategy.cpp
+        Tarbz2ArchiverStrategy.cpp
+        ZipArchiverStrategy.cpp
+        FileSignature.cpp 
+        AboutDialog.cpp Bookmark.cpp BookmarkManager.cpp
 	Bookmarks.cpp ComicBookCfgDialog.cpp ComicBookInfo.cpp ComicBookSettings.cpp ComicMainWindow.cpp DirReader.cpp
 	History.cpp IconViewThumbnail.cpp ImgArchiver.cpp ImgArchiveSink.cpp
 	ImgCache.cpp

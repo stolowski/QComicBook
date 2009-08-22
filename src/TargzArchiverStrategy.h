@@ -10,3 +10,21 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
+#ifndef __TARGZ_ARCHIVER_STRATEGY_H
+#define __TARGZ_ARCHIVER_STRATEGY_H
+
+#include "ArchiverStrategy.h"
+
+namespace QComicBook
+{
+    class TargzArchiverStrategy: public ArchiverStrategy
+    {
+    public:
+        TargzArchiverStrategy();
+        virtual ~TargzArchiverStrategy();
+
+        virtual void configure();
+    };
+}
+
+#endif

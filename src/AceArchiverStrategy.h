@@ -10,3 +10,21 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
+#ifndef __ACE_ARCHIVER_STRATEGY_H
+#define __ACE_ARCHIVER_STRATEGY_H
+
+#include "ArchiverStrategy.h"
+
+namespace QComicBook
+{
+    class AceArchiverStrategy: public ArchiverStrategy
+    {
+    public:
+        AceArchiverStrategy();
+        virtual ~AceArchiverStrategy();
+
+        virtual void configure();
+    };
+}
+
+#endif
