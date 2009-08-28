@@ -14,10 +14,12 @@ SET(qcomicbook_src
 	History.cpp IconViewThumbnail.cpp ImgArchiveSink.cpp
 	ImgCache.cpp
 	ImgDirSink.cpp ImgLoader.cpp ImgSinkFactory.cpp ComicImageView.cpp
-	JumpToPageWindow.cpp ListViewThumbnail.cpp main.cpp Utility.cpp Page.cpp PageNumberEdit.cpp
+	JumpToPageWindow.cpp ListViewThumbnail.cpp main.cpp Utility.cpp Page.cpp PageNumberEdit.cpp PageWidget.cpp
 	StatusBar.cpp SupportedArchivesWindow.cpp Thumbnail.cpp
 	ThumbnailEvent.cpp ThumbnailItem.cpp ThumbnailLoader.cpp
-	ThumbnailsView.cpp ThumbnailsWindow.cpp)
+	ThumbnailsView.cpp ThumbnailsWindow.cpp
+        ViewProperties.cpp
+)
 
 SET(qcomicbook_moc_hdrs
 		 BookmarkManager.h 
@@ -28,11 +30,14 @@ SET(qcomicbook_moc_hdrs
 		 ImgDirSink.h 
 		 ImgArchiveSink.h 
 		 JumpToPageWindow.h 
+                 PageWidget.h
 		 PageNumberEdit.h 
 		 StatusBar.h 
 		 SupportedArchivesWindow.h 
 		 ThumbnailsWindow.h 
-		 ThumbnailsView.h)
+		 ThumbnailsView.h
+                 ViewProperties.h
+)
 
 SET(qcomicbook_ui AboutDialog.ui ConfigDialog.ui BookmarkManager.ui ComicMainWindow.ui)
 

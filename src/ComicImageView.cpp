@@ -12,12 +12,12 @@
 
 #include "ComicImageView.h"
 #include "Utility.h"
+#include "PageWidget.h"
 #include <QImage>
 #include <QPixmap>
 #include <QMenu>
 #include <QScrollBar>
 #include <QContextMenuEvent>
-#include <QLabel>
 #include <QPainter>
 #include <QPalette>
 #include <QScrollBar>
@@ -31,25 +31,23 @@ const int ComicImageView::EXTRA_WHEEL_SPIN = 3;
 const float ComicImageView::JUMP_FACTOR = 0.85f;
 
 ComicImageView::ComicImageView(QWidget *parent, Size size, const QColor &color)
-  : QScrollArea(parent),
-    isize(size), iangle(0), xoff(0), yoff(0), imgs(0), totalWidth(0), totalHeight(0),
-    lx(-1), wheelupcnt(0), wheeldowncnt(0), smallcursor(NULL), pagenumbers(false)
+  : QScrollArea(parent)
+  , props(size, 0, false)
+  , lx(-1), wheelupcnt(0), wheeldowncnt(0), smallcursor(NULL)
 {
-    orgimg[0] = orgimg[1] = NULL;
     context_menu = new QMenu(this);
     //setFocusPolicy(QWidget::StrongFocus);
-    imgLabel = new QLabel();
+    imgLabel = new PageWidget(this);
     imgLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    imgLabel->setScaledContents(true);
     setWidget(imgLabel);
     
     setBackground(color);
     //setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    connect(&props, SIGNAL(changed()), imgLabel, SLOT(propsChanged()));
 }
 
 ComicImageView::~ComicImageView()
 {
-    deletePages();
 }
 
 void ComicImageView::scrollByDelta(int dx, int dy)
@@ -78,51 +76,30 @@ bool ComicImageView::onBottom()
 
 void ComicImageView::contextMenuEvent(QContextMenuEvent *e)
 {
-	if (imgs > 0)
-		context_menu->popup(e->globalPos());
-}
-
-void ComicImageView::deletePages()
-{
-    for (int i=0; i<2; i++)
-    {
-        if (orgimg[i])
-        {
-            delete orgimg[i];
-            orgimg[i] = NULL;
-        }
-    }
+    //if (imgs > 0)
+    context_menu->popup(e->globalPos());
 }
 
 void ComicImageView::setImage(const Page &img1, bool preserveangle)
 {
-        if (!preserveangle)
-                iangle = 0;
+    //if (!preserveangle)
+    //          iangle = 0;
 
-	imgs = 1;
-        deletePages();
-	orgimg[0] = new Page(img1);
-
-        redrawImages();
+        imgLabel->setImage(img1);
 }
 
 void ComicImageView::setImage(const Page &img1, const Page &img2, bool preserveangle)
 {
-        if (!preserveangle)
-                iangle = 0;
+    //  if (!preserveangle)
+    //          iangle = 0;
 
-	imgs = 2;
-        deletePages();
-	orgimg[0] = new Page(img1);
-	orgimg[1] = new Page(img2);
-
-	redrawImages();
+        imgLabel->setImage(img1), img2;
 }
 
 void ComicImageView::resizeEvent(QResizeEvent *e)
 {
         QScrollArea::resizeEvent(e);
-        updateImageSize();
+        imgLabel->redrawImages();
 }
 
 void ComicImageView::wheelEvent(QWheelEvent *e)
@@ -193,178 +170,14 @@ void ComicImageView::mouseDoubleClickEvent(QMouseEvent *e)
 	emit doubleClick();
 }
 
-void ComicImageView::updateImageSize()
-{
-	if (totalWidth * totalHeight  * imgs == 0)
-		return;
-
-	Size size = isize;
-
-	const double hRatio = static_cast<double>(height()) / totalHeight;
-	const double wRatio = static_cast<double>(width()) / totalWidth;
-
-	int w, h;
-
-        if (size == BestFit)
-        {
-		if (totalWidth > totalHeight)
-			size = FitWidth;
-		else
-			size = FitHeight;
-        }
-       	if (size == Original)
-        {
-		w = totalWidth;
-		h = totalHeight;
-        }
-	else if (size == FitWidth)
-	{
-		w = width();
-		h = static_cast<int>(static_cast<double>(totalHeight) * wRatio);
-	}
-	else if (size == FitHeight)
-	{
-		w = static_cast<int>(static_cast<double>(totalWidth) * hRatio);
-		h = height();
-	}
-	else if (size == WholePage)
-	{
-		const double ratio = std::min(wRatio, hRatio);
-		w = static_cast<int>(static_cast<double>(ratio) * totalWidth);
-		h = static_cast<int>(static_cast<double>(ratio) * totalHeight);
-	}
-
-	xoff = (width() - w) /2 ;
-	yoff = (height() - h) /2;
-
-	if (xoff < 0)
-		xoff = 0;
-	if (yoff < 0)
-		yoff = 0;
-	imgLabel->setContentsMargins(xoff, yoff, 0, 0);
-	imgLabel->setFixedSize(w + xoff, h + yoff);
-	
-	//
-        // update scrolling speeds
-        spdx = w / 100;
-        spdy = h / 100;
-}
-
-void ComicImageView::drawPageNumber(int page, QPainter &p, int x, int y)
-{
-    const QString pagestr(QString::number(page));
-    const QFontMetrics mtr(p.fontMetrics());
-    const int txtw(mtr.width(pagestr));
-    p.setPen(Qt::black);
-    p.fillRect(x - txtw - 5, y - 2 - mtr.height(), txtw + 5, mtr.height() + 4, Qt::white);
-    p.drawText(x - txtw - 4, y - 4, pagestr);
-}
-
-void ComicImageView::redrawImages()
-{
-	if (imgs < 1)
-		return;
-
-	if (imgs  == 1)
-	{
-		if (iangle == 0 || iangle == 2)
-		{
-			totalWidth = orgimg[0]->width();
-			totalHeight = orgimg[0]->height();
-		}
-		else
-		{
-			totalWidth = orgimg[0]->height();
-			totalHeight = orgimg[0]->width();
-		}
-	}
-	else
-	{
-		if (iangle == 0 || iangle == 2)
-		{
-			totalWidth = orgimg[0]->width() + orgimg[1]->width();
-			totalHeight = std::max(orgimg[0]->height(), orgimg[1]->height());
-		}
-		else
-		{
-			totalWidth = std::max(orgimg[0]->height(), orgimg[1]->height());
-			totalHeight = orgimg[0]->width() + orgimg[1]->width();
-		}
-	}
-	
-	QPixmap pixmap(totalWidth, totalHeight);
-        QPainter p(&pixmap);
-      
-      	if (iangle > 0)
-	{
-		rmtx.reset();
-		if (iangle == 1)
-			rmtx.translate(totalWidth, 0);
-		else if (iangle == 3)
-			rmtx.translate(0, totalHeight);
-		else
-			rmtx.translate(totalWidth, totalHeight);
-		rmtx.rotate(static_cast<double>(iangle) * 90.0f);
-		p.setWorldMatrix(rmtx);
-		p.setWorldMatrixEnabled(true);
-	}
-	if (imgs == 1)
-	{
-            p.drawImage(0, 0, orgimg[0]->getImage(), 0, 0);
-            if (pagenumbers)
-            {
-                p.setWorldMatrixEnabled(false);
-                drawPageNumber(orgimg[0]->getNumber(), p, pixmap.width(), pixmap.height());
-            }
-	}
-	else
-	{
-            // clear areas not covered by page (if pages sizes differ)
-            for (int i=0; i<2; i++)
-            {
-                if (orgimg[i]->height() < std::max(orgimg[0]->height(), orgimg[1]->height()))
-                {
-                    p.fillRect(i*orgimg[0]->width(), orgimg[i]->height(), orgimg[i]->width(), totalHeight - orgimg[i]->height(), background);
-                    break; //only one page may be smaller
-                }
-            }
-            
-            p.drawImage(0, 0, orgimg[0]->getImage(), 0, 0);
-            p.drawImage(orgimg[0]->width(), 0, orgimg[1]->getImage(), 0, 0);
-            if (pagenumbers)
-            {
-                p.setWorldMatrixEnabled(false);
-                drawPageNumber(std::max(orgimg[0]->getNumber(), orgimg[1]->getNumber()), p, pixmap.width(), pixmap.height());
-            }
-	}
-        
-	p.end();
-	imgLabel->setPixmap(pixmap);
-	imgLabel->adjustSize();
-
-	updateImageSize();
-}
-
 void ComicImageView::setRotation(Rotation r)
 {
-	if (r == QComicBook::None && iangle == 0)
-		return;
-
-        if (r == QComicBook::Right)
-                ++iangle;
-        else if (r == QComicBook::Left)
-                --iangle;
-        else
-                iangle = 0; //None
-        iangle &= 3;            
-
-	redrawImages();
+    props.setAngle(r);
 }
 
 void ComicImageView::setSize(Size s)
 {
-        isize = s;
-        updateImageSize();
+    props.setSize(s);
 }
 
 void ComicImageView::setSizeOriginal()
@@ -500,7 +313,7 @@ void ComicImageView::enableScrollbars(bool f)
 
 void ComicImageView::setBackground(const QColor &color)
 {
-    background = color;
+    props.setBackground(color);
     QPalette palette;
     palette.setColor(backgroundRole(), color);
     setPalette(palette);
@@ -538,39 +351,37 @@ void ComicImageView::setSmallCursor(bool f)
 
 void ComicImageView::showPageNumbers(bool f)
 {
-    if (pagenumbers != f)
-    {
-        pagenumbers = f;
-    }
-    redrawImages();
+    props.setPageNumbers(f);
 }
 
 void ComicImageView::clear()
 {
-	imgs = 0;
-	imgLabel->setFixedSize(0, 0);
+    imgLabel->dispose();
 }
 
 Size ComicImageView::getSize() const
 {
-        return isize;
+    return props.size();
 }
 			
 int ComicImageView::visiblePages() const
 {
-	return imgs;
+    return imgLabel->numOfPages();
 }
 
 const QPixmap ComicImageView::image() const
 {
-	if (imgs > 0)
-		return QPixmap(*imgLabel->pixmap());
-	return QPixmap(); //fallback
+    if (imgLabel->numOfPages())
+        return QPixmap(*imgLabel->pixmap());
+    return QPixmap(); //fallback
 }
 
 int ComicImageView::viewWidth() const
 {
-	return (imgs > 0) ? imgLabel->width() : 0;
+    return (imgLabel->numOfPages()) ? imgLabel->width() : 0;
 }
 
-
+ViewProperties& ComicImageView::properties()
+{
+    return props;
+}

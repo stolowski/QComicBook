@@ -16,18 +16,18 @@
 #include <QScrollArea>
 #include <QMatrix>
 #include "Page.h"
+#include "ViewProperties.h"
 
 class QMenu;
 class QPixmap;
 class QColor;
 class QCursor;
-class QLabel;
 
 namespace QComicBook
 {
-	enum Size { Original, FitWidth, FitHeight, WholePage, BestFit };
+    class PageWidget;
+
 	enum Scaling { Smooth, Fast };
-	enum Rotation { None, Left, Right };
 
 	class ComicImageView: public QScrollArea
 	{
@@ -35,23 +35,14 @@ namespace QComicBook
 
 		private:
 			QMenu *context_menu;
-			Size isize;
-			Page *orgimg[2];
-			int imgs; //number of images in orgimg array
-			int iangle; //rotation angle, 0..3, multipled by 90
-			QMatrix rmtx; //rotation matrix
+			ViewProperties props;
 			int spdx, spdy; //scroll speed
-			int xoff, yoff;
 			int lx, ly; //last mouse position when tracking mouse movements
 			int wheelupcnt, wheeldowncnt;
 			QCursor *smallcursor;
-                        QColor background; //background color
-                        bool pagenumbers; //if page numbers should be embedded
 			static const int EXTRA_WHEEL_SPIN; //number of extra wheel spins to flip the page
 			static const float JUMP_FACTOR; //factor used to calculate the amount of space to scroll when scrolling page with space
-			QLabel *imgLabel;
-			int totalWidth;
-			int totalHeight;
+			PageWidget *imgLabel;
 
 		signals:
 			void bottomReached();
@@ -59,10 +50,7 @@ namespace QComicBook
 			void doubleClick();
 
 		protected:
-                        void deletePages();
 			void resizeEvent(QResizeEvent *e);
-			void updateImageSize();
-			void redrawImages();
 			virtual void contextMenuEvent(QContextMenuEvent *e);
 			virtual void wheelEvent(QWheelEvent *e);
 			virtual void mouseMoveEvent(QMouseEvent *e);
@@ -70,7 +58,6 @@ namespace QComicBook
 			virtual void mouseReleaseEvent(QMouseEvent *e);
 			virtual void mouseDoubleClickEvent(QMouseEvent *e);
 			void scrollByDelta(int dx, int dy);
-                        void drawPageNumber(int page, QPainter &p, int x, int y);
 
 		public slots:
 			
@@ -106,14 +93,15 @@ namespace QComicBook
 
 		public:
 			ComicImageView(QWidget *parent, Size size=Original, const QColor &color=Qt::black);
-			~ComicImageView();
+			virtual ~ComicImageView();
 			bool onBottom();
 			bool onTop();
 			QMenu *contextMenu() const;
-			Size getSize() const;
+                        Size getSize() const;
 			int visiblePages() const;
 			const QPixmap image() const;
 			int viewWidth() const;
+                        ViewProperties& properties();
 	};
 }
 
