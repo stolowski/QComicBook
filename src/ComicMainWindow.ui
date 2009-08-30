@@ -338,6 +338,9 @@
    </property>
   </action>
   <action name="actionTwoPages">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="../data/qcomicbook.qrc">
      <normaloff>:/icons/twopages.png</normaloff>:/icons/twopages.png</iconset>
@@ -350,6 +353,9 @@
    </property>
   </action>
   <action name="actionMangaMode">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="../data/qcomicbook.qrc">
      <normaloff>:/icons/japanese.png</normaloff>:/icons/japanese.png</iconset>
