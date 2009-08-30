@@ -145,7 +145,7 @@ void ComicMainWindow::setupActions()
 
 void ComicMainWindow::setupComicImageView()
 {
-        view = new ComicImageView(this, cfg->pageSize(), cfg->background());
+    view = new ComicImageView(this, 0, actionTwoPages->isChecked(), cfg->pageSize(), cfg->background());
         setCentralWidget(view);
         view->setFocus();
         reconfigureDisplay();
@@ -173,6 +173,8 @@ void ComicMainWindow::setupComicImageView()
         connect(actionNoRotation, SIGNAL(triggered(bool)), view, SLOT(resetRotation()));
         connect(actionJumpDown, SIGNAL(triggered()), view, SLOT(jumpDown()));
         connect(actionJumpUp, SIGNAL(triggered()), view, SLOT(jumpUp()));
+        connect(view, SIGNAL(requestPage(int)), this, SLOT(pageRequested(int)));
+        connect(view, SIGNAL(requestTwoPages(int)), this, SLOT(twoPagesRequested(int)));
         if (cfg->continuousScrolling())
         {
                 connect(view, SIGNAL(bottomReached()), this, SLOT(nextPage()));
@@ -393,8 +395,9 @@ void ComicMainWindow::toggleContinousScroll()
 
 void ComicMainWindow::toggleTwoPages(bool f)
 {
-        actionTwoPages->setChecked(f);
-        jumpToPage(currpage, true);
+//        actionTwoPages->setChecked(f);
+    view->setTwoPagesMode(f);
+    jumpToPage(currpage, true);
 }
 
 void ComicMainWindow::toggleJapaneseMode(bool f)
@@ -458,6 +461,7 @@ void ComicMainWindow::sinkReady(const QString &path)
         updateCaption();
         statusbar->setName(sink->getFullName());
 
+        view->setNumOfPages(sink->numOfImages()); //FIXME
         thumbswin->view()->setPages(sink->numOfImages());
 
         //
@@ -890,4 +894,38 @@ void ComicMainWindow::reconfigureDisplay()
     view->setSmallCursor(cfg->smallCursor());
     view->showPageNumbers(cfg->embedPageNumbers());
     view->setBackground(cfg->background());
+}
+
+void ComicMainWindow::pageRequested(int n)
+{
+    if (sink)
+    {
+        const bool preserveangle = actionTogglePreserveRotation->isChecked();
+        int result;
+        Page img1 = sink->getImage(n, result);
+        if (result == 0)
+        {
+            view->setImage(img1, preserveangle);
+        }
+        if (cfg->preloadPages())
+        {
+            sink->preload(n + 1);
+        }
+    }
+}
+
+void ComicMainWindow::twoPagesRequested(int n)
+{
+    if (sink)
+    {
+        const bool preserveangle = actionTogglePreserveRotation->isChecked();
+        int result1, result2;
+        Page img1 = sink->getImage(currpage = n, result1);
+        Page img2 = sink->getImage(currpage + 1, result2);
+        if (result2 == 0)
+        {
+//TODO
+            view->setImage(img1, img2, preserveangle);
+        }
+    }
 }

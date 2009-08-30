@@ -89,6 +89,8 @@ namespace QComicBook
 			void thumbnailsWindowShown();
 			void savePageAs();
                         void reconfigureDisplay();
+                        void pageRequested(int n);
+                        void twoPagesRequested(int n);
 
 		public slots:
 			void firstPage();

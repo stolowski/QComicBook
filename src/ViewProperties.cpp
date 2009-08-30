@@ -2,10 +2,11 @@
 
 using namespace QComicBook;
 
-ViewProperties::ViewProperties(Size size, unsigned char angle, bool pagenumbers)
+ViewProperties::ViewProperties(Size size, unsigned char angle, bool pagenumbers, bool contScroll)
     : m_size(size)
     , m_angle(angle)
     , m_pageNumbers(pagenumbers)
+    , m_contScroll(contScroll)
 {
 }
 
@@ -70,4 +71,9 @@ void ViewProperties::setBackground(const QColor &c)
         m_background = c;
         emit changed();
     }
+}
+
+bool ViewProperties::continuousScrolling() const
+{
+    return m_contScroll;
 }

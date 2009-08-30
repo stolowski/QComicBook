@@ -16,19 +16,21 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <QSizePolicy>
+#include <QScrollBar>
 
 using namespace QComicBook;
 
-PageWidget::PageWidget(ComicImageView *parent)
+PageWidget::PageWidget(ComicImageView *parent, int pageNum)
     : QWidget(parent)
     , view(parent)
+    , m_pageNum(pageNum)
     , m_pixmap(NULL)
     , pageSize(1, 1)
     , estimated(true)
 {
     m_image[0] = m_image[1] = NULL;
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    setFixedSize(0, 0);
+    setFixedSize(1, 1);
 }
 
 PageWidget::~PageWidget()
@@ -49,8 +51,6 @@ void PageWidget::setImage(const Page &img1)
 {
     deletePages();
     m_image[0] = new Page(img1);
-    pageSize = QSize(img1.width(), img1.height());
-    estimated = false;
     redrawImages();
 }
 
@@ -59,8 +59,6 @@ void PageWidget::setImage(const Page &img1, const Page &img2)
     deletePages();
     m_image[0] = new Page(img1);
     m_image[1] = new Page(img2);
-    pageSize = QSize(img1.width() + img2.width(), std::max(img1.height(), img2.height()));
-    estimated = false;
     redrawImages();
 }
 
@@ -74,6 +72,11 @@ void PageWidget::dispose()
     delete m_pixmap;
     m_pixmap = NULL;
     deletePages();
+}
+
+bool PageWidget::isDisposed() const
+{
+    return m_pixmap == NULL;
 }
 
 void PageWidget::setEstimatedSize(int w, int h)
@@ -93,6 +96,21 @@ bool PageWidget::estimatedSize() const
     return estimated;
 }
 
+bool PageWidget::isInView() const
+{
+    const int y1 = pos().y();
+    const int y2 = y1 + pageSize.height();
+    const int vy1 = view->verticalScrollBar()->value();
+    const int vy2 = vy1 + view->viewport()->height();
+
+    return (y1 >= vy1 && y1 <= vy2) || (y2 >= vy1 && y2 <= vy2) || (y1 <= vy1 && y2 >= vy2);
+}
+
+int PageWidget::pageNumber() const
+{
+    return m_pageNum;
+}
+
 void PageWidget::drawPageNumber(int page, QPainter &p, int x, int y)
 {
     const QString pagestr(QString::number(page));
@@ -105,6 +123,9 @@ void PageWidget::drawPageNumber(int page, QPainter &p, int x, int y)
 
 void PageWidget::redrawImages()
 {
+    const int viewW = view->viewport()->width();
+    const int viewH = view->viewport()->height();
+
     const int pages = numOfPages();
 
     int totalWidth, totalHeight;
@@ -152,8 +173,8 @@ void PageWidget::redrawImages()
     
     Size size = props.size();
 
-    const double hRatio = static_cast<double>(view->height()) / totalHeight;
-    const double wRatio = static_cast<double>(view->width()) / totalWidth;
+    const double hRatio = static_cast<double>(viewH) / totalHeight;
+    const double wRatio = static_cast<double>(viewW) / totalWidth;
 
     int pixmapWidth, pixmapHeight; //resulting image size (1 or 2 pages with scaling and rotation applied)
 
@@ -171,13 +192,13 @@ void PageWidget::redrawImages()
     }
     else if (size == FitWidth)
     {
-        pixmapWidth = view->width();
+        pixmapWidth = viewW;
         pixmapHeight = static_cast<int>(static_cast<double>(totalHeight) * wRatio);
     }
     else if (size == FitHeight)
     {
         pixmapWidth = static_cast<int>(static_cast<double>(totalWidth) * hRatio);
-        pixmapHeight = view->height();
+        pixmapHeight = viewH;
     }
     else if (size == WholePage)
     {
@@ -186,8 +207,10 @@ void PageWidget::redrawImages()
         pixmapHeight = static_cast<int>(static_cast<double>(ratio) * totalHeight);
     }
     
-    xoff = (view->width() - pixmapWidth) /2 ;
-    yoff = (view->height() - pixmapHeight) /2;
+    xoff = (viewW - pixmapWidth) / 2;
+    yoff = props.continuousScrolling() ? 0 : (viewH - pixmapHeight) / 2;
+
+    pageSize = QSize(pixmapWidth, pixmapHeight);
     
     if (xoff < 0)
         xoff = 0;
@@ -196,6 +219,8 @@ void PageWidget::redrawImages()
 
     if (pages > 0)
     {
+        estimated = false;
+
         if (m_pixmap == NULL || m_pixmap->width() != pixmapWidth || m_pixmap->height() != pixmapHeight)
         {
             delete m_pixmap;

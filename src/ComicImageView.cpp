@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005-2009 Pawel Stolowski <pawel.stolowski@wp.pl>
+ * Copyright (C) 2005-2009 Pawel Stolowski <stolowski@gmail.com>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -23,6 +23,7 @@
 #include <QScrollBar>
 #include <QBitmap>
 #include <QCursor>
+#include <QtGlobal>
 #include <algorithm>
 
 using namespace QComicBook;
@@ -30,24 +31,202 @@ using namespace QComicBook;
 const int ComicImageView::EXTRA_WHEEL_SPIN = 3;
 const float ComicImageView::JUMP_FACTOR = 0.85f;
 
-ComicImageView::ComicImageView(QWidget *parent, Size size, const QColor &color)
+ComicImageView::ComicImageView(QWidget *parent, int physicalPages, bool twoPagesMode, Size size, const QColor &color)
   : QScrollArea(parent)
-  , props(size, 0, false)
+  , props(size, 0, false, true)
+  , m_physicalPages(physicalPages)
+  , m_twoPagesMode(twoPagesMode)
+  , m_contMode(false)
   , lx(-1), wheelupcnt(0), wheeldowncnt(0), smallcursor(NULL)
 {
     context_menu = new QMenu(this);
     //setFocusPolicy(QWidget::StrongFocus);
-    imgLabel = new PageWidget(this);
-    imgLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    setWidget(imgLabel);
+ 
+    QWidget *w = new QWidget(this);
+    w->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
+    m_layout = new QVBoxLayout(w);
+    m_layout->setContentsMargins(0, 0, 0, 0);
+    m_layout->setAlignment(Qt::AlignCenter);
+    recreatePageWidgets();
+    setWidget(w);
+    setWidgetResizable(true);
     
     setBackground(color);
-    //setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    connect(&props, SIGNAL(changed()), imgLabel, SLOT(propsChanged()));
+    setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    connect(&props, SIGNAL(changed()), this, SLOT(propsChanged()));
 }
 
 ComicImageView::~ComicImageView()
 {
+}
+
+void ComicImageView::setNumOfPages(int n)
+{
+    m_physicalPages = n;
+    recreatePageWidgets();
+}
+
+void ComicImageView::propsChanged()
+{
+    foreach (PageWidget *p, imgLabel)
+    {
+        p->redrawImages();
+    }
+    disposeOrRequestPages();
+    update();
+}
+
+void ComicImageView::recreatePageWidgets()
+{
+    foreach (PageWidget *p, imgLabel)
+    {
+        delete p;
+    }
+    imgLabel.clear();
+
+    if (m_twoPagesMode)
+    {
+        for (int i=0; i<m_physicalPages/2; i++) //TODO
+        {
+            PageWidget *p = new PageWidget(this, i);
+            imgLabel.append(p);
+            m_layout->addWidget(p);
+        }
+    }
+    else
+    {
+        for (int i=0; i<m_physicalPages; i++)
+        {
+            PageWidget *p = new PageWidget(this, i);
+            p->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+            imgLabel.append(p);
+            m_layout->addWidget(p);
+        }
+    }
+}
+
+PageWidget* ComicImageView::findPageWidget(int pageNum) const
+{
+    if (m_twoPagesMode)
+    {
+        pageNum /= 2;
+    }
+    if (pageNum < imgLabel.size())
+    {
+        return imgLabel[pageNum];
+    }
+    return NULL;
+}
+
+void ComicImageView::disposeUnneededPageWidgets()
+{
+    int i;
+    for (i=0; i<imgLabel.size(); i++)
+    {
+        PageWidget *w = imgLabel[i];
+        if (!w->isInView() && !w->estimatedSize() && !w->isDisposed())
+        {
+            break;
+        }
+    }
+    while (i<imgLabel.size())
+    {
+        PageWidget *w = imgLabel[i];
+        if (!w->isInView() && !w->estimatedSize() && !w->isDisposed())
+        {
+            w->dispose();
+        }
+        else
+        {
+            break;
+        }
+        ++i;
+    }
+}
+
+void ComicImageView::disposeOrRequestPages()
+{
+    for (int i=0; i<imgLabel.size(); i++)
+    {
+        PageWidget *w = imgLabel[i];
+        if (w->isInView())
+        {
+            if (w->estimatedSize() || w->isDisposed())
+            {
+                if (m_twoPagesMode)
+                {
+                    emit requestTwoPages(w->pageNumber());
+                }
+                else
+                {
+                    emit requestPage(w->pageNumber());
+                }
+            }
+        }
+        else
+        {
+            if (!w->estimatedSize() && !w->isDisposed())
+            {
+                // dispose page only if none of its neighbours are in view
+                if (! ((i>1 && imgLabel[i-1]->isInView()) || (i<imgLabel.size()-1 && imgLabel[i+1]->isInView())) )
+                {
+                    w->dispose();
+                }
+            }
+        }
+    }
+}
+
+QList<PageWidget *> ComicImageView::findPageWidgetsInView() const
+{
+    QList<PageWidget *> wlist;
+    int i;
+    for (i=0; i<imgLabel.size(); i++)
+    {
+        if (imgLabel[i]->isInView())
+        {
+            break;
+        }
+    }
+    while (i < imgLabel.size() && imgLabel[i]->isInView()) 
+    {
+        wlist.append(imgLabel[i]);
+        ++i;
+    }
+    return wlist;
+}
+
+void ComicImageView::recalculatePageSizes()
+{
+    if (imgLabel.size() > 0)
+    {
+        int avgw = 0;
+        int avgh = 0;
+        int n = 0;
+        foreach (PageWidget *p, imgLabel)
+        {
+            if (!p->estimatedSize())
+            {
+                const QSize s(p->size());
+                avgw += s.width();
+                avgh += s.height();
+                ++n;
+            }
+        }
+        if (n > 0)
+        {
+            avgw /= n;
+            avgh /= n;
+
+            foreach (PageWidget *p, imgLabel)
+            {
+                if (p->estimatedSize())
+                {
+                    p->setEstimatedSize(avgw, avgh);
+                }
+            }
+        }
+    }
 }
 
 void ComicImageView::scrollByDelta(int dx, int dy)
@@ -57,6 +236,12 @@ void ComicImageView::scrollByDelta(int dx, int dy)
 
 	vbar->setValue(vbar->value() + dy);
 	hbar->setValue(hbar->value() + dx);
+}
+
+void ComicImageView::scrollContentsBy(int dx, int dy)
+{
+    QScrollArea::scrollContentsBy(dx, dy);
+    disposeOrRequestPages();
 }
 
 QMenu *ComicImageView::contextMenu() const
@@ -82,29 +267,40 @@ void ComicImageView::contextMenuEvent(QContextMenuEvent *e)
 
 void ComicImageView::setImage(const Page &img1, bool preserveangle)
 {
+    Q_ASSERT(m_physicalPages > 0);
     //if (!preserveangle)
     //          iangle = 0;
-
-        imgLabel->setImage(img1);
+    PageWidget *w = findPageWidget(img1.getNumber());
+    Q_ASSERT(w != NULL);
+    w->setImage(img1);
+    recalculatePageSizes();
 }
 
 void ComicImageView::setImage(const Page &img1, const Page &img2, bool preserveangle)
 {
+    Q_ASSERT(m_physicalPages > 0);
     //  if (!preserveangle)
     //          iangle = 0;
-
-        imgLabel->setImage(img1), img2;
+    PageWidget *w = findPageWidget(img1.getNumber());
+    Q_ASSERT(w != NULL);
+    w->setImage(img1, img2);
+    recalculatePageSizes();
 }
 
 void ComicImageView::resizeEvent(QResizeEvent *e)
 {
-        QScrollArea::resizeEvent(e);
-        imgLabel->redrawImages();
+    QScrollArea::resizeEvent(e);
+    foreach (PageWidget *w, imgLabel)
+    {
+        w->redrawImages();
+    }
+    disposeOrRequestPages();
 }
 
 void ComicImageView::wheelEvent(QWheelEvent *e)
 {
-        e->accept();
+//TODO
+    /*e->accept();
         if (e->delta() > 0) //scrolling up
         {
                 if (imgLabel->height() <= height() || (onTop() && ++wheelupcnt > EXTRA_WHEEL_SPIN))
@@ -130,7 +326,7 @@ void ComicImageView::wheelEvent(QWheelEvent *e)
                         scrollByDelta(0, 3*spdy);
                         wheelupcnt = 0; //reset opposite direction counter
                 }
-        }
+                }*/
 }
 
 void ComicImageView::mouseMoveEvent(QMouseEvent *e)
@@ -168,6 +364,15 @@ void ComicImageView::mouseDoubleClickEvent(QMouseEvent *e)
 {
 	e->accept();
 	emit doubleClick();
+}
+
+void ComicImageView::setTwoPagesMode(bool f)
+{
+    if (f != m_twoPagesMode)
+    {
+        m_twoPagesMode = f;
+        recreatePageWidgets();
+    }
 }
 
 void ComicImageView::setRotation(Rotation r)
@@ -356,7 +561,8 @@ void ComicImageView::showPageNumbers(bool f)
 
 void ComicImageView::clear()
 {
-    imgLabel->dispose();
+    m_physicalPages = 0;
+    recreatePageWidgets();
 }
 
 Size ComicImageView::getSize() const
@@ -366,19 +572,22 @@ Size ComicImageView::getSize() const
 			
 int ComicImageView::visiblePages() const
 {
-    return imgLabel->numOfPages();
+    return m_twoPagesMode ? 2 : 1;
+    //return imgLabel->numOfPages();
 }
 
 const QPixmap ComicImageView::image() const
 {
-    if (imgLabel->numOfPages())
-        return QPixmap(*imgLabel->pixmap());
+//TODO
+//    if (imgLabel->numOfPages())
+//        return QPixmap(*imgLabel->pixmap());
     return QPixmap(); //fallback
 }
 
 int ComicImageView::viewWidth() const
 {
-    return (imgLabel->numOfPages()) ? imgLabel->width() : 0;
+    return width(); //TODO?
+//    return (imgLabel->numOfPages()) ? imgLabel->width() : 0;
 }
 
 ViewProperties& ComicImageView::properties()

@@ -14,7 +14,9 @@
 #define __IMGVIEW_H
 
 #include <QScrollArea>
-#include <QMatrix>
+#include <QVector>
+#include <QList>
+#include <QVBoxLayout>
 #include "Page.h"
 #include "ViewProperties.h"
 
@@ -33,21 +35,12 @@ namespace QComicBook
 	{
 		Q_OBJECT
 
-		private:
-			QMenu *context_menu;
-			ViewProperties props;
-			int spdx, spdy; //scroll speed
-			int lx, ly; //last mouse position when tracking mouse movements
-			int wheelupcnt, wheeldowncnt;
-			QCursor *smallcursor;
-			static const int EXTRA_WHEEL_SPIN; //number of extra wheel spins to flip the page
-			static const float JUMP_FACTOR; //factor used to calculate the amount of space to scroll when scrolling page with space
-			PageWidget *imgLabel;
-
 		signals:
 			void bottomReached();
 			void topReached();
 			void doubleClick();
+                        void requestPage(int);
+                        void requestTwoPages(int);
 
 		protected:
 			void resizeEvent(QResizeEvent *e);
@@ -57,13 +50,23 @@ namespace QComicBook
 			virtual void mousePressEvent(QMouseEvent *e);
 			virtual void mouseReleaseEvent(QMouseEvent *e);
 			virtual void mouseDoubleClickEvent(QMouseEvent *e);
+                        virtual void scrollContentsBy(int dx, int dy);
 			void scrollByDelta(int dx, int dy);
+                        void recreatePageWidgets();
+                        PageWidget *findPageWidget(int pageNum) const;
+                        void recalculatePageSizes();
+                        QList<PageWidget *> findPageWidgetsInView() const;
+                        void disposeUnneededPageWidgets();
+                        void disposeOrRequestPages();
+
+                protected slots:
+                        void propsChanged();
 
 		public slots:
-			
 			void setImage(const Page &img1, bool preserveangle=false);
 			void setImage(const Page &img1, const Page &img2, bool preserveangle=false);
 			void setRotation(Rotation r);
+                        void setTwoPagesMode(bool f);
 			void setSize(Size s);
 			void setSizeOriginal();
 			void setSizeFitWidth();
@@ -92,7 +95,7 @@ namespace QComicBook
                         void showPageNumbers(bool f);
 
 		public:
-			ComicImageView(QWidget *parent, Size size=Original, const QColor &color=Qt::black);
+			ComicImageView(QWidget *parent, int physicalPages, bool twoPagesMode, Size size=Original, const QColor &color=Qt::black);
 			virtual ~ComicImageView();
 			bool onBottom();
 			bool onTop();
@@ -102,6 +105,22 @@ namespace QComicBook
 			const QPixmap image() const;
 			int viewWidth() const;
                         ViewProperties& properties();
+                        void setNumOfPages(int n);
+
+		private:
+			QMenu *context_menu;
+			ViewProperties props;
+			int spdx, spdy; //scroll speed
+			int lx, ly; //last mouse position when tracking mouse movements
+			int wheelupcnt, wheeldowncnt;
+			QCursor *smallcursor;
+			static const int EXTRA_WHEEL_SPIN; //number of extra wheel spins to flip the page
+			static const float JUMP_FACTOR; //factor used to calculate the amount of space to scroll when scrolling page with space
+			QVector<PageWidget*> imgLabel;
+                        QVBoxLayout *m_layout;
+                        int m_physicalPages;
+                        bool m_twoPagesMode;
+                        bool m_contMode; //continuous mode flag
 	};
 }
 

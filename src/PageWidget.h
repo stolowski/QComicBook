@@ -29,28 +29,31 @@ namespace QComicBook
         void propsChanged();
 
     public:
-        PageWidget(ComicImageView *parent);
+        PageWidget(ComicImageView *parent, int pageNum);
         virtual ~PageWidget();
 
         void setImage(const Page &img1);
         void setImage(const Page &img1, const Page &img2);
         void dispose();
+        bool isDisposed() const;
         const QPixmap* pixmap() const;
-        int numOfPages() const;
-
+        bool isInView() const;
         virtual void paintEvent(QPaintEvent *event);
         virtual void resizeEvent(QResizeEvent *event);
 //        virtual QSize sizeHint() const;
         void redrawImages();
         void setEstimatedSize(int w, int h);
         bool estimatedSize() const;
+        int pageNumber() const;
 
     protected:
+        int numOfPages() const;
         void deletePages();
         void drawPageNumber(int page, QPainter &p, int x, int y);
 
     private:
         ComicImageView *view;
+        int m_pageNum; //number of physical page
         Page *m_image[2];
         int xoff, yoff;
         QPixmap *m_pixmap;
