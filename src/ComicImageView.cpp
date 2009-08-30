@@ -86,9 +86,17 @@ void ComicImageView::recreatePageWidgets()
 
     if (m_twoPagesMode)
     {
-        for (int i=0; i<m_physicalPages/2; i++) //TODO
+        int i = 0;
+        if (m_physicalPages % 2) // odd number of pages
         {
-            PageWidget *p = new PageWidget(this, i);
+            PageWidget *p = new PageWidget(this, 0);
+            imgLabel.append(p);
+            m_layout->addWidget(p);
+            ++i;
+        }
+        for (; i<m_physicalPages; i+=2)
+        {
+            PageWidget *p = new PageWidget(this, i, true);
             imgLabel.append(p);
             m_layout->addWidget(p);
         }
@@ -153,7 +161,7 @@ void ComicImageView::disposeOrRequestPages()
         {
             if (w->estimatedSize() || w->isDisposed())
             {
-                if (m_twoPagesMode)
+                if (m_twoPagesMode && w->hasTwoPages())
                 {
                     emit requestTwoPages(w->pageNumber());
                 }

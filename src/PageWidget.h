@@ -29,7 +29,7 @@ namespace QComicBook
         void propsChanged();
 
     public:
-        PageWidget(ComicImageView *parent, int pageNum);
+        PageWidget(ComicImageView *parent, int pageNum, bool twoPages=false);
         virtual ~PageWidget();
 
         void setImage(const Page &img1);
@@ -45,6 +45,7 @@ namespace QComicBook
         void setEstimatedSize(int w, int h);
         bool estimatedSize() const;
         int pageNumber() const;
+        bool hasTwoPages() const;
 
     protected:
         int numOfPages() const;
@@ -59,6 +60,7 @@ namespace QComicBook
         QPixmap *m_pixmap;
         QSize pageSize; //size of 1 or 2 pages without scaling
         bool estimated;
+        bool m_twoPages; //whether this widget holds one or two pages; this is independent from current two pages mode setting
     };
 }
 

@@ -20,10 +20,11 @@
 
 using namespace QComicBook;
 
-PageWidget::PageWidget(ComicImageView *parent, int pageNum)
+PageWidget::PageWidget(ComicImageView *parent, int pageNum, bool twoPages)
     : QWidget(parent)
     , view(parent)
     , m_pageNum(pageNum)
+    , m_twoPages(twoPages)
     , m_pixmap(NULL)
     , pageSize(1, 1)
     , estimated(true)
@@ -109,6 +110,11 @@ bool PageWidget::isInView() const
 int PageWidget::pageNumber() const
 {
     return m_pageNum;
+}
+
+bool PageWidget::hasTwoPages() const
+{
+    return m_twoPages;
 }
 
 void PageWidget::drawPageNumber(int page, QPainter &p, int x, int y)
