@@ -18,20 +18,38 @@
 #include <QThread>
 #include <QList>
 #include <QMutex>
+#include <QWaitCondition>
 
 namespace QComicBook
 {
 	class ImgDirSink;
+        class Page;
+
+        struct LoadRequest
+        {
+            int pageNumber;
+            bool twoPages;
+
+            LoadRequest(int page, bool twoPages): pageNumber(page), twoPages(twoPages) {}
+            bool operator==(const LoadRequest &r)
+            {
+                return pageNumber == r.pageNumber && twoPages == r.twoPages;
+            }
+        };
 
 	//! Thread-based image loader.
 	class ImgLoaderThread: public QThread
 	{
+            Q_OBJECT
+
 		protected:
 			volatile QThread::Priority prio; //!<thread priority
-			QMutex mtx; //!<mutex for serialization of class attributes
-			QList<int> requests; //!<the list of requested pages
+			QList<LoadRequest> requests; //!<the list of requested pages
 			ImgDirSink *sink;
-
+			QMutex loaderMutex;
+                        QMutex condMutex;
+                        QMutex sinkMutex;
+                        QWaitCondition reqCond;
 			volatile bool stopped;
 
 			//! Main function of the thread.
@@ -40,6 +58,10 @@ namespace QComicBook
 			 *  @see ImgDirSink::getImage
 			 */
 			virtual void run();
+
+                signals:
+                        void pageLoaded(const Page &);
+                        void pageLoaded(const Page &, const Page &);
 
 		public:
 			ImgLoaderThread();
@@ -55,19 +77,27 @@ namespace QComicBook
 			 */
 			virtual void setSink(ImgDirSink *sink=NULL);
 
+			//! Stops processing requests and exits thread execution.
+			virtual void stop();
+
+
+               public slots:
 			//! Appends page to the list of pages to load.
 			/*! @param page page to load
 			 */
 			virtual void request(int page);
 
+                        virtual void requestTwoPages(int page);
+
 			//! Appends few pages to the list of pages to load.
 			/*! @param first starting page
 			 *  @param n number of pages to load in turn
 			 */
-			virtual void request(int first, int n);
+                        virtual void request(int first, int n);
 
-			//! Stops processing requests and exits thread execution.
-			virtual void stop();
+                        virtual void cancel(int page);
+                        virtual void cancelTwoPages(int page);
+                        virtual void cancelAll();
 	};
 }
 

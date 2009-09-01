@@ -28,21 +28,21 @@ ThumbnailLoaderThread::~ThumbnailLoaderThread()
 
 void ThumbnailLoaderThread::setReciever(QObject *rcv)
 {
-	mtx.lock();
+/*	mtx.lock();
 	rcvobj = rcv;
-	mtx.unlock();
+	mtx.unlock();*/
 }
 
 void ThumbnailLoaderThread::setUseCache(bool f)
 {
-	mtx.lock();
+/*	mtx.lock();
 	usecache = f;
-	mtx.unlock();
+	mtx.unlock();*/
 }
 
 void ThumbnailLoaderThread::run()
 {
-	for (;;)
+/*	for (;;)
 	{
 		mtx.lock();
 		if (stopped || requests.empty())
@@ -50,11 +50,12 @@ void ThumbnailLoaderThread::run()
 			mtx.unlock();
 			break;
 		}
-		int n = requests.first();
+
+		const LoadRequest req(requests.first());
 		requests.pop_front();
 		if (sink && rcvobj)
 		{
-			Thumbnail *t = sink->getThumbnail(n, usecache);
+			Thumbnail *t = sink->getThumbnail(req.pageNumber, usecache);
 			mtx.unlock();
 			if (t)
 			{
@@ -64,6 +65,6 @@ void ThumbnailLoaderThread::run()
 		}
 		else
 			mtx.unlock();
-	}
+                        }*/
 }
 

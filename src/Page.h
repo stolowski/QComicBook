@@ -16,17 +16,20 @@
 #define __PAGE_H
 
 #include <QImage>
+#include <QMetaType>
 
 namespace QComicBook
 {
     class Page
     {
     public:
-        Page(unsigned int number, const QImage &image);
+        Page();
+        Page(const Page &p);
+        Page(int number, const QImage &image);
         ~Page();
 
         QImage getImage() const;
-        unsigned int getNumber() const;
+        int getNumber() const;
         int width() const;
         int height() const;
 
@@ -34,9 +37,11 @@ namespace QComicBook
         operator int() const { return m_number; }
 
     private:
-        const unsigned int m_number;
-        const QImage m_image;
+        int m_number;
+        QImage m_image;
     };
 }
+
+Q_DECLARE_METATYPE(QComicBook::Page)
 
 #endif

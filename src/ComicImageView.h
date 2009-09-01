@@ -41,6 +41,8 @@ namespace QComicBook
 			void doubleClick();
                         void requestPage(int);
                         void requestTwoPages(int);
+                        void cancelPageRequest(int);
+                        void cancelTwoPagesRequest(int);
 
 		protected:
 			void resizeEvent(QResizeEvent *e);
@@ -63,8 +65,8 @@ namespace QComicBook
                         void propsChanged();
 
 		public slots:
-			void setImage(const Page &img1, bool preserveangle=false);
-			void setImage(const Page &img1, const Page &img2, bool preserveangle=false);
+			void setImage(const Page &img1);
+			void setImage(const Page &img1, const Page &img2);
 			void setRotation(Rotation r);
                         void setTwoPagesMode(bool f);
 			void setSize(Size s);
@@ -121,6 +123,7 @@ namespace QComicBook
                         int m_physicalPages;
                         bool m_twoPagesMode;
                         bool m_contMode; //continuous mode flag
+                        QList<int> m_requestedPages;
 	};
 }
 

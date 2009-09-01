@@ -32,6 +32,7 @@ namespace QComicBook
 	class ThumbnailsWindow;
 	class Bookmarks;
 	class StatusBar;
+        class ImgLoaderThread;
 	using Utility::History;
 
 	//! The main window of QComicBook.
@@ -56,6 +57,7 @@ namespace QComicBook
                         QAction *actionExitFullScreen;
 			QLabel *pageinfo; //!<page info displayed in right-click context menu
 			QString lastdir; //!<last opened directory for Open File/Directory dialog
+                        ImgLoaderThread *loader;
 		
 		protected:
 			virtual void dragEnterEvent(QDragEnterEvent *e);
@@ -89,8 +91,6 @@ namespace QComicBook
 			void thumbnailsWindowShown();
 			void savePageAs();
                         void reconfigureDisplay();
-                        void pageRequested(int n);
-                        void twoPagesRequested(int n);
 
 		public slots:
 			void firstPage();

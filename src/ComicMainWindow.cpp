@@ -31,6 +31,7 @@
 #include "Utility.h"
 #include "SupportedArchivesWindow.h"
 #include "JumpToPageWindow.h"
+#include "ImgLoader.h"
 #include <QMenu>
 #include <QStringList>
 #include <QAction>
@@ -93,6 +94,16 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), sink(NUL
     
     connect(cfg, SIGNAL(displaySettingsChanged()), this, SLOT(reconfigureDisplay()));
     enableComicBookActions(false);
+
+    qRegisterMetaType<Page>("Page");
+    loader = new ImgLoaderThread();
+    connect(loader, SIGNAL(pageLoaded(const Page&)), view, SLOT(setImage(const Page&)));
+    connect(loader, SIGNAL(pageLoaded(const Page&, const Page&)), view, SLOT(setImage(const Page&, const Page&)));
+    connect(view, SIGNAL(requestPage(int)), loader, SLOT(request(int)));
+    connect(view, SIGNAL(requestTwoPages(int)), loader, SLOT(requestTwoPages(int)));
+    connect(view, SIGNAL(cancelPageRequest(int)), loader, SLOT(cancel(int)));
+    connect(view, SIGNAL(cancelTwoPagesRequest(int)), loader, SLOT(cancelTwoPages(int)));
+    loader->start();
 }
 
 ComicMainWindow::~ComicMainWindow()
@@ -104,6 +115,9 @@ ComicMainWindow::~ComicMainWindow()
 
         delete recentfiles;
         delete bookmarks;
+
+        loader->stop();
+        delete loader;
 
         if (sink)
                 delete sink;
@@ -173,8 +187,7 @@ void ComicMainWindow::setupComicImageView()
         connect(actionNoRotation, SIGNAL(triggered(bool)), view, SLOT(resetRotation()));
         connect(actionJumpDown, SIGNAL(triggered()), view, SLOT(jumpDown()));
         connect(actionJumpUp, SIGNAL(triggered()), view, SLOT(jumpUp()));
-        connect(view, SIGNAL(requestPage(int)), this, SLOT(pageRequested(int)));
-        connect(view, SIGNAL(requestTwoPages(int)), this, SLOT(twoPagesRequested(int)));
+
         if (cfg->continuousScrolling())
         {
                 connect(view, SIGNAL(bottomReached()), this, SLOT(nextPage()));
@@ -531,6 +544,8 @@ void ComicMainWindow::open(const QString &path, int page)
         sink->thumbnailLoader().setReciever(thumbswin);
         sink->thumbnailLoader().setUseCache(cfg->cacheThumbnails());
 
+        loader->setSink(sink);
+
         connect(sink, SIGNAL(progress(int, int)), statusbar, SLOT(setProgress(int, int)));
 
         statusbar->setShown(true); //ensures status bar is visible when opening regardless of user settings
@@ -686,7 +701,7 @@ void ComicMainWindow::jumpToPage(int n, bool force)
         if ((n != currpage) || force)
         {
                 int result1, result2;
-                const bool preserveangle = actionTogglePreserveRotation->isChecked();
+                const bool preserveangle = actionTogglePreserveRotation->isChecked(); //FIXME
 
                 if (actionTwoPages->isChecked())
                 {
@@ -696,18 +711,18 @@ void ComicMainWindow::jumpToPage(int n, bool force)
                         {
                                 if (actionMangaMode->isChecked())
                                 {
-                                        view->setImage(img2, img1, preserveangle);
+                                        view->setImage(img2, img1);
                                         statusbar->setImageInfo(&img2, &img1);
                                 }
                                 else
                                 {
-                                        view->setImage(img1, img2, preserveangle);
+                                        view->setImage(img1, img2);
                                         statusbar->setImageInfo(&img1, &img2);
                                 }
                         }
                         else
                         {
-                                view->setImage(img1, preserveangle);
+                                view->setImage(img1);
                                 statusbar->setImageInfo(&img1);
 				if (cfg->preloadPages())
 					sink->preload(currpage + 1);
@@ -716,7 +731,7 @@ void ComicMainWindow::jumpToPage(int n, bool force)
                 else
                 {
                         Page img = sink->getImage(currpage = n, result1);
-                        view->setImage(img, preserveangle);
+                        view->setImage(img);
                         statusbar->setImageInfo(&img);
                 }
                 if (actionMangaMode->isChecked())
@@ -786,17 +801,19 @@ void ComicMainWindow::showJumpToPage(const QString &number)
 
 void ComicMainWindow::closeSink()
 {
-        enableComicBookActions(false);
+    enableComicBookActions(false);
 
-        if (sink)
-        {
-                sink->deleteLater();
-                sink = NULL;
-        }
-        view->clear();
-        thumbswin->view()->clear();
-        updateCaption();
-        statusbar->clear();
+    if (sink)
+    {
+        loader->stop();
+        loader->setSink(NULL);
+        sink->deleteLater();
+        sink = NULL;
+    }
+    view->clear();
+    thumbswin->view()->clear();
+    updateCaption();
+    statusbar->clear();
 }
 
 void ComicMainWindow::setBookmark()
@@ -894,38 +911,4 @@ void ComicMainWindow::reconfigureDisplay()
     view->setSmallCursor(cfg->smallCursor());
     view->showPageNumbers(cfg->embedPageNumbers());
     view->setBackground(cfg->background());
-}
-
-void ComicMainWindow::pageRequested(int n)
-{
-    if (sink)
-    {
-        const bool preserveangle = actionTogglePreserveRotation->isChecked();
-        int result;
-        Page img1 = sink->getImage(n, result);
-        if (result == 0)
-        {
-            view->setImage(img1, preserveangle);
-        }
-        if (cfg->preloadPages())
-        {
-            sink->preload(n + 1);
-        }
-    }
-}
-
-void ComicMainWindow::twoPagesRequested(int n)
-{
-    if (sink)
-    {
-        const bool preserveangle = actionTogglePreserveRotation->isChecked();
-        int result1, result2;
-        Page img1 = sink->getImage(currpage = n, result1);
-        Page img2 = sink->getImage(currpage + 1, result2);
-        if (result2 == 0)
-        {
-//TODO
-            view->setImage(img1, img2, preserveangle);
-        }
-    }
 }

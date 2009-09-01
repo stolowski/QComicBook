@@ -29,6 +29,7 @@ SET(qcomicbook_moc_hdrs
 		 ComicImageView.h 
 		 ImgDirSink.h 
 		 ImgArchiveSink.h 
+                 ImgLoader.h
 		 JumpToPageWindow.h 
                  PageWidget.h
 		 PageNumberEdit.h 

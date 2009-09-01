@@ -14,7 +14,18 @@
 
 using namespace QComicBook;
 
-Page::Page(unsigned int number, const QImage &image)
+Page::Page()
+    : m_number(-1)
+{
+}
+
+Page::Page(const Page &p)
+{
+    m_number = p.m_number;
+    m_image = p.m_image;
+}
+
+Page::Page(int number, const QImage &image)
     : m_number(number),
       m_image(image)
 {
@@ -29,7 +40,7 @@ QImage Page::getImage() const
     return m_image;
 }
 
-unsigned int Page::getNumber() const
+int Page::getNumber() const
 {
     return m_number;
 }

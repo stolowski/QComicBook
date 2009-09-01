@@ -161,13 +161,17 @@ void ComicImageView::disposeOrRequestPages()
         {
             if (w->estimatedSize() || w->isDisposed())
             {
-                if (m_twoPagesMode && w->hasTwoPages())
+                if (m_requestedPages.indexOf(i) < 0)
                 {
-                    emit requestTwoPages(w->pageNumber());
-                }
-                else
-                {
-                    emit requestPage(w->pageNumber());
+                    m_requestedPages.append(i);
+                    if (m_twoPagesMode && w->hasTwoPages())
+                    {
+                        emit requestTwoPages(w->pageNumber());
+                    }
+                    else
+                    {
+                        emit requestPage(w->pageNumber());
+                    }
                 }
             }
         }
@@ -179,6 +183,19 @@ void ComicImageView::disposeOrRequestPages()
                 if (! ((i>1 && imgLabel[i-1]->isInView()) || (i<imgLabel.size()-1 && imgLabel[i+1]->isInView())) )
                 {
                     w->dispose();
+                }
+            }
+            int idx = m_requestedPages.indexOf(i);
+            if (idx >= 0)
+            {
+                m_requestedPages.removeAt(idx);
+                if (m_twoPagesMode && w->hasTwoPages())
+                {
+                    emit cancelTwoPagesRequest(w->pageNumber());
+                }
+                else
+                {
+                    emit cancelPageRequest(w->pageNumber());
                 }
             }
         }
@@ -273,7 +290,7 @@ void ComicImageView::contextMenuEvent(QContextMenuEvent *e)
     context_menu->popup(e->globalPos());
 }
 
-void ComicImageView::setImage(const Page &img1, bool preserveangle)
+void ComicImageView::setImage(const Page &img1)
 {
     Q_ASSERT(m_physicalPages > 0);
     //if (!preserveangle)
@@ -284,7 +301,7 @@ void ComicImageView::setImage(const Page &img1, bool preserveangle)
     recalculatePageSizes();
 }
 
-void ComicImageView::setImage(const Page &img1, const Page &img2, bool preserveangle)
+void ComicImageView::setImage(const Page &img1, const Page &img2)
 {
     Q_ASSERT(m_physicalPages > 0);
     //  if (!preserveangle)
@@ -303,6 +320,7 @@ void ComicImageView::resizeEvent(QResizeEvent *e)
         w->redrawImages();
     }
     disposeOrRequestPages();
+    e->accept();
 }
 
 void ComicImageView::wheelEvent(QWheelEvent *e)
@@ -570,6 +588,7 @@ void ComicImageView::showPageNumbers(bool f)
 void ComicImageView::clear()
 {
     m_physicalPages = 0;
+    m_requestedPages.clear();
     recreatePageWidgets();
 }
 

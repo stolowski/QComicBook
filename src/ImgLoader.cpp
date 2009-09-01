@@ -27,79 +27,136 @@ ImgLoaderThread::~ImgLoaderThread()
 
 void ImgLoaderThread::setPriority(QThread::Priority p)
 {
-	mtx.lock();
-	prio = p;
-	mtx.unlock();
+    loaderMutex.lock();
+    prio = p;
+    loaderMutex.unlock();
 }
 
 void ImgLoaderThread::setSink(ImgDirSink *sink)
 {
-	mtx.lock();
-	this->sink = sink;
-	mtx.unlock();
+    sinkMutex.lock();
+    this->sink = sink;
+    sinkMutex.unlock();
 }
 
 void ImgLoaderThread::request(int page)
 {
-	mtx.lock();
-	if (requests.contains(page))
-	{
-		mtx.unlock();
-		return;
-	}
-	requests.append(page);
-	if (!isRunning() && !stopped)
-	{
-		mtx.unlock();
-		start(prio);
-	}
-	else
-		mtx.unlock();
+    loaderMutex.lock();
+    const LoadRequest req(page, false);
+    if (requests.contains(req))
+    {
+        loaderMutex.unlock();
+        return;
+    }
+    requests.append(req);
+    loaderMutex.unlock();
+    reqCond.wakeOne();
+}
+
+void ImgLoaderThread::requestTwoPages(int page)
+{
+    std::cout << "request 2 pages: " << page << "\n";
+
+    loaderMutex.lock();
+    const LoadRequest req(page, true);
+    if (requests.contains(req))
+    {
+        loaderMutex.unlock();
+        return;
+    }
+    requests.append(req);
+    loaderMutex.unlock();
+    reqCond.wakeOne();
 }
 
 void ImgLoaderThread::request(int first, int n)
 {
-	mtx.lock();
-	const int last = first + n;
-	for (int i=first; i<last; i++)
-		if (requests.contains(i) == 0)
-			requests.append(i);
-	if (!isRunning() && !stopped)
-	{
-		mtx.unlock();
-		start(prio);
-	}
-	else
-		mtx.unlock();
+    for (int i=first; i<first+n; i++)
+    {
+        request(i);
+    }
+}
+
+void ImgLoaderThread::cancel(int page)
+{
+    loaderMutex.lock();
+    const LoadRequest req(page, false);
+    requests.removeAll(req);
+    loaderMutex.unlock();
+}
+
+void ImgLoaderThread::cancelTwoPages(int page)
+{
+    loaderMutex.lock();
+    const LoadRequest req(page, true);
+    requests.removeAll(req);
+    loaderMutex.unlock();
+}
+
+void ImgLoaderThread::cancelAll()
+{
+    loaderMutex.lock();
+    requests.clear();
+    loaderMutex.unlock();
 }
 
 void ImgLoaderThread::stop()
 {
-	mtx.lock();
-	stopped = true;
-	mtx.unlock();
+    loaderMutex.lock();
+    stopped = true;
+    loaderMutex.unlock();
+    reqCond.wakeOne();
 }
 
 void ImgLoaderThread::run()
 {
-	for (;;)
-	{
-		mtx.lock();
-		if (stopped || requests.empty())
-		{
-			mtx.unlock();
-			break;
-		}
-		
-		const int n = requests.first();
-		requests.pop_front();
-		if (sink)
-		{
-			int result;
-			std::cout << "preloading: " << n << std::endl;
-			sink->getImage(n, result);
-		}
-		mtx.unlock();
+    for (;;)
+    {
+        condMutex.lock();
+        reqCond.wait(&condMutex);
+        condMutex.unlock();
+        	
+        for (;;) {
+            loaderMutex.lock();
+            if (stopped)
+            {
+                loaderMutex.unlock();
+                return;
+            }
+
+            if (requests.empty())
+            {
+                loaderMutex.unlock();
+                break;
+            }
+            const LoadRequest req(requests.first());
+            requests.pop_front();
+            loaderMutex.unlock();
+
+            sinkMutex.lock();
+            if (sink) //TODO not safe, sink as shared ptr
+            {
+                int result;
+                std::cout << "preloading: " << req.pageNumber << std::endl;
+                if (req.twoPages)
+                {
+                    const Page page1(sink->getImage(req.pageNumber, result));
+                    const Page page2(sink->getImage(req.pageNumber+1, result));
+                    sinkMutex.unlock();
+                    emit pageLoaded(page1, page2); //TODO errors
+                }
+                else
+                {
+                    const Page page(sink->getImage(req.pageNumber, result));
+                    sinkMutex.unlock();
+                    emit pageLoaded(page);
+                }
+            }
+            else
+            {
+                sinkMutex.unlock();
+            }
 	}
+    }
 }
 
