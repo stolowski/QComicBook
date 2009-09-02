@@ -1,4 +1,4 @@
-2009-08-xx:  0.4.2       -- fixed compilation warnings (no return values in two methods)
+2009-09-02:  0.4.2       -- fixed compilation warnings (no return values in two methods)
 	                 -- fixed compilation problems due to hardcoded moc-qt4 name
 	                 -- added option to embed page numbers on displayed page
 	                 -- properly clear empty ereas when displaying 2 pages of different size
