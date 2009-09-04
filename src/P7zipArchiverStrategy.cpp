@@ -35,4 +35,10 @@ void P7zipArchiverStrategy::configure()
         setListArguments("7z l @F");
         setSupported();
     }
+    else if (which("7zr") != QString::null)
+    {
+        setExtractArguments("7zr x @F");
+        setListArguments("7zr l @F");
+        setSupported();
+    }
 }
