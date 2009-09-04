@@ -465,6 +465,7 @@ void ImgArchiveSink::autoconfTARBZ2()
 	inf.name = "tar.bz2";
 	inf.extensions.append(".tar.bz2");
 	inf.extensions.append(".cbb");
+        inf.reading = inf.writing = false;
 	if (which("tar") != QString::null)
 	{
 		inf.extractopts.append("tar");
@@ -484,6 +485,7 @@ void ImgArchiveSink::autoconfSEVENZIP()
 	inf.type = SEVENZIP_ARCHIVE;
 	inf.name = "7z";
 	inf.extensions.append(".7z");
+        inf.reading = inf.writing = false;
 	if (which("7z") != QString::null)
 	{
 		inf.extractopts.append("7z");
@@ -491,8 +493,15 @@ void ImgArchiveSink::autoconfSEVENZIP()
 		inf.listopts.append("7z");
 		inf.listopts.append("l");
 		inf.reading = true;
-		inf.writing = false;
 	}
+        else if (which("7zr") != QString::null)
+        {
+            inf.extractopts.append("7zr");
+            inf.extractopts.append("x");
+            inf.listopts.append("7zr");
+            inf.listopts.append("l");
+            inf.reading = true;
+        }
 	archinfo.append(inf);
 }
 
