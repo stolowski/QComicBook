@@ -1,4 +1,4 @@
-QComicBook v0.4.1
+QComicBook v0.4.3
 (c)by Pawel Stolowski 2005-2009
 released under terms of GNU General Public License v2
 
@@ -14,7 +14,7 @@ navigation etc.
 ---------------
 QComicBook requires Qt library version >=4.3.0 and pkg-config.
 It *may* work with earlier versions of Qt (from 4.x family), but it was not
-tested. You will also need unzip, rar (or unra  r), unace and tar (with gzip and
+tested. You will also need unzip, rar (or unrar), unace, p7zip and tar (with gzip and
 bzip2 support compiled in) somewhere in your path to handle archives. If one of
 these tools is missing you can still use QComicBook, but you won't be able to
 open some archives.

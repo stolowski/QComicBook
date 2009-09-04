@@ -1,3 +1,5 @@
+2009-09-04:  0.4.3       -- fixed bug with p7zip archiver detection that could result in crash when opening .7z archives
+
 2009-09-02:  0.4.2       -- fixed compilation warnings (no return values in two methods)
 	                 -- fixed compilation problems due to hardcoded moc-qt4 name
 	                 -- added option to embed page numbers on displayed page
