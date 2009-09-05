@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005-2007 Pawel Stolowski <pawel.stolowski@wp.pl>
+ * Copyright (C) 2005-2009 Pawel Stolowski <stolowski@gmail.com>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -12,7 +12,7 @@
 
 #include "DirReader.h"
 
-DirReader::DirReader(QDir::SortFlags sortFlags, int maxDepth): flags(sortFlags), maxDirDepth(maxDepth), curDepth(0)
+DirReader::DirReader(QDir::SortFlags sortFlags, int maxDepth): flags(sortFlags), maxDirDepth(maxDepth)
 {
 }
 
@@ -20,7 +20,7 @@ DirReader::~DirReader()
 {
 }
 
-void DirReader::recurseDir(const QString &path)
+void DirReader::recurseDir(const QString &path, int curDepth)
 {
         QDir dir(path);
         dir.setSorting(flags);
@@ -38,8 +38,7 @@ void DirReader::recurseDir(const QString &path)
 		{
 			if (curDepth < maxDirDepth)
 			{
-				++curDepth;
-				recurseDir(finf.absoluteFilePath());
+				recurseDir(finf.absoluteFilePath(), curDepth+1);
 			}
 		}
         }
@@ -47,6 +46,6 @@ void DirReader::recurseDir(const QString &path)
 
 void DirReader::visit(const QString &path) 
 {
-	recurseDir(path);
+    recurseDir(path, 0);
 }
 

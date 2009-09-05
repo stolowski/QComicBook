@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005-2007 Pawel Stolowski <pawel.stolowski@wp.pl>
+ * Copyright (C) 2005-2009 Pawel Stolowski <stolowski@gmail.com>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -21,9 +21,8 @@ class DirReader
 	private:
 		QDir::SortFlags flags;
 		int maxDirDepth;
-		int curDepth;
 
-		void recurseDir(const QString &path);
+		void recurseDir(const QString &path, int curDepth);
 		
 	protected:
 		virtual bool fileHandler(const QFileInfo &path) = 0;
