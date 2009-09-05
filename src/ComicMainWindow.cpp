@@ -26,12 +26,12 @@
 #include "StatusBar.h"
 #include "ThumbnailsWindow.h"
 #include "ThumbnailsView.h"
-#include "ThumbnailLoader.h"
+#include "ThumbnailLoaderThread.h"
 #include "BookmarkManager.h"
 #include "Utility.h"
 #include "SupportedArchivesWindow.h"
 #include "JumpToPageWindow.h"
-#include "ImgLoader.h"
+#include "PageLoaderThread.h"
 #include <QMenu>
 #include <QStringList>
 #include <QAction>
@@ -96,14 +96,18 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), sink(NUL
     enableComicBookActions(false);
 
     qRegisterMetaType<Page>("Page");
-    loader = new ImgLoaderThread();
-    connect(loader, SIGNAL(pageLoaded(const Page&)), view, SLOT(setImage(const Page&)));
-    connect(loader, SIGNAL(pageLoaded(const Page&, const Page&)), view, SLOT(setImage(const Page&, const Page&)));
-    connect(view, SIGNAL(requestPage(int)), loader, SLOT(request(int)));
-    connect(view, SIGNAL(requestTwoPages(int)), loader, SLOT(requestTwoPages(int)));
-    connect(view, SIGNAL(cancelPageRequest(int)), loader, SLOT(cancel(int)));
-    connect(view, SIGNAL(cancelTwoPagesRequest(int)), loader, SLOT(cancelTwoPages(int)));
-    loader->start();
+    pageLoader = new PageLoaderThread();
+    connect(pageLoader, SIGNAL(pageLoaded(const Page&)), view, SLOT(setImage(const Page&)));
+    connect(pageLoader, SIGNAL(pageLoaded(const Page&, const Page&)), view, SLOT(setImage(const Page&, const Page&)));
+    connect(view, SIGNAL(requestPage(int)), pageLoader, SLOT(request(int)));
+    connect(view, SIGNAL(requestTwoPages(int)), pageLoader, SLOT(requestTwoPages(int)));
+    connect(view, SIGNAL(cancelPageRequest(int)), pageLoader, SLOT(cancel(int)));
+    connect(view, SIGNAL(cancelTwoPagesRequest(int)), pageLoader, SLOT(cancelTwoPages(int)));
+    pageLoader->start();
+
+    thumbnailLoader = new ThumbnailLoaderThread();
+    connect(thumbnailLoader, SIGNAL(thumbnailLoaded(Thumbnail *)), thumbswin, SLOT(setThumbnail(Thumbnail *)));
+    thumbnailLoader->start();
 }
 
 ComicMainWindow::~ComicMainWindow()
@@ -116,11 +120,18 @@ ComicMainWindow::~ComicMainWindow()
         delete recentfiles;
         delete bookmarks;
 
-        loader->stop();
-        delete loader;
+        pageLoader->stop();
+        thumbnailLoader->stop();
+        pageLoader->wait();
+        thumbnailLoader->wait();
+
+        delete pageLoader;
+        delete thumbnailLoader;
 
         if (sink)
-                delete sink;
+        {
+            delete sink;
+        }
 }
 
 void ComicMainWindow::setupActions()
@@ -375,13 +386,17 @@ bool ComicMainWindow::confirmExit()
 
 void ComicMainWindow::thumbnailsWindowShown()
 {
-        if (sink)
+    if (sink)
+    {
+        int max = sink->numOfImages();
+        for (int i=0; i<max; i++)
         {
-                int max = sink->numOfImages();
-                for (int i=0; i<max; i++)
-                        if (!thumbswin->view()->isLoaded(i))
-                                sink->requestThumbnail(i);
+            if (!thumbswin->view()->isLoaded(i))
+            {
+                thumbnailLoader->request(i);
+            }
         }
+    }
 }
 
 void ComicMainWindow::toggleScrollbars()
@@ -480,8 +495,10 @@ void ComicMainWindow::sinkReady(const QString &path)
         //
         // request thumbnails for all pages
         if (thumbswin->isVisible())
-                sink->requestThumbnails(0, sink->numOfImages());
-
+        {
+            thumbnailLoader->request(0, sink->numOfImages());
+        }
+        
         jumpToPage(currpage, true);
 
 	const bool hasdesc = (sink->getDescription().count() > 0);
@@ -541,10 +558,10 @@ void ComicMainWindow::open(const QString &path, int page)
 
         sink = ImgSinkFactory::instance().createImgSink(path);
 	sink->setCacheSize(cfg->cacheSize()*1024*1024, cfg->cacheAutoAdjust());
-        sink->thumbnailLoader().setReciever(thumbswin);
-        sink->thumbnailLoader().setUseCache(cfg->cacheThumbnails());
 
-        loader->setSink(sink);
+        pageLoader->setSink(sink);
+        thumbnailLoader->setSink(sink);
+        thumbnailLoader->setUseCache(cfg->cacheThumbnails());
 
         connect(sink, SIGNAL(progress(int, int)), statusbar, SLOT(setProgress(int, int)));
 
@@ -724,8 +741,8 @@ void ComicMainWindow::jumpToPage(int n, bool force)
                         {
                                 view->setImage(img1);
                                 statusbar->setImageInfo(&img1);
-				if (cfg->preloadPages())
-					sink->preload(currpage + 1);
+				//if (cfg->preloadPages()) TODO
+				//	sink->preload(currpage + 1);
                         }
                 }
                 else
@@ -746,12 +763,12 @@ void ComicMainWindow::jumpToPage(int n, bool force)
 		{
 			if (!actionTwoPages->isChecked())
 			{
-				sink->preload(currpage + 1);
+                            //sink->preload(currpage + 1);
 			}
 			else
 			{
-				sink->preload(currpage + 3);
-				sink->preload(currpage + 2);
+                            //sink->preload(currpage + 3);
+                            //sink->preload(currpage + 2);
 			}
 		}
         }
@@ -805,8 +822,10 @@ void ComicMainWindow::closeSink()
 
     if (sink)
     {
-        loader->stop();
-        loader->setSink(NULL);
+        pageLoader->cancelAll();
+        pageLoader->setSink(NULL);
+        thumbnailLoader->cancelAll();
+        thumbnailLoader->setSink(NULL);
         sink->deleteLater();
         sink = NULL;
     }

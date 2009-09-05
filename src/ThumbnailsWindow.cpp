@@ -12,9 +12,7 @@
 
 #include "ThumbnailsWindow.h"
 #include "ThumbnailsView.h"
-#include "ThumbnailLoader.h"
 #include "Thumbnail.h"
-#include "ThumbnailEvent.h"
 
 using namespace QComicBook;
 
@@ -34,17 +32,9 @@ ThumbnailsWindow::~ThumbnailsWindow()
 {
 }
 
-void ThumbnailsWindow::customEvent(QEvent *e)
+void ThumbnailsWindow::setThumbnail(Thumbnail *t)
 {
-	if (e->type() == ThumbnailReady)
-	{
-		ThumbnailEvent *evt = dynamic_cast<ThumbnailEvent *>(e);
-		tview->setPage(*evt->getThumbnail());
-	}
-	else
-	{
-		QDockWidget::customEvent(e);
-	}
+    tview->setPage(*t);
 }
 
 void ThumbnailsWindow::showEvent(QShowEvent *e)

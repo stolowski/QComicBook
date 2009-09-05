@@ -33,24 +33,17 @@ const QString ImgDirSink::imgext[] = {".jpg", ".jpeg", ".png", ".gif", ".xpm", "
 ImgDirSink::ImgDirSink(bool dirs, int cacheSize): QObject(), dirpath(QString::null), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
 {
 	cache = new ImgCache(cacheSize);
-	imgloader.setSink(this);
-        thloader.setSink(this);
 }
 
 ImgDirSink::ImgDirSink(const QString &path, bool dirs, int cacheSize): QObject(), dirpath(QString::null), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
 {
 	cache = new ImgCache(cacheSize);
-	imgloader.setSink(this);
-        thloader.setSink(this);
         open(path);
 }
 
 ImgDirSink::ImgDirSink(const ImgDirSink &sink, int cacheSize): QObject(), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
 {
 	cache = new ImgCache(cacheSize);
-
-	imgloader.setSink(this);
-        thloader.setSink(this);
 
 	dirpath = sink.dirpath;
 	cbname = sink.cbname;
@@ -145,11 +138,6 @@ int ImgDirSink::open(const QString &path)
 
 void ImgDirSink::close()
 {
-        thloader.stop();
-        imgloader.stop();
-        thloader.wait(); //wait for thumbnail loader thread
-        imgloader.wait(); //wait for preload thread
-
         listmtx.lock();
         dirpath = QString::null;
         imgfiles.clear();
@@ -246,20 +234,6 @@ Page ImgDirSink::getImage(unsigned int num, int &result)
 	return page;
 }
 
-void ImgDirSink::preload(unsigned int num)
-{
-	listmtx.lock();
-	if (num >= imgfiles.count())
-	{
-		listmtx.unlock();
-	}
-	else
-	{
-		listmtx.unlock();
-		imgloader.request(num);
-	}
-}
-
 Thumbnail* ImgDirSink::getThumbnail(int num, bool thumbcache)
 {
         QString fname;
@@ -298,16 +272,6 @@ Thumbnail* ImgDirSink::getThumbnail(int num, bool thumbcache)
         if (thumbcache)
                 t->save();
         return t;
-}
-
-void ImgDirSink::requestThumbnail(int num)
-{
-        thloader.request(num);
-}
-
-void ImgDirSink::requestThumbnails(int first, int n)
-{
-        thloader.request(first, n);
 }
 
 int ImgDirSink::numOfImages() const
@@ -393,11 +357,6 @@ void ImgDirSink::removeThumbnails(int days)
                 if (finfo.lastModified().daysTo(currdate) > days)
                         dir.remove(*it);
         }
-}
-
-ThumbnailLoaderThread& ImgDirSink::thumbnailLoader()
-{
-        return thloader;
 }
 
 bool ImgDirSink::knownImageExtension(const QString &path)
