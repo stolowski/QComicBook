@@ -178,7 +178,7 @@ void ComicBookSettings::load()
 		autoinfo = cfg->value(OPT_AUTOINFO, false).toBool();
 		showsplash = cfg->value(OPT_SHOWSPLASH, true).toBool();
 		thumbsage = cfg->value(OPT_THUMBSAGE, 7).toInt();
-		cachethumbs = cfg->value(OPT_CACHETHUMBS, true).toInt();
+		cachethumbs = cfg->value(OPT_CACHETHUMBS, true).toBool();
 		tmpdir = cfg->value(OPT_TMPDIR, QString()).toString();
 		QDir dir(tmpdir);
 		if (tmpdir.isNull() || !dir.exists())
