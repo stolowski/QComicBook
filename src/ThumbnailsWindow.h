@@ -40,7 +40,7 @@ namespace QComicBook
         //void onOrientationChanged(Orientation o); -- nie ma w Qt4
         
     public slots:
-        void setThumbnail(Thumbnail *t);
+        void setThumbnail(const Thumbnail &t);
         
     public:
         ThumbnailsWindow(QWidget *parent=0);

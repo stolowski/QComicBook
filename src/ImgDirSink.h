@@ -135,7 +135,7 @@ namespace QComicBook
 			 *  the image is loaded and thumbnail is generated.
 			 *  @param num page number
 			 *  @param thumbcache specifies if thumbnails disk cache should be used */
-			virtual Thumbnail* getThumbnail(int num, bool thumbcache=true);
+			virtual Thumbnail getThumbnail(int num, bool thumbcache=true);
 
 			/*! @return number of images for this comic book sink */
 			virtual int numOfImages() const;

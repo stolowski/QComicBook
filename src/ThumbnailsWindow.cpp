@@ -32,9 +32,9 @@ ThumbnailsWindow::~ThumbnailsWindow()
 {
 }
 
-void ThumbnailsWindow::setThumbnail(Thumbnail *t)
+void ThumbnailsWindow::setThumbnail(const Thumbnail &t)
 {
-    tview->setPage(*t);
+    tview->setPage(t);
 }
 
 void ThumbnailsWindow::showEvent(QShowEvent *e)

@@ -20,7 +20,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QTextStream>
-#include <iostream>
+#include <QDebug>
 
 using namespace QComicBook;
 
@@ -200,7 +200,7 @@ Page ImgDirSink::getImage(unsigned int num, int &result)
 	{
 		listmtx.unlock();
 		result = 0;
-		std::cout << "from cache: " << num << std::endl;
+		qDebug() << "from cache:" << num;
 	}
 	else if (num < imgcnt)
 	{
@@ -222,7 +222,7 @@ Page ImgDirSink::getImage(unsigned int num, int &result)
 		}*/
 
 		cache->insertImage(num, im);
-		std::cout << "to cache: " << num << std::endl;
+		qDebug() << "to cache:" << num;
 	}
         else
 	{
@@ -234,7 +234,7 @@ Page ImgDirSink::getImage(unsigned int num, int &result)
 	return page;
 }
 
-Thumbnail* ImgDirSink::getThumbnail(int num, bool thumbcache)
+Thumbnail ImgDirSink::getThumbnail(int num, bool thumbcache)
 {
         QString fname;
         listmtx.lock();
@@ -243,34 +243,35 @@ Thumbnail* ImgDirSink::getThumbnail(int num, bool thumbcache)
         else
         {
                 listmtx.unlock();
-                return NULL;
+                return Thumbnail(); //TODO exception?
         }
         listmtx.unlock();
 
-        Thumbnail *t = new Thumbnail(num, cbname.remove('/'));
+        Thumbnail t(num, cbname.remove('/'));
 
         //
         // try to load cached thumbnail
         if (thumbcache)
         {
-            if (t->tryLoad())
+            if (t.tryLoad())
             {
+                qDebug() << "thumbnail" << num << "loaded from disk";
                 return t;
             }
         }
 
         //
         // try to load image
-        if (!t->fromOriginalImage(fname))
+        if (t.fromOriginalImage(fname))
         {
-            delete t;
-            return NULL;
+            //
+            // save thumbnail if caching enabled
+            if (thumbcache)
+            {
+                t.save();
+            }
         }
 
-        //
-        // save thumbnail if caching enabled
-        if (thumbcache)
-                t->save();
         return t;
 }
 

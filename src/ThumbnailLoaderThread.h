@@ -27,7 +27,7 @@ namespace QComicBook
     Q_OBJECT
             
     signals:
-        void thumbnailLoaded(Thumbnail *);
+        void thumbnailLoaded(const Thumbnail &);
 
     public:
         ThumbnailLoaderThread(bool cache=false);
@@ -36,7 +36,6 @@ namespace QComicBook
         
     protected:
         virtual bool process(const LoadRequest &req);
-        
         
     private:
         QMutex mtx;

@@ -44,7 +44,6 @@
 #include <QWidgetAction>
 #include <QList>
 #include <QUrl>
-#include <typeinfo>
 
 using namespace QComicBook;
 using namespace Utility;
@@ -95,7 +94,6 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), sink(NUL
     connect(cfg, SIGNAL(displaySettingsChanged()), this, SLOT(reconfigureDisplay()));
     enableComicBookActions(false);
 
-    qRegisterMetaType<Page>("Page");
     pageLoader = new PageLoaderThread();
     connect(pageLoader, SIGNAL(pageLoaded(const Page&)), view, SLOT(setImage(const Page&)));
     connect(pageLoader, SIGNAL(pageLoaded(const Page&, const Page&)), view, SLOT(setImage(const Page&, const Page&)));
@@ -106,7 +104,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), sink(NUL
     pageLoader->start();
 
     thumbnailLoader = new ThumbnailLoaderThread();
-    connect(thumbnailLoader, SIGNAL(thumbnailLoaded(Thumbnail *)), thumbswin, SLOT(setThumbnail(Thumbnail *)));
+    connect(thumbnailLoader, SIGNAL(thumbnailLoaded(const Thumbnail &)), thumbswin, SLOT(setThumbnail(const Thumbnail &)));
     thumbnailLoader->start();
 }
 

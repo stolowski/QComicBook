@@ -34,11 +34,8 @@ bool ThumbnailLoaderThread::process(const LoadRequest &req)
     else
     {
         qDebug() << "thumbnail requested: " << req.pageNumber;
-        Thumbnail *t = sink->getThumbnail(req.pageNumber, usecache);
-        if (t)
-        {
-            emit thumbnailLoaded(t);
-        }
+        const Thumbnail t = sink->getThumbnail(req.pageNumber, usecache);
+        emit thumbnailLoaded(t); //TODO errors
     }
     return true;
 }

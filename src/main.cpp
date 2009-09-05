@@ -16,6 +16,8 @@
 #include <QTimer>
 #include "ComicMainWindow.h"
 #include "ComicBookSettings.h"
+#include "Thumbnail.h"
+#include "Page.h"
 #include "config.h"
 
 int main(int argc, char *argv[])
@@ -24,6 +26,9 @@ int main(int argc, char *argv[])
 
 	QApplication app(argc, argv);
 	const QString errcaption = ComicMainWindow::tr("QComicBook error");
+
+        qRegisterMetaType<Page>("Page");
+        qRegisterMetaType<Thumbnail>("Thumbnail");
 
 	ComicBookSettings::instance().load();
 
@@ -61,7 +66,6 @@ int main(int argc, char *argv[])
 		QObject::connect(timer, SIGNAL(timeout()), splash, SLOT(close()));
 		timer->setSingleShot(true);
 		timer->start(2000);
-		//splash->finish(win);
 	}
 
 	return app.exec();

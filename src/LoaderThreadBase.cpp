@@ -28,7 +28,7 @@ void LoaderThreadBase::setSink(ImgDirSink *sink)
 
 void LoaderThreadBase::request(int page)
 {
-    qDebug() << "request page: " << page;
+    qDebug() << "requested page" << page;
 
     loaderMutex.lock();
     const LoadRequest req(page, false);
@@ -44,7 +44,7 @@ void LoaderThreadBase::request(int page)
 
 void LoaderThreadBase::requestTwoPages(int page)
 {
-    qDebug() << "request 2 pages: " << page << "\n";
+    qDebug() << "requested 2 pages" << page;
 
     loaderMutex.lock();
     const LoadRequest req(page, true);
@@ -125,7 +125,7 @@ void LoaderThreadBase::run()
             sinkMutex.lock(); //TODO is it safe to lock when process() may emit signal?
             if (sink)
             {
-                qDebug() << "loading: " << req.pageNumber;
+                qDebug() << "loading" << req.pageNumber;
                 process(req);
             }
             sinkMutex.unlock();
