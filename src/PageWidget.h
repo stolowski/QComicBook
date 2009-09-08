@@ -29,7 +29,7 @@ namespace QComicBook
         void propsChanged();
 
     public:
-        PageWidget(PageViewBase *parent, int pageNum, bool twoPages=false);
+        PageWidget(PageViewBase *parent, int w, int h, int pageNum, bool twoPages=false);
         virtual ~PageWidget();
 
         void setImage(const Page &img1);

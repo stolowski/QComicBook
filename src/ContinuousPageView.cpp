@@ -33,6 +33,8 @@ ContinuousPageView::ContinuousPageView(QWidget *parent, int physicalPages, bool 
     , m_physicalPages(physicalPages)
     , m_firstVisible(-1)
     , m_firstVisibleOffset(0)
+    , m_y1pos(NULL)
+    , m_y2pos(NULL)
 {
     //setFocusPolicy(QWidget::StrongFocus);
  
@@ -40,13 +42,19 @@ ContinuousPageView::ContinuousPageView(QWidget *parent, int physicalPages, bool 
     w->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
     m_layout = new QVBoxLayout(w);
     m_layout->setContentsMargins(0, 0, 0, 0);
+    m_layout->setSpacing(0);
     m_layout->setAlignment(Qt::AlignCenter);
+
     recreatePageWidgets();
+    recalculatePageSizes();
     setWidget(w);
     setWidgetResizable(true);
     
     setBackground(color);
     setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+
+    // track scrollbar range changes to restore its relative position
+    connect(verticalScrollBar(), SIGNAL(rangeChanged(int, int)), this, SLOT(scrollbarRangeChanged(int, int)));
 }
 
 ContinuousPageView::~ContinuousPageView()
@@ -57,6 +65,7 @@ void ContinuousPageView::setNumOfPages(int n)
 {
     m_physicalPages = n;
     recreatePageWidgets();
+    recalculatePageSizes();
     disposeOrRequestPages();
 }
 
@@ -66,8 +75,21 @@ void ContinuousPageView::propsChanged()
     {
         p->redrawImages();
     }
+    recalculatePageSizes();
     disposeOrRequestPages();
     update();
+}
+
+void ContinuousPageView::scrollbarRangeChanged(int min, int max)
+{
+    //
+    // scrollbar ranges were updated (probably due to resizeEvent) -- restore previous page position
+    if (m_firstVisible >= 0)
+    {
+        int offset = m_y1pos[m_firstVisible] + static_cast<int>(m_firstVisibleOffset * (m_y2pos[m_firstVisible]-m_y1pos[m_firstVisible]));
+        qDebug() << "scroll offset" << offset;
+        verticalScrollBar()->setValue(offset);
+    }
 }
 
 void ContinuousPageView::recreatePageWidgets()
@@ -78,33 +100,45 @@ void ContinuousPageView::recreatePageWidgets()
         delete p;
     }
     imgLabel.clear();
+    delete [] m_y1pos;
+    delete [] m_y2pos;
+    m_y1pos = m_y2pos = NULL;
+    
+    int w = viewport()->width() - 10;
+    int h = viewport()->height() - 10;
 
-    if (props.twoPagesMode())
+    if (m_physicalPages)
     {
-        int i = 0;
-        if (m_physicalPages % 2) // odd number of pages
+        if (props.twoPagesMode())
         {
-            PageWidget *p = new PageWidget(this, 0);
-            imgLabel.append(p);
-            m_layout->addWidget(p);
-            ++i;
+            int i = 0;
+            if (m_physicalPages % 2) // odd number of pages
+            {
+                PageWidget *p = new PageWidget(this, w, h, 0);
+                imgLabel.append(p);
+                m_layout->addWidget(p);
+                ++i;
+            }
+            for (; i<m_physicalPages; i+=2)
+            {
+                PageWidget *p = new PageWidget(this, w, h, i, true);
+                imgLabel.append(p);
+                m_layout->addWidget(p);
+            }
         }
-        for (; i<m_physicalPages; i+=2)
+        else
         {
-            PageWidget *p = new PageWidget(this, i, true);
-            imgLabel.append(p);
-            m_layout->addWidget(p);
+            for (int i=0; i<m_physicalPages; i++)
+            {
+                PageWidget *p = new PageWidget(this, w, h, i);
+                p->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+                imgLabel.append(p);
+                m_layout->addWidget(p);
+            }
         }
-    }
-    else
-    {
-        for (int i=0; i<m_physicalPages; i++)
-        {
-            PageWidget *p = new PageWidget(this, i);
-            p->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-            imgLabel.append(p);
-            m_layout->addWidget(p);
-        }
+        
+        m_y1pos = new int [imgLabel.size()];
+        m_y2pos = new int [imgLabel.size()];
     }
 }
 
@@ -123,16 +157,21 @@ PageWidget* ContinuousPageView::findPageWidget(int pageNum) const
 
 void ContinuousPageView::disposeOrRequestPages()
 {
+    qDebug() << "ContinuousPageView::disposeOrRequestPages";
+
     const int vy1 = verticalScrollBar()->value();
     const int vy2 = vy1 + viewport()->height();
 
+    int y = 0;
+
     m_firstVisible = -1;
-    m_firstVisibleOffset = 0;
+    m_firstVisibleOffset = 0.0f;
 
     for (int i=0; i<imgLabel.size(); i++)
     {
         PageWidget *w = imgLabel[i];
-        if (w->isInView(vy1, vy2))
+   
+        if (isInView(m_y1pos[i], m_y2pos[i], vy1, vy2))
         {
             if (w->estimatedSize() || w->isDisposed())
             {
@@ -144,7 +183,7 @@ void ContinuousPageView::disposeOrRequestPages()
             if (m_firstVisible < 0)
             {
                 m_firstVisible = i;
-                m_firstVisibleOffset = vy1 - w->pos().y();
+                m_firstVisibleOffset = static_cast<double>(vy1 - m_y1pos[i]) / w->height(); //visible portion (%) of page
             }
         }
         else
@@ -152,8 +191,9 @@ void ContinuousPageView::disposeOrRequestPages()
             if (!w->estimatedSize() && !w->isDisposed())
             {
                 // dispose page only if none of its neighbours are in view
-                if (! ((i>1 && imgLabel[i-1]->isInView(vy1, vy2)) || (i<imgLabel.size()-1 && imgLabel[i+1]->isInView(vy1, vy2))) )
+                if (! ((i>1 && isInView(m_y1pos[i-1], m_y2pos[i-1], vy1, vy2)) || (i<imgLabel.size()-1 && isInView(m_y1pos[i+1], m_y2pos[i+1], vy1, vy2))) )
                 {
+                    qDebug() << "disposing page" << w->pageNumber();
                     w->dispose();
                 }
             }
@@ -187,6 +227,8 @@ QList<PageWidget *> ContinuousPageView::findPageWidgetsInView() const
 
 void ContinuousPageView::recalculatePageSizes()
 {
+    qDebug() << "ContinuousPageView::recalculatePageSizes";
+
     if (imgLabel.size() > 0)
     {
         int avgw = 0;
@@ -204,15 +246,34 @@ void ContinuousPageView::recalculatePageSizes()
         }
         if (n > 0)
         {
+            int y = 0;
             avgw /= n;
             avgh /= n;
             qDebug() << "estimated w=" << avgw << "h=" << avgh;
-            foreach (PageWidget *p, imgLabel)
+           
+            for (int i=0; i<imgLabel.size(); i++)
             {
+                PageWidget *p = imgLabel[i];
                 if (p->estimatedSize())
                 {
                     p->setEstimatedSize(avgw, avgh);
                 }
+                // update positions lookup
+                m_y1pos[i] = y;
+                m_y2pos[i] = y + p->height();
+                y += p->height();
+            }
+        }
+        else
+        {
+            int y = 0;
+            for (int i=0; i<imgLabel.size(); i++)
+            {
+                PageWidget *p = imgLabel[i];
+                // update positions lookup
+                m_y1pos[i] = y;
+                m_y2pos[i] = y + p->height();
+                y += p->height();
             }
         }
     }
@@ -221,8 +282,8 @@ void ContinuousPageView::recalculatePageSizes()
 
 void ContinuousPageView::scrollContentsBy(int dx, int dy)
 {
-    PageViewBase::scrollContentsBy(dx, dy);
     qDebug() << "ContinuousPageView::scrollContentsBy y=" << verticalScrollBar()->value();
+    PageViewBase::scrollContentsBy(dx, dy);
     disposeOrRequestPages();
     
     const int n = currentPage();
@@ -235,6 +296,7 @@ void ContinuousPageView::scrollContentsBy(int dx, int dy)
 void ContinuousPageView::setImage(const Page &img1)
 {
     Q_ASSERT(m_physicalPages > 0);
+    delRequest(img1.getNumber(), false);
     //if (!preserveangle)
     //          iangle = 0;
     PageWidget *w = findPageWidget(img1.getNumber());
@@ -246,6 +308,7 @@ void ContinuousPageView::setImage(const Page &img1)
 void ContinuousPageView::setImage(const Page &img1, const Page &img2)
 {
     Q_ASSERT(m_physicalPages > 0);
+    delRequest(img1.getNumber(), true);
     //  if (!preserveangle)
     //          iangle = 0;
     PageWidget *w = findPageWidget(img1.getNumber());
@@ -257,49 +320,24 @@ void ContinuousPageView::setImage(const Page &img1, const Page &img2)
 
 void ContinuousPageView::resizeEvent(QResizeEvent *e)
 {
-    qDebug() << "ContinuousPageView::resizeEvent";
-    
-    if (m_firstVisible >= 0)
-    {
-        qDebug() << "first visible y=" << imgLabel[m_firstVisible]->pos().y() << "h=" << imgLabel[m_firstVisible]->height();
-    }
-
+    qDebug() << "ContinuousPageView::resizeEvent"; 
+   
     foreach (PageWidget *w, imgLabel)
     {
         w->redrawImages();
     }
+
     recalculatePageSizes();
-    //viewport()->updateGeometry();
-    // disposeOrRequestPages();
-
-    if (m_firstVisible >= 0)
+    /*if (e->oldSize().height() != e->size().height())
     {
-        int offset = 0;
-        for (int i=0; i<m_firstVisible; i++)
-        {
-            offset += imgLabel[i]->height();
-        }
-        qDebug() << "after upd first visible y=" << imgLabel[m_firstVisible]->pos().y() << "h=" << imgLabel[m_firstVisible]->height() << "should be" << offset;
-
-        const int newPos = imgLabel[m_firstVisible]->pos().y();// + m_firstVisibleOffset;
-
-        if (verticalScrollBar()->value() != newPos)
-        {
-            qDebug() << "old Y pos=" << verticalScrollBar()->value() << "new=" << newPos;
-            
-        }
-        verticalScrollBar()->setValue(offset);
-//        ensureVisible(0, offset, 0, 0);
-    }
-   
-    //viewport()->update();
-//    e->accept();
-    QScrollArea::resizeEvent(e);
+        disposeOrRequestPages();
+    }*/
+    QScrollArea::resizeEvent(e); 
 }
 
 void ContinuousPageView::wheelEvent(QWheelEvent *e)
 {
-    e->accept();
+    QScrollArea::wheelEvent(e);
 //TODO
     /*e->accept();
         if (e->delta() > 0) //scrolling up
@@ -436,7 +474,9 @@ void ContinuousPageView::gotoPage(int n)
     PageWidget *w = findPageWidget(n);
     if (w)
     {
-        scrollContentsBy(0, w->pos().y());
+        int idx = imgLabel.indexOf(w);
+        Q_ASSERT(idx >= 0);
+        ensureVisible(0, m_y1pos[idx]);
     }
 }
 
@@ -474,14 +514,14 @@ int ContinuousPageView::currentPage() const
     int current(-1);
     const int vy1 = verticalScrollBar()->value();
     const int vy2 = vy1 + viewport()->height();
-    //
+    //\
     // find page with most part displayed on the view
     int i = 0;
     if (m_firstVisible < 0)
     {
         for (; i<imgLabel.size(); i++)
         {
-            if (imgLabel[i]->isInView(vy1, vy2))
+            if (isInView(m_y1pos[i], m_y2pos[i], vy1, vy2))
             {
                 break;
             }
@@ -495,11 +535,8 @@ int ContinuousPageView::currentPage() const
     {
         PageWidget *w = imgLabel[i];
         
-        const int y1 = w->pos().y();
-        const int y2 = y1 + w->height();
-
-        const int my1 = std::max(y1, vy1);
-        const int my2 = std::min(y2, vy2);
+        const int my1 = std::max(m_y1pos[i], vy1);
+        const int my2 = std::min(m_y2pos[i], vy2);
         
         if (my2 <= my1)
         {

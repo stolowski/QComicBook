@@ -40,6 +40,11 @@ namespace QComicBook
 
                 protected slots:
                         void propsChanged();
+                        void scrollbarRangeChanged(int min, int max);
+                        static bool isInView(int y1, int y2, int vy1, int vy2)
+                        {
+                            return std::min(y2, vy2) > std::max(y1, vy1);
+                        }
 
 		public slots:
 			virtual void setImage(const Page &img1);
@@ -78,8 +83,10 @@ namespace QComicBook
 			static const int EXTRA_WHEEL_SPIN; //number of extra wheel spins to flip the page
 			static const float JUMP_FACTOR; //factor used to calculate the amount of space to scroll when scrolling page with space
 			QVector<PageWidget*> imgLabel;
+                        int *m_y1pos;
+                        int *m_y2pos;
                         int m_firstVisible; //first visible page in the view
-                        int m_firstVisibleOffset; //Y offset of first visible page
+                        double m_firstVisibleOffset; //visible portion (%) of first visible page
                         QVBoxLayout *m_layout;
                         int m_physicalPages;
 	};

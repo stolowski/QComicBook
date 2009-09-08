@@ -21,18 +21,18 @@
 
 using namespace QComicBook;
 
-PageWidget::PageWidget(PageViewBase *parent, int pageNum, bool twoPages)
+PageWidget::PageWidget(PageViewBase *parent, int w, int h, int pageNum, bool twoPages)
     : QWidget(parent)
     , view(parent)
     , m_pageNum(pageNum)
     , m_twoPages(twoPages)
     , m_pixmap(NULL)
-    , pageSize(1, 1)
+    , pageSize(w, h)
     , estimated(true)
 {
     m_image[0] = m_image[1] = NULL;
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    setFixedSize(1, 1);
+    setFixedSize(w, h);
 }
 
 PageWidget::~PageWidget()
@@ -230,6 +230,7 @@ void PageWidget::redrawImages()
             m_pixmap = new QPixmap(pixmapWidth, pixmapHeight);
         }
         QPainter p(m_pixmap);
+        p.setRenderHint(QPainter::SmoothPixmapTransform, true); //FIXME configurable
  
         QMatrix rmtx;
         rmtx.reset();   
