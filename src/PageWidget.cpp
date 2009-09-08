@@ -12,15 +12,16 @@
 
 #include "PageWidget.h"
 #include "Page.h"
-#include "ComicImageView.h"
+#include "PageViewBase.h"
 #include <QPaintEvent>
 #include <QPainter>
 #include <QSizePolicy>
 #include <QScrollBar>
+#include <QDebug>
 
 using namespace QComicBook;
 
-PageWidget::PageWidget(ComicImageView *parent, int pageNum, bool twoPages)
+PageWidget::PageWidget(PageViewBase *parent, int pageNum, bool twoPages)
     : QWidget(parent)
     , view(parent)
     , m_pageNum(pageNum)
@@ -97,14 +98,10 @@ bool PageWidget::estimatedSize() const
     return estimated;
 }
 
-bool PageWidget::isInView() const
+bool PageWidget::isInView(int vy1, int vy2) const
 {
     const int y1 = pos().y();
-    const int y2 = y1 + pageSize.height();
-    const int vy1 = view->verticalScrollBar()->value();
-    const int vy2 = vy1 + view->viewport()->height();
-
-    return (y1 >= vy1 && y1 <= vy2) || (y2 >= vy1 && y2 <= vy2) || (y1 <= vy1 && y2 >= vy2);
+    return std::min(y1 + pageSize.height(), vy2) > std::max(y1, vy1);
 }
 
 int PageWidget::pageNumber() const

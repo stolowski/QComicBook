@@ -12,7 +12,7 @@
 
 #include "ComicBookCfgDialog.h"
 #include "ComicBookSettings.h"
-#include "ComicImageView.h"
+#include "PageViewBase.h"
 #include <QColorDialog>
 #include <QFontDialog>
 

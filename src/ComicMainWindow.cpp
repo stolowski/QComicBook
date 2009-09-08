@@ -15,7 +15,7 @@
 #include "ComicMainWindow.h"
 #include "Page.h"
 #include "ComicBookInfo.h"
-#include "ComicImageView.h"
+#include "ContinuousPageView.h"
 #include "ArchiversConfiguration.h"
 #include "ImgArchiveSink.h"
 #include "ImgSinkFactory.h"
@@ -168,7 +168,7 @@ void ComicMainWindow::setupActions()
 
 void ComicMainWindow::setupComicImageView()
 {
-    view = new ComicImageView(this, 0, actionTwoPages->isChecked(), cfg->pageSize(), cfg->background());
+    view = new ContinuousPageView(this, 0, actionTwoPages->isChecked(), cfg->pageSize(), cfg->background());
         setCentralWidget(view);
         view->setFocus();
         reconfigureDisplay();
@@ -204,6 +204,8 @@ void ComicMainWindow::setupComicImageView()
         }
 	connect(view, SIGNAL(doubleClick()), this, SLOT(nextPage()));
         view->enableScrollbars(cfg->scrollbarsVisible());
+        connect(view, SIGNAL(currentPageChanged(int)), this, SLOT(currentPageChanged(int)));
+
         QAction *which = actionOriginalSize;
         switch (cfg->pageSize())
         {
@@ -718,7 +720,7 @@ void ComicMainWindow::jumpToPage(int n, bool force)
                 int result1, result2;
                 const bool preserveangle = actionTogglePreserveRotation->isChecked(); //FIXME
 
-                if (actionTwoPages->isChecked())
+                /*if (actionTwoPages->isChecked())
                 {
                         Page img1 = sink->getImage(currpage = n, result1);
                         Page img2 = sink->getImage(currpage + 1, result2);
@@ -753,6 +755,7 @@ void ComicMainWindow::jumpToPage(int n, bool force)
                         view->ensureVisible(view->viewWidth(), 0);
 		else
 			view->ensureVisible(0, 0);
+                */
                 const QString page = tr("Page") + " " + QString::number(currpage + 1) + "/" + QString::number(sink->numOfImages());
                 pageinfo->setText(page);
                 statusbar->setPage(currpage + 1, sink->numOfImages());
@@ -770,6 +773,15 @@ void ComicMainWindow::jumpToPage(int n, bool force)
 			}
 		}
         }
+        view->gotoPage(0); //FIXME
+}
+
+void ComicMainWindow::currentPageChanged(int n)
+{
+    const QString page = tr("Page") + " " + QString::number(n + 1) + "/" + QString::number(sink->numOfImages());
+    pageinfo->setText(page);
+    statusbar->setPage(n + 1, sink->numOfImages());
+    thumbswin->view()->scrollToPage(n);
 }
 
 void ComicMainWindow::showInfo()
@@ -917,7 +929,7 @@ void ComicMainWindow::saveSettings()
         cfg->continuousScrolling(actionToggleContinuousScroll->isChecked());
         cfg->lastDir(lastdir);
         cfg->recentlyOpened(*recentfiles);
-        cfg->pageSize(view->getSize());
+        cfg->pageSize(view->properties().size());
         cfg->showStatusbar(actionToggleStatusbar->isChecked());
 
         bookmarks->save();        

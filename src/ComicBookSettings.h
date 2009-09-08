@@ -13,7 +13,7 @@
 #ifndef __SETTINGS_H
 #define __SETTINGS_H
 
-#include "ComicImageView.h"
+#include "PageViewBase.h"
 #include "History.h"
 #include "EnumMap.h"
 #include <QObject>

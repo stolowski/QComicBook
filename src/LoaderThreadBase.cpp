@@ -70,6 +70,7 @@ void LoaderThreadBase::cancel(int page)
 {
     loaderMutex.lock();
     const LoadRequest req(page, false);
+    qDebug() << "canceled page" << page;
     requests.removeAll(req);
     loaderMutex.unlock();
 }
@@ -77,6 +78,7 @@ void LoaderThreadBase::cancel(int page)
 void LoaderThreadBase::cancelTwoPages(int page)
 {
     loaderMutex.lock();
+    qDebug() << "canceled 2 pages" << page;
     const LoadRequest req(page, true);
     requests.removeAll(req);
     loaderMutex.unlock();

@@ -28,7 +28,7 @@ namespace QComicBook
 {
 	class ImgDirSink;
 	class ComicBookSettings;
-	class ComicImageView;
+	class PageViewBase;
 	class ThumbnailsWindow;
 	class Bookmarks;
 	class StatusBar;
@@ -43,7 +43,7 @@ namespace QComicBook
 
 		private:
 			ImgDirSink *sink;
-			ComicImageView *view;
+			PageViewBase *view;
 			ThumbnailsWindow *thumbswin;
 			History *recentfiles;
 			Bookmarks *bookmarks;
@@ -93,6 +93,7 @@ namespace QComicBook
 			void thumbnailsWindowShown();
 			void savePageAs();
                         void reconfigureDisplay();
+                        void currentPageChanged(int n);
 
 		public slots:
 			void firstPage();

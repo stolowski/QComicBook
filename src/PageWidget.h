@@ -19,7 +19,7 @@
 namespace QComicBook
 {
     class Page;
-    class ComicImageView;
+    class PageViewBase;
 
     class PageWidget: public QWidget
     {
@@ -29,7 +29,7 @@ namespace QComicBook
         void propsChanged();
 
     public:
-        PageWidget(ComicImageView *parent, int pageNum, bool twoPages=false);
+        PageWidget(PageViewBase *parent, int pageNum, bool twoPages=false);
         virtual ~PageWidget();
 
         void setImage(const Page &img1);
@@ -37,7 +37,7 @@ namespace QComicBook
         void dispose();
         bool isDisposed() const;
         const QPixmap* pixmap() const;
-        bool isInView() const;
+        bool isInView(int vy1, int vy2) const;
         virtual void paintEvent(QPaintEvent *event);
         virtual void resizeEvent(QResizeEvent *event);
 //        virtual QSize sizeHint() const;
@@ -53,7 +53,7 @@ namespace QComicBook
         void drawPageNumber(int page, QPainter &p, int x, int y);
 
     private:
-        ComicImageView *view;
+        PageViewBase *view;
         int m_pageNum; //number of physical page
         Page *m_image[2];
         int xoff, yoff;

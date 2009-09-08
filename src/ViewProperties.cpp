@@ -2,11 +2,12 @@
 
 using namespace QComicBook;
 
-ViewProperties::ViewProperties(Size size, unsigned char angle, bool pagenumbers, bool contScroll)
+ViewProperties::ViewProperties(Size size, unsigned char angle, bool twoPagesMode, bool pagenumbers, bool contScroll)
     : m_size(size)
     , m_angle(angle)
     , m_pageNumbers(pagenumbers)
     , m_contScroll(contScroll)
+    , m_twoPagesMode(twoPagesMode)
 {
 }
 
@@ -76,4 +77,18 @@ void ViewProperties::setBackground(const QColor &c)
 bool ViewProperties::continuousScrolling() const
 {
     return m_contScroll;
+}
+
+void ViewProperties::setTwoPagesMode(bool f)
+{
+    if (m_twoPagesMode != f)
+    {
+        m_twoPagesMode = f;
+        emit changed();
+    }
+}
+
+bool ViewProperties::twoPagesMode() const
+{
+    return m_twoPagesMode;
 }

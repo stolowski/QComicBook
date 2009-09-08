@@ -13,8 +13,9 @@ SET(qcomicbook_src
 	Bookmarks.cpp ComicBookCfgDialog.cpp ComicBookInfo.cpp ComicBookSettings.cpp ComicMainWindow.cpp DirReader.cpp
 	History.cpp IconViewThumbnail.cpp ImgArchiveSink.cpp
 	ImgCache.cpp
-	ImgDirSink.cpp LoaderThreadBase.cpp PageLoaderThread.cpp ImgSinkFactory.cpp ComicImageView.cpp
+	ImgDirSink.cpp LoaderThreadBase.cpp PageLoaderThread.cpp ImgSinkFactory.cpp
 	JumpToPageWindow.cpp ListViewThumbnail.cpp main.cpp Utility.cpp Page.cpp PageNumberEdit.cpp PageWidget.cpp
+        PageViewBase.cpp SimplePageView.cpp ContinuousPageView.cpp
 	StatusBar.cpp SupportedArchivesWindow.cpp Thumbnail.cpp
 	ThumbnailItem.cpp ThumbnailLoaderThread.cpp
 	ThumbnailsView.cpp ThumbnailsWindow.cpp
@@ -26,7 +27,9 @@ SET(qcomicbook_moc_hdrs
 		 ComicBookCfgDialog.h 
 		 ComicBookSettings.h 
 		 ComicMainWindow.h 
-		 ComicImageView.h 
+		 PageViewBase.h 
+                 ContinuousPageView.h
+                 SimplePageView.h
 		 ImgDirSink.h 
 		 ImgArchiveSink.h
                  LoaderThreadBase.h 
