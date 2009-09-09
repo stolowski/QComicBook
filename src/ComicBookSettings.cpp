@@ -25,7 +25,7 @@
 #define OPT_TWOPAGES                 "/TwoPages"
 #define OPT_JAPANESEMODE             "/JapaneseMode"
 #define OPT_SCROLLBARS               "/Scrollbars"
-//#define OPT_SCALING                  "/Scaling"
+#define OPT_SMOOTHSCALING            "/SmoothScaling"
 #define OPT_PAGESIZE                 "/PageSize"
 #define OPT_BACKGROUND               "/Background"
 #define OPT_FULLSCREENHIDEMENU       "/FullScreenHideMenu"
@@ -71,12 +71,6 @@ const EnumMap<Size> ComicBookSettings::size2string[] = {
 	{"bestfit",   BestFit},
 	{QString::null}
 };
-
-/*const EnumMap<Scaling> ComicBookSettings::scaling2string[] = {
-	{"smooth", Smooth},
-	{"fast",   Fast},
-	{QString::null}
-};*/
 
 ComicBookSettings& ComicBookSettings::instance()
 {
@@ -148,7 +142,7 @@ void ComicBookSettings::load()
 		twopages = cfg->value(OPT_TWOPAGES, false).toBool();
 		japanese = cfg->value(OPT_JAPANESEMODE, false).toBool();
 		scrollbars = cfg->value(OPT_SCROLLBARS, false).toBool();
-		//scaling = convert(scaling2string, cfg->readEntry(OPT_SCALING, size2string[0].str));
+		smoothscaling = cfg->value(OPT_SMOOTHSCALING, true).toBool();
 		pagesize = convert(size2string, cfg->value(OPT_PAGESIZE, size2string[0].str).toString());
 		bgcolor = cfg->value(OPT_BACKGROUND).value<QColor>();
 		fscrhidemenu = cfg->value(OPT_FULLSCREENHIDEMENU, true).toBool();
@@ -231,10 +225,10 @@ Size ComicBookSettings::pageSize() const
 	return pagesize;
 }
 
-/*Scaling ComicBookSettings::pageScaling() const
+bool ComicBookSettings::smoothScaling() const
 {
-	return scaling;
-}*/
+    return smoothscaling;
+}
 
 QString ComicBookSettings::lastDir() const
 {
@@ -395,14 +389,13 @@ void ComicBookSettings::pageSize(Size s)
 		cfg->setValue(GRP_VIEW OPT_PAGESIZE, convert(size2string, pagesize = s));
 }
 
-/*void ComicBookSettings::pageScaling(Scaling s)
+void ComicBookSettings::smoothScaling(bool s)
 {
-	if (s != scaling)
-	{
-		cfg->setValue(GRP_VIEW OPT_SCALING, convert(scaling2string, scaling = s));
-		emit scalingMethodChanged(scaling);
-	}
-}*/
+    if (s != smoothscaling)
+    {
+        cfg->setValue(GRP_VIEW OPT_SMOOTHSCALING, smoothscaling = s);
+    }
+}
 
 void ComicBookSettings::lastDir(const QString &d)
 {

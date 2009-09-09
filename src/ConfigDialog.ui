@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>816</width>
-    <height>644</height>
+    <width>534</width>
+    <height>513</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -47,6 +47,13 @@
            <widget class="QCheckBox" name="cb_embedpagenumbers">
             <property name="text">
              <string>Embed page numbers</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="cb_smoothscaling">
+            <property name="text">
+             <string>Smooth scaling</string>
             </property>
            </widget>
           </item>
@@ -119,9 +126,6 @@
            </layout>
           </item>
          </layout>
-         <zorder>cb_smallcursor</zorder>
-         <zorder>cb_embedpagenumbers</zorder>
-         <zorder></zorder>
         </widget>
        </item>
        <item>
@@ -171,7 +175,7 @@
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
-       <string>Misc</string>
+       <string>Performance</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
@@ -285,6 +289,26 @@
         </widget>
        </item>
        <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>398</width>
+           <height>149</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_3">
+      <attribute name="title">
+       <string>Misc</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_9">
+       <item>
         <widget class="QGroupBox" name="groupBox_5">
          <property name="title">
           <string>Convenience</string>
@@ -322,14 +346,14 @@
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer_2">
+        <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>398</width>
-           <height>149</height>
+           <width>20</width>
+           <height>255</height>
           </size>
          </property>
         </spacer>

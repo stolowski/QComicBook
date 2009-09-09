@@ -44,6 +44,7 @@ ComicBookCfgDialog::ComicBookCfgDialog(QWidget *parent, ComicBookSettings *cfg):
     cb_hidestatus->setChecked(cfg->fullScreenHideStatusbar());
     cb_smallcursor->setChecked(cfg->smallCursor());
     cb_embedpagenumbers->setChecked(cfg->embedPageNumbers());
+    cb_smoothscaling->setChecked(cfg->smoothScaling());
 
     sb_cachesize->setValue(cfg->cacheSize());
     cb_cacheadjust->setChecked(cfg->cacheAutoAdjust());
@@ -71,11 +72,7 @@ void ComicBookCfgDialog::accept()
 	cfg->fullScreenHideToolbar(cb_hidetoolbar->isChecked());
 	cfg->smallCursor(cb_smallcursor->isChecked());
         cfg->embedPageNumbers(cb_embedpagenumbers->isChecked());
-	/*if (rb_smooth->isChecked())
-		cfg->pageScaling(Smooth);
-	else
-		if (rb_fast->isChecked())
-			cfg->pageScaling(Fast);*/
+	cfg->smoothScaling(cb_smoothscaling->isChecked());
 	cfg->infoFont(font);
 
 	//

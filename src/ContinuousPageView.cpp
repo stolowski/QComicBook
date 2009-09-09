@@ -59,6 +59,8 @@ ContinuousPageView::ContinuousPageView(QWidget *parent, int physicalPages, bool 
 
 ContinuousPageView::~ContinuousPageView()
 {
+    delete [] m_y1pos;
+    delete [] m_y2pos;
 }
 
 void ContinuousPageView::setNumOfPages(int n)
@@ -171,14 +173,20 @@ void ContinuousPageView::disposeOrRequestPages()
     {
         PageWidget *w = imgLabel[i];
    
+        // if page is visible on the screen but not loaded, request it
         if (isInView(m_y1pos[i], m_y2pos[i], vy1, vy2))
         {
-            if (w->estimatedSize() || w->isDisposed())
+            if (w->isDisposed())
             {
                 if (!hasRequest(w->pageNumber()))
                 {
+                    qDebug() << "requesting" << w->pageNumber();
                     addRequest(w->pageNumber(), props.twoPagesMode() && w->hasTwoPages());
                 }
+            }
+            else
+            {
+                qDebug() << "already loaded" << w->pageNumber();
             }
             if (m_firstVisible < 0)
             {
@@ -186,18 +194,32 @@ void ContinuousPageView::disposeOrRequestPages()
                 m_firstVisibleOffset = static_cast<double>(vy1 - m_y1pos[i]) / w->height(); //visible portion (%) of page
             }
         }
-        else
+        else // page is not visible
         {
-            if (!w->estimatedSize() && !w->isDisposed())
+            // if page images are still in memory
+            if (!w->isDisposed())
             {
                 // dispose page only if none of its neighbours are in view
                 if (! ((i>1 && isInView(m_y1pos[i-1], m_y2pos[i-1], vy1, vy2)) || (i<imgLabel.size()-1 && isInView(m_y1pos[i+1], m_y2pos[i+1], vy1, vy2))) )
                 {
-                    qDebug() << "disposing page" << w->pageNumber();
+                    qDebug() << "disposing" << w->pageNumber();
                     w->dispose();
+                    delRequest(w->pageNumber(), props.twoPagesMode() && w->hasTwoPages());
                 }
             }
-            delRequest(w->pageNumber(), props.twoPagesMode() && w->hasTwoPages());
+            else
+            {
+                // if previous page is visible then preload this one
+                if ((i>1 && isInView(m_y1pos[i-1], m_y2pos[i-1], vy1, vy2)))
+                {
+                    qDebug() << "preloading" << w->pageNumber();
+                    addRequest(w->pageNumber(), props.twoPagesMode() && w->hasTwoPages());
+                }
+                else
+                {
+                    delRequest(w->pageNumber(), props.twoPagesMode() && w->hasTwoPages());                   
+                }
+            }
         }
     }
     qDebug() << "first visible" << m_firstVisible << "offset" << m_firstVisibleOffset;
@@ -296,7 +318,7 @@ void ContinuousPageView::scrollContentsBy(int dx, int dy)
 void ContinuousPageView::setImage(const Page &img1)
 {
     Q_ASSERT(m_physicalPages > 0);
-    delRequest(img1.getNumber(), false);
+    delRequest(img1.getNumber(), false, false);
     //if (!preserveangle)
     //          iangle = 0;
     PageWidget *w = findPageWidget(img1.getNumber());
@@ -308,7 +330,7 @@ void ContinuousPageView::setImage(const Page &img1)
 void ContinuousPageView::setImage(const Page &img1, const Page &img2)
 {
     Q_ASSERT(m_physicalPages > 0);
-    delRequest(img1.getNumber(), true);
+    delRequest(img1.getNumber(), true, false);
     //  if (!preserveangle)
     //          iangle = 0;
     PageWidget *w = findPageWidget(img1.getNumber());

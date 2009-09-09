@@ -77,7 +77,7 @@ namespace QComicBook
 
             bool hasRequest(int page) const;
             void addRequest(int page, bool twoPages);
-            void delRequest(int page, bool twoPages);
+            void delRequest(int page, bool twoPages, bool cancel=true);
             void delRequests();
 
             ViewProperties props;

@@ -212,16 +212,19 @@ void PageViewBase::addRequest(int page, bool twoPages)
         emit requestPage(page);
 }
 
-void PageViewBase::delRequest(int page, bool twoPages)
+void PageViewBase::delRequest(int page, bool twoPages, bool cancel)
 {
     int idx = m_requestedPages.indexOf(page);
     if (idx >= 0)
     {
         m_requestedPages.removeAt(idx);
-        if (twoPages)
-            emit cancelTwoPagesRequest(page);
-        else
-            emit cancelPageRequest(page);
+        if (cancel)
+        {
+            if (twoPages)
+                emit cancelTwoPagesRequest(page);
+            else
+                emit cancelPageRequest(page);
+        }
     }
 }
 

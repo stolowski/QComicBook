@@ -13,6 +13,7 @@
 #include "PageWidget.h"
 #include "Page.h"
 #include "PageViewBase.h"
+#include "ComicBookSettings.h"
 #include <QPaintEvent>
 #include <QPainter>
 #include <QSizePolicy>
@@ -230,7 +231,7 @@ void PageWidget::redrawImages()
             m_pixmap = new QPixmap(pixmapWidth, pixmapHeight);
         }
         QPainter p(m_pixmap);
-        p.setRenderHint(QPainter::SmoothPixmapTransform, true); //FIXME configurable
+        p.setRenderHint(QPainter::SmoothPixmapTransform, ComicBookSettings::instance().smoothScaling());
  
         QMatrix rmtx;
         rmtx.reset();   
