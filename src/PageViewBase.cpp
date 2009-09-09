@@ -136,15 +136,6 @@ void PageViewBase::setMangaMode(bool f)
     //TODO
 }
 
-void PageViewBase::scrollToTop()
-{
-	verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
-}
-
-void PageViewBase::scrollToBottom()
-{
-	verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMaximum);
-}
 
 void PageViewBase::setSmallCursor(bool f)
 {

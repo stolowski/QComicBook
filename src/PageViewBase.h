@@ -32,14 +32,14 @@ namespace QComicBook
             virtual void setImage(const Page &img1, const Page &img2) = 0;
             virtual void clear() = 0;
             virtual void gotoPage(int n) = 0;
+            virtual void scrollToTop() = 0;
+            virtual void scrollToBottom() = 0;
 
             void setTwoPagesMode(bool f);
             void setMangaMode(bool f);
             void setBackground(const QColor &color);
             void setSmallCursor(bool f);
             void showPageNumbers(bool f);
-            void scrollToTop();
-            void scrollToBottom();
             void setRotation(Rotation r);
             void setSize(Size s);
             void setSizeOriginal();

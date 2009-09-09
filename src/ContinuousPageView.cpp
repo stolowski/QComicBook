@@ -496,9 +496,32 @@ void ContinuousPageView::gotoPage(int n)
     PageWidget *w = findPageWidget(n);
     if (w)
     {
-        int idx = imgLabel.indexOf(w);
+        const int idx(imgLabel.indexOf(w));
         Q_ASSERT(idx >= 0);
-        ensureVisible(0, m_y1pos[idx]);
+        m_firstVisibleOffset = 0;
+        verticalScrollBar()->setValue(m_y1pos[idx]);
+    }
+}
+
+void ContinuousPageView::scrollToTop()
+{
+    PageWidget *w = currentPageWidget();
+    if (w)
+    {
+        const int idx(imgLabel.indexOf(w));
+        Q_ASSERT(idx >= 0);
+        verticalScrollBar()->setValue(m_y1pos[idx]);
+    }
+}
+
+void ContinuousPageView::scrollToBottom()
+{
+    PageWidget *w = currentPageWidget();
+    if (w)
+    {
+        const int idx(imgLabel.indexOf(w));
+        Q_ASSERT(idx >= 0);
+        verticalScrollBar()->setValue(m_y2pos[idx] - viewport()->height());
     }
 }
 
@@ -530,13 +553,13 @@ int ContinuousPageView::viewWidth() const
 //    return (imgLabel->numOfPages()) ? imgLabel->width() : 0;
 }
 
-int ContinuousPageView::currentPage() const
+PageWidget *ContinuousPageView::currentPageWidget() const
 {
     double maxv(0.0f);
-    int current(-1);
+    PageWidget *current(NULL);
     const int vy1 = verticalScrollBar()->value();
     const int vy2 = vy1 + viewport()->height();
-    //\
+    //
     // find page with most part displayed on the view
     int i = 0;
     if (m_firstVisible < 0)
@@ -569,9 +592,20 @@ int ContinuousPageView::currentPage() const
         if (v > maxv)
         {
             maxv = v;
-            current = w->pageNumber();
+            current = w;
         }
         ++i;
+    }
+    return current;
+}
+
+int ContinuousPageView::currentPage() const
+{
+    int current(-1);
+    const PageWidget *w(currentPageWidget());
+    if (w)
+    {
+        current = w->pageNumber();
     }
     qDebug() << "current page" << current;
     return current;

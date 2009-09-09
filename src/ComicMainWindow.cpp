@@ -756,31 +756,30 @@ void ComicMainWindow::jumpToPage(int n, bool force)
 		else
 			view->ensureVisible(0, 0);
                 */
-                const QString page = tr("Page") + " " + QString::number(currpage + 1) + "/" + QString::number(sink->numOfImages());
-                pageinfo->setText(page);
-                statusbar->setPage(currpage + 1, sink->numOfImages());
-                thumbswin->view()->scrollToPage(currpage);
-		if (cfg->preloadPages())
-		{
-			if (!actionTwoPages->isChecked())
-			{
-                            //sink->preload(currpage + 1);
-			}
-			else
-			{
-                            //sink->preload(currpage + 3);
-                            //sink->preload(currpage + 2);
-			}
-		}
+
         }
-        view->gotoPage(0); //FIXME
+        view->gotoPage(n); //TODO two pages mode?
 }
 
 void ComicMainWindow::currentPageChanged(int n)
 {
+    currpage = n;
     const QString page = tr("Page") + " " + QString::number(n + 1) + "/" + QString::number(sink->numOfImages());
     pageinfo->setText(page);
     statusbar->setPage(n + 1, sink->numOfImages());
+
+/*if (actionTwoPages->isChecked())
+    if (actionMangaMode->isChecked())
+                                {
+                                        view->setImage(img2, img1);
+                                        statusbar->setImageInfo(&img2, &img1);
+                                }
+                                else
+                                {
+                                        view->setImage(img1, img2);
+                                        statusbar->setImageInfo(&img1, &img2);
+                                        }*/
+
     thumbswin->view()->scrollToPage(n);
 }
 

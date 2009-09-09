@@ -207,6 +207,15 @@ void SimplePageView::jumpDown()
 		scrollByDelta(0, static_cast<int>(JUMP_FACTOR * viewport()->height()));
 }
 
+void SimplePageView::scrollToTop()
+{
+	verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
+}
+
+void SimplePageView::scrollToBottom()
+{
+	verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMaximum);
+}
 
 void SimplePageView::clear()
 {

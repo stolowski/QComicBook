@@ -37,6 +37,7 @@ namespace QComicBook
                         void recalculatePageSizes();
                         QList<PageWidget *> findPageWidgetsInView() const;
                         void disposeOrRequestPages();
+                        PageWidget *currentPageWidget() const;
 
                 protected slots:
                         void propsChanged();
@@ -66,6 +67,8 @@ namespace QComicBook
 			void jumpDown();
                         virtual void clear();
                         virtual void gotoPage(int n);
+                        virtual void scrollToTop();
+                        virtual void scrollToBottom();
 
 		public:
 			ContinuousPageView(QWidget *parent, int physicalPages, bool twoPagesMode, Size size=Original, const QColor &color=Qt::black);
