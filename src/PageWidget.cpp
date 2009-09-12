@@ -54,6 +54,7 @@ void PageWidget::setImage(const Page &img1)
 {
     deletePages();
     m_image[0] = new Page(img1);
+    m_twoPages = false;
     redrawImages();
 }
 
@@ -62,6 +63,7 @@ void PageWidget::setImage(const Page &img1, const Page &img2)
     deletePages();
     m_image[0] = new Page(img1);
     m_image[1] = new Page(img2);
+    m_twoPages = true;
     redrawImages();
 }
 

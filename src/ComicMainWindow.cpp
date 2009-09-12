@@ -16,6 +16,7 @@
 #include "Page.h"
 #include "ComicBookInfo.h"
 #include "ContinuousPageView.h"
+#include "SimplePageView.h"
 #include "ArchiversConfiguration.h"
 #include "ImgArchiveSink.h"
 #include "ImgSinkFactory.h"
@@ -48,7 +49,7 @@
 using namespace QComicBook;
 using namespace Utility;
 
-ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), sink(NULL), currpage(0)
+ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NULL), sink(NULL), currpage(0)
 {
     setupUi(this);
     updateCaption();
@@ -56,6 +57,8 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), sink(NUL
     
     cfg = &ComicBookSettings::instance();
     cfg->restoreGeometry(this);
+
+    pageLoader = new PageLoaderThread();
 
     setupThumbnailsWindow();
     setupActions();
@@ -93,14 +96,8 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), sink(NUL
     
     connect(cfg, SIGNAL(displaySettingsChanged()), this, SLOT(reconfigureDisplay()));
     enableComicBookActions(false);
+    
 
-    pageLoader = new PageLoaderThread();
-    connect(pageLoader, SIGNAL(pageLoaded(const Page&)), view, SLOT(setImage(const Page&)));
-    connect(pageLoader, SIGNAL(pageLoaded(const Page&, const Page&)), view, SLOT(setImage(const Page&, const Page&)));
-    connect(view, SIGNAL(requestPage(int)), pageLoader, SLOT(request(int)));
-    connect(view, SIGNAL(requestTwoPages(int)), pageLoader, SLOT(requestTwoPages(int)));
-    connect(view, SIGNAL(cancelPageRequest(int)), pageLoader, SLOT(cancel(int)));
-    connect(view, SIGNAL(cancelTwoPagesRequest(int)), pageLoader, SLOT(cancelTwoPages(int)));
     pageLoader->start();
 
     thumbnailLoader = new ThumbnailLoaderThread();
@@ -168,54 +165,79 @@ void ComicMainWindow::setupActions()
 
 void ComicMainWindow::setupComicImageView()
 {
-    view = new ContinuousPageView(this, 0, actionTwoPages->isChecked(), cfg->pageSize(), cfg->background());
-        setCentralWidget(view);
-        view->setFocus();
-        reconfigureDisplay();
-        connect(actionFullscreen, SIGNAL(triggered(bool)), this, SLOT(toggleFullScreen()));
-        connect(actionPageTop, SIGNAL(triggered(bool)), view, SLOT(scrollToTop()));
-        connect(actionPageBottom, SIGNAL(triggered(bool)), view, SLOT(scrollToBottom()));
-        connect(actionScrollRight, SIGNAL(triggered(bool)), view, SLOT(scrollRight()));
-        connect(actionScrollLeft, SIGNAL(triggered(bool)), view, SLOT(scrollLeft()));
-        connect(actionScrollRightFast, SIGNAL(triggered(bool)), view, SLOT(scrollRightFast()));
-        connect(actionScrollLeftFast, SIGNAL(triggered(bool)), view, SLOT(scrollLeftFast()));
-        connect(actionScrollUp, SIGNAL(triggered(bool)), view, SLOT(scrollUp()));
-        connect(actionScrollDown, SIGNAL(triggered(bool)), view, SLOT(scrollDown()));       
-        connect(actionScrollUpFast, SIGNAL(triggered(bool)), view, SLOT(scrollUpFast()));        
-        connect(actionScrollDownFast, SIGNAL(triggered(bool)), view, SLOT(scrollDownFast()));
-        connect(actionFitWidth, SIGNAL(triggered(bool)), view, SLOT(setSizeFitWidth()));        
-        connect(actionFitHeight, SIGNAL(triggered(bool)), view, SLOT(setSizeFitHeight()));        
-        connect(actionWholePage, SIGNAL(triggered(bool)), view, SLOT(setSizeWholePage()));        
-        connect(actionOriginalSize, SIGNAL(triggered(bool)), view, SLOT(setSizeOriginal()));        
-        connect(actionBestFit, SIGNAL(triggered(bool)), view, SLOT(setSizeBestFit()));        
-        connect(actionMangaMode, SIGNAL(toggled(bool)), this, SLOT(toggleJapaneseMode(bool)));        
-        connect(actionTwoPages, SIGNAL(toggled(bool)), this, SLOT(toggleTwoPages(bool)));
-        connect(actionPreviousPage, SIGNAL(triggered(bool)), this, SLOT(prevPage()));       
-        connect(actionRotateRight, SIGNAL(triggered(bool)), view, SLOT(rotateRight()));        
-        connect(actionRotateLeft, SIGNAL(triggered(bool)), view, SLOT(rotateLeft()));
-        connect(actionNoRotation, SIGNAL(triggered(bool)), view, SLOT(resetRotation()));
-        connect(actionJumpDown, SIGNAL(triggered()), view, SLOT(jumpDown()));
-        connect(actionJumpUp, SIGNAL(triggered()), view, SLOT(jumpUp()));
+    const int n = (sink != NULL ? sink->numOfImages() : 0);
+    if (view)
+    {
+        view->deleteLater();
+    }
+    if (cfg->continuousScrolling())
+    {
+        view = new ContinuousPageView(this, n, actionTwoPages->isChecked(), cfg->pageSize(), cfg->background());
+    }
+    else
+    {
+        view = new SimplePageView(this, n, actionTwoPages->isChecked(), cfg->pageSize(), cfg->background());
+    }
+    
+    setCentralWidget(view);
+    view->setFocus();
+    reconfigureDisplay();
+    connect(actionFullscreen, SIGNAL(triggered(bool)), this, SLOT(toggleFullScreen()));
+    connect(actionPageTop, SIGNAL(triggered(bool)), view, SLOT(scrollToTop()));
+    connect(actionPageBottom, SIGNAL(triggered(bool)), view, SLOT(scrollToBottom()));
+    connect(actionScrollRight, SIGNAL(triggered(bool)), view, SLOT(scrollRight()));
+    connect(actionScrollLeft, SIGNAL(triggered(bool)), view, SLOT(scrollLeft()));
+    connect(actionScrollRightFast, SIGNAL(triggered(bool)), view, SLOT(scrollRightFast()));
+    connect(actionScrollLeftFast, SIGNAL(triggered(bool)), view, SLOT(scrollLeftFast()));
+    connect(actionScrollUp, SIGNAL(triggered(bool)), view, SLOT(scrollUp()));
+    connect(actionScrollDown, SIGNAL(triggered(bool)), view, SLOT(scrollDown()));       
+    connect(actionScrollUpFast, SIGNAL(triggered(bool)), view, SLOT(scrollUpFast()));        
+    connect(actionScrollDownFast, SIGNAL(triggered(bool)), view, SLOT(scrollDownFast()));
+    connect(actionFitWidth, SIGNAL(triggered(bool)), view, SLOT(setSizeFitWidth()));        
+    connect(actionFitHeight, SIGNAL(triggered(bool)), view, SLOT(setSizeFitHeight()));        
+    connect(actionWholePage, SIGNAL(triggered(bool)), view, SLOT(setSizeWholePage()));        
+    connect(actionOriginalSize, SIGNAL(triggered(bool)), view, SLOT(setSizeOriginal()));        
+    connect(actionBestFit, SIGNAL(triggered(bool)), view, SLOT(setSizeBestFit()));        
+    connect(actionMangaMode, SIGNAL(toggled(bool)), this, SLOT(toggleJapaneseMode(bool)));        
+    connect(actionTwoPages, SIGNAL(toggled(bool)), this, SLOT(toggleTwoPages(bool)));
+    connect(actionPreviousPage, SIGNAL(triggered(bool)), this, SLOT(prevPage()));       
+    connect(actionRotateRight, SIGNAL(triggered(bool)), view, SLOT(rotateRight()));        
+    connect(actionRotateLeft, SIGNAL(triggered(bool)), view, SLOT(rotateLeft()));
+    connect(actionNoRotation, SIGNAL(triggered(bool)), view, SLOT(resetRotation()));
+    connect(actionJumpDown, SIGNAL(triggered()), view, SLOT(jumpDown()));
+    connect(actionJumpUp, SIGNAL(triggered()), view, SLOT(jumpUp()));
+    
+    if (cfg->continuousScrolling())
+    {
+        connect(view, SIGNAL(bottomReached()), this, SLOT(nextPage()));
+        connect(view, SIGNAL(topReached()), this, SLOT(prevPageBottom()));
+    }
+    connect(view, SIGNAL(doubleClick()), this, SLOT(nextPage()));
+    view->enableScrollbars(cfg->scrollbarsVisible());
+    connect(view, SIGNAL(currentPageChanged(int)), this, SLOT(currentPageChanged(int)));
+    
+    QAction *which = actionOriginalSize; //TODO move somewhere else
+    switch (cfg->pageSize())
+    {
+        case FitWidth:  which = actionFitWidth; break;
+        case FitHeight: which = actionFitHeight; break;
+        case BestFit:   which = actionBestFit; break;
+        case WholePage: which = actionWholePage; break;
+        case Original:  which = actionOriginalSize; break;
+    }
+    which->setChecked(true);
 
-        if (cfg->continuousScrolling())
-        {
-                connect(view, SIGNAL(bottomReached()), this, SLOT(nextPage()));
-                connect(view, SIGNAL(topReached()), this, SLOT(prevPageBottom()));
-        }
-	connect(view, SIGNAL(doubleClick()), this, SLOT(nextPage()));
-        view->enableScrollbars(cfg->scrollbarsVisible());
-        connect(view, SIGNAL(currentPageChanged(int)), this, SLOT(currentPageChanged(int)));
+    connect(pageLoader, SIGNAL(pageLoaded(const Page&)), view, SLOT(setImage(const Page&)));
+    connect(pageLoader, SIGNAL(pageLoaded(const Page&, const Page&)), view, SLOT(setImage(const Page&, const Page&)));
+    connect(view, SIGNAL(requestPage(int)), pageLoader, SLOT(request(int)));
+    connect(view, SIGNAL(requestTwoPages(int)), pageLoader, SLOT(requestTwoPages(int)));
+    connect(view, SIGNAL(cancelPageRequest(int)), pageLoader, SLOT(cancel(int)));
+    connect(view, SIGNAL(cancelTwoPagesRequest(int)), pageLoader, SLOT(cancelTwoPages(int)));
 
-        QAction *which = actionOriginalSize;
-        switch (cfg->pageSize())
-        {
-                case FitWidth:  which = actionFitWidth; break;
-                case FitHeight: which = actionFitHeight; break;
-                case BestFit:   which = actionBestFit; break;
-                case WholePage: which = actionWholePage; break;
-                case Original:  which = actionOriginalSize; break;
-        }
-        which->setChecked(true);
+    if (sink) 
+    {
+         jumpToPage(currpage, true);
+    }
 }
 
 void ComicMainWindow::setupThumbnailsWindow()
@@ -408,17 +430,8 @@ void ComicMainWindow::toggleScrollbars()
 
 void ComicMainWindow::toggleContinousScroll()
 {
-        bool f = actionToggleContinuousScroll->isChecked();
-        //actionToggleContinuousScroll->setChecked(!f); //???? potrzebne?
-        if (f)
-        {
-                view->disconnect(SIGNAL(bottomReached()), this);
-                view->disconnect(SIGNAL(topReached()), this);
-        }
-        else
-        {       connect(view, SIGNAL(bottomReached()), this, SLOT(nextPage()));
-                connect(view, SIGNAL(topReached()), this, SLOT(prevPageBottom()));
-        }
+    cfg->continuousScrolling(actionToggleContinuousScroll->isChecked());
+    setupComicImageView();
 }
 
 void ComicMainWindow::toggleTwoPages(bool f)
@@ -686,28 +699,6 @@ void ComicMainWindow::backwardPages()
 
 void ComicMainWindow::jumpToPage(int n, bool force)
 {
-	//
-	// enable or disable next/prev/backward/forward page actions if first/last page shown
-        if (sink == NULL || n == sink->numOfImages() - (actionTwoPages->isChecked() ? 2 : 1))
-	{
-		actionNextPage->setDisabled(true);
-		actionForwardPage->setDisabled(true);
-	}
-	else
-	{
-		actionNextPage->setDisabled(false);
-		actionForwardPage->setDisabled(false);
-	}
-        if (sink == NULL || n == (actionTwoPages->isChecked() ? 1 : 0))
-	{
-                actionPreviousPage->setDisabled(true);
-		actionBackwardPage->setDisabled(true);
-	}
-	else
-	{
-		actionPreviousPage->setDisabled(false);
-		actionBackwardPage->setDisabled(false);
-	}
 
 	if (!sink)
 		return;
@@ -767,6 +758,29 @@ void ComicMainWindow::currentPageChanged(int n)
     const QString page = tr("Page") + " " + QString::number(n + 1) + "/" + QString::number(sink->numOfImages());
     pageinfo->setText(page);
     statusbar->setPage(n + 1, sink->numOfImages());
+
+ 	//
+	// enable or disable next/prev/backward/forward page actions if first/last page shown
+        if (sink == NULL || n == sink->numOfImages() - (actionTwoPages->isChecked() ? 2 : 1))
+	{
+		actionNextPage->setDisabled(true);
+		actionForwardPage->setDisabled(true);
+	}
+	else
+	{
+		actionNextPage->setDisabled(false);
+		actionForwardPage->setDisabled(false);
+	}
+        if (sink == NULL || n == (actionTwoPages->isChecked() ? 1 : 0))
+	{
+                actionPreviousPage->setDisabled(true);
+		actionBackwardPage->setDisabled(true);
+	}
+	else
+	{
+		actionPreviousPage->setDisabled(false);
+		actionBackwardPage->setDisabled(false);
+	}
 
 /*if (actionTwoPages->isChecked())
     if (actionMangaMode->isChecked())

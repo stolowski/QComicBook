@@ -3,6 +3,7 @@
 #include "ContinuousPageView.h"
 #include "Utility.h"
 #include "PageWidget.h"
+#include <QVBoxLayout>
 #include <QImage>
 #include <QPixmap>
 #include <QPainter>
@@ -21,13 +22,21 @@ SimplePageView::SimplePageView(QWidget *parent, int physicalPages, bool twoPages
     : PageViewBase(parent, twoPagesMode, size, color)
     , wheelupcnt(0), wheeldowncnt(0)
     , m_physicalPages(physicalPages)
+    , imgLabel(NULL)
 {
     //setFocusPolicy(QWidget::StrongFocus);
- 
-//    w->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
-//TODO
-    setWidget(imgLabel);
-//    setWidgetResizable(true);
+    QWidget *w = new QWidget(this);
+    w->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
+    m_layout = new QVBoxLayout(w);
+    m_layout->setContentsMargins(0, 0, 0, 0);
+    m_layout->setSpacing(0);
+    m_layout->setAlignment(Qt::AlignCenter);
+    setWidget(w);
+
+    recreatePageWidget();
+    setWidgetResizable(false);
+    
+    setWidgetResizable(true);
     
     setBackground(color);
     setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -37,10 +46,25 @@ SimplePageView::~SimplePageView()
 {
 }
 
+void SimplePageView::recreatePageWidget()
+{
+    delete imgLabel;
+    imgLabel = NULL;
+
+    int w = viewport()->width() - 10;
+    int h = viewport()->height() - 10;
+
+    if (m_physicalPages)
+    {
+        imgLabel = new PageWidget(this, w, h, 0, props.twoPagesMode());
+        m_layout->addWidget(imgLabel); 
+    }
+}
+
 void SimplePageView::setNumOfPages(int n)
 {
     m_physicalPages = n;
-//TODO
+    recreatePageWidget();
 }
 
 void SimplePageView::propsChanged()
@@ -57,54 +81,84 @@ void SimplePageView::setImage(const Page &img1)
     Q_ASSERT(m_physicalPages > 0);
     //if (!preserveangle)
     //          iangle = 0;
-    imgLabel->setImage(img1);
+    if (img1.getNumber() == m_currentPage)
+    {
+        imgLabel->setImage(img1);
+        verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);        
+    }
 }
 
 void SimplePageView::setImage(const Page &img1, const Page &img2)
 {
     Q_ASSERT(m_physicalPages > 0);
+
     //  if (!preserveangle)
     //          iangle = 0;
-    imgLabel->setImage(img1, img2);
+    if (img1.getNumber() == m_currentPage)
+    {
+        imgLabel->setImage(img1, img2);
+        verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);        
+    }
+}
+
+void SimplePageView::gotoPage(int n)
+{
+    if (n < m_physicalPages)
+    {
+        if (n != m_currentPage)
+        {
+            //delRequest(m_currentPage);
+        }
+        if (props.twoPagesMode() && m_physicalPages % 2 == 0)
+        {
+            n -= n & 1;
+        }
+        m_currentPage = n;
+        addRequest(m_currentPage, props.twoPagesMode() && !((m_physicalPages % 2 !=0 ) && n == 0));
+        emit currentPageChanged(n);
+    }
 }
 
 void SimplePageView::resizeEvent(QResizeEvent *e)
 {
+    if (imgLabel)
+    {
+        imgLabel->redrawImages();
+    }
     QScrollArea::resizeEvent(e);
-    imgLabel->redrawImages();
-    e->accept();
 }
 
 void SimplePageView::wheelEvent(QWheelEvent *e)
 {
-//TODO
-    /*e->accept();
-        if (e->delta() > 0) //scrolling up
+    
+    if (e->delta() > 0) //scrolling up
+    {
+        if (imgLabel->height() <= height() || (onTop() && ++wheelupcnt > EXTRA_WHEEL_SPIN))
         {
-                if (imgLabel->height() <= height() || (onTop() && ++wheelupcnt > EXTRA_WHEEL_SPIN))
-                {
-                        wheelupcnt = 0;
-                        emit topReached();
-                }
-                else
-                {
-                        scrollByDelta(0, -3*spdy);
-                        wheeldowncnt = 0; //reset opposite direction counter
-                }
+            e->accept();
+            wheelupcnt = 0;
+            gotoPage(m_currentPage - 1);
         }
-        else //scrolling down
+        else
         {
-                if (imgLabel->height() <= height() || (onBottom() && ++wheeldowncnt > EXTRA_WHEEL_SPIN))
-                {
-                        wheeldowncnt = 0;
-                        emit bottomReached();
-                }
-                else
-                {
-                        scrollByDelta(0, 3*spdy);
-                        wheelupcnt = 0; //reset opposite direction counter
-                }
-                }*/
+            QScrollArea::wheelEvent(e);
+            wheeldowncnt = 0; //reset opposite direction counter
+        }
+    }
+    else //scrolling down
+    {
+        if (imgLabel->height() <= height() || (onBottom() && ++wheeldowncnt > EXTRA_WHEEL_SPIN))
+        {
+            e->accept();
+            wheeldowncnt = 0;
+            gotoPage(m_currentPage + 1);
+        }
+        else
+        {
+            QScrollArea::wheelEvent(e);
+            wheelupcnt = 0; //reset opposite direction counter
+        }
+    }
 }
 
 
@@ -115,6 +169,7 @@ void SimplePageView::setTwoPagesMode(bool f)
         m_twoPagesMode = f;
         recreatePageWidgets();
         }*/
+    recreatePageWidget();
     props.setTwoPagesMode(f);
 }
 

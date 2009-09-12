@@ -5,6 +5,8 @@
 #include "Page.h"
 #include "PageViewBase.h"
 
+class QVBoxLayout;
+
 namespace QComicBook
 {
     class PageWidget;
@@ -14,6 +16,7 @@ namespace QComicBook
 		Q_OBJECT
 
 		protected:
+                        void recreatePageWidget();
 			virtual void resizeEvent(QResizeEvent *e);
 			virtual void wheelEvent(QWheelEvent *e);
                         virtual void scrollContentsBy(int dx, int dy);
@@ -24,6 +27,7 @@ namespace QComicBook
 		public slots:
 			virtual void setImage(const Page &img1);
 			virtual void setImage(const Page &img1, const Page &img2);
+                        virtual void gotoPage(int n);
                         virtual void setTwoPagesMode(bool f);
                         virtual void scrollToTop();
                         virtual void scrollToBottom();
@@ -58,7 +62,9 @@ namespace QComicBook
 			int wheelupcnt, wheeldowncnt;
 			static const int EXTRA_WHEEL_SPIN; //number of extra wheel spins to flip the page
 			static const float JUMP_FACTOR; //factor used to calculate the amount of space to scroll when scrolling page with space
+                        QVBoxLayout *m_layout;
 			PageWidget* imgLabel;
+                        int m_currentPage;
                         int m_physicalPages;
 	};
 }
