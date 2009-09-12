@@ -107,7 +107,6 @@ namespace QComicBook
 			const QString& thumbnailsDir();
 
 		private:
-                        static ComicBookSettings *m_instance;
 			QSettings *m_cfg;
                         bool m_embedpagenumbers;
 			bool m_smallcursor;

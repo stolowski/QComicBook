@@ -60,8 +60,6 @@
 
 using namespace QComicBook;
 
-ComicBookSettings* ComicBookSettings::m_instance = NULL;
-
 const EnumMap<Size> ComicBookSettings::size2string[] = {
 	{"original",  Original},
 	{"fitwidth",  FitWidth},
@@ -73,11 +71,8 @@ const EnumMap<Size> ComicBookSettings::size2string[] = {
 
 ComicBookSettings& ComicBookSettings::instance()
 {
-    if (!m_instance)
-    {
-        m_instance = new ComicBookSettings();
-    }
-    return *m_instance;
+    static ComicBookSettings cfg;
+    return cfg;
 }
 
 ComicBookSettings::ComicBookSettings(): QObject()
@@ -133,8 +128,6 @@ const QString& ComicBookSettings::thumbnailsDir()
 void ComicBookSettings::load()
 {
 	QString fontdesc;
-
-
 	m_cfg->beginGroup(GRP_VIEW);
                 m_embedpagenumbers = m_cfg->value(OPT_EMBEDPAGENUMBERS, false).toBool();
 		m_smallcursor = m_cfg->value(OPT_SMALLCURSOR, false).toBool();
@@ -317,7 +310,7 @@ bool ComicBookSettings::showSplash() const
 
 void ComicBookSettings::restoreDockLayout(ComicMainWindow *w) const
 {
-    w->restoreState(m_cfg->value(OPT_DOCKLAYOUT).toByteArray());
+    w->restoreState(m_cfg->value(GRP_WINDOW OPT_DOCKLAYOUT).toByteArray());
 }
 
 QString ComicBookSettings::tmpDir() const
@@ -408,14 +401,14 @@ void ComicBookSettings::lastDir(const QString &d)
 {
     if (m_lastdir != d)
     {
-        m_cfg->setValue(GRP_MISC OPT_LASTDIR, m_lastdir = d);
+        m_cfg->setValue(GRP_RUNTIME OPT_LASTDIR, m_lastdir = d);
     }
 }
 
 void ComicBookSettings::recentlyOpened(const History &hist)
 {
     m_recent = hist;
-    m_cfg->setValue(GRP_MISC OPT_RECENT, m_recent.getAll());
+    m_cfg->setValue(GRP_RUNTIME OPT_RECENT, m_recent.getAll());
 }
 
 void ComicBookSettings::background(const QColor &color)
