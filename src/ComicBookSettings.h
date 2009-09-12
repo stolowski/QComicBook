@@ -108,45 +108,44 @@ namespace QComicBook
 
 		private:
                         static ComicBookSettings *m_instance;
-			QSettings *cfg;
-                        bool embedpagenumbers;
-			bool smallcursor;
-			bool twopages;
-			bool twopagesstep;
-			bool japanese;
-			bool contscroll;
-			bool scrollbars;
-			bool preload;
-			bool fscrhidemenu;
-			bool fscrhidestatus;
-			bool fscrhidetoolbar;
-			Size pagesize;
-			bool smoothscaling;
-			QString lastdir;
-			QColor bgcolor;
-			History recent;
-			int cachesize;
-			int thumbsage;
-			bool cacheadjust;
-			bool cachethumbs;
-			bool autoinfo;
-			bool confirmexit;
-			bool statusbar;
-			bool intbrowser;
-			bool showsplash;
-			QByteArray docklayout;
-			QByteArray geometry;
-			QString tmpdir;
-			QFont font;
+			QSettings *m_cfg;
+                        bool m_embedpagenumbers;
+			bool m_smallcursor;
+			bool m_twopages;
+			bool m_twopagesstep;
+			bool m_japanese;
+			bool m_contscroll;
+			bool m_scrollbars;
+			bool m_preload;
+			bool m_fscrhidemenu;
+			bool m_fscrhidestatus;
+			bool m_fscrhidetoolbar;
+			Size m_pagesize;
+			bool m_smoothscaling;
+			QString m_lastdir;
+			QColor m_bgcolor;
+			History m_recent;
+			int m_cachesize;
+			int m_thumbsage;
+			bool m_cacheadjust;
+			bool m_cachethumbs;
+			bool m_autoinfo;
+			bool m_confirmexit;
+			bool m_statusbar;
+			bool m_intbrowser;
+			bool m_showsplash;
+			QString m_tmpdir;
+			QFont m_font;
 
-			QString bkpath; //bookmarks path
-			QString thpath; //thumbnails cache path
-			bool dirsok; //is above dirs are ok
+			QString m_bkpath; //bookmarks path
+			QString m_thpath; //thumbnails cache path
+			bool m_dirsok; //is above dirs are ok
 
 			static const EnumMap<Size> size2string[];
 
                         ComicBookSettings();
                         ComicBookSettings(const ComicBookSettings &);
+                        ComicBookSettings operator =(const ComicBookSettings &);
                         virtual ~ComicBookSettings();
 
 

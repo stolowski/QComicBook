@@ -43,10 +43,12 @@
 #define OPT_GEOMETRY    "/Geometry"
 #define OPT_DOCKLAYOUT  "/DockLayout"
 
-#define GRP_MISC        "/Misc"
-#define OPT_AUTOINFO    "/InfoDialog"
+#define GRP_RUNTIME     "/Runtime"
 #define OPT_LASTDIR     "/LastDir"
 #define OPT_RECENT      "/RecentlyOpened"
+
+#define GRP_MISC        "/Misc"
+#define OPT_AUTOINFO    "/InfoDialog"
 #define OPT_CACHESIZE   "/CacheSize"
 #define OPT_CACHEADJUST "/CacheAutoAdjust"
 #define OPT_THUMBSAGE   "/ThumbnailsAge"
@@ -79,464 +81,473 @@ ComicBookSettings& ComicBookSettings::instance()
 }
 
 ComicBookSettings::ComicBookSettings(): QObject()
-                                      , bkpath(QString::null)
-                                      , thpath(QString::null)
-                                      , dirsok(false)
+                                      , m_bkpath(QString::null)
+                                      , m_thpath(QString::null)
+                                      , m_dirsok(false)
 {
-	cfg = new QSettings();
+	m_cfg = new QSettings();
 //	cfg->insertSearchPath(QSettings::Unix, QDir::homeDirPath() + "/.qcomicbook");
-	cfg->beginGroup("/QComicBook");
+	m_cfg->beginGroup("/QComicBook");
 }
 
 ComicBookSettings::~ComicBookSettings()
 {
-	cfg->endGroup();
-	delete cfg;
+	m_cfg->endGroup();
+	delete m_cfg;
 }
 
 bool ComicBookSettings::checkDirs()
 {
-	dirsok = false; 
-	bkpath = QDir::homePath() + "/.qcomicbook";
-	QDir dir(bkpath);
+	m_dirsok = false; 
+	m_bkpath = QDir::homePath() + "/.qcomicbook";
+	QDir dir(m_bkpath);
 	if (!dir.exists())
-		if (!dir.mkdir(bkpath))
-			return false;
+        {
+            if (!dir.mkdir(m_bkpath))
+            {
+                return false;
+            }
+        }
 	
-	dir.setPath(thpath = bkpath + "/cache");
+	dir.setPath(m_thpath = m_bkpath + "/cache");
 	if (!dir.exists())
-		if (!dir.mkdir(thpath))
-			return false;
-	return dirsok = true;
+        {
+            if (!dir.mkdir(m_thpath))
+            {
+                return false;
+            }
+        }
+	return m_dirsok = true;
 }
 
 const QString& ComicBookSettings::bookmarksDir()
 {
-	return bkpath;
+	return m_bkpath;
 }
 
 const QString& ComicBookSettings::thumbnailsDir()
 {
-	return thpath;
+	return m_thpath;
 }
 
 void ComicBookSettings::load()
 {
 	QString fontdesc;
 
-	cfg->beginGroup(GRP_WINDOW);
-		geometry = cfg->value(OPT_GEOMETRY).toByteArray();
-		docklayout = cfg->value(OPT_DOCKLAYOUT).toByteArray();
-	cfg->endGroup();
-	cfg->beginGroup(GRP_VIEW);
-                embedpagenumbers = cfg->value(OPT_EMBEDPAGENUMBERS, false).toBool();
-		smallcursor = cfg->value(OPT_SMALLCURSOR, false).toBool();
-		twopages = cfg->value(OPT_TWOPAGES, false).toBool();
-		japanese = cfg->value(OPT_JAPANESEMODE, false).toBool();
-		scrollbars = cfg->value(OPT_SCROLLBARS, false).toBool();
-		smoothscaling = cfg->value(OPT_SMOOTHSCALING, true).toBool();
-		pagesize = convert(size2string, cfg->value(OPT_PAGESIZE, size2string[0].str).toString());
-		bgcolor = cfg->value(OPT_BACKGROUND).value<QColor>();
-		fscrhidemenu = cfg->value(OPT_FULLSCREENHIDEMENU, true).toBool();
-		fscrhidestatus = cfg->value(OPT_FULLSCREENHIDESTATUS, true).toBool();
-		fscrhidetoolbar = cfg->value(OPT_FULLSCREENHIDETOOLBAR, false).toBool();
-		statusbar = cfg->value(OPT_STATUSBAR, true).toBool();
-		fontdesc = cfg->value(OPT_FONT, QString()).toString();
-		if (fontdesc.isNull() || !font.fromString(fontdesc))
+
+	m_cfg->beginGroup(GRP_VIEW);
+                m_embedpagenumbers = m_cfg->value(OPT_EMBEDPAGENUMBERS, false).toBool();
+		m_smallcursor = m_cfg->value(OPT_SMALLCURSOR, false).toBool();
+		m_twopages = m_cfg->value(OPT_TWOPAGES, false).toBool();
+		m_japanese = m_cfg->value(OPT_JAPANESEMODE, false).toBool();
+		m_scrollbars = m_cfg->value(OPT_SCROLLBARS, false).toBool();
+		m_smoothscaling = m_cfg->value(OPT_SMOOTHSCALING, true).toBool();
+		m_pagesize = convert(size2string, m_cfg->value(OPT_PAGESIZE, size2string[0].str).toString());
+		m_bgcolor = m_cfg->value(OPT_BACKGROUND).value<QColor>();
+		m_fscrhidemenu = m_cfg->value(OPT_FULLSCREENHIDEMENU, true).toBool();
+		m_fscrhidestatus = m_cfg->value(OPT_FULLSCREENHIDESTATUS, true).toBool();
+		m_fscrhidetoolbar = m_cfg->value(OPT_FULLSCREENHIDETOOLBAR, false).toBool();
+		m_statusbar = m_cfg->value(OPT_STATUSBAR, true).toBool();
+		fontdesc = m_cfg->value(OPT_FONT, QString()).toString();
+		if (fontdesc.isNull() || !m_font.fromString(fontdesc))
 		{
-			font.setFamily("Courier");
-			font.setPointSize(10);
+			m_font.setFamily("Courier");
+			m_font.setPointSize(10);
 		}
-	cfg->endGroup();
-	cfg->beginGroup(GRP_NAVI);
-		contscroll = cfg->value(OPT_CONTSCROLL, true).toBool();
-		twopagesstep = cfg->value(OPT_TWOPAGESSTEP, true).toBool();
-	cfg->endGroup();
-	cfg->beginGroup(GRP_MISC);
-		lastdir = cfg->value(OPT_LASTDIR, QString()).toString();
-		recent = cfg->value(OPT_RECENT).toStringList(); 
-		cachesize = cfg->value(OPT_CACHESIZE, 3).toInt();
-		if (cachesize < 1)
+	m_cfg->endGroup();
+	m_cfg->beginGroup(GRP_NAVI);
+		m_contscroll = m_cfg->value(OPT_CONTSCROLL, true).toBool();
+		m_twopagesstep = m_cfg->value(OPT_TWOPAGESSTEP, true).toBool();
+	m_cfg->endGroup();
+	m_cfg->beginGroup(GRP_RUNTIME);
+		m_lastdir = m_cfg->value(OPT_LASTDIR, QString()).toString();
+		m_recent = m_cfg->value(OPT_RECENT).toStringList(); 
+        m_cfg->endGroup();
+	m_cfg->beginGroup(GRP_MISC);
+		m_cachesize = m_cfg->value(OPT_CACHESIZE, 3).toInt();
+		if (m_cachesize < 1)
                 {
-			cachesize = 1;
+                    m_cachesize = 1;
                 }
-		cacheadjust = cfg->value(OPT_CACHEADJUST, true).toBool();
-		preload = cfg->value(OPT_PRELOAD, true).toBool();
-		confirmexit = cfg->value(OPT_CONFIRMEXIT, true).toBool();
-		autoinfo = cfg->value(OPT_AUTOINFO, false).toBool();
-		showsplash = cfg->value(OPT_SHOWSPLASH, true).toBool();
-		thumbsage = cfg->value(OPT_THUMBSAGE, 7).toInt();
-		cachethumbs = cfg->value(OPT_CACHETHUMBS, true).toBool();
-		tmpdir = cfg->value(OPT_TMPDIR, QString()).toString();
-		QDir dir(tmpdir);
-		if (tmpdir.isNull() || !dir.exists())
+		m_cacheadjust = m_cfg->value(OPT_CACHEADJUST, true).toBool();
+		m_preload = m_cfg->value(OPT_PRELOAD, true).toBool();
+		m_confirmexit = m_cfg->value(OPT_CONFIRMEXIT, true).toBool();
+		m_autoinfo = m_cfg->value(OPT_AUTOINFO, false).toBool();
+		m_showsplash = m_cfg->value(OPT_SHOWSPLASH, true).toBool();
+		m_thumbsage = m_cfg->value(OPT_THUMBSAGE, 7).toInt();
+		m_cachethumbs = m_cfg->value(OPT_CACHETHUMBS, true).toBool();
+		m_tmpdir = m_cfg->value(OPT_TMPDIR, QString()).toString();
+		QDir dir(m_tmpdir);
+		if (m_tmpdir.isNull() || !dir.exists())
                 {
-			tmpdir = "/tmp";
+                    m_tmpdir = "/tmp";
                 }
-	cfg->endGroup();
+	m_cfg->endGroup();
 }
 
 bool ComicBookSettings::embedPageNumbers() const
 {
-    return embedpagenumbers;
+    return m_embedpagenumbers;
 }
 
 bool ComicBookSettings::smallCursor() const
 {
-    return smallcursor;
+    return m_smallcursor;
 }
 
 bool ComicBookSettings::twoPagesMode() const
 {
-    return twopages;
+    return m_twopages;
 }
 
 bool ComicBookSettings::twoPagesStep() const
 {
-    return twopagesstep;
+    return m_twopagesstep;
 }
 
 bool ComicBookSettings::japaneseMode() const
 {
-    return japanese;
+    return m_japanese;
 }
 
 bool ComicBookSettings::continuousScrolling() const
 {
-    return contscroll;
+    return m_contscroll;
 }
 
 bool ComicBookSettings::scrollbarsVisible() const
 {
-    return scrollbars;
+    return m_scrollbars;
 }
 
 void ComicBookSettings::restoreGeometry(ComicMainWindow *w) const
 {
-    w->restoreGeometry(geometry);
+    w->restoreGeometry(m_cfg->value(GRP_WINDOW OPT_GEOMETRY).toByteArray());
 }
 
 Size ComicBookSettings::pageSize() const
 {
-    return pagesize;
+    return m_pagesize;
 }
 
 bool ComicBookSettings::smoothScaling() const
 {
-    return smoothscaling;
+    return m_smoothscaling;
 }
 
 QString ComicBookSettings::lastDir() const
 {
-    return lastdir;
+    return m_lastdir;
 }
 
 const History& ComicBookSettings::recentlyOpened() const
 {
-    return recent;
+    return m_recent;
 }
 
 QColor ComicBookSettings::background() const
 {
-	return bgcolor;
+	return m_bgcolor;
 }
 
 int ComicBookSettings::cacheSize() const
 {
-    return cachesize;
+    return m_cachesize;
 }
 
 bool ComicBookSettings::cacheAutoAdjust() const
 {
-    return cacheadjust;
+    return m_cacheadjust;
 }
 
 bool ComicBookSettings::cacheThumbnails() const
 {
-    return cachethumbs;
+    return m_cachethumbs;
 }
 
 int ComicBookSettings::thumbnailsAge() const
 {
-    return thumbsage;
+    return m_thumbsage;
 }
 
 bool ComicBookSettings::preloadPages() const
 {
-    return preload;
+    return m_preload;
 }
 
 bool ComicBookSettings::confirmExit() const
 {
-	return confirmexit;
+	return m_confirmexit;
 }
 
 bool ComicBookSettings::autoInfo() const
 {
-    return autoinfo;
+    return m_autoinfo;
 }
 
 bool ComicBookSettings::fullScreenHideMenu() const
 {
-    return fscrhidemenu;
+    return m_fscrhidemenu;
 }
 
 bool ComicBookSettings::fullScreenHideStatusbar() const
 {
-    return fscrhidestatus;
+    return m_fscrhidestatus;
 }
 
 bool ComicBookSettings::fullScreenHideToolbar() const
 {
-    return fscrhidetoolbar;
+    return m_fscrhidetoolbar;
 }
 
 bool ComicBookSettings::showStatusbar() const
 {
-    return statusbar;
+    return m_statusbar;
 }
 
 const QFont& ComicBookSettings::infoFont() const
 {
-    return font;
+    return m_font;
 }
 
 bool ComicBookSettings::showSplash() const
 {
-    return showsplash;
+    return m_showsplash;
 }
 
 void ComicBookSettings::restoreDockLayout(ComicMainWindow *w) const
 {
-    w->restoreState(docklayout);
+    w->restoreState(m_cfg->value(OPT_DOCKLAYOUT).toByteArray());
 }
 
 QString ComicBookSettings::tmpDir() const
 {
-    return tmpdir;
+    return m_tmpdir;
 }
 
 void ComicBookSettings::embedPageNumbers(bool f)
 {
-    if (f != embedpagenumbers)
+    if (f != m_embedpagenumbers)
     {
-        cfg->setValue(GRP_VIEW OPT_EMBEDPAGENUMBERS, embedpagenumbers = f);
+        m_cfg->setValue(GRP_VIEW OPT_EMBEDPAGENUMBERS, m_embedpagenumbers = f);
         emit displaySettingsChanged();
     }
 }
 
 void ComicBookSettings::smallCursor(bool f)
 {
-    if (f != smallcursor)
+    if (f != m_smallcursor)
     {
-        cfg->setValue(GRP_VIEW OPT_SMALLCURSOR, smallcursor = f);
+        m_cfg->setValue(GRP_VIEW OPT_SMALLCURSOR, m_smallcursor = f);
         emit displaySettingsChanged();
     }
 }
 
 void ComicBookSettings::twoPagesMode(bool f)
 {
-    if (f != twopages)
+    if (f != m_twopages)
     {
-        cfg->setValue(GRP_VIEW OPT_TWOPAGES, twopages = f);
+        m_cfg->setValue(GRP_VIEW OPT_TWOPAGES, m_twopages = f);
     }
 }
 
 void ComicBookSettings::twoPagesStep(bool f)
 {
-    if (f != twopagesstep)
+    if (f != m_twopagesstep)
     {
-        cfg->setValue(GRP_NAVI OPT_TWOPAGESSTEP, twopagesstep = f);
+        m_cfg->setValue(GRP_NAVI OPT_TWOPAGESSTEP, m_twopagesstep = f);
     }
 }
 
 void ComicBookSettings::japaneseMode(bool f)
 {
-    if (f != japanese)
+    if (f != m_japanese)
     {
-        cfg->setValue(GRP_VIEW OPT_JAPANESEMODE, japanese = f);
+        m_cfg->setValue(GRP_VIEW OPT_JAPANESEMODE, m_japanese = f);
     }
 }
 
 void ComicBookSettings::continuousScrolling(bool f)
 {
-    if (f != contscroll)
+    if (f != m_contscroll)
     {
-        cfg->setValue(GRP_NAVI OPT_CONTSCROLL, contscroll = f);
+        m_cfg->setValue(GRP_NAVI OPT_CONTSCROLL, m_contscroll = f);
     }
 }
 
 void ComicBookSettings::scrollbarsVisible(bool f)
 {
-    if (f != scrollbars)
+    if (f != m_scrollbars)
     {
-        cfg->setValue(GRP_VIEW OPT_SCROLLBARS, scrollbars = f);
+        m_cfg->setValue(GRP_VIEW OPT_SCROLLBARS, m_scrollbars = f);
     }
 }
 
 void ComicBookSettings::saveGeometry(ComicMainWindow *w)
 {
-    cfg->setValue(GRP_WINDOW OPT_GEOMETRY, w->saveGeometry());
+    m_cfg->setValue(GRP_WINDOW OPT_GEOMETRY, w->saveGeometry());
 }
 
 void ComicBookSettings::pageSize(Size s)
 {
-    if (s != pagesize)
+    if (s != m_pagesize)
     {
-        cfg->setValue(GRP_VIEW OPT_PAGESIZE, convert(size2string, pagesize = s));
+        m_cfg->setValue(GRP_VIEW OPT_PAGESIZE, convert(size2string, m_pagesize = s));
     }
 }
 
 void ComicBookSettings::smoothScaling(bool s)
 {
-    if (s != smoothscaling)
+    if (s != m_smoothscaling)
     {
-        cfg->setValue(GRP_VIEW OPT_SMOOTHSCALING, smoothscaling = s);
+        m_cfg->setValue(GRP_VIEW OPT_SMOOTHSCALING, m_smoothscaling = s);
     }
 }
 
 void ComicBookSettings::lastDir(const QString &d)
 {
-    if (lastdir != d)
+    if (m_lastdir != d)
     {
-        cfg->setValue(GRP_MISC OPT_LASTDIR, lastdir = d);
+        m_cfg->setValue(GRP_MISC OPT_LASTDIR, m_lastdir = d);
     }
 }
 
 void ComicBookSettings::recentlyOpened(const History &hist)
 {
-    recent = hist;
-    cfg->setValue(GRP_MISC OPT_RECENT, recent.getAll());
+    m_recent = hist;
+    m_cfg->setValue(GRP_MISC OPT_RECENT, m_recent.getAll());
 }
 
 void ComicBookSettings::background(const QColor &color)
 {
-    if (color != bgcolor)
+    if (color != m_bgcolor)
     {
-        bgcolor = color;
-        cfg->setValue(GRP_VIEW OPT_BACKGROUND, bgcolor.name());
+        m_bgcolor = color;
+        m_cfg->setValue(GRP_VIEW OPT_BACKGROUND, m_bgcolor.name());
         emit displaySettingsChanged();
     }
 }
 
 void ComicBookSettings::cacheSize(int s)
 {
-    if (s != cachesize)
+    if (s != m_cachesize)
     {
         if (s < 1)
+        {
             s = 1;
-        cfg->setValue(GRP_MISC OPT_CACHESIZE, cachesize = s);
+        }
+        m_cfg->setValue(GRP_MISC OPT_CACHESIZE, m_cachesize = s);
     }
 }
 
 void ComicBookSettings::cacheAutoAdjust(bool f)
 {
-    if (f != cacheadjust)
+    if (f != m_cacheadjust)
     {
-        cacheadjust = f;
-        cfg->setValue(GRP_MISC OPT_CACHEADJUST, cacheadjust = f);
+        m_cacheadjust = f;
+        m_cfg->setValue(GRP_MISC OPT_CACHEADJUST, m_cacheadjust = f);
     }
 }
 
 void ComicBookSettings::cacheThumbnails(bool f)
 {
-    if (f != cachethumbs)
+    if (f != m_cachethumbs)
     {
-        cfg->setValue(GRP_MISC OPT_CACHETHUMBS, cachethumbs = f);
+        m_cfg->setValue(GRP_MISC OPT_CACHETHUMBS, m_cachethumbs = f);
     }
 }
 
 void ComicBookSettings::thumbnailsAge(int n)
 {
-    if (n != thumbsage)
+    if (n != m_thumbsage)
     {
-        cfg->setValue(GRP_MISC OPT_THUMBSAGE, thumbsage = n);
+        m_cfg->setValue(GRP_MISC OPT_THUMBSAGE, m_thumbsage = n);
     }
 }
 
 void ComicBookSettings::preloadPages(bool f)
 {
-    if (f != preload)
+    if (f != m_preload)
     {
-        cfg->setValue(GRP_MISC OPT_PRELOAD, preload = f);
+        m_cfg->setValue(GRP_MISC OPT_PRELOAD, m_preload = f);
     }
 }
 
 void ComicBookSettings::confirmExit(bool f)
 {
-    if (f != confirmexit)
+    if (f != m_confirmexit)
     {
-        cfg->setValue(GRP_MISC OPT_CONFIRMEXIT, confirmexit = f);
+        m_cfg->setValue(GRP_MISC OPT_CONFIRMEXIT, m_confirmexit = f);
     }
 }
 
 void ComicBookSettings::autoInfo(bool f)
 {
-    if (f != autoinfo)
+    if (f != m_autoinfo)
     {
-        cfg->setValue(GRP_MISC OPT_AUTOINFO, autoinfo = f);
+        m_cfg->setValue(GRP_MISC OPT_AUTOINFO, m_autoinfo = f);
     }
 }
 
 void ComicBookSettings::fullScreenHideMenu(bool f)
 {
-    if (f != fscrhidemenu)
+    if (f != m_fscrhidemenu)
     {
-        cfg->setValue(GRP_VIEW OPT_FULLSCREENHIDEMENU, fscrhidemenu = f);
+        m_cfg->setValue(GRP_VIEW OPT_FULLSCREENHIDEMENU, m_fscrhidemenu = f);
     }
 }
 
 void ComicBookSettings::fullScreenHideStatusbar(bool f)
 {
-    if (f != fscrhidestatus)
+    if (f != m_fscrhidestatus)
     {
-        cfg->setValue(GRP_VIEW OPT_FULLSCREENHIDESTATUS, fscrhidestatus = f);
+        m_cfg->setValue(GRP_VIEW OPT_FULLSCREENHIDESTATUS, m_fscrhidestatus = f);
     }
 }
 
 void ComicBookSettings::fullScreenHideToolbar(bool f)
 {
-    if (f != fscrhidetoolbar)
+    if (f != m_fscrhidetoolbar)
     {
-        cfg->setValue(GRP_VIEW OPT_FULLSCREENHIDETOOLBAR, fscrhidetoolbar = f);
+        m_cfg->setValue(GRP_VIEW OPT_FULLSCREENHIDETOOLBAR, m_fscrhidetoolbar = f);
     }
 }
 
 void ComicBookSettings::showStatusbar(bool f)
 {
-    if (f != statusbar)
+    if (f != m_statusbar)
     {
-        cfg->setValue(GRP_VIEW OPT_STATUSBAR, statusbar = f);
+        m_cfg->setValue(GRP_VIEW OPT_STATUSBAR, m_statusbar = f);
     }
 }
 
 void ComicBookSettings::infoFont(const QFont &s)
 {
-    if (s != font)
+    if (s != m_font)
     {
-        font = s;
-        cfg->setValue(GRP_VIEW OPT_FONT, font.toString());
+        m_font = s;
+        m_cfg->setValue(GRP_VIEW OPT_FONT, m_font.toString());
     }
 }
 
 void ComicBookSettings::saveDockLayout(ComicMainWindow *w)
 {
-    cfg->setValue(GRP_WINDOW OPT_DOCKLAYOUT, w->saveState());
+    m_cfg->setValue(GRP_WINDOW OPT_DOCKLAYOUT, w->saveState());
 }
 
 void ComicBookSettings::showSplash(bool f)
 {
-    if (f != showsplash)
+    if (f != m_showsplash)
     {
-        cfg->setValue(GRP_MISC OPT_SHOWSPLASH, showsplash = f);
+        m_cfg->setValue(GRP_MISC OPT_SHOWSPLASH, m_showsplash = f);
     }
 }
 
 void ComicBookSettings::tmpDir(const QString &dir)
 {
-    if (dir != tmpdir)
+    if (dir != m_tmpdir)
     {
-        cfg->setValue(GRP_MISC OPT_TMPDIR, tmpdir = dir);
+        m_cfg->setValue(GRP_MISC OPT_TMPDIR, m_tmpdir = dir);
     }
 }
 
