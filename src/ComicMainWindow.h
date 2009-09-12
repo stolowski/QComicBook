@@ -71,17 +71,8 @@ namespace QComicBook
 			void enableComicBookActions(bool f=true);
 			void saveSettings();
 
-			void setupActions();
+                        void setupContextMenu();
 			void setupComicImageView();
-			void setupThumbnailsWindow();
-			void setupFileMenu();
-			void setupViewMenu();
-			void setupNavigationMenu();
-			void setupBookmarksMenu();
-			void setupSettingsMenu();
-			void setupHelpMenu();
-			void setupStatusbar();
-			void setupContextMenu();
 
 		protected slots:
 			void sinkReady(const QString &path);
@@ -119,10 +110,10 @@ namespace QComicBook
 			void setBookmark();
 			void removeBookmark();
 			void openBookmarksManager();
-			void toggleScrollbars();
+			void toggleScrollbars(bool f);
 			void toggleTwoPages(bool f);
 			void toggleFullScreen();
-			void toggleContinousScroll();
+			void toggleContinousScroll(bool f);
 			void toggleJapaneseMode(bool f);
 			void reloadPage();
 

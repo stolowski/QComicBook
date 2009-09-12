@@ -323,7 +323,7 @@ void ComicBookSettings::embedPageNumbers(bool f)
     if (f != m_embedpagenumbers)
     {
         m_cfg->setValue(GRP_VIEW OPT_EMBEDPAGENUMBERS, m_embedpagenumbers = f);
-        emit displaySettingsChanged();
+        emit displaySettingsChanged(OPT_EMBEDPAGENUMBERS);
     }
 }
 
@@ -332,7 +332,7 @@ void ComicBookSettings::smallCursor(bool f)
     if (f != m_smallcursor)
     {
         m_cfg->setValue(GRP_VIEW OPT_SMALLCURSOR, m_smallcursor = f);
-        emit displaySettingsChanged();
+        emit displaySettingsChanged(OPT_SMALLCURSOR);
     }
 }
 
@@ -341,6 +341,7 @@ void ComicBookSettings::twoPagesMode(bool f)
     if (f != m_twopages)
     {
         m_cfg->setValue(GRP_VIEW OPT_TWOPAGES, m_twopages = f);
+        emit displaySettingsChanged(OPT_TWOPAGES);
     }
 }
 
@@ -357,6 +358,7 @@ void ComicBookSettings::japaneseMode(bool f)
     if (f != m_japanese)
     {
         m_cfg->setValue(GRP_VIEW OPT_JAPANESEMODE, m_japanese = f);
+        emit displaySettingsChanged(OPT_JAPANESEMODE);
     }
 }
 
@@ -394,6 +396,7 @@ void ComicBookSettings::smoothScaling(bool s)
     if (s != m_smoothscaling)
     {
         m_cfg->setValue(GRP_VIEW OPT_SMOOTHSCALING, m_smoothscaling = s);
+        emit displaySettingsChanged(OPT_SMOOTHSCALING);
     }
 }
 
@@ -417,7 +420,7 @@ void ComicBookSettings::background(const QColor &color)
     {
         m_bgcolor = color;
         m_cfg->setValue(GRP_VIEW OPT_BACKGROUND, m_bgcolor.name());
-        emit displaySettingsChanged();
+        emit displaySettingsChanged(OPT_BACKGROUND);
     }
 }
 

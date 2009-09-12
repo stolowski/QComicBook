@@ -34,7 +34,7 @@ namespace QComicBook
 		Q_OBJECT
 
 		signals:
-                        void displaySettingsChanged();
+                        void displaySettingsChanged(const QString &option);
 
 		public:
 			void load();
