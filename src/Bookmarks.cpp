@@ -21,7 +21,7 @@ using namespace QComicBook;
 
 Bookmarks::Bookmarks(QMenu *menu): bmenu(menu), changed(false)
 {
-	fname = ComicBookSettings::bookmarksDir() + "/bookmarks";
+    fname = ComicBookSettings::instance().bookmarksDir() + "/bookmarks";
 }
 
 Bookmarks::~Bookmarks()

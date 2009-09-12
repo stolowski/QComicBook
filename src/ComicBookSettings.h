@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005-2006 Pawel Stolowski <pawel.stolowski@wp.pl>
+ * Copyright (C) 2005-2009 Pawel Stolowski <stolowski@gmail.com>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -21,63 +21,20 @@
 #include <QByteArray>
 
 class QSettings;
-class QRect;
 class QColor;
-class QMainWindow;
 
 namespace QComicBook
 {
 	using namespace Utility;
 
+        class ComicMainWindow;
+        
 	class ComicBookSettings: public QObject
 	{
 		Q_OBJECT
 
-		private:
-			QSettings *cfg;
-                        bool embedpagenumbers;
-			bool smallcursor;
-			bool twopages;
-			bool twopagesstep;
-			bool japanese;
-			bool contscroll;
-			bool scrollbars;
-			bool preload;
-			bool fscrhidemenu;
-			bool fscrhidestatus;
-			bool fscrhidetoolbar;
-			Size pagesize;
-			bool smoothscaling;
-			QString lastdir;
-			QColor bgcolor;
-			History recent;
-			int cachesize;
-			int thumbsage;
-			bool cacheadjust;
-			bool cachethumbs;
-			bool autoinfo;
-			bool confirmexit;
-			bool statusbar;
-			bool intbrowser;
-			bool showsplash;
-			QString extbrowser;
-			QByteArray docklayout;
-			QByteArray geometry;
-			QString tmpdir;
-			QFont font;
-
-			static QString bkpath; //bookmarks path
-			static QString thpath; //thumbnails cache path
-			static bool dirsok; //is above dirs are ok
-
-			static const EnumMap<Size> size2string[];
-
 		signals:
                         void displaySettingsChanged();
-
-		private:
-			ComicBookSettings();
-			virtual ~ComicBookSettings();
 
 		public:
 			void load();
@@ -105,11 +62,9 @@ namespace QComicBook
 			bool fullScreenHideStatusbar() const;
 			bool fullScreenHideToolbar() const;
 			bool showStatusbar() const;
-			bool useInternalBrowser() const;
 			const QFont& infoFont() const;
-			QString externalBrowser() const;
-			void restoreGeometry(QMainWindow *w) const;
-			void restoreDockLayout(QMainWindow *w);
+			void restoreGeometry(ComicMainWindow *w) const;
+			void restoreDockLayout(ComicMainWindow *w) const;
 			bool showSplash() const;
 			QString tmpDir() const;
 
@@ -136,11 +91,9 @@ namespace QComicBook
 			void fullScreenHideStatusbar(bool f);
 			void fullScreenHideToolbar(bool f);
 			void showStatusbar(bool f);
-			void useInternalBrowser(bool f);
 			void infoFont(const QFont &f);
-			void externalBrowser(const QString &cmd);
-			void saveDockLayout(QMainWindow *w);
-			void saveGeometry(QMainWindow *w);
+			void saveDockLayout(ComicMainWindow *w);
+			void saveGeometry(ComicMainWindow *w);
 			void showSplash(bool f);
 			void tmpDir(const QString &dir);
 
@@ -149,9 +102,54 @@ namespace QComicBook
 			//
 			// checks and creates .qcomicbook/ and cache subdirectories if
 			// necessary
-			static bool checkDirs();
-			static const QString& bookmarksDir();
-			static const QString& thumbnailsDir();
+			bool checkDirs();
+			const QString& bookmarksDir();
+			const QString& thumbnailsDir();
+
+		private:
+                        static ComicBookSettings *m_instance;
+			QSettings *cfg;
+                        bool embedpagenumbers;
+			bool smallcursor;
+			bool twopages;
+			bool twopagesstep;
+			bool japanese;
+			bool contscroll;
+			bool scrollbars;
+			bool preload;
+			bool fscrhidemenu;
+			bool fscrhidestatus;
+			bool fscrhidetoolbar;
+			Size pagesize;
+			bool smoothscaling;
+			QString lastdir;
+			QColor bgcolor;
+			History recent;
+			int cachesize;
+			int thumbsage;
+			bool cacheadjust;
+			bool cachethumbs;
+			bool autoinfo;
+			bool confirmexit;
+			bool statusbar;
+			bool intbrowser;
+			bool showsplash;
+			QByteArray docklayout;
+			QByteArray geometry;
+			QString tmpdir;
+			QFont font;
+
+			QString bkpath; //bookmarks path
+			QString thpath; //thumbnails cache path
+			bool dirsok; //is above dirs are ok
+
+			static const EnumMap<Size> size2string[];
+
+                        ComicBookSettings();
+                        ComicBookSettings(const ComicBookSettings &);
+                        virtual ~ComicBookSettings();
+
+
 	};
 }
 

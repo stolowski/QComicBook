@@ -45,9 +45,11 @@ int main(int argc, char *argv[])
 		}
 	}
 	
-	if (!ComicBookSettings::checkDirs())
+	if (!ComicBookSettings::instance().checkDirs())
+        {
 		QMessageBox::critical(NULL, errcaption, ComicMainWindow::tr("Can't initialize QComicBook directories"),
 				QMessageBox::Ok, QMessageBox::NoButton);
+        }
 	
 	ComicMainWindow *win = new ComicMainWindow(NULL);
 	//app.setMainWidget(win);

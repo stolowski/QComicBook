@@ -350,7 +350,7 @@ void ImgDirSink::removeThumbnails(int days)
 
         const QDateTime currdate = QDateTime::currentDateTime();
         
-        QDir dir(ComicBookSettings::thumbnailsDir(), "*.jpg", QDir::Unsorted, QDir::Files|QDir::NoSymLinks);
+        QDir dir(ComicBookSettings::instance().thumbnailsDir(), "*.jpg", QDir::Unsorted, QDir::Files|QDir::NoSymLinks);
         const QStringList files = dir.entryList();
         for (QStringList::const_iterator it = files.begin(); it!=files.end(); it++)
         {

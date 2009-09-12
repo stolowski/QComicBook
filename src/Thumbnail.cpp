@@ -104,7 +104,7 @@ int Thumbnail::maxHeight()
 
 QString Thumbnail::getFullPath() const
 {
-    return ComicBookSettings::thumbnailsDir() + "/" + hash.toHex() + ".jpg";
+    return ComicBookSettings::instance().thumbnailsDir() + "/" + hash.toHex() + ".jpg";
 }
 
 QByteArray Thumbnail::getScrambledName(const QString &in)
