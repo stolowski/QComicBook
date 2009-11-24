@@ -86,7 +86,8 @@ void ComicBookCfgDialog::accept()
 	cfg->autoInfo(cb_autoinfo->isChecked());
 	cfg->showSplash(cb_splash->isChecked());
 	cfg->confirmExit(cb_confirmexit->isChecked());
-	
+
+        emit displaySettingsChanged(); //FIXME only if needed
 	QDialog::accept();
 }
 

@@ -18,8 +18,10 @@ namespace QComicBook
         void changed();
 
     public:
-        ViewProperties(Size size, unsigned char angle, bool twoPagesMode, bool pagenumbers, bool contScroll);
+        ViewProperties();
+        ViewProperties(const ViewProperties &props);
 
+        void setFromSettings();
         int angle() const;
         void setAngle(Rotation r);
         Size size() const;
@@ -31,6 +33,10 @@ namespace QComicBook
         bool continuousScrolling() const;
         void setTwoPagesMode(bool f);
         bool twoPagesMode() const;
+        void setTwoPagesStep(bool f);
+        bool twoPagesStep() const;
+        void setMangaMode(bool f);
+        bool mangaMode() const;
 
     private:
         unsigned char m_angle; //rotation angle, 0..3, multipled by 90
@@ -39,6 +45,8 @@ namespace QComicBook
         QColor m_background; //background color
         bool m_pageNumbers;  //if page numbers should be embedded
         bool m_twoPagesMode;
+        bool m_twoPagesStep;
+        bool m_mangaMode;
         bool m_contScroll;
 
     };

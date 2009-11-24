@@ -46,9 +46,9 @@ namespace QComicBook
         bool estimatedSize() const;
         int pageNumber() const;
         bool hasTwoPages() const;
+        int numOfPages() const;
 
     protected:
-        int numOfPages() const;
         void deletePages();
         void drawPageNumber(int page, QPainter &p, int x, int y);
 

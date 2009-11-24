@@ -34,6 +34,7 @@ void LoaderThreadBase::request(int page)
     const LoadRequest req(page, false);
     if (requests.contains(req))
     {
+        qDebug() << "requests queue already has" << page;
         loaderMutex.unlock();
         return;
     }
@@ -50,6 +51,7 @@ void LoaderThreadBase::requestTwoPages(int page)
     const LoadRequest req(page, true);
     if (requests.contains(req))
     {
+        qDebug() << "requests queue (2 pages) already has" << page;
         loaderMutex.unlock();
         return;
     }
@@ -87,6 +89,7 @@ void LoaderThreadBase::cancelTwoPages(int page)
 void LoaderThreadBase::cancelAll()
 {
     loaderMutex.lock();
+    qDebug() << "canceled all pages";
     requests.clear();
     loaderMutex.unlock();
 }

@@ -29,6 +29,9 @@ namespace QComicBook
 			QFont font;
 
 			void updateFontPreview();
+ 
+                signals:
+                        void displaySettingsChanged();
 
 		protected slots:
 			virtual void accept();

@@ -27,10 +27,9 @@ using namespace QComicBook;
 const int ContinuousPageView::EXTRA_WHEEL_SPIN = 3;
 const float ContinuousPageView::JUMP_FACTOR = 0.85f;
 
-ContinuousPageView::ContinuousPageView(QWidget *parent, int physicalPages, bool twoPagesMode, Size size, const QColor &color)
-    : PageViewBase(parent, twoPagesMode, size, color)
+ContinuousPageView::ContinuousPageView(QWidget *parent, PageLoaderThread *loader, int physicalPages, const ViewProperties& props)
+    : PageViewBase(parent, loader, physicalPages, props)
     , wheelupcnt(0), wheeldowncnt(0)
-    , m_physicalPages(physicalPages)
     , m_firstVisible(-1)
     , m_firstVisibleOffset(0)
     , m_y1pos(NULL)
@@ -47,10 +46,11 @@ ContinuousPageView::ContinuousPageView(QWidget *parent, int physicalPages, bool 
 
     recreatePageWidgets();
     recalculatePageSizes();
+
     setWidget(w);
     setWidgetResizable(true);
     
-    setBackground(color);
+    setBackground(props.background());
     setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 
     // track scrollbar range changes to restore its relative position
@@ -65,7 +65,7 @@ ContinuousPageView::~ContinuousPageView()
 
 void ContinuousPageView::setNumOfPages(int n)
 {
-    m_physicalPages = n;
+    PageViewBase::setNumOfPages(n);
     recreatePageWidgets();
     recalculatePageSizes();
     disposeOrRequestPages();
@@ -73,6 +73,11 @@ void ContinuousPageView::setNumOfPages(int n)
 
 void ContinuousPageView::propsChanged()
 {
+    qDebug() << "ContinuousPageView::propsChanged()";
+    if ((props.twoPagesMode() && imgLabel.size() == numOfPages()) || (!props.twoPagesMode() && imgLabel.size() < numOfPages()))
+    {
+        recreatePageWidgets();
+    }
     foreach (PageWidget *p, imgLabel)
     {
         p->redrawImages();
@@ -96,6 +101,7 @@ void ContinuousPageView::scrollbarRangeChanged(int min, int max)
 
 void ContinuousPageView::recreatePageWidgets()
 {
+    qDebug() << "ContinuousPageView::recreatePageWidgets()";
     m_firstVisible = -1;
     foreach (PageWidget *p, imgLabel)
     {
@@ -109,19 +115,19 @@ void ContinuousPageView::recreatePageWidgets()
     int w = viewport()->width() - 10;
     int h = viewport()->height() - 10;
 
-    if (m_physicalPages)
+    if (numOfPages())
     {
         if (props.twoPagesMode())
         {
             int i = 0;
-            if (m_physicalPages % 2) // odd number of pages
+            if (numOfPages() % 2) // odd number of pages
             {
                 PageWidget *p = new PageWidget(this, w, h, 0);
                 imgLabel.append(p);
                 m_layout->addWidget(p);
                 ++i;
             }
-            for (; i<m_physicalPages; i+=2)
+            for (; i<numOfPages(); i+=2)
             {
                 PageWidget *p = new PageWidget(this, w, h, i, true);
                 imgLabel.append(p);
@@ -130,7 +136,7 @@ void ContinuousPageView::recreatePageWidgets()
         }
         else
         {
-            for (int i=0; i<m_physicalPages; i++)
+            for (int i=0; i<numOfPages(); i++)
             {
                 PageWidget *p = new PageWidget(this, w, h, i);
                 p->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -146,13 +152,16 @@ void ContinuousPageView::recreatePageWidgets()
 
 PageWidget* ContinuousPageView::findPageWidget(int pageNum) const
 {
-    if (props.twoPagesMode())
+    if (pageNum >=0 && pageNum < numOfPages())
     {
-        pageNum = (pageNum + pageNum % 2) / 2;
-    }
-    if (pageNum < imgLabel.size())
-    {
-        return imgLabel[pageNum];
+        if (props.twoPagesMode())
+        {
+            pageNum = (pageNum + pageNum % 2) / 2;
+        }
+        if (pageNum < imgLabel.size())
+        {
+            return imgLabel[pageNum];
+        }
     }
     return NULL;
 }
@@ -180,7 +189,7 @@ void ContinuousPageView::disposeOrRequestPages()
             {
                 if (!hasRequest(w->pageNumber()))
                 {
-                    qDebug() << "requesting" << w->pageNumber();
+                    qDebug() << "ContinuousPageView: requesting" << w->pageNumber();
                     addRequest(w->pageNumber(), props.twoPagesMode() && w->hasTwoPages());
                 }
             }
@@ -317,19 +326,20 @@ void ContinuousPageView::scrollContentsBy(int dx, int dy)
 
 void ContinuousPageView::setImage(const Page &img1)
 {
-    Q_ASSERT(m_physicalPages > 0);
+    Q_ASSERT(numOfPages() > 0);
     delRequest(img1.getNumber(), false, false);
     //if (!preserveangle)
     //          iangle = 0;
     PageWidget *w = findPageWidget(img1.getNumber());
     Q_ASSERT(w != NULL);
+    qDebug() << "setImage:" << img1.getNumber() << "widget page" << w->pageNumber();
     w->setImage(img1);
     recalculatePageSizes();
 }
 
 void ContinuousPageView::setImage(const Page &img1, const Page &img2)
 {
-    Q_ASSERT(m_physicalPages > 0);
+    Q_ASSERT(numOfPages() > 0);
     delRequest(img1.getNumber(), true, false);
     //  if (!preserveangle)
     //          iangle = 0;
@@ -354,7 +364,7 @@ void ContinuousPageView::resizeEvent(QResizeEvent *e)
     {
         disposeOrRequestPages();
     }*/
-    QScrollArea::resizeEvent(e); 
+    PageViewBase::resizeEvent(e);
 }
 
 void ContinuousPageView::wheelEvent(QWheelEvent *e)
@@ -393,102 +403,33 @@ void ContinuousPageView::wheelEvent(QWheelEvent *e)
 
 void ContinuousPageView::setTwoPagesMode(bool f)
 {
-    /*if (f != m_twoPagesMode)
-    {
-        m_twoPagesMode = f;
-        recreatePageWidgets();
-        }*/
     props.setTwoPagesMode(f);
-    recreatePageWidgets(); //FIXME
+    //   recreatePageWidgets(); //FIXME
 }
 
-void ContinuousPageView::scrollRight()
-{
-        scrollByDelta(spdx, 0);
-}
-
-void ContinuousPageView::scrollLeft()
-{
-        scrollByDelta(-spdx, 0);
-}
-
-void ContinuousPageView::scrollRightFast()
-{
-        scrollByDelta(3*spdx, 0);
-}
-
-void ContinuousPageView::scrollLeftFast()
-{
-        scrollByDelta(-3*spdx, 0);
-}
-
-void ContinuousPageView::scrollUp()
-{
-        if (onTop())
-        {
-                wheelupcnt = wheeldowncnt = 0;
-                emit topReached();
-        }
-        else
-		scrollByDelta(0, -spdy);
-}
-
-void ContinuousPageView::scrollDown()
-{
-        if (onBottom())
-        {
-                wheelupcnt = wheeldowncnt = 0;
-                emit bottomReached();
-        }
-        else
-		scrollByDelta(0, spdy);
-}
-
-void ContinuousPageView::scrollUpFast()
-{
-        if (onTop())
-                emit topReached();
-        else
-		scrollByDelta(0, -3*spdy);
-}
-
-void ContinuousPageView::scrollDownFast()
-{       
-        if (onBottom())
-                emit bottomReached();
-        else
-		scrollByDelta(0, 3*spdy);
-}
-
-void ContinuousPageView::rotateRight()
-{
-        setRotation(QComicBook::Right);
-}
-
-void ContinuousPageView::rotateLeft()
-{
-        setRotation(QComicBook::Left);
-}
-
-void ContinuousPageView::resetRotation()
-{
-        setRotation(None);
-}
 
 void ContinuousPageView::jumpUp()
 {
         if (onTop())
+        {
                 emit topReached();
+        }
         else 
+        {
 		scrollByDelta(0, -static_cast<int>(JUMP_FACTOR * viewport()->height()));
+        }
 }
 
 void ContinuousPageView::jumpDown()
 {
         if (onBottom())
+        {
                 emit bottomReached();
-        else 
+        }
+        else
+        {
 		scrollByDelta(0, static_cast<int>(JUMP_FACTOR * viewport()->height()));
+        }
 }
 
 void ContinuousPageView::gotoPage(int n)
@@ -499,7 +440,14 @@ void ContinuousPageView::gotoPage(int n)
         const int idx(imgLabel.indexOf(w));
         Q_ASSERT(idx >= 0);
         m_firstVisibleOffset = 0;
-        verticalScrollBar()->setValue(m_y1pos[idx]);
+        if (verticalScrollBar()->value() != m_y1pos[idx])
+        {
+            verticalScrollBar()->setValue(m_y1pos[idx]);
+        }
+        else
+        {
+            disposeOrRequestPages();
+        }
     }
 }
 
@@ -527,24 +475,15 @@ void ContinuousPageView::scrollToBottom()
 
 void ContinuousPageView::clear()
 {
-    m_physicalPages = 0;
     m_firstVisible = -1;
     delRequests();
-    recreatePageWidgets();
+    setNumOfPages(0);
 }
 			
 int ContinuousPageView::visiblePages() const
 {
-    return props.twoPagesMode() ? 2 : 1;
-    //return imgLabel->numOfPages();
-}
-
-const QPixmap ContinuousPageView::image() const
-{
-//TODO
-//    if (imgLabel->numOfPages())
-//        return QPixmap(*imgLabel->pixmap());
-    return QPixmap(); //fallback
+    PageWidget *w(currentPageWidget());
+    return w ? w->numOfPages() : 0;
 }
 
 int ContinuousPageView::viewWidth() const

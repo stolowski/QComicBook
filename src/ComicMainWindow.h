@@ -85,6 +85,7 @@ namespace QComicBook
 			void savePageAs();
                         void reconfigureDisplay();
                         void currentPageChanged(int n);
+                        void setPageSize(QAction *action);
 
 		public slots:
 			void firstPage();

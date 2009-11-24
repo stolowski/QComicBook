@@ -10,6 +10,7 @@ namespace QComicBook
 {
     class PageWidget;
     class Page;
+    class PageLoaderThread;
 
 	enum Scaling { Smooth, Fast };
 
@@ -41,18 +42,22 @@ namespace QComicBook
             void setSmallCursor(bool f);
             void showPageNumbers(bool f);
             void setRotation(Rotation r);
+            void rotateRight();
+            void rotateLeft();
+            void resetRotation();
             void setSize(Size s);
-            void setSizeOriginal();
-            void setSizeFitWidth();
-            void setSizeFitHeight();
-            void setSizeWholePage();
-            void setSizeBestFit();
-
-        protected slots:
+            virtual void scrollUp();
+            virtual void scrollDown();
+            virtual void scrollUpFast();
+            virtual void scrollDownFast();
+            virtual void scrollRight();
+            virtual void scrollLeft();
+            virtual void scrollRightFast();
+            virtual void scrollLeftFast();
             virtual void propsChanged() = 0;
 
         public:
-            PageViewBase(QWidget *parent, bool twoPagesMode, Size size, const QColor &color);
+            PageViewBase(QWidget *parent, PageLoaderThread *loader, int physicalPages, const ViewProperties &props);
             virtual ~PageViewBase();
 
             void enableScrollbars(bool f);
@@ -61,19 +66,23 @@ namespace QComicBook
             bool onBottom();
             bool onTop();
 
-            virtual void setNumOfPages(int n) = 0;
+            virtual void setNumOfPages(int n);
+            int numOfPages() const;
             virtual int visiblePages() const = 0;
-            virtual const QPixmap image() const = 0;
             virtual int viewWidth() const = 0;
             virtual int currentPage() const = 0;
+            virtual int nextPage(int page) const;
+            virtual int previousPage(int page) const;
 
         protected:
+            virtual void resizeEvent(QResizeEvent *e);
             virtual void contextMenuEvent(QContextMenuEvent *e);
             virtual void mouseMoveEvent(QMouseEvent *e);
             virtual void mousePressEvent(QMouseEvent *e);
             virtual void mouseReleaseEvent(QMouseEvent *e);
             virtual void mouseDoubleClickEvent(QMouseEvent *e);
             void scrollByDelta(int dx, int dy);
+            void recalculateScrollSpeeds();
 
             bool hasRequest(int page) const;
             void addRequest(int page, bool twoPages);
@@ -84,7 +93,9 @@ namespace QComicBook
 
         private:
             QMenu *context_menu;
+            int m_physicalPages;
             int lx, ly; //last mouse position when tracking mouse movements
+            int spdx, spdy; //scroll speed
             int wheelupcnt, wheeldowncnt;
             QCursor *smallcursor;
             QList<int> m_requestedPages;

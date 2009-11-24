@@ -45,6 +45,7 @@
 #include <QWidgetAction>
 #include <QList>
 #include <QUrl>
+#include <QDebug>
 
 using namespace QComicBook;
 using namespace Utility;
@@ -77,6 +78,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
     scaleActions->addAction(actionWholePage);
     scaleActions->addAction(actionOriginalSize);
     scaleActions->addAction(actionBestFit);
+    connect(scaleActions, SIGNAL(triggered(QAction *)), this, SLOT(setPageSize(QAction *)));
        
     actionExitFullScreen = new QAction(QString::null, this);
     actionExitFullScreen->setShortcut(tr("Escape"));
@@ -134,6 +136,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
     connect(actionToggleContinuousScroll, SIGNAL(toggled(bool)), this, SLOT(toggleContinousScroll(bool)));
     actionTwoPages->setChecked(cfg->twoPagesMode());
     actionMangaMode->setChecked(cfg->japaneseMode());
+    actionMangaMode->setDisabled(!cfg->twoPagesMode());
     actionToggleContinuousScroll->setChecked(cfg->continuousScrolling());
 
     //
@@ -189,7 +192,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
     
     cfg->restoreDockLayout(this);
     
-    connect(cfg, SIGNAL(displaySettingsChanged(const QString &)), this, SLOT(reconfigureDisplay()));
+    //connect(cfg, SIGNAL(displaySettingsChanged(const QString &)), this, SLOT(reconfigureDisplay())); ??
     enableComicBookActions(false);
     
     pageLoader->start();
@@ -260,15 +263,18 @@ void ComicMainWindow::setupComicImageView()
     const int n = (sink != NULL ? sink->numOfImages() : 0);
     if (view)
     {
-        view->deleteLater();
+        view->disconnect();
+//        pageLoader->disconnect(); not needed?
+//        view->deleteLater();
     }
+    const ViewProperties props;
     if (cfg->continuousScrolling())
     {
-        view = new ContinuousPageView(this, n, actionTwoPages->isChecked(), cfg->pageSize(), cfg->background());
+        view = new ContinuousPageView(this, pageLoader, n, props);
     }
     else
     {
-        view = new SimplePageView(this, n, actionTwoPages->isChecked(), cfg->pageSize(), cfg->background());
+        view = new SimplePageView(this, pageLoader, n, props);
     }
     
     setCentralWidget(view);
@@ -286,11 +292,11 @@ void ComicMainWindow::setupComicImageView()
     connect(actionScrollDown, SIGNAL(triggered(bool)), view, SLOT(scrollDown()));       
     connect(actionScrollUpFast, SIGNAL(triggered(bool)), view, SLOT(scrollUpFast()));        
     connect(actionScrollDownFast, SIGNAL(triggered(bool)), view, SLOT(scrollDownFast()));
-    connect(actionFitWidth, SIGNAL(triggered(bool)), view, SLOT(setSizeFitWidth()));        
+    /*connect(actionFitWidth, SIGNAL(triggered(bool)), view, SLOT(setSizeFitWidth()));        
     connect(actionFitHeight, SIGNAL(triggered(bool)), view, SLOT(setSizeFitHeight()));        
     connect(actionWholePage, SIGNAL(triggered(bool)), view, SLOT(setSizeWholePage()));        
     connect(actionOriginalSize, SIGNAL(triggered(bool)), view, SLOT(setSizeOriginal()));        
-    connect(actionBestFit, SIGNAL(triggered(bool)), view, SLOT(setSizeBestFit()));        
+    connect(actionBestFit, SIGNAL(triggered(bool)), view, SLOT(setSizeBestFit()));*/        
     connect(actionRotateRight, SIGNAL(triggered(bool)), view, SLOT(rotateRight()));        
     connect(actionRotateLeft, SIGNAL(triggered(bool)), view, SLOT(rotateLeft()));
     connect(actionNoRotation, SIGNAL(triggered(bool)), view, SLOT(resetRotation()));
@@ -305,12 +311,12 @@ void ComicMainWindow::setupComicImageView()
     view->enableScrollbars(cfg->scrollbarsVisible());
 
     connect(view, SIGNAL(currentPageChanged(int)), this, SLOT(currentPageChanged(int)));
-    connect(pageLoader, SIGNAL(pageLoaded(const Page&)), view, SLOT(setImage(const Page&)));
+    /*connect(pageLoader, SIGNAL(pageLoaded(const Page&)), view, SLOT(setImage(const Page&))); aktualnie ustawiane w konstruktorze view
     connect(pageLoader, SIGNAL(pageLoaded(const Page&, const Page&)), view, SLOT(setImage(const Page&, const Page&)));
     connect(view, SIGNAL(requestPage(int)), pageLoader, SLOT(request(int)));
     connect(view, SIGNAL(requestTwoPages(int)), pageLoader, SLOT(requestTwoPages(int)));
     connect(view, SIGNAL(cancelPageRequest(int)), pageLoader, SLOT(cancel(int)));
-    connect(view, SIGNAL(cancelTwoPagesRequest(int)), pageLoader, SLOT(cancelTwoPages(int)));
+    connect(view, SIGNAL(cancelTwoPagesRequest(int)), pageLoader, SLOT(cancelTwoPages(int)));*/
 
     setupContextMenu();
 
@@ -418,18 +424,43 @@ void ComicMainWindow::toggleContinousScroll(bool f)
 
 void ComicMainWindow::toggleTwoPages(bool f)
 {
+    actionMangaMode->setDisabled(!f);
     cfg->twoPagesMode(f);
-    view->setTwoPagesMode(f); //FIXME
-    jumpToPage(currpage, true);
+    view->setTwoPagesMode(f);
 }
 
 void ComicMainWindow::toggleJapaneseMode(bool f)
 {
     cfg->japaneseMode(f);
-    if (actionTwoPages->isChecked())
+    view->setMangaMode(f);
+}
+
+void ComicMainWindow::setPageSize(QAction *action)
+{
+    Size size;
+    
+    if (action == actionFitWidth)
     {
-        jumpToPage(currpage, true);
+        size = FitWidth;
     }
+    else if (action == actionFitHeight)
+    {
+        size = FitHeight;
+    }
+    else if (action == actionBestFit)
+    {
+        size = BestFit;
+    }
+    else if (action == actionWholePage)
+    {
+        size = WholePage;
+    }
+    else //actionOriginalSize
+    {
+        size = Original;
+    }
+    cfg->pageSize(size);
+    view->setSize(size);
 }
 
 void ComicMainWindow::reloadPage()
@@ -636,23 +667,12 @@ void ComicMainWindow::exitFullscreen()
 
 void ComicMainWindow::nextPage()
 {
-        if (sink)
-        {
-                if (actionTwoPages->isChecked() && cfg->twoPagesStep())
-                {
-                        if (currpage < sink->numOfImages() - 2) //do not change pages if last two pages are visible
-                                jumpToPage(currpage + 2);
-                }
-                else
-                {
-                        jumpToPage(currpage + 1);
-                }
-        }
+    jumpToPage(view->nextPage(currpage));
 }
 
 void ComicMainWindow::prevPage()
 {
-        jumpToPage(currpage - (actionTwoPages->isChecked() && cfg->twoPagesStep() ? 2 : 1));
+    jumpToPage(view->previousPage(currpage));
 }
 
 void ComicMainWindow::prevPageBottom()
@@ -749,7 +769,7 @@ void ComicMainWindow::currentPageChanged(int n)
 
  	//
 	// enable or disable next/prev/backward/forward page actions if first/last page shown
-        if (sink == NULL || n == sink->numOfImages() - (actionTwoPages->isChecked() ? 2 : 1))
+    if (sink == NULL || n == sink->numOfImages() - 1) //- (actionTwoPages->isChecked() ? 2 : 1))
 	{
 		actionNextPage->setDisabled(true);
 		actionForwardPage->setDisabled(true);
@@ -759,7 +779,7 @@ void ComicMainWindow::currentPageChanged(int n)
 		actionNextPage->setDisabled(false);
 		actionForwardPage->setDisabled(false);
 	}
-        if (sink == NULL || n == (actionTwoPages->isChecked() ? 1 : 0))
+        if (sink == NULL || n == 0) //n == (actionTwoPages->isChecked() ? 1 : 0))
 	{
                 actionPreviousPage->setDisabled(true);
 		actionBackwardPage->setDisabled(true);
@@ -814,6 +834,7 @@ void ComicMainWindow::showAbout()
 void ComicMainWindow::showConfigDialog()
 {
         ComicBookCfgDialog *d = new ComicBookCfgDialog(this, cfg);
+        connect(d, SIGNAL(displaySettingsChanged()), this, SLOT(reconfigureDisplay()));
         d->show();
 }
 
@@ -872,22 +893,25 @@ void ComicMainWindow::savePageAs()
 	{
 		const QString msg = tr("Save image as");
 		int cnt = view->visiblePages();
-		for (int i = 1; i<=cnt; i++)
+		for (int i = 0; i<cnt; i++)
 		{
 			QString tmpmsg(msg);
 			if (cnt > 1)
-				tmpmsg += " (" + tr("page") + " " + QString::number(i) + ")";
+                        {
+				tmpmsg += " (" + tr("page") + " " + QString::number(currpage + i + 1) + ")";
+                        }
 			QString fname = QFileDialog::getSaveFileName(this, tmpmsg, QString::null, "Images (*.jpg *.png)");
-			if (!fname.isEmpty())
-			{
-				int result;
-				const Page img = sink->getImage(currpage, result);
-				if (result != 0 || !img.getImage().save(fname)) //TODO: overwrite and default format (jpeg)
-				{
-					QMessageBox::critical(this, tr("QComicBook error"), tr("Error saving image"), QMessageBox::Ok, QMessageBox::NoButton);
-					break; //do not attempt to save second image
-				}
-			}
+			if (fname.isEmpty())
+                        {
+                            break;
+                        }
+                        int result;
+                        const Page img = sink->getImage(currpage + i, result);
+                        if (result != 0 || !img.getImage().save(fname)) //TODO: overwrite and default format (jpeg)
+                        {
+                            QMessageBox::critical(this, tr("QComicBook error"), tr("Error saving image"), QMessageBox::Ok, QMessageBox::NoButton);
+                            break; //do not attempt to save second image
+                        }
 		}
 	}
 }
@@ -926,7 +950,7 @@ void ComicMainWindow::saveSettings()
         cfg->saveDockLayout(this);
         cfg->lastDir(lastdir);
         cfg->recentlyOpened(*recentfiles);
-        cfg->pageSize(view->properties().size());
+        
         cfg->showStatusbar(actionToggleStatusbar->isChecked());
 
         bookmarks->save();        
@@ -937,4 +961,5 @@ void ComicMainWindow::reconfigureDisplay()
     view->setSmallCursor(cfg->smallCursor());
     view->showPageNumbers(cfg->embedPageNumbers());
     view->setBackground(cfg->background());
+    view->properties().setTwoPagesStep(cfg->twoPagesStep());
 }

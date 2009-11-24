@@ -1,14 +1,37 @@
 #include "ViewProperties.h"
+#include "ComicBookSettings.h"
+#include <QDebug>
 
 using namespace QComicBook;
 
-ViewProperties::ViewProperties(Size size, unsigned char angle, bool twoPagesMode, bool pagenumbers, bool contScroll)
-    : m_size(size)
-    , m_angle(angle)
-    , m_pageNumbers(pagenumbers)
-    , m_contScroll(contScroll)
-    , m_twoPagesMode(twoPagesMode)
+ViewProperties::ViewProperties()
 {
+    setFromSettings();
+}
+
+ViewProperties::ViewProperties(const ViewProperties &props)
+{
+    m_size = props.m_size;
+    m_angle = props.m_angle;
+    m_pageNumbers = props.m_pageNumbers;
+    m_contScroll = props.m_contScroll;
+    m_twoPagesMode = props.m_twoPagesMode;
+    m_mangaMode = props.m_mangaMode;
+    m_twoPagesStep = props.m_twoPagesStep;
+    m_background = props.m_background;
+}
+
+void ViewProperties::setFromSettings()
+{
+    ComicBookSettings &cfg(ComicBookSettings::instance());
+    m_size = cfg.pageSize();
+    m_angle = 0; //?
+    m_pageNumbers = cfg.embedPageNumbers();
+    m_contScroll = cfg.continuousScrolling();
+    m_twoPagesMode = cfg.twoPagesMode();
+    m_mangaMode = cfg.japaneseMode();
+    m_twoPagesStep = cfg.twoPagesStep();
+    m_background = cfg.background();
 }
 
 int ViewProperties::angle() const
@@ -91,4 +114,32 @@ void ViewProperties::setTwoPagesMode(bool f)
 bool ViewProperties::twoPagesMode() const
 {
     return m_twoPagesMode;
+}
+
+void ViewProperties::setTwoPagesStep(bool f)
+{
+    if (m_twoPagesStep != f)
+    {
+        m_twoPagesStep = f;
+        emit changed();
+    }
+}
+
+bool ViewProperties::twoPagesStep() const
+{
+    return m_twoPagesStep;
+}
+
+void ViewProperties::setMangaMode(bool f)
+{
+    if (m_mangaMode != f)
+    {
+        m_mangaMode = f;
+        emit changed();
+    }
+}
+
+bool ViewProperties::mangaMode() const
+{
+    return m_mangaMode;
 }

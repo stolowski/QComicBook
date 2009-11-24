@@ -265,22 +265,24 @@ void PageWidget::redrawImages()
         }
         else if (pages == 2)
         {
+            const int swap(props.mangaMode());
             // clear areas not covered by page (if pages sizes differ)
             for (int i=0; i<2; i++)
             {
-                if (m_image[i]->height() < std::max(m_image[0]->height(), m_image[1]->height()))
+                const int j(i^swap);
+                if (m_image[j]->height() < std::max(m_image[0]->height(), m_image[1]->height()))
                 {
-                    p.fillRect(i*m_image[0]->width(), m_image[i]->height(), m_image[i]->width(), totalHeight - m_image[i]->height(), props.background());
+                    p.fillRect(i*m_image[j]->width(), m_image[j]->height(), m_image[j]->width(), totalHeight - m_image[j]->height(), props.background());
                     break; //only one page may be smaller
                 }
             }
         
-            p.drawImage(0, 0, m_image[0]->getImage(), 0, 0);
-            p.drawImage(m_image[0]->width(), 0, m_image[1]->getImage(), 0, 0);
+            p.drawImage(0, 0, m_image[0^swap]->getImage(), 0, 0);
+            p.drawImage(m_image[0^swap]->width(), 0, m_image[1^swap]->getImage(), 0, 0);
             if (props.pageNumbers())
             {
                 p.setWorldMatrixEnabled(false);
-                drawPageNumber(std::max(m_image[0]->getNumber(), m_image[1]->getNumber()), p, m_pixmap->width(), m_pixmap->height());
+                drawPageNumber(std::max(m_image[swap]->getNumber(), m_image[1^swap]->getNumber()), p, m_pixmap->width(), m_pixmap->height());
             }
         }
     

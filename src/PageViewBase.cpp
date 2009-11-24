@@ -1,4 +1,5 @@
 #include "PageViewBase.h"
+#include "PageLoaderThread.h"
 #include <QContextMenuEvent>
 #include <QMenu>
 #include <QBitmap>
@@ -8,13 +9,22 @@
 
 using namespace QComicBook;
 
-PageViewBase::PageViewBase(QWidget *parent, bool twoPagesMode, Size size, const QColor &color)
+PageViewBase::PageViewBase(QWidget *parent, PageLoaderThread *loader, int physicalPages, const ViewProperties &props)
     : QScrollArea(parent)
-    , props(size, 0, twoPagesMode, false, true)
+    , m_physicalPages(physicalPages)
+    , props(props)
     , smallcursor(NULL)
 {
     context_menu = new QMenu(this);
-    connect(&props, SIGNAL(changed()), this, SLOT(propsChanged()));
+    connect(&this->props, SIGNAL(changed()), this, SLOT(propsChanged()));
+    recalculateScrollSpeeds();
+
+    connect(this, SIGNAL(requestPage(int)), loader, SLOT(request(int)));
+    connect(this, SIGNAL(requestTwoPages(int)), loader, SLOT(requestTwoPages(int)));
+    connect(this, SIGNAL(cancelPageRequest(int)), loader, SLOT(cancel(int)));
+    connect(this, SIGNAL(cancelTwoPagesRequest(int)), loader, SLOT(cancelTwoPages(int)));
+    connect(loader, SIGNAL(pageLoaded(const Page&)), this, SLOT(setImage(const Page&)));
+    connect(loader, SIGNAL(pageLoaded(const Page&, const Page&)), this, SLOT(setImage(const Page&, const Page&)));
 }
 
 PageViewBase::~PageViewBase()
@@ -83,9 +93,104 @@ bool PageViewBase::onBottom()
         return verticalScrollBar()->value() == verticalScrollBar()->maximum();
 }
 
+void PageViewBase::scrollUp()
+{
+        if (onTop())
+        {
+                wheelupcnt = wheeldowncnt = 0;
+                emit topReached();
+        }
+        else
+        {
+		scrollByDelta(0, -spdy);
+        }
+}
+
+void PageViewBase::scrollDown()
+{
+        if (onBottom())
+        {
+                wheelupcnt = wheeldowncnt = 0;
+                emit bottomReached();
+        }
+        else
+        {
+		scrollByDelta(0, spdy);
+        }
+}
+
+void PageViewBase::scrollUpFast()
+{
+        if (onTop())
+        {
+                emit topReached();
+        }
+        else
+        {
+		scrollByDelta(0, -3*spdy);
+        }
+}
+
+void PageViewBase::scrollDownFast()
+{       
+        if (onBottom())
+        {
+                emit bottomReached();
+        }
+        else
+        {
+		scrollByDelta(0, 3*spdy);
+        }
+}
+
+void PageViewBase::scrollRight()
+{
+        scrollByDelta(spdx, 0);
+}
+
+void PageViewBase::scrollLeft()
+{
+        scrollByDelta(-spdx, 0);
+}
+
+void PageViewBase::scrollRightFast()
+{
+        scrollByDelta(3*spdx, 0);
+}
+
+void PageViewBase::scrollLeftFast()
+{
+        scrollByDelta(-3*spdx, 0);
+}
+
+void PageViewBase::setNumOfPages(int n)
+{
+    m_physicalPages = n;
+}
+
+int PageViewBase::numOfPages() const
+{
+    return m_physicalPages;
+}
+
 void PageViewBase::setRotation(Rotation r)
 {
     props.setAngle(r);
+}
+
+void PageViewBase::rotateRight()
+{
+        setRotation(QComicBook::Right);
+}
+
+void PageViewBase::rotateLeft()
+{
+        setRotation(QComicBook::Left);
+}
+
+void PageViewBase::resetRotation()
+{
+        setRotation(None);
 }
 
 void PageViewBase::setSize(Size s)
@@ -93,37 +198,12 @@ void PageViewBase::setSize(Size s)
     props.setSize(s);
 }
 
-void PageViewBase::setSizeOriginal()
-{
-        setSize(Original);
-}
-
-void PageViewBase::setSizeFitWidth()
-{
-        setSize(FitWidth);
-}
-
-void PageViewBase::setSizeFitHeight()
-{
-        setSize(FitHeight);
-}
-
-void PageViewBase::setSizeWholePage()
-{
-        setSize(WholePage);
-}
-
-void PageViewBase::setSizeBestFit()
-{
-        setSize(BestFit);
-}
-
 void PageViewBase::setBackground(const QColor &color)
 {
-    props.setBackground(color);
     QPalette palette;
     palette.setColor(backgroundRole(), color);
     setPalette(palette);
+    props.setBackground(color);
 }
 
 void PageViewBase::setTwoPagesMode(bool f)
@@ -133,7 +213,7 @@ void PageViewBase::setTwoPagesMode(bool f)
 
 void PageViewBase::setMangaMode(bool f)
 {
-    //TODO
+    props.setMangaMode(f);
 }
 
 
@@ -148,7 +228,9 @@ void PageViewBase::setSmallCursor(bool f)
             return;
         
         for (int i=0; i<4*32; i++)
+        {
             bmp_bits[i] = msk_bits[i] = 0;
+        }
         bmp_bits[0] = msk_bits[0] = 0xe0;
         bmp_bits[4] = 0xa0;
         msk_bits[4] = 0xe0;
@@ -161,8 +243,10 @@ void PageViewBase::setSmallCursor(bool f)
     else
     {
         if (smallcursor)
+        {
             delete smallcursor;
-        smallcursor = NULL;
+            smallcursor = NULL;
+        }
         unsetCursor();
     }
 }
@@ -219,7 +303,49 @@ void PageViewBase::delRequest(int page, bool twoPages, bool cancel)
     }
 }
 
+int PageViewBase::nextPage(int page) const
+{
+    if (props.twoPagesMode() && props.twoPagesStep() && page < m_physicalPages-2)
+    {
+        page += 2;
+    }
+    else
+    {
+        ++page;
+        if (page >= m_physicalPages)
+        {
+            page = -1;
+        }
+    }
+    return page;
+}
+
+int PageViewBase::previousPage(int page) const
+{
+    if (props.twoPagesMode() && props.twoPagesStep() && page>1)
+    {
+        page -= 2;
+    }
+    else
+    {
+        --page;
+    }
+    return page;
+}
+
 void PageViewBase::delRequests()
 {
     m_requestedPages.clear();
+}
+
+void PageViewBase::recalculateScrollSpeeds()
+{
+    spdy = viewport()->height()/10;
+    spdx = viewport()->width()/10;
+}
+
+void PageViewBase::resizeEvent(QResizeEvent *e)
+{
+    QScrollArea::resizeEvent(e);
+    recalculateScrollSpeeds();
 }

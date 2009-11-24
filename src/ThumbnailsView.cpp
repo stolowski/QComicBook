@@ -98,14 +98,15 @@ void ThumbnailsView::clear()
 
 void ThumbnailsView::scrollToPage(int n)
 {
-	if (n < icons.count())
-	{
-		IconViewThumbnail *th = icons[n];
-		setCurrentItem(th);
-		if (isVisible())
-			scrollToItem(th);
-			//ensureVisible(th->x(), th->y());
-	}
+    Q_ASSERT(n>0);
+    if (n>0 && n < icons.count())
+    {
+        IconViewThumbnail *th = icons[n];
+        setCurrentItem(th);
+        if (isVisible())
+            scrollToItem(th);
+        //ensureVisible(th->x(), th->y());
+    }
 }
 
 void ThumbnailsView::contextMenuEvent(QContextMenuEvent *e)

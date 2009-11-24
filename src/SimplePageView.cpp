@@ -18,10 +18,10 @@ using namespace QComicBook;
 const int SimplePageView::EXTRA_WHEEL_SPIN = 3;
 const float SimplePageView::JUMP_FACTOR = 0.85f;
 
-SimplePageView::SimplePageView(QWidget *parent, int physicalPages, bool twoPagesMode, Size size, const QColor &color)
-    : PageViewBase(parent, twoPagesMode, size, color)
+SimplePageView::SimplePageView(QWidget *parent, PageLoaderThread *loader, int physicalPages, const ViewProperties& props)
+    : PageViewBase(parent, loader, physicalPages, props)
     , wheelupcnt(0), wheeldowncnt(0)
-    , m_physicalPages(physicalPages)
+    , m_currentPage(0) //??
     , imgLabel(NULL)
 {
     //setFocusPolicy(QWidget::StrongFocus);
@@ -34,11 +34,10 @@ SimplePageView::SimplePageView(QWidget *parent, int physicalPages, bool twoPages
     setWidget(w);
 
     recreatePageWidget();
-    setWidgetResizable(false);
     
     setWidgetResizable(true);
     
-    setBackground(color);
+    setBackground(props.background());
     setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 }
 
@@ -54,7 +53,7 @@ void SimplePageView::recreatePageWidget()
     int w = viewport()->width() - 10;
     int h = viewport()->height() - 10;
 
-    if (m_physicalPages)
+    if (numOfPages())
     {
         imgLabel = new PageWidget(this, w, h, 0, props.twoPagesMode());
         m_layout->addWidget(imgLabel); 
@@ -63,12 +62,23 @@ void SimplePageView::recreatePageWidget()
 
 void SimplePageView::setNumOfPages(int n)
 {
-    m_physicalPages = n;
+    PageViewBase::setNumOfPages(n);
     recreatePageWidget();
 }
 
 void SimplePageView::propsChanged()
 {
+    qDebug() << "SimplePageView::propsChanged()";
+    if (imgLabel)
+    {
+        if ((props.twoPagesMode() && !imgLabel->hasTwoPages()) || (imgLabel->hasTwoPages() && !props.twoPagesMode()))
+        {
+            recreatePageWidget();
+        }
+        imgLabel->redrawImages();
+        update();
+        gotoPage(m_currentPage);
+    }    
 }
 
 void SimplePageView::scrollContentsBy(int dx, int dy)
@@ -78,19 +88,19 @@ void SimplePageView::scrollContentsBy(int dx, int dy)
 
 void SimplePageView::setImage(const Page &img1)
 {
-    Q_ASSERT(m_physicalPages > 0);
+    Q_ASSERT(numOfPages() > 0);
     //if (!preserveangle)
     //          iangle = 0;
     if (img1.getNumber() == m_currentPage)
     {
         imgLabel->setImage(img1);
-        verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);        
+        verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
     }
 }
 
 void SimplePageView::setImage(const Page &img1, const Page &img2)
 {
-    Q_ASSERT(m_physicalPages > 0);
+    Q_ASSERT(numOfPages() > 0);
 
     //  if (!preserveangle)
     //          iangle = 0;
@@ -103,18 +113,18 @@ void SimplePageView::setImage(const Page &img1, const Page &img2)
 
 void SimplePageView::gotoPage(int n)
 {
-    if (n < m_physicalPages)
+    if (n>= 0 && n < numOfPages())
     {
         if (n != m_currentPage)
         {
             //delRequest(m_currentPage);
         }
-        if (props.twoPagesMode() && m_physicalPages % 2 == 0)
+        if (props.twoPagesMode() && numOfPages() % 2 == 0 && props.twoPagesStep())
         {
             n -= n & 1;
         }
         m_currentPage = n;
-        addRequest(m_currentPage, props.twoPagesMode() && !((m_physicalPages % 2 !=0 ) && n == 0));
+        addRequest(m_currentPage, props.twoPagesMode() && !((numOfPages() % 2 !=0 ) && n == 0));
         emit currentPageChanged(n);
     }
 }
@@ -125,7 +135,7 @@ void SimplePageView::resizeEvent(QResizeEvent *e)
     {
         imgLabel->redrawImages();
     }
-    QScrollArea::resizeEvent(e);
+    PageViewBase::resizeEvent(e);
 }
 
 void SimplePageView::wheelEvent(QWheelEvent *e)
@@ -137,7 +147,7 @@ void SimplePageView::wheelEvent(QWheelEvent *e)
         {
             e->accept();
             wheelupcnt = 0;
-            gotoPage(m_currentPage - 1);
+            gotoPage(previousPage(m_currentPage));
         }
         else
         {
@@ -151,7 +161,7 @@ void SimplePageView::wheelEvent(QWheelEvent *e)
         {
             e->accept();
             wheeldowncnt = 0;
-            gotoPage(m_currentPage + 1);
+            gotoPage(nextPage(m_currentPage));
         }
         else
         {
@@ -164,86 +174,8 @@ void SimplePageView::wheelEvent(QWheelEvent *e)
 
 void SimplePageView::setTwoPagesMode(bool f)
 {
-    /*if (f != m_twoPagesMode)
-    {
-        m_twoPagesMode = f;
-        recreatePageWidgets();
-        }*/
-    recreatePageWidget();
+    recreatePageWidget(); //??
     props.setTwoPagesMode(f);
-}
-
-void SimplePageView::scrollRight()
-{
-        scrollByDelta(spdx, 0);
-}
-
-void SimplePageView::scrollLeft()
-{
-        scrollByDelta(-spdx, 0);
-}
-
-void SimplePageView::scrollRightFast()
-{
-        scrollByDelta(3*spdx, 0);
-}
-
-void SimplePageView::scrollLeftFast()
-{
-        scrollByDelta(-3*spdx, 0);
-}
-
-void SimplePageView::scrollUp()
-{
-        if (onTop())
-        {
-                wheelupcnt = wheeldowncnt = 0;
-                emit topReached();
-        }
-        else
-		scrollByDelta(0, -spdy);
-}
-
-void SimplePageView::scrollDown()
-{
-        if (onBottom())
-        {
-                wheelupcnt = wheeldowncnt = 0;
-                emit bottomReached();
-        }
-        else
-		scrollByDelta(0, spdy);
-}
-
-void SimplePageView::scrollUpFast()
-{
-        if (onTop())
-                emit topReached();
-        else
-		scrollByDelta(0, -3*spdy);
-}
-
-void SimplePageView::scrollDownFast()
-{       
-        if (onBottom())
-                emit bottomReached();
-        else
-		scrollByDelta(0, 3*spdy);
-}
-
-void SimplePageView::rotateRight()
-{
-        setRotation(QComicBook::Right);
-}
-
-void SimplePageView::rotateLeft()
-{
-        setRotation(QComicBook::Left);
-}
-
-void SimplePageView::resetRotation()
-{
-        setRotation(None);
 }
 
 void SimplePageView::jumpUp()
@@ -274,22 +206,13 @@ void SimplePageView::scrollToBottom()
 
 void SimplePageView::clear()
 {
-    m_physicalPages = 0;
     delRequests();
+    setNumOfPages(0);
 }
 			
 int SimplePageView::visiblePages() const
 {
-    return props.twoPagesMode() ? 2 : 1;
-    //return imgLabel->numOfPages();
-}
-
-const QPixmap SimplePageView::image() const
-{
-//TODO
-//    if (imgLabel->numOfPages())
-//        return QPixmap(*imgLabel->pixmap());
-    return QPixmap(); //fallback
+    return imgLabel ? imgLabel->numOfPages() : 0;
 }
 
 int SimplePageView::viewWidth() const
@@ -302,3 +225,4 @@ int SimplePageView::currentPage() const
 {
     return imgLabel ? imgLabel->pageNumber() : -1;
 }
+

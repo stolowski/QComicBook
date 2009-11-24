@@ -32,40 +32,26 @@ namespace QComicBook
                         virtual void scrollToTop();
                         virtual void scrollToBottom();
 
-			void scrollRight();
-			void scrollLeft();
-			void scrollRightFast();
-			void scrollLeftFast();
-			void scrollUp();
-			void scrollDown();
-			void scrollUpFast();
-			void scrollDownFast();
-			void rotateRight();
-			void rotateLeft();
-			void resetRotation();
 			void jumpUp();
 			void jumpDown();
                         virtual void clear();
 
 		public:
-			SimplePageView(QWidget *parent, int physicalPages, bool twoPagesMode, Size size=Original, const QColor &color=Qt::black);
+			SimplePageView(QWidget *parent, PageLoaderThread *loader, int physicalPages, const ViewProperties& props);
 			virtual ~SimplePageView();
 
 			virtual int visiblePages() const;
-			virtual const QPixmap image() const;
 			virtual int viewWidth() const;
                         virtual void setNumOfPages(int n);
                         virtual int currentPage() const;
 
 		private:
-			int spdx, spdy; //scroll speed
 			int wheelupcnt, wheeldowncnt;
 			static const int EXTRA_WHEEL_SPIN; //number of extra wheel spins to flip the page
 			static const float JUMP_FACTOR; //factor used to calculate the amount of space to scroll when scrolling page with space
                         QVBoxLayout *m_layout;
 			PageWidget* imgLabel;
                         int m_currentPage;
-                        int m_physicalPages;
 	};
 }
 
