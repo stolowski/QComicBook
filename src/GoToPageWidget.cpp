@@ -19,7 +19,7 @@ GoToPageWidget::GoToPageWidget(QWidget *parent, int value, int max): QDialog(par
 {
     setupUi(this);
 
-    validator = new QIntValidator(1, max, this);
+    QIntValidator *validator = new QIntValidator(1, max, this);
     le_pagenumber->setValidator(validator);
     if (value < 1)
     {

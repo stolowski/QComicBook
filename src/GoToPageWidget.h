@@ -16,8 +16,6 @@
 #include "ui_GoToPageWidget.h"
 #include <QDialog>
 
-class QIntValidator;
-
 namespace QComicBook
 {
 	class GoToPageWidget: public QDialog, private Ui::GoToPageWidget
@@ -33,9 +31,6 @@ namespace QComicBook
 		public:
 			GoToPageWidget(QWidget *parent, int value, int max);
 			virtual ~GoToPageWidget();
-                        
-                private:
-			QIntValidator *validator;
 	};
 }
 
