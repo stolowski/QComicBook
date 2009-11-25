@@ -31,7 +31,7 @@
 #include "BookmarkManager.h"
 #include "Utility.h"
 #include "SupportedArchivesWindow.h"
-#include "JumpToPageWindow.h"
+#include "GoToPageWidget.h"
 #include "PageLoaderThread.h"
 #include <QMenu>
 #include <QStringList>
@@ -842,9 +842,9 @@ void ComicMainWindow::showJumpToPage(const QString &number)
 {
         if (sink)
         {
-                JumpToPageWindow *win = new JumpToPageWindow(this, number.toInt(), sink->numOfImages());
-                connect(win, SIGNAL(pageSelected(int)), this, SLOT(jumpToPage(int)));
-                win->show();
+                GoToPageWidget win(this, number.toInt(), sink->numOfImages());
+                connect(&win, SIGNAL(pageSelected(int)), this, SLOT(jumpToPage(int)));
+                win.exec();
         }
 }
 

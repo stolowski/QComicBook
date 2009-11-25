@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005-2006 Pawel Stolowski <pawel.stolowski@wp.pl>
+ * Copyright (C) 2005-2009 Pawel Stolowski <stolowski@gmail.com>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -10,31 +10,32 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#ifndef __JUMPTOPAGEWIN_H
-#define __JUMPTOPAGEWIN_H
+#ifndef __GOTOPAGEWIDGET_H
+#define __GOTOPAGEWIDGET_H
 
+#include "ui_GoToPageWidget.h"
 #include <QDialog>
+
+class QIntValidator;
 
 namespace QComicBook
 {
-	class PageNumberEdit;
-
-	class JumpToPageWindow: public QDialog
+	class GoToPageWidget: public QDialog, private Ui::GoToPageWidget
 	{
 		Q_OBJECT
-
-		private:
-			PageNumberEdit *pedit;
-
-		protected slots:
-			void jumpPressed();
 
 		signals:
 			void pageSelected(int n);
 
+		protected slots:
+			void goClicked();
+
 		public:
-			JumpToPageWindow(QWidget *parent, int value, int max);
-			virtual ~JumpToPageWindow();
+			GoToPageWidget(QWidget *parent, int value, int max);
+			virtual ~GoToPageWidget();
+                        
+                private:
+			QIntValidator *validator;
 	};
 }
 

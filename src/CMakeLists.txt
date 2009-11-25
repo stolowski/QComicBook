@@ -14,7 +14,7 @@ SET(qcomicbook_src
 	History.cpp IconViewThumbnail.cpp ImgArchiveSink.cpp
 	ImgCache.cpp
 	ImgDirSink.cpp LoaderThreadBase.cpp PageLoaderThread.cpp ImgSinkFactory.cpp
-	JumpToPageWindow.cpp ListViewThumbnail.cpp main.cpp Utility.cpp Page.cpp PageNumberEdit.cpp PageWidget.cpp
+	GoToPageWidget.cpp ListViewThumbnail.cpp main.cpp Utility.cpp Page.cpp PageWidget.cpp
         PageViewBase.cpp SimplePageView.cpp ContinuousPageView.cpp
 	StatusBar.cpp SupportedArchivesWindow.cpp Thumbnail.cpp
 	ThumbnailItem.cpp ThumbnailLoaderThread.cpp
@@ -35,9 +35,8 @@ SET(qcomicbook_moc_hdrs
                  LoaderThreadBase.h 
                  PageLoaderThread.h
                  ThumbnailLoaderThread.h
-		 JumpToPageWindow.h 
+		 GoToPageWidget.h 
                  PageWidget.h
-		 PageNumberEdit.h 
 		 StatusBar.h 
 		 SupportedArchivesWindow.h 
 		 ThumbnailsWindow.h 
@@ -45,7 +44,7 @@ SET(qcomicbook_moc_hdrs
                  ViewProperties.h
 )
 
-SET(qcomicbook_ui AboutDialog.ui ConfigDialog.ui BookmarkManager.ui ComicMainWindow.ui)
+SET(qcomicbook_ui AboutDialog.ui ConfigDialog.ui BookmarkManager.ui ComicMainWindow.ui GoToPageWidget.ui)
 
 QT4_ADD_RESOURCES(qcomicbook_res ../data/qcomicbook.qrc)
 QT4_WRAP_CPP(qcomicbook_moc_src ${qcomicbook_moc_hdrs})
