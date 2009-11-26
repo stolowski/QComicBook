@@ -96,7 +96,6 @@ namespace QComicBook
 		private:
 			ImgCache *cache;
 			mutable QMutex listmtx; //!< mutex for imgfiles
-			static const QString imgext[];
 			QStringList imgfiles; //!< list of images files in directory
 			QStringList txtfiles; //!< text files (.nfo, file_id.diz)
 			QStringList otherfiles; //!< list of other files

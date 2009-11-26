@@ -30,7 +30,7 @@
 #include "ThumbnailLoaderThread.h"
 #include "BookmarkManager.h"
 #include "Utility.h"
-#include "SupportedArchivesWindow.h"
+#include "SystemInfoDialog.h"
 #include "GoToPageWidget.h"
 #include "PageLoaderThread.h"
 #include <QMenu>
@@ -816,8 +816,10 @@ void ComicMainWindow::showInfo()
 
 void ComicMainWindow::showSysInfo()
 {
-	SupportedArchivesWindow *win = new SupportedArchivesWindow(this);
-	win->show();
+    //SupportedArchivesWindow *win = new SupportedArchivesWindow(this);
+//	win->show();
+    SystemInfoDialog sysinfo(this);
+    sysinfo.exec();
 }
 
 void ComicMainWindow::showAbout()

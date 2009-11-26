@@ -29,6 +29,8 @@ void ZipArchiverStrategy::configure()
 {
     addExtension(".zip");
     addExtension(".cbz");
+    addExtension(".cbr");
+    setExecutables("unzip");
 
     if (which("unzip") != QString::null)
     {

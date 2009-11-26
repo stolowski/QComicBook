@@ -29,6 +29,7 @@ void AceArchiverStrategy::configure()
 {
     addExtension(".ace");
     addExtension(".cba");
+    setExecutables("unace");
 
     if (which("unace") != QString::null)
     {

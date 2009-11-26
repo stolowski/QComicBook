@@ -14,6 +14,7 @@
 #include "ImgCache.h"
 #include "ComicBookSettings.h"
 #include "Thumbnail.h"
+#include "ImageFormatsInfo.h"
 #include <QImage>
 #include <QStringList>
 #include <QDir>
@@ -28,8 +29,6 @@ using namespace QComicBook;
 // maximum size of description file (won't load files larger than that)
 const int ImgDirSink::MAX_TEXTFILE_SIZE = 65535;
                         
-const QString ImgDirSink::imgext[] = {".jpg", ".jpeg", ".png", ".gif", ".xpm", ".bmp", NULL};
-
 ImgDirSink::ImgDirSink(bool dirs, int cacheSize): QObject(), dirpath(QString::null), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
 {
 	cache = new ImgCache(cacheSize);
@@ -362,28 +361,35 @@ void ImgDirSink::removeThumbnails(int days)
 
 bool ImgDirSink::knownImageExtension(const QString &path)
 {
-	for (int i=0; imgext[i] != NULL; i++)
-		if (path.endsWith(imgext[i], Qt::CaseInsensitive))
-			return true;
-	return false;
+    foreach (QString ext, ImageFormatsInfo::instance().extensions())
+    {
+        if (path.endsWith(ext, Qt::CaseInsensitive))
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 QString ImgDirSink::getKnownImageExtension(const QString &path)
 {
-	for (int i=0; imgext[i] != NULL; i++)
-		if (path.endsWith(imgext[i], Qt::CaseInsensitive))
-			return imgext[i];
-	return false;
+    foreach (QString ext, ImageFormatsInfo::instance().extensions())
+    {
+        if (path.endsWith(ext, Qt::CaseInsensitive))
+            return ext;
+    }
+    return QString::null;
 }
 
 QStringList ImgDirSink::getKnownImageExtensionsList()
 {
-	QStringList list;
-	for (int i=0; imgext[i] != NULL; i++)
-	{
-		QString p = "*" + imgext[i];
-		list << p;
-	}
-	return list;
+    QStringList list;
+    foreach (QString ext, ImageFormatsInfo::instance().extensions())
+    {
+        QString p("*");
+        p.append(ext);
+        list << p;
+    }
+    return list;
 }
 

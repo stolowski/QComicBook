@@ -15,6 +15,7 @@
 
 #include <QList>
 #include <QStringList>
+#include "ArchiverStatus.h"
 
 namespace QComicBook
 {
@@ -28,6 +29,7 @@ namespace QComicBook
         QStringList getExtractArguments(const QString &filename) const;
         QStringList getListArguments(const QString &filename) const;
         QStringList supportedOpenExtensions() const;
+        QList<ArchiverStatus> getArchiversStatus() const;
 
     private:
         ArchiversConfiguration();

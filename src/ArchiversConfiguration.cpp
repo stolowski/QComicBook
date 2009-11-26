@@ -52,6 +52,7 @@ ArchiversConfiguration::~ArchiversConfiguration()
     {
         delete s;
     }
+    delete cfg;
 }
 
 ArchiverStrategy* ArchiversConfiguration::findStrategy(const QString &filename) const
@@ -128,4 +129,15 @@ QStringList ArchiversConfiguration::supportedOpenExtensions() const
         }
     }
     return extlist;
+}
+
+QList<ArchiverStatus> ArchiversConfiguration::getArchiversStatus() const
+{
+    QList<ArchiverStatus> status;
+    foreach (ArchiverStrategy *s, archivers)
+    {
+        status.append(ArchiverStatus(*s));
+    }
+    return status;
+
 }

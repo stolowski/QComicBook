@@ -30,6 +30,7 @@ void TargzArchiverStrategy::configure()
     addExtension(".tar.gz");
     addExtension(".tgz");
     addExtension(".cbg");
+    setExecutables("tar");
 
     if (which("tar") != QString::null)
     {

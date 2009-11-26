@@ -1,6 +1,7 @@
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR})
 SET(qcomicbook_src
         ArchiversConfiguration.cpp
+        ArchiverStatus.cpp
         ArchiverStrategy.cpp
         AceArchiverStrategy.cpp
         P7zipArchiverStrategy.cpp
@@ -12,17 +13,19 @@ SET(qcomicbook_src
         AboutDialog.cpp Bookmark.cpp BookmarkManager.cpp
 	Bookmarks.cpp ComicBookCfgDialog.cpp ComicBookInfo.cpp ComicBookSettings.cpp ComicMainWindow.cpp DirReader.cpp
 	History.cpp IconViewThumbnail.cpp ImgArchiveSink.cpp
+        ImageFormatsInfo.cpp
 	ImgCache.cpp
 	ImgDirSink.cpp LoaderThreadBase.cpp PageLoaderThread.cpp ImgSinkFactory.cpp
 	GoToPageWidget.cpp ListViewThumbnail.cpp main.cpp Utility.cpp Page.cpp PageWidget.cpp
         PageViewBase.cpp SimplePageView.cpp ContinuousPageView.cpp
-	StatusBar.cpp SupportedArchivesWindow.cpp Thumbnail.cpp
-	ThumbnailItem.cpp ThumbnailLoaderThread.cpp
+	StatusBar.cpp SystemInfoDialog.cpp
+        Thumbnail.cpp ThumbnailItem.cpp ThumbnailLoaderThread.cpp
 	ThumbnailsView.cpp ThumbnailsWindow.cpp
         ViewProperties.cpp
 )
 
 SET(qcomicbook_moc_hdrs
+                 ArchiverStatus.h
 		 BookmarkManager.h 
 		 ComicBookCfgDialog.h 
 		 ComicBookSettings.h 
@@ -30,6 +33,7 @@ SET(qcomicbook_moc_hdrs
 		 PageViewBase.h 
                  ContinuousPageView.h
                  SimplePageView.h
+                 ImageFormatsInfo.h
 		 ImgDirSink.h 
 		 ImgArchiveSink.h
                  LoaderThreadBase.h 
@@ -38,13 +42,13 @@ SET(qcomicbook_moc_hdrs
 		 GoToPageWidget.h 
                  PageWidget.h
 		 StatusBar.h 
-		 SupportedArchivesWindow.h 
+                 SystemInfoDialog.h
 		 ThumbnailsWindow.h 
 		 ThumbnailsView.h
                  ViewProperties.h
 )
 
-SET(qcomicbook_ui AboutDialog.ui ConfigDialog.ui BookmarkManager.ui ComicMainWindow.ui GoToPageWidget.ui)
+SET(qcomicbook_ui AboutDialog.ui ConfigDialog.ui BookmarkManager.ui ComicMainWindow.ui GoToPageWidget.ui SystemInfoDialog.ui)
 
 QT4_ADD_RESOURCES(qcomicbook_res ../data/qcomicbook.qrc)
 QT4_WRAP_CPP(qcomicbook_moc_src ${qcomicbook_moc_hdrs})

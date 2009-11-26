@@ -30,6 +30,7 @@ void RarArchiverStrategy::configure()
 {
     addExtension(".rar");
     addExtension(".cbr");
+    setExecutables("rar", "unrar");
 
     if (which("rar") != QString::null)
     {

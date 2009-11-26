@@ -29,6 +29,7 @@ void Tarbz2ArchiverStrategy::configure()
 {
     addExtension(".tar.bz2");
     addExtension(".cbb");
+    setExecutables("tar");
 
     if (which("tar") != QString::null)
     {

@@ -12,6 +12,7 @@
 
 #include "ArchiverStrategy.h"
 #include <QFile>
+#include <QDebug>
 
 using namespace QComicBook;
 
@@ -71,6 +72,16 @@ void ArchiverStrategy::setListArguments(const QString &command)
     listArgs = command.split(" ", QString::SkipEmptyParts);
 }
 
+void ArchiverStrategy::setExecutables(const QString &exec1, const QString &exec2)
+{
+    executables.clear();
+    executables.append(exec1);
+    if (exec2 != QString::null)
+    {
+        executables.append(exec2);
+    }
+}
+
 QStringList ArchiverStrategy::getExtractArguments(const QString &filename) const
 {
     return fillTemplateArguments(extractArgs, filename);
@@ -108,4 +119,10 @@ bool ArchiverStrategy::canOpen(const QString &filename) const
     {
         return canOpen(&file);
     }
+}
+
+ArchiverStrategy::operator ArchiverStatus() const
+{
+    Q_ASSERT(executables.size() > 0);
+    return ArchiverStatus(supported, name, extensions, executables);
 }
