@@ -24,7 +24,7 @@ open some archives.
 To compile QComicBook, you will need Qt4 developement packages (usually named
 -devel- in many distros). Compilation includes three steps:
 
-$ cmake . -DCMAKE_INSTALL_PREFIX=/usr
+$ cmake . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release
 $ make
 $ make install
 (the -D... argument is optional; if not specified, qcomicbook will be installed in
@@ -45,5 +45,12 @@ as empty by QComicBook. It is *recommended* to use non-free rar/unrar.
 
 5. Bugs
 -------
-Please report any bugs to: stolowski@gmail.com. Ideas are welcome too!
+Ideally, your bug report should include:
+- description of problem.
+- list of steps that reproduce the problem (if it's reproducible).
+- console output from QComicBook (recompile QComicBook with -DCMAKE_BUILD_TYPE=Debug flag to enable debug
+  messages).
+- sample comic book archive that causes problems if problem is only reproducible with particular archive.
+  Please reduce the number of images in the archive to the minimum needed for reproducing bug.
 
+Please report bugs to: stolowski@gmail.com.
