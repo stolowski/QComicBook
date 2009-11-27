@@ -1,5 +1,4 @@
 #include "PageViewBase.h"
-#include "PageLoaderThread.h"
 #include <QContextMenuEvent>
 #include <QMenu>
 #include <QBitmap>
@@ -9,7 +8,7 @@
 
 using namespace QComicBook;
 
-PageViewBase::PageViewBase(QWidget *parent, PageLoaderThread *loader, int physicalPages, const ViewProperties &props)
+PageViewBase::PageViewBase(QWidget *parent, int physicalPages, const ViewProperties &props)
     : QScrollArea(parent)
     , m_physicalPages(physicalPages)
     , props(props)
@@ -18,13 +17,6 @@ PageViewBase::PageViewBase(QWidget *parent, PageLoaderThread *loader, int physic
     context_menu = new QMenu(this);
     connect(&this->props, SIGNAL(changed()), this, SLOT(propsChanged()));
     recalculateScrollSpeeds();
-
-    connect(this, SIGNAL(requestPage(int)), loader, SLOT(request(int)));
-    connect(this, SIGNAL(requestTwoPages(int)), loader, SLOT(requestTwoPages(int)));
-    connect(this, SIGNAL(cancelPageRequest(int)), loader, SLOT(cancel(int)));
-    connect(this, SIGNAL(cancelTwoPagesRequest(int)), loader, SLOT(cancelTwoPages(int)));
-    connect(loader, SIGNAL(pageLoaded(const Page&)), this, SLOT(setImage(const Page&)));
-    connect(loader, SIGNAL(pageLoaded(const Page&, const Page&)), this, SLOT(setImage(const Page&, const Page&)));
 }
 
 PageViewBase::~PageViewBase()

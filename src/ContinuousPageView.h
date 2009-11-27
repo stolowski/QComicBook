@@ -60,7 +60,7 @@ namespace QComicBook
                         virtual void scrollToBottom();
 
 		public:
-			ContinuousPageView(QWidget *parent, PageLoaderThread *loader, int physicalPages, const ViewProperties& props);
+			ContinuousPageView(QWidget *parent, int physicalPages, const ViewProperties& props);
 			virtual ~ContinuousPageView();
 
 			virtual int visiblePages() const;

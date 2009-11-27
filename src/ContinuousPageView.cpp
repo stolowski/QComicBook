@@ -27,8 +27,8 @@ using namespace QComicBook;
 const int ContinuousPageView::EXTRA_WHEEL_SPIN = 3;
 const float ContinuousPageView::JUMP_FACTOR = 0.85f;
 
-ContinuousPageView::ContinuousPageView(QWidget *parent, PageLoaderThread *loader, int physicalPages, const ViewProperties& props)
-    : PageViewBase(parent, loader, physicalPages, props)
+ContinuousPageView::ContinuousPageView(QWidget *parent, int physicalPages, const ViewProperties& props)
+    : PageViewBase(parent, physicalPages, props)
     , wheelupcnt(0), wheeldowncnt(0)
     , m_firstVisible(-1)
     , m_firstVisibleOffset(0)
@@ -89,6 +89,7 @@ void ContinuousPageView::propsChanged()
 
 void ContinuousPageView::scrollbarRangeChanged(int min, int max)
 {
+    qDebug() << "ContinuousPageView::scrollbarRangeChanged";
     //
     // scrollbar ranges were updated (probably due to resizeEvent) -- restore previous page position
     if (m_firstVisible >= 0)
@@ -189,7 +190,7 @@ void ContinuousPageView::disposeOrRequestPages()
             {
                 if (!hasRequest(w->pageNumber()))
                 {
-                    qDebug() << "ContinuousPageView: requesting" << w->pageNumber();
+                    qDebug() << "requesting" << w->pageNumber();
                     addRequest(w->pageNumber(), props.twoPagesMode() && w->hasTwoPages());
                 }
             }
@@ -221,7 +222,7 @@ void ContinuousPageView::disposeOrRequestPages()
                 // if previous page is visible then preload this one
                 if ((i>1 && isInView(m_y1pos[i-1], m_y2pos[i-1], vy1, vy2)))
                 {
-                    qDebug() << "preloading" << w->pageNumber();
+                    qDebug() << "preloading" << w->pageNumber(); //TODO preload settings?
                     addRequest(w->pageNumber(), props.twoPagesMode() && w->hasTwoPages());
                 }
                 else
@@ -369,35 +370,7 @@ void ContinuousPageView::resizeEvent(QResizeEvent *e)
 
 void ContinuousPageView::wheelEvent(QWheelEvent *e)
 {
-    QScrollArea::wheelEvent(e);
-//TODO
-    /*e->accept();
-        if (e->delta() > 0) //scrolling up
-        {
-                if (imgLabel->height() <= height() || (onTop() && ++wheelupcnt > EXTRA_WHEEL_SPIN))
-                {
-                        wheelupcnt = 0;
-                        emit topReached();
-                }
-                else
-                {
-                        scrollByDelta(0, -3*spdy);
-                        wheeldowncnt = 0; //reset opposite direction counter
-                }
-        }
-        else //scrolling down
-        {
-                if (imgLabel->height() <= height() || (onBottom() && ++wheeldowncnt > EXTRA_WHEEL_SPIN))
-                {
-                        wheeldowncnt = 0;
-                        emit bottomReached();
-                }
-                else
-                {
-                        scrollByDelta(0, 3*spdy);
-                        wheelupcnt = 0; //reset opposite direction counter
-                }
-                }*/
+    PageViewBase::wheelEvent(e);
 }
 
 

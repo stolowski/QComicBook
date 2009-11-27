@@ -23,7 +23,7 @@ namespace QComicBook
 
         void setFromSettings();
         int angle() const;
-        void setAngle(Rotation r);
+        void setAngle(Rotation r, bool notify=true);
         Size size() const;
         void setSize(Size s);
         bool pageNumbers() const;
@@ -48,7 +48,6 @@ namespace QComicBook
         bool m_twoPagesStep;
         bool m_mangaMode;
         bool m_contScroll;
-
     };
 }
 

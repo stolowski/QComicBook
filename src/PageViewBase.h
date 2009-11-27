@@ -10,7 +10,6 @@ namespace QComicBook
 {
     class PageWidget;
     class Page;
-    class PageLoaderThread;
 
 	enum Scaling { Smooth, Fast };
 
@@ -57,7 +56,7 @@ namespace QComicBook
             virtual void propsChanged() = 0;
 
         public:
-            PageViewBase(QWidget *parent, PageLoaderThread *loader, int physicalPages, const ViewProperties &props);
+            PageViewBase(QWidget *parent, int physicalPages, const ViewProperties &props);
             virtual ~PageViewBase();
 
             void enableScrollbars(bool f);

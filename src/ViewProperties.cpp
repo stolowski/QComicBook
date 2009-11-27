@@ -39,7 +39,7 @@ int ViewProperties::angle() const
     return m_angle;
 }
 
-void ViewProperties::setAngle(Rotation r)
+void ViewProperties::setAngle(Rotation r, bool notify)
 {
     if (r == None && m_angle == 0)
         return;
@@ -51,7 +51,10 @@ void ViewProperties::setAngle(Rotation r)
     else
         m_angle = 0; //None
     m_angle &= 3;
-    emit changed();
+    if (notify)
+    {
+        emit changed();
+    }
 }
 
 

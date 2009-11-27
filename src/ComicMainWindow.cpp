@@ -270,11 +270,11 @@ void ComicMainWindow::setupComicImageView()
     const ViewProperties props;
     if (cfg->continuousScrolling())
     {
-        view = new ContinuousPageView(this, pageLoader, n, props);
+        view = new ContinuousPageView(this, n, props);
     }
     else
     {
-        view = new SimplePageView(this, pageLoader, n, props);
+        view = new SimplePageView(this, n, props);
     }
     
     setCentralWidget(view);
@@ -311,12 +311,12 @@ void ComicMainWindow::setupComicImageView()
     view->enableScrollbars(cfg->scrollbarsVisible());
 
     connect(view, SIGNAL(currentPageChanged(int)), this, SLOT(currentPageChanged(int)));
-    /*connect(pageLoader, SIGNAL(pageLoaded(const Page&)), view, SLOT(setImage(const Page&))); aktualnie ustawiane w konstruktorze view
+    connect(pageLoader, SIGNAL(pageLoaded(const Page&)), view, SLOT(setImage(const Page&)));
     connect(pageLoader, SIGNAL(pageLoaded(const Page&, const Page&)), view, SLOT(setImage(const Page&, const Page&)));
     connect(view, SIGNAL(requestPage(int)), pageLoader, SLOT(request(int)));
     connect(view, SIGNAL(requestTwoPages(int)), pageLoader, SLOT(requestTwoPages(int)));
     connect(view, SIGNAL(cancelPageRequest(int)), pageLoader, SLOT(cancel(int)));
-    connect(view, SIGNAL(cancelTwoPagesRequest(int)), pageLoader, SLOT(cancelTwoPages(int)));*/
+    connect(view, SIGNAL(cancelTwoPagesRequest(int)), pageLoader, SLOT(cancelTwoPages(int)));
 
     setupContextMenu();
 
@@ -717,8 +717,6 @@ void ComicMainWindow::jumpToPage(int n, bool force)
         if ((n != currpage) || force)
         {
                 int result1, result2;
-                const bool preserveangle = actionTogglePreserveRotation->isChecked(); //FIXME
-
                 /*if (actionTwoPages->isChecked())
                 {
                         Page img1 = sink->getImage(currpage = n, result1);
@@ -757,7 +755,11 @@ void ComicMainWindow::jumpToPage(int n, bool force)
                 */
 
         }
-        view->gotoPage(n); //TODO two pages mode?
+        if (!actionTogglePreserveRotation->isChecked())
+        {
+            view->properties().setAngle(None, false);
+        }
+        view->gotoPage(n);
 }
 
 void ComicMainWindow::currentPageChanged(int n)

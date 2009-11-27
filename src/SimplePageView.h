@@ -37,7 +37,7 @@ namespace QComicBook
                         virtual void clear();
 
 		public:
-			SimplePageView(QWidget *parent, PageLoaderThread *loader, int physicalPages, const ViewProperties& props);
+			SimplePageView(QWidget *parent, int physicalPages, const ViewProperties& props);
 			virtual ~SimplePageView();
 
 			virtual int visiblePages() const;

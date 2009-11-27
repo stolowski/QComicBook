@@ -18,8 +18,8 @@ using namespace QComicBook;
 const int SimplePageView::EXTRA_WHEEL_SPIN = 3;
 const float SimplePageView::JUMP_FACTOR = 0.85f;
 
-SimplePageView::SimplePageView(QWidget *parent, PageLoaderThread *loader, int physicalPages, const ViewProperties& props)
-    : PageViewBase(parent, loader, physicalPages, props)
+SimplePageView::SimplePageView(QWidget *parent, int physicalPages, const ViewProperties& props)
+    : PageViewBase(parent, physicalPages, props)
     , wheelupcnt(0), wheeldowncnt(0)
     , m_currentPage(0) //??
     , imgLabel(NULL)
