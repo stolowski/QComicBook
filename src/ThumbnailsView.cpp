@@ -98,8 +98,7 @@ void ThumbnailsView::clear()
 
 void ThumbnailsView::scrollToPage(int n)
 {
-    Q_ASSERT(n>0);
-    if (n>0 && n < icons.count())
+    if (n>=0 && n < icons.count())
     {
         IconViewThumbnail *th = icons[n];
         setCurrentItem(th);
