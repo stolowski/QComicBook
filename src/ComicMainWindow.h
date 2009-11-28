@@ -33,6 +33,7 @@ namespace QComicBook
 	class Bookmarks;
 	class StatusBar;
         class PageLoaderThread;
+        class Page;
         class ThumbnailLoaderThread;
 	using Utility::History;
 
@@ -75,6 +76,8 @@ namespace QComicBook
 			void setupComicImageView();
 
 		protected slots:
+                        void pageLoaded(const Page &page);
+                        void pageLoaded(const Page &page1, const Page &page2);
 			void sinkReady(const QString &path);
 			void sinkError(int code);
 			void updateCaption();

@@ -60,6 +60,8 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
     cfg->restoreGeometry(this);
 
     pageLoader = new PageLoaderThread();
+    connect(pageLoader, SIGNAL(pageLoaded(const Page &)), this, SLOT(pageLoaded(const Page &)));
+    connect(pageLoader, SIGNAL(pageLoaded(const Page &, const Page &)), this, SLOT(pageLoaded(const Page &, const Page &)));
 
     //
     // Thumbnails window
@@ -507,6 +509,22 @@ void ComicMainWindow::recentSelected(QAction *action)
                 }
                 open(fname, 0);
         }
+}
+
+void ComicMainWindow::pageLoaded(const Page &page)
+{
+    if (currpage == page.getNumber())
+    {
+        statusbar->setImageInfo(&page);
+    }
+}
+
+void ComicMainWindow::pageLoaded(const Page &page1, const Page &page2)
+{
+    if (currpage == page1.getNumber() || currpage == page2.getNumber())
+    {
+        statusbar->setImageInfo(&page1, &page2);
+    }
 }
 
 void ComicMainWindow::sinkReady(const QString &path)
