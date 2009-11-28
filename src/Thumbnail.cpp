@@ -20,6 +20,11 @@ using namespace QComicBook;
 int Thumbnail::thwidth = 100;
 int Thumbnail::thheight = 120;
 
+Thumbnail::Thumbnail()
+    : num(-1)
+{
+}
+
 Thumbnail::Thumbnail(int n, const QString &comicbookName)
   : num(n)
 {
@@ -29,6 +34,13 @@ Thumbnail::Thumbnail(int n, const QString &comicbookName)
 Thumbnail::Thumbnail(int n, const QImage &i): num(n)
 {
 	setImage(i);
+}
+
+Thumbnail::Thumbnail(const Thumbnail &t)
+    : num(t.num)
+    , hash(t.hash)
+    , img(t.img)
+{
 }
 
 Thumbnail::~Thumbnail()
@@ -92,7 +104,7 @@ int Thumbnail::maxHeight()
 
 QString Thumbnail::getFullPath() const
 {
-    return ComicBookSettings::thumbnailsDir() + "/" + hash.toHex() + ".jpg";
+    return ComicBookSettings::instance().thumbnailsDir() + "/" + hash.toHex() + ".jpg";
 }
 
 QByteArray Thumbnail::getScrambledName(const QString &in)

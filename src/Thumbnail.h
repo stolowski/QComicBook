@@ -15,6 +15,7 @@
 
 #include <QImage>
 #include <QByteArray>
+#include <QMetaType>
 
 namespace QComicBook
 {
@@ -28,8 +29,10 @@ namespace QComicBook
                         static QByteArray getScrambledName(const QString &in);
 
 		public:
+                        Thumbnail();
 			Thumbnail(int n, const QString &comicbookName);
 			Thumbnail(int n, const QImage &i);
+                        Thumbnail(const Thumbnail &t);
 			~Thumbnail();
 
 			int page() const;
@@ -44,6 +47,8 @@ namespace QComicBook
 			static int maxHeight();
 	};
 }
+
+Q_DECLARE_METATYPE(QComicBook::Thumbnail)
 
 #endif
 

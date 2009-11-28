@@ -18,32 +18,35 @@
 
 namespace QComicBook
 {
-	class ThumbnailsView;
+    class Thumbnail;
+    class ThumbnailsView;
 
-	class ThumbnailsWindow: public QDockWidget
-	{
-		Q_OBJECT
+    class ThumbnailsWindow: public QDockWidget
+    {
+    Q_OBJECT
 
-		private:
-			ThumbnailsView *tview;
+    private:
+        ThumbnailsView *tview;
 
-		signals:
-			void requestedThumbnail(int n);
-			void requestedPage(int n, bool force);
-			void shown();
-
-		protected:
-			virtual void customEvent(QEvent *e);
-			virtual void showEvent(QShowEvent *e);
-
-		protected slots:
-			//void onOrientationChanged(Orientation o); -- nie ma w Qt4
-
-		public:
-			ThumbnailsWindow(QWidget *parent=0);
-			virtual ~ThumbnailsWindow();
-			ThumbnailsView* view() const;
-	};
+    signals:
+        void requestedThumbnail(int n);
+        void requestedPage(int n, bool force);
+        void shown();
+        
+    protected:
+        virtual void showEvent(QShowEvent *e);
+        
+    protected slots:
+        //void onOrientationChanged(Orientation o); -- nie ma w Qt4
+        
+    public slots:
+        void setThumbnail(const Thumbnail &t);
+        
+    public:
+        ThumbnailsWindow(QWidget *parent=0);
+        virtual ~ThumbnailsWindow();
+        ThumbnailsView* view() const;
+    };
 }
 
 #endif

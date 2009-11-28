@@ -32,29 +32,6 @@ namespace QComicBook
 	{
 		Q_OBJECT
 
-		public:
-			enum ArchiveType {
-				RAR_ARCHIVE = 1,
-				ZIP_ARCHIVE = 2,
-				ACE_ARCHIVE = 4,
-				TARGZ_ARCHIVE = 8,
-				TARBZ2_ARCHIVE = 16,
-				SEVENZIP_ARCHIVE = 32,
-				UNKNOWN_ARCHIVE = 2<<31
-			};
-
-			struct ArchiveTypeInfo
-			{
-				ArchiveType type;
-				QString name;
-				QStringList listopts;
-				QStringList extractopts;
-				QStringList compressopts;
-				QStringList extensions;
-				bool reading;
-				bool writing;
-			};
-
 		protected:
 			QProcess *pext; ///< extracting process
 			QProcess *pinf; ///< file list extracing process
@@ -66,27 +43,8 @@ namespace QComicBook
 			int filesnum; ///< number of files gathered from parsing archiver output, used for progress bar
 			int extcnt; ///< extracted files counter for progress bar
 
-			static QList<ArchiveTypeInfo> archinfo;
-			
-			static int suppopen;
-			static int suppsave;
-			static QStringList openext; ///< supported archives extensions (for open)
-			static QStringList saveext; ///< supported archives extensions (for save)
-
-			static void autoconfRAR();
-			static void autoconfZIP();
-			static void autoconfACE();
-			static void autoconfTARGZ();
-			static void autoconfTARBZ2();
-			static void autoconfSEVENZIP();
-
-			//! Determines archive type
-			/*! Determines archive type basing on filename extension. As a last effort, if
-			 *  the check fails, tries to guess archive type basing on well known magic bytes.
-			 *  @param filename name of the archive, with path */
-			static ArchiveType getArchiveType(const QString &filename);
                         static int waitForFinished(QProcess *p);
-			int extract(const QString &filename, const QString &destdir, ArchiveType archiveType=ImgArchiveSink::UNKNOWN_ARCHIVE);
+                        int extract(const QString &filename, const QString &destdir, QStringList extargs, QStringList infargs);
 			void init();
 			virtual void doCleanup();
 			
@@ -113,13 +71,6 @@ namespace QComicBook
 			virtual QString getNext() const;
 			virtual QString getPrevious() const;
 
-			static void autoconfArchivers();
-			static int supportedArchives();
-			static QList<ImgArchiveSink::ArchiveTypeInfo> supportedArchivesInfo();
-			static bool supportsOpen(ArchiveType t);
-			static bool supportsSave(ArchiveType t);
-			static QStringList supportedOpenExtensions();
-			static QStringList supportedSaveExtensions();
 			static QString makeTempDir(const QString &parent = QDir::tempPath());
 	};
 }

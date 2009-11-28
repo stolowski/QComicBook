@@ -22,30 +22,13 @@ using namespace QComicBook;
 
 AboutDialog::AboutDialog(QWidget *parent, const QString &caption, const QString &text, const QPixmap &logo): QDialog(parent)
 {
-        setWindowTitle(caption);
-        setModal(true);
-        setMinimumSize(320, 200);
-
-        QVBoxLayout *box1 = new QVBoxLayout(this);
-        //box1->setResizeMode(QLayout::FreeResize);
-        about_text = new QLabel(text, this);
-        about_text->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-        about_text->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
-        about_text->setMargin(5);
-        box1->addWidget(about_text);
-	if (!logo.isNull())
-	{
-		about_logo = new QLabel(this);
-		about_logo->setPixmap(logo);
-		about_logo->setAlignment(Qt::AlignCenter);
-		box1->addWidget(about_logo);
-	}
-
-        QPushButton *bclose = new QPushButton(tr("Close"), this);
-        bclose->setDefault(true);
-        bclose->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-        box1->addWidget(bclose, 0, Qt::AlignHCenter);
-        connect(bclose, SIGNAL(clicked()), this, SLOT(accept()));
+    setupUi(this);
+    setWindowTitle(caption);
+    setText(text);
+    if (!logo.isNull())
+        about_logo->setPixmap(logo);
+    
+    connect(bclose, SIGNAL(clicked()), this, SLOT(accept()));
 }
 
 AboutDialog::~AboutDialog()

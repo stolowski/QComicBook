@@ -14,10 +14,11 @@
 #include <QMessageBox>
 #include <QSplashScreen>
 #include <QTimer>
-#include "ImgArchiveSink.h"
-#include "Icons.h"
 #include "ComicMainWindow.h"
 #include "ComicBookSettings.h"
+#include "Thumbnail.h"
+#include "Page.h"
+#include "config.h"
 
 int main(int argc, char *argv[])
 {
@@ -26,6 +27,9 @@ int main(int argc, char *argv[])
 	QApplication app(argc, argv);
 	const QString errcaption = ComicMainWindow::tr("QComicBook error");
 
+        qRegisterMetaType<Page>("Page");
+        qRegisterMetaType<Thumbnail>("Thumbnail");
+
 	ComicBookSettings::instance().load();
 
 	//
@@ -33,7 +37,7 @@ int main(int argc, char *argv[])
 	QSplashScreen *splash = NULL;
 	if (ComicBookSettings::instance().showSplash())
 	{
-		QPixmap splashpix(DATADIR "qcomicbook-splash.png");
+		QPixmap splashpix(":/images/qcomicbook-splash.png");
 		if (!splashpix.isNull())
 		{
 			splash = new QSplashScreen(splashpix);
@@ -41,18 +45,12 @@ int main(int argc, char *argv[])
 		}
 	}
 	
-	if (!Icons::init(DATADIR))
-		QMessageBox::critical(NULL, errcaption, ComicMainWindow::tr("Can't initialize icons path") + ":\n" DATADIR,
-				QMessageBox::Ok, QMessageBox::NoButton);
-
-	if (!ComicBookSettings::checkDirs())
+	if (!ComicBookSettings::instance().checkDirs())
+        {
 		QMessageBox::critical(NULL, errcaption, ComicMainWindow::tr("Can't initialize QComicBook directories"),
 				QMessageBox::Ok, QMessageBox::NoButton);
+        }
 	
-	//
-	// initialize unpackers
-	ImgArchiveSink::autoconfArchivers();
-		
 	ComicMainWindow *win = new ComicMainWindow(NULL);
 	//app.setMainWidget(win);
 	win->show();
@@ -70,7 +68,6 @@ int main(int argc, char *argv[])
 		QObject::connect(timer, SIGNAL(timeout()), splash, SLOT(close()));
 		timer->setSingleShot(true);
 		timer->start(2000);
-		//splash->finish(win);
 	}
 
 	return app.exec();

@@ -35,7 +35,7 @@ namespace QComicBook
 		public slots:
 			void setPage(int n, int total);
 			void setName(const QString &n);
-			void setImageInfo(const Page *img1, const Page *img2=NULL);
+			void setImageInfo(const Page *img1, const Page *img2 = NULL);
 			void setProgress(int n, int total);
 			void clear();
 

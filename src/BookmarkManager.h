@@ -17,24 +17,20 @@
 
 #include <QWidget>
 #include <QList>
+#include "ui_BookmarkManager.h"
 
-class QTreeWidget;
 class QTreeWidgetItem;
-class QPushButton;
 
 namespace QComicBook
 {
 	class Bookmarks;
 	class Bookmark;
 
-	class BookmarkManager: public QWidget
+	class BookmarkManager: public QWidget, private Ui::BookmarkManager
 	{
 		Q_OBJECT
 
 		private:
-			QTreeWidget *lview;
-			QPushButton *b_selinv;
-			QPushButton *b_remsel;
 			Bookmarks *bookmarks;
 			QList<QTreeWidgetItem *> invalid; //!<the list of invalid bookmarks
 
@@ -50,7 +46,7 @@ namespace QComicBook
 
 		public:
 			BookmarkManager(QWidget *parent, Bookmarks *b);
-			~BookmarkManager();
+			virtual ~BookmarkManager();
 	};
 }
 

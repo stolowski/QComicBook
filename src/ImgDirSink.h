@@ -22,7 +22,6 @@
 #include <QMap>
 #include <QMutex>
 #include "DirReader.h"
-#include "ThumbnailLoader.h"
 #include "Page.h"
 
 class QImage;
@@ -96,10 +95,7 @@ namespace QComicBook
 		
 		private:
 			ImgCache *cache;
-			ThumbnailLoaderThread thloader;
-			ImgLoaderThread imgloader;
 			mutable QMutex listmtx; //!< mutex for imgfiles
-			static const QString imgext[];
 			QStringList imgfiles; //!< list of images files in directory
 			QStringList txtfiles; //!< text files (.nfo, file_id.diz)
 			QStringList otherfiles; //!< list of other files
@@ -108,17 +104,6 @@ namespace QComicBook
 			QString cbname; //!< comic book name (directory path by default)
 			QMap<QString, FileStatus> timestamps; //!< last modifications timestamps for all pages
 			mutable QStringList desc; //txt files
-
-		public slots:
-			//! Requestes thumbnail to be loaded in separate thread.
-			/*! @param num page number */
-			virtual void requestThumbnail(int num);
-
-			//! Requests number of thumbnails to be loaded in separate thread.
-			/*! @param first first page number
-			 *  @page n number of thumbnails to load */
-			virtual void requestThumbnails(int first, int n);
-
 
 		public:
 			ImgDirSink(bool dirs=false, int cacheSize=0);
@@ -138,21 +123,18 @@ namespace QComicBook
 			virtual void close();
 
 			//! Returns an image for specified page.
-			/*! The cache is first checked for image. If not found, the image is loaded. Optionally,
-			 *  the preload thread is started to preload next images.
+			/*! The cache is first checked for image. If not found, the image is loaded.
 			 *  @param num page number
 			 *  @param result contains 0 on succes or value greater than 0 for error
 			 *  @return an image */
 			virtual Page getImage(unsigned int num, int &result);
-
-			virtual void preload(unsigned int num);
 
 			//! Returns thumbnail image for specified page.
 			/*! Thumbnail is loaded from disk if found and caching is enabled. Otherwise,
 			 *  the image is loaded and thumbnail is generated.
 			 *  @param num page number
 			 *  @param thumbcache specifies if thumbnails disk cache should be used */
-			virtual Thumbnail* getThumbnail(int num, bool thumbcache=true);
+			virtual Thumbnail getThumbnail(int num, bool thumbcache=true);
 
 			/*! @return number of images for this comic book sink */
 			virtual int numOfImages() const;
@@ -184,10 +166,6 @@ namespace QComicBook
 			virtual QString getNext() const;
 
 			virtual QString getPrevious() const;
-			
-			//! Returns the instance of thumbnail loader.
-			/*! @return thumbnail loader instance */
-			virtual ThumbnailLoaderThread& thumbnailLoader();
 
 			//
 			//! Removes old thumbnails.

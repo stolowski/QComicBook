@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005-2006 Pawel Stolowski <pawel.stolowski@wp.pl>
+ * Copyright (C) 2005-2009 Pawel Stolowski <pawel.stolowski@wp.pl>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -14,18 +14,12 @@
 #define __ABOUT_DIALOG_H
 
 #include <QDialog>
-
-class QLabel;
-class QPixmap;
+#include "ui_AboutDialog.h"
 
 namespace QComicBook
 {
-    class AboutDialog: public QDialog
+    class AboutDialog: public QDialog, private Ui::AboutDialog
     {
-        private:
-		QLabel *about_text;
-		QLabel *about_logo;
-
         public:
 		AboutDialog(QWidget *parent, const QString &caption, const QString &text, const QPixmap &logo);
 		virtual ~AboutDialog();

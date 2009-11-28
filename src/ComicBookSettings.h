@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005-2006 Pawel Stolowski <pawel.stolowski@wp.pl>
+ * Copyright (C) 2005-2009 Pawel Stolowski <stolowski@gmail.com>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -13,7 +13,7 @@
 #ifndef __SETTINGS_H
 #define __SETTINGS_H
 
-#include "ComicImageView.h"
+#include "PageViewBase.h"
 #include "History.h"
 #include "EnumMap.h"
 #include <QObject>
@@ -21,65 +21,20 @@
 #include <QByteArray>
 
 class QSettings;
-class QRect;
 class QColor;
-class QMainWindow;
 
 namespace QComicBook
 {
 	using namespace Utility;
 
+        class ComicMainWindow;
+        
 	class ComicBookSettings: public QObject
 	{
 		Q_OBJECT
 
-		private:
-			QSettings *cfg;
-                        bool embedpagenumbers;
-			bool smallcursor;
-			bool twopages;
-			bool twopagesstep;
-			bool japanese;
-			bool contscroll;
-			bool scrollbars;
-			bool preload;
-			bool fscrhidemenu;
-			bool fscrhidestatus;
-			bool fscrhidetoolbar;
-			Size pagesize;
-			//Scaling scaling;
-			QString lastdir;
-			QColor bgcolor;
-			History recent;
-			int cachesize;
-			int thumbsage;
-			bool cacheadjust;
-			bool cachethumbs;
-			bool autoinfo;
-			bool confirmexit;
-			bool statusbar;
-			bool intbrowser;
-			bool showsplash;
-			QString extbrowser;
-			QByteArray docklayout;
-			QByteArray geometry;
-			QString tmpdir;
-			QFont font;
-
-			static QString bkpath; //bookmarks path
-			static QString thpath; //thumbnails cache path
-			static bool dirsok; //is above dirs are ok
-
-			static const EnumMap<Size> size2string[];
-			//static const EnumMap<Scaling> scaling2string[];
-
 		signals:
-			//void scalingMethodChanged(Scaling s);
-                        void displaySettingsChanged();
-
-		private:
-			ComicBookSettings();
-			virtual ~ComicBookSettings();
+                        void displaySettingsChanged(const QString &option);
 
 		public:
 			void load();
@@ -87,12 +42,11 @@ namespace QComicBook
                         bool embedPageNumbers() const;
 			bool smallCursor() const;
 			bool twoPagesMode() const;
-			bool twoPagesStep() const;
 			bool japaneseMode() const;
 			bool continuousScrolling() const;
 			bool scrollbarsVisible() const;
 			Size pageSize() const;
-			//Scaling pageScaling() const;
+			bool smoothScaling() const;
 			QString lastDir() const;
 			const History& recentlyOpened() const;
 			QColor background() const;
@@ -107,23 +61,20 @@ namespace QComicBook
 			bool fullScreenHideStatusbar() const;
 			bool fullScreenHideToolbar() const;
 			bool showStatusbar() const;
-			bool useInternalBrowser() const;
 			const QFont& infoFont() const;
-			QString externalBrowser() const;
-			void restoreGeometry(QMainWindow *w) const;
-			void restoreDockLayout(QMainWindow *w);
+			void restoreGeometry(ComicMainWindow *w) const;
+			void restoreDockLayout(ComicMainWindow *w) const;
 			bool showSplash() const;
 			QString tmpDir() const;
 
                         void embedPageNumbers(bool f);
 			void smallCursor(bool f);
 			void twoPagesMode(bool f);
-			void twoPagesStep(bool f);
 			void japaneseMode(bool f);
 			void continuousScrolling(bool f);
 			void scrollbarsVisible(bool f);
 			void pageSize(Size s);
-			//void pageScaling(Scaling s);
+			void smoothScaling(bool s);
 			void lastDir(const QString &d);
 			void recentlyOpened(const History &hist);
 			void background(const QColor &color);
@@ -138,11 +89,9 @@ namespace QComicBook
 			void fullScreenHideStatusbar(bool f);
 			void fullScreenHideToolbar(bool f);
 			void showStatusbar(bool f);
-			void useInternalBrowser(bool f);
 			void infoFont(const QFont &f);
-			void externalBrowser(const QString &cmd);
-			void saveDockLayout(QMainWindow *w);
-			void saveGeometry(QMainWindow *w);
+			void saveDockLayout(ComicMainWindow *w);
+			void saveGeometry(ComicMainWindow *w);
 			void showSplash(bool f);
 			void tmpDir(const QString &dir);
 
@@ -151,9 +100,52 @@ namespace QComicBook
 			//
 			// checks and creates .qcomicbook/ and cache subdirectories if
 			// necessary
-			static bool checkDirs();
-			static const QString& bookmarksDir();
-			static const QString& thumbnailsDir();
+			bool checkDirs();
+			const QString& bookmarksDir();
+			const QString& thumbnailsDir();
+
+		private:
+			QSettings *m_cfg;
+                        bool m_embedpagenumbers;
+			bool m_smallcursor;
+			bool m_twopages;
+			bool m_twopagesstep;
+			bool m_japanese;
+			bool m_contscroll;
+			bool m_scrollbars;
+			bool m_preload;
+			bool m_fscrhidemenu;
+			bool m_fscrhidestatus;
+			bool m_fscrhidetoolbar;
+			Size m_pagesize;
+			bool m_smoothscaling;
+			QString m_lastdir;
+			QColor m_bgcolor;
+			History m_recent;
+			int m_cachesize;
+			int m_thumbsage;
+			bool m_cacheadjust;
+			bool m_cachethumbs;
+			bool m_autoinfo;
+			bool m_confirmexit;
+			bool m_statusbar;
+			bool m_intbrowser;
+			bool m_showsplash;
+			QString m_tmpdir;
+			QFont m_font;
+
+			QString m_bkpath; //bookmarks path
+			QString m_thpath; //thumbnails cache path
+			bool m_dirsok; //is above dirs are ok
+
+			static const EnumMap<Size> size2string[];
+
+                        ComicBookSettings();
+                        ComicBookSettings(const ComicBookSettings &);
+                        ComicBookSettings operator =(const ComicBookSettings &);
+                        virtual ~ComicBookSettings();
+
+
 	};
 }
 

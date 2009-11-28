@@ -14,13 +14,14 @@
 #include "ImgCache.h"
 #include "ComicBookSettings.h"
 #include "Thumbnail.h"
+#include "ImageFormatsInfo.h"
 #include <QImage>
 #include <QStringList>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QTextStream>
-#include <iostream>
+#include <QDebug>
 
 using namespace QComicBook;
 
@@ -28,29 +29,20 @@ using namespace QComicBook;
 // maximum size of description file (won't load files larger than that)
 const int ImgDirSink::MAX_TEXTFILE_SIZE = 65535;
                         
-const QString ImgDirSink::imgext[] = {".jpg", ".jpeg", ".png", ".gif", ".xpm", ".bmp", NULL};
-
 ImgDirSink::ImgDirSink(bool dirs, int cacheSize): QObject(), dirpath(QString::null), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
 {
 	cache = new ImgCache(cacheSize);
-	imgloader.setSink(this);
-        thloader.setSink(this);
 }
 
 ImgDirSink::ImgDirSink(const QString &path, bool dirs, int cacheSize): QObject(), dirpath(QString::null), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
 {
 	cache = new ImgCache(cacheSize);
-	imgloader.setSink(this);
-        thloader.setSink(this);
         open(path);
 }
 
 ImgDirSink::ImgDirSink(const ImgDirSink &sink, int cacheSize): QObject(), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
 {
 	cache = new ImgCache(cacheSize);
-
-	imgloader.setSink(this);
-        thloader.setSink(this);
 
 	dirpath = sink.dirpath;
 	cbname = sink.cbname;
@@ -145,11 +137,6 @@ int ImgDirSink::open(const QString &path)
 
 void ImgDirSink::close()
 {
-        thloader.stop();
-        imgloader.stop();
-        thloader.wait(); //wait for thumbnail loader thread
-        imgloader.wait(); //wait for preload thread
-
         listmtx.lock();
         dirpath = QString::null;
         imgfiles.clear();
@@ -212,7 +199,7 @@ Page ImgDirSink::getImage(unsigned int num, int &result)
 	{
 		listmtx.unlock();
 		result = 0;
-		std::cout << "from cache: " << num << std::endl;
+		qDebug() << "from cache:" << num;
 	}
 	else if (num < imgcnt)
 	{
@@ -234,7 +221,7 @@ Page ImgDirSink::getImage(unsigned int num, int &result)
 		}*/
 
 		cache->insertImage(num, im);
-		std::cout << "to cache: " << num << std::endl;
+		qDebug() << "to cache:" << num;
 	}
         else
 	{
@@ -246,21 +233,7 @@ Page ImgDirSink::getImage(unsigned int num, int &result)
 	return page;
 }
 
-void ImgDirSink::preload(unsigned int num)
-{
-	listmtx.lock();
-	if (num >= imgfiles.count())
-	{
-		listmtx.unlock();
-	}
-	else
-	{
-		listmtx.unlock();
-		imgloader.request(num);
-	}
-}
-
-Thumbnail* ImgDirSink::getThumbnail(int num, bool thumbcache)
+Thumbnail ImgDirSink::getThumbnail(int num, bool thumbcache)
 {
         QString fname;
         listmtx.lock();
@@ -269,45 +242,36 @@ Thumbnail* ImgDirSink::getThumbnail(int num, bool thumbcache)
         else
         {
                 listmtx.unlock();
-                return NULL;
+                return Thumbnail(); //TODO exception?
         }
         listmtx.unlock();
 
-        Thumbnail *t = new Thumbnail(num, cbname.remove('/'));
+        Thumbnail t(num, cbname.remove('/'));
 
         //
         // try to load cached thumbnail
         if (thumbcache)
         {
-            if (t->tryLoad())
+            if (t.tryLoad())
             {
+                qDebug() << "thumbnail" << num << "loaded from disk";
                 return t;
             }
         }
 
         //
         // try to load image
-        if (!t->fromOriginalImage(fname))
+        if (t.fromOriginalImage(fname))
         {
-            delete t;
-            return NULL;
+            //
+            // save thumbnail if caching enabled
+            if (thumbcache)
+            {
+                t.save();
+            }
         }
 
-        //
-        // save thumbnail if caching enabled
-        if (thumbcache)
-                t->save();
         return t;
-}
-
-void ImgDirSink::requestThumbnail(int num)
-{
-        thloader.request(num);
-}
-
-void ImgDirSink::requestThumbnails(int first, int n)
-{
-        thloader.request(first, n);
 }
 
 int ImgDirSink::numOfImages() const
@@ -385,7 +349,7 @@ void ImgDirSink::removeThumbnails(int days)
 
         const QDateTime currdate = QDateTime::currentDateTime();
         
-        QDir dir(ComicBookSettings::thumbnailsDir(), "*.jpg", QDir::Unsorted, QDir::Files|QDir::NoSymLinks);
+        QDir dir(ComicBookSettings::instance().thumbnailsDir(), "*.jpg", QDir::Unsorted, QDir::Files|QDir::NoSymLinks);
         const QStringList files = dir.entryList();
         for (QStringList::const_iterator it = files.begin(); it!=files.end(); it++)
         {
@@ -395,35 +359,37 @@ void ImgDirSink::removeThumbnails(int days)
         }
 }
 
-ThumbnailLoaderThread& ImgDirSink::thumbnailLoader()
-{
-        return thloader;
-}
-
 bool ImgDirSink::knownImageExtension(const QString &path)
 {
-	for (int i=0; imgext[i] != NULL; i++)
-		if (path.endsWith(imgext[i], Qt::CaseInsensitive))
-			return true;
-	return false;
+    foreach (QString ext, ImageFormatsInfo::instance().extensions())
+    {
+        if (path.endsWith(ext, Qt::CaseInsensitive))
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 QString ImgDirSink::getKnownImageExtension(const QString &path)
 {
-	for (int i=0; imgext[i] != NULL; i++)
-		if (path.endsWith(imgext[i], Qt::CaseInsensitive))
-			return imgext[i];
-	return false;
+    foreach (QString ext, ImageFormatsInfo::instance().extensions())
+    {
+        if (path.endsWith(ext, Qt::CaseInsensitive))
+            return ext;
+    }
+    return QString::null;
 }
 
 QStringList ImgDirSink::getKnownImageExtensionsList()
 {
-	QStringList list;
-	for (int i=0; imgext[i] != NULL; i++)
-	{
-		QString p = "*" + imgext[i];
-		list << p;
-	}
-	return list;
+    QStringList list;
+    foreach (QString ext, ImageFormatsInfo::instance().extensions())
+    {
+        QString p("*");
+        p.append(ext);
+        list << p;
+    }
+    return list;
 }
 
