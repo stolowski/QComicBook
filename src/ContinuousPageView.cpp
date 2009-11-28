@@ -118,19 +118,19 @@ void ContinuousPageView::recreatePageWidgets()
         if (props.twoPagesMode())
         {
             int i = 0;
-            if (numOfPages() % 2) // odd number of pages
-            {
-                PageWidget *p = new PageWidget(this, w, h, 0);
-                imgLabel.append(p);
-                m_layout->addWidget(p);
-                ++i;
-            }
-            for (; i<numOfPages(); i+=2)
+            for (; i<roundPageNumber(numOfPages()); i+=2)
             {
                 PageWidget *p = new PageWidget(this, w, h, i, true);
                 imgLabel.append(p);
                 m_layout->addWidget(p);
             }
+            if (numOfPages() & 1) // odd number of pages
+            {
+                PageWidget *p = new PageWidget(this, w, h, i);
+                imgLabel.append(p);
+                m_layout->addWidget(p);
+            }
+
         }
         else
         {
@@ -154,7 +154,7 @@ PageWidget* ContinuousPageView::findPageWidget(int pageNum) const
     {
         if (props.twoPagesMode())
         {
-            pageNum = (pageNum + pageNum % 2) / 2;
+            pageNum /= 2;
         }
         if (pageNum < imgLabel.size())
         {
@@ -387,6 +387,7 @@ void ContinuousPageView::gotoPage(int n)
         else
         {
             disposeOrRequestPages();
+            emit currentPageChanged(roundPageNumber(n));
         }
     }
 }

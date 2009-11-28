@@ -29,7 +29,6 @@ ViewProperties::ViewProperties(const ViewProperties &props)
     m_contScroll = props.m_contScroll;
     m_twoPagesMode = props.m_twoPagesMode;
     m_mangaMode = props.m_mangaMode;
-    m_twoPagesStep = props.m_twoPagesStep;
     m_background = props.m_background;
 }
 
@@ -42,7 +41,6 @@ void ViewProperties::setFromSettings()
     m_contScroll = cfg.continuousScrolling();
     m_twoPagesMode = cfg.twoPagesMode();
     m_mangaMode = cfg.japaneseMode();
-    m_twoPagesStep = cfg.twoPagesStep();
     m_background = cfg.background();
 }
 
@@ -129,20 +127,6 @@ void ViewProperties::setTwoPagesMode(bool f)
 bool ViewProperties::twoPagesMode() const
 {
     return m_twoPagesMode;
-}
-
-void ViewProperties::setTwoPagesStep(bool f)
-{
-    if (m_twoPagesStep != f)
-    {
-        m_twoPagesStep = f;
-        emit changed();
-    }
-}
-
-bool ViewProperties::twoPagesStep() const
-{
-    return m_twoPagesStep;
 }
 
 void ViewProperties::setMangaMode(bool f)

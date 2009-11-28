@@ -51,7 +51,6 @@ ComicBookCfgDialog::ComicBookCfgDialog(QWidget *parent, ComicBookSettings *cfg):
     cb_preload->setChecked(cfg->preloadPages());
 
     cb_autoinfo->setChecked(cfg->autoInfo());
-    cb_twopagesstep->setChecked(cfg->twoPagesStep());
     cb_thumbs->setChecked(cfg->cacheThumbnails());
     sb_thumbsage->setValue(cfg->thumbnailsAge());
     cb_splash->setChecked(cfg->showSplash());
@@ -82,7 +81,6 @@ void ComicBookCfgDialog::accept()
 	cfg->preloadPages(cb_preload->isChecked());
 	cfg->cacheThumbnails(cb_thumbs->isChecked());
 	cfg->thumbnailsAge(sb_thumbsage->value());
-	cfg->twoPagesStep(cb_twopagesstep->isChecked());
 	cfg->autoInfo(cb_autoinfo->isChecked());
 	cfg->showSplash(cb_splash->isChecked());
 	cfg->confirmExit(cb_confirmexit->isChecked());

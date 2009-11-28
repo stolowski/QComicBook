@@ -702,11 +702,11 @@ void ComicMainWindow::prevPage()
 
 void ComicMainWindow::prevPageBottom()
 {
-        if (currpage > 0)
-        {
-                jumpToPage(currpage - (actionTwoPages->isChecked() && cfg->twoPagesStep() ? 2 : 1));
-                view->scrollToBottom();
-        }
+    if (currpage > 0)
+    {
+        jumpToPage(view->previousPage(currpage));
+        view->scrollToBottom();
+    }
 }
 
 void ComicMainWindow::firstPage()
@@ -716,18 +716,20 @@ void ComicMainWindow::firstPage()
 
 void ComicMainWindow::lastPage()
 {
-        if (sink)
-                jumpToPage(sink->numOfImages() - (actionTwoPages->isChecked() && cfg->twoPagesStep() ? 2 : 1));
+    if (sink)
+    {
+        jumpToPage(sink->numOfImages() - 1);
+    }
 }
 
 void ComicMainWindow::forwardPages()
 {
-        jumpToPage(currpage + (actionTwoPages->isChecked() && cfg->twoPagesStep() ? 10 : 5));
+    jumpToPage(currpage + 5 );
 }
 
 void ComicMainWindow::backwardPages()
 {
-        jumpToPage(currpage - (actionTwoPages->isChecked() && cfg->twoPagesStep() ? 10 : 5));
+    jumpToPage(currpage - 5);
 }
 
 void ComicMainWindow::jumpToPage(int n, bool force)
@@ -944,5 +946,4 @@ void ComicMainWindow::reconfigureDisplay()
     view->setSmallCursor(cfg->smallCursor());
     view->showPageNumbers(cfg->embedPageNumbers());
     view->setBackground(cfg->background());
-    view->properties().setTwoPagesStep(cfg->twoPagesStep());
 }

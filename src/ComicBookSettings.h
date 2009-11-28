@@ -42,7 +42,6 @@ namespace QComicBook
                         bool embedPageNumbers() const;
 			bool smallCursor() const;
 			bool twoPagesMode() const;
-			bool twoPagesStep() const;
 			bool japaneseMode() const;
 			bool continuousScrolling() const;
 			bool scrollbarsVisible() const;
@@ -71,7 +70,6 @@ namespace QComicBook
                         void embedPageNumbers(bool f);
 			void smallCursor(bool f);
 			void twoPagesMode(bool f);
-			void twoPagesStep(bool f);
 			void japaneseMode(bool f);
 			void continuousScrolling(bool f);
 			void scrollbarsVisible(bool f);

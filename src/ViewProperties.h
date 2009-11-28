@@ -45,8 +45,6 @@ namespace QComicBook
         bool continuousScrolling() const;
         void setTwoPagesMode(bool f);
         bool twoPagesMode() const;
-        void setTwoPagesStep(bool f);
-        bool twoPagesStep() const;
         void setMangaMode(bool f);
         bool mangaMode() const;
 
@@ -57,7 +55,6 @@ namespace QComicBook
         QColor m_background; //background color
         bool m_pageNumbers;  //if page numbers should be embedded
         bool m_twoPagesMode;
-        bool m_twoPagesStep;
         bool m_mangaMode;
         bool m_contScroll;
     };

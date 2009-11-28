@@ -74,6 +74,7 @@ namespace QComicBook
             virtual int currentPage() const = 0;
             virtual int nextPage(int page) const;
             virtual int previousPage(int page) const;
+            virtual int roundPageNumber(int page) const;
 
         protected:
             virtual void resizeEvent(QResizeEvent *e);

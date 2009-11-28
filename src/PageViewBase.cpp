@@ -322,7 +322,7 @@ void PageViewBase::delRequest(int page, bool twoPages, bool cancel)
 
 int PageViewBase::nextPage(int page) const
 {
-    if (props.twoPagesMode() && props.twoPagesStep()) //TODO odd number of pages, single 1st page
+    if (props.twoPagesMode()) //TODO odd number of pages, single 1st page
     {
         page += 2;
     }
@@ -339,7 +339,7 @@ int PageViewBase::nextPage(int page) const
 
 int PageViewBase::previousPage(int page) const
 {
-    if (props.twoPagesMode() && props.twoPagesStep() && page>1)
+    if (props.twoPagesMode())
     {
         page -= 2;
     }
@@ -348,6 +348,11 @@ int PageViewBase::previousPage(int page) const
         --page;
     }
     return page;
+}
+
+int PageViewBase::roundPageNumber(int page) const
+{
+    return props.twoPagesMode() ? page - (page&1) : page;
 }
 
 void PageViewBase::delRequests()

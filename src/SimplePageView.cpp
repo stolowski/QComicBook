@@ -128,13 +128,9 @@ void SimplePageView::gotoPage(int n)
         {
             //delRequest(m_currentPage);
         }
-        if (props.twoPagesMode() && numOfPages() % 2 == 0 && props.twoPagesStep())
-        {
-            n -= n & 1;
-        }
-        m_currentPage = n;
+        m_currentPage = n = roundPageNumber(n);
 
-        addRequest(m_currentPage, props.twoPagesMode() && !((numOfPages() % 2 !=0 ) && n == 0));
+        addRequest(m_currentPage, props.twoPagesMode() && n+1 < numOfPages());
         emit currentPageChanged(n);
 
         ComicBookSettings &cfg(ComicBookSettings::instance());

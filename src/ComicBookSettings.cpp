@@ -37,7 +37,6 @@
 
 #define GRP_NAVI                     "/Navigation"
 #define OPT_CONTSCROLL               "/ContinuousScroll"
-#define OPT_TWOPAGESSTEP             "/TwoPagesStep"
 
 #define GRP_WINDOW      "/Window"
 #define OPT_GEOMETRY    "/Geometry"
@@ -150,7 +149,6 @@ void ComicBookSettings::load()
 	m_cfg->endGroup();
 	m_cfg->beginGroup(GRP_NAVI);
 		m_contscroll = m_cfg->value(OPT_CONTSCROLL, true).toBool();
-		m_twopagesstep = m_cfg->value(OPT_TWOPAGESSTEP, true).toBool();
 	m_cfg->endGroup();
 	m_cfg->beginGroup(GRP_RUNTIME);
 		m_lastdir = m_cfg->value(OPT_LASTDIR, QString()).toString();
@@ -191,11 +189,6 @@ bool ComicBookSettings::smallCursor() const
 bool ComicBookSettings::twoPagesMode() const
 {
     return m_twopages;
-}
-
-bool ComicBookSettings::twoPagesStep() const
-{
-    return m_twopagesstep;
 }
 
 bool ComicBookSettings::japaneseMode() const
@@ -342,14 +335,6 @@ void ComicBookSettings::twoPagesMode(bool f)
     {
         m_cfg->setValue(GRP_VIEW OPT_TWOPAGES, m_twopages = f);
         emit displaySettingsChanged(OPT_TWOPAGES);
-    }
-}
-
-void ComicBookSettings::twoPagesStep(bool f)
-{
-    if (f != m_twopagesstep)
-    {
-        m_cfg->setValue(GRP_NAVI OPT_TWOPAGESSTEP, m_twopagesstep = f);
     }
 }
 
