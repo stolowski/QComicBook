@@ -40,12 +40,8 @@ namespace QComicBook
 			virtual void setImage(const Page &img1);
 			virtual void setImage(const Page &img1, const Page &img2);
                         virtual void gotoPage(int n);
-                        virtual void setTwoPagesMode(bool f);
                         virtual void scrollToTop();
                         virtual void scrollToBottom();
-
-			void jumpUp();
-			void jumpDown();
                         virtual void clear();
 
 		public:

@@ -732,7 +732,6 @@ void ComicMainWindow::backwardPages()
 
 void ComicMainWindow::jumpToPage(int n, bool force)
 {
-
 	if (!sink)
         {
 		return;
@@ -745,52 +744,15 @@ void ComicMainWindow::jumpToPage(int n, bool force)
         {
                 n = 0;
         }
-        if ((n != currpage) || force)
-        {
-            int result1, result2; //TODO remove
-                /*if (actionTwoPages->isChecked())
-                {
-                        Page img1 = sink->getImage(currpage = n, result1);
-                        Page img2 = sink->getImage(currpage + 1, result2);
-                        if (result2 == 0)
-                        {
-                                if (actionMangaMode->isChecked())
-                                {
-                                        view->setImage(img2, img1);
-                                        statusbar->setImageInfo(&img2, &img1);
-                                }
-                                else
-                                {
-                                        view->setImage(img1, img2);
-                                        statusbar->setImageInfo(&img1, &img2);
-                                }
-                        }
-                        else
-                        {
-                                view->setImage(img1);
-                                statusbar->setImageInfo(&img1);
-				//if (cfg->preloadPages()) TODO
-				//	sink->preload(currpage + 1);
-                        }
-                }
-                else
-                {
-                        Page img = sink->getImage(currpage = n, result1);
-                        view->setImage(img);
-                        statusbar->setImageInfo(&img);
-                }
-                if (actionMangaMode->isChecked())
-                        view->ensureVisible(view->viewWidth(), 0);
-		else
-			view->ensureVisible(0, 0);
-                */
 
-        }
         if (!actionTogglePreserveRotation->isChecked())
         {
             view->properties().setAngle(None, false);
         }
-        view->gotoPage(n);
+        if ((n != currpage) || force)
+        {
+            view->gotoPage(n);
+        }
 }
 
 void ComicMainWindow::currentPageChanged(int n)
@@ -837,8 +799,6 @@ void ComicMainWindow::showInfo()
 
 void ComicMainWindow::showSysInfo()
 {
-    //SupportedArchivesWindow *win = new SupportedArchivesWindow(this);
-//	win->show();
     SystemInfoDialog sysinfo(this);
     sysinfo.exec();
 }

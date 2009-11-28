@@ -50,10 +50,6 @@ namespace QComicBook
 		public slots:
 			virtual void setImage(const Page &img1);
 			virtual void setImage(const Page &img1, const Page &img2);
-                        virtual void setTwoPagesMode(bool f);
-
-			void jumpUp();
-			void jumpDown();
                         virtual void clear();
                         virtual void gotoPage(int n);
                         virtual void scrollToTop();
@@ -69,9 +65,6 @@ namespace QComicBook
                         virtual int currentPage() const;
 
 		private:
-			int wheelupcnt, wheeldowncnt;
-			static const int EXTRA_WHEEL_SPIN; //number of extra wheel spins to flip the page
-			static const float JUMP_FACTOR; //factor used to calculate the amount of space to scroll when scrolling page with space
 			QVector<PageWidget*> imgLabel;
                         int *m_y1pos;
                         int *m_y2pos;

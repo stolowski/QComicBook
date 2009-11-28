@@ -25,12 +25,8 @@
 
 using namespace QComicBook;
 
-const int ContinuousPageView::EXTRA_WHEEL_SPIN = 3;
-const float ContinuousPageView::JUMP_FACTOR = 0.85f;
-
 ContinuousPageView::ContinuousPageView(QWidget *parent, int physicalPages, const ViewProperties& props)
     : PageViewBase(parent, physicalPages, props)
-    , wheelupcnt(0), wheeldowncnt(0)
     , m_firstVisible(-1)
     , m_firstVisibleOffset(0)
     , m_y1pos(NULL)
@@ -374,38 +370,6 @@ void ContinuousPageView::resizeEvent(QResizeEvent *e)
 void ContinuousPageView::wheelEvent(QWheelEvent *e)
 {
     PageViewBase::wheelEvent(e);
-}
-
-
-void ContinuousPageView::setTwoPagesMode(bool f)
-{
-    props.setTwoPagesMode(f);
-    //   recreatePageWidgets(); //FIXME
-}
-
-
-void ContinuousPageView::jumpUp()
-{
-        if (onTop())
-        {
-                emit topReached();
-        }
-        else 
-        {
-		scrollByDelta(0, -static_cast<int>(JUMP_FACTOR * viewport()->height()));
-        }
-}
-
-void ContinuousPageView::jumpDown()
-{
-        if (onBottom())
-        {
-                emit bottomReached();
-        }
-        else
-        {
-		scrollByDelta(0, static_cast<int>(JUMP_FACTOR * viewport()->height()));
-        }
 }
 
 void ContinuousPageView::gotoPage(int n)

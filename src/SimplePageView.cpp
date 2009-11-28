@@ -26,7 +26,6 @@
 using namespace QComicBook;
 
 const int SimplePageView::EXTRA_WHEEL_SPIN = 3;
-const float SimplePageView::JUMP_FACTOR = 0.85f;
 
 SimplePageView::SimplePageView(QWidget *parent, int physicalPages, const ViewProperties& props)
     : PageViewBase(parent, physicalPages, props)
@@ -60,6 +59,7 @@ void SimplePageView::recreatePageWidget()
     delete imgLabel;
     imgLabel = NULL;
 
+    // size of default empty page widget (until first image is loaded)
     int w = viewport()->width() - 10;
     int h = viewport()->height() - 10;
 
@@ -187,29 +187,6 @@ void SimplePageView::wheelEvent(QWheelEvent *e)
             wheelupcnt = 0; //reset opposite direction counter
         }
     }
-}
-
-
-void SimplePageView::setTwoPagesMode(bool f)
-{
-    recreatePageWidget(); //??
-    props.setTwoPagesMode(f);
-}
-
-void SimplePageView::jumpUp()
-{
-        if (onTop())
-                emit topReached();
-        else 
-		scrollByDelta(0, -static_cast<int>(JUMP_FACTOR * viewport()->height()));
-}
-
-void SimplePageView::jumpDown()
-{
-        if (onBottom())
-                emit bottomReached();
-        else 
-		scrollByDelta(0, static_cast<int>(JUMP_FACTOR * viewport()->height()));
 }
 
 void SimplePageView::scrollToTop()

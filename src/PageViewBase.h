@@ -34,17 +34,19 @@ namespace QComicBook
             virtual void gotoPage(int n) = 0;
             virtual void scrollToTop() = 0;
             virtual void scrollToBottom() = 0;
+            virtual void jumpUp();
+            virtual void jumpDown();
 
-            void setTwoPagesMode(bool f);
-            void setMangaMode(bool f);
-            void setBackground(const QColor &color);
-            void setSmallCursor(bool f);
-            void showPageNumbers(bool f);
-            void setRotation(Rotation r);
-            void rotateRight();
-            void rotateLeft();
-            void resetRotation();
-            void setSize(Size s);
+            virtual void setTwoPagesMode(bool f);
+            virtual void setMangaMode(bool f);
+            virtual void setBackground(const QColor &color);
+            virtual void setSmallCursor(bool f);
+            virtual void showPageNumbers(bool f);
+            virtual void setRotation(Rotation r);
+            virtual void rotateRight();
+            virtual void rotateLeft();
+            virtual void resetRotation();
+            virtual void setSize(Size s);
             virtual void scrollUp();
             virtual void scrollDown();
             virtual void scrollUpFast();
@@ -91,6 +93,7 @@ namespace QComicBook
             ViewProperties props;
 
         private:
+            static const float JUMP_FACTOR; //factor used to calculate the amount of space to scroll when scrolling page with space
             QMenu *context_menu;
             int m_physicalPages;
             int lx, ly; //last mouse position when tracking mouse movements

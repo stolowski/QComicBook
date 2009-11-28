@@ -8,6 +8,8 @@
 
 using namespace QComicBook;
 
+const float PageViewBase::JUMP_FACTOR = 0.85f;
+
 PageViewBase::PageViewBase(QWidget *parent, int physicalPages, const ViewProperties &props)
     : QScrollArea(parent)
     , m_physicalPages(physicalPages)
@@ -155,6 +157,30 @@ void PageViewBase::scrollLeftFast()
         scrollByDelta(-3*spdx, 0);
 }
 
+void PageViewBase::jumpUp()
+{
+    if (onTop())
+    {
+        emit topReached();
+    }
+    else 
+    {
+        scrollByDelta(0, -static_cast<int>(JUMP_FACTOR * viewport()->height()));
+    }
+}
+
+void PageViewBase::jumpDown()
+{
+    if (onBottom())
+    {
+        emit bottomReached();
+    }
+    else
+    {
+        scrollByDelta(0, static_cast<int>(JUMP_FACTOR * viewport()->height()));
+    }
+}
+
 void PageViewBase::setNumOfPages(int n)
 {
     m_physicalPages = n;
@@ -207,7 +233,6 @@ void PageViewBase::setMangaMode(bool f)
 {
     props.setMangaMode(f);
 }
-
 
 void PageViewBase::setSmallCursor(bool f)
 {
