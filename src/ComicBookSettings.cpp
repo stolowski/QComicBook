@@ -34,9 +34,9 @@
 #define OPT_FONT                     "/InfoFont"
 #define OPT_SMALLCURSOR              "/SmallCursor"
 #define OPT_EMBEDPAGENUMBERS         "/EmbedPageNumbers"
+#define OPT_CONTSCROLL               "/ContinuousScroll"
 
 #define GRP_NAVI                     "/Navigation"
-#define OPT_CONTSCROLL               "/ContinuousScroll"
 
 #define GRP_WINDOW      "/Window"
 #define OPT_GEOMETRY    "/Geometry"
@@ -146,8 +146,6 @@ void ComicBookSettings::load()
 			m_font.setFamily("Courier");
 			m_font.setPointSize(10);
 		}
-	m_cfg->endGroup();
-	m_cfg->beginGroup(GRP_NAVI);
 		m_contscroll = m_cfg->value(OPT_CONTSCROLL, true).toBool();
 	m_cfg->endGroup();
 	m_cfg->beginGroup(GRP_RUNTIME);
@@ -351,7 +349,7 @@ void ComicBookSettings::continuousScrolling(bool f)
 {
     if (f != m_contscroll)
     {
-        m_cfg->setValue(GRP_NAVI OPT_CONTSCROLL, m_contscroll = f);
+        m_cfg->setValue(GRP_VIEW OPT_CONTSCROLL, m_contscroll = f);
     }
 }
 
