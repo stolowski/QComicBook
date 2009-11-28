@@ -684,12 +684,20 @@ void ComicMainWindow::exitFullscreen()
 
 void ComicMainWindow::nextPage()
 {
-    jumpToPage(view->nextPage(currpage));
+    const int n(view->nextPage(currpage));
+    if (n >= 0)
+    {
+        jumpToPage(n);
+    }
 }
 
 void ComicMainWindow::prevPage()
 {
-    jumpToPage(view->previousPage(currpage));
+    const int n(view->previousPage(currpage));
+    if (n >= 0)
+    {
+        jumpToPage(n);
+    }
 }
 
 void ComicMainWindow::prevPageBottom()
@@ -726,14 +734,20 @@ void ComicMainWindow::jumpToPage(int n, bool force)
 {
 
 	if (!sink)
+        {
 		return;
+        }
         if (n >= sink->numOfImages())
+        {
                 n = sink->numOfImages()-1;
+        }
         if (n < 0)
+        {
                 n = 0;
+        }
         if ((n != currpage) || force)
         {
-                int result1, result2;
+            int result1, result2; //TODO remove
                 /*if (actionTwoPages->isChecked())
                 {
                         Page img1 = sink->getImage(currpage = n, result1);
@@ -786,40 +800,28 @@ void ComicMainWindow::currentPageChanged(int n)
     pageinfo->setText(page);
     statusbar->setPage(n + 1, sink->numOfImages());
 
- 	//
-	// enable or disable next/prev/backward/forward page actions if first/last page shown
-    if (sink == NULL || n == sink->numOfImages() - 1) //- (actionTwoPages->isChecked() ? 2 : 1))
-	{
-		actionNextPage->setDisabled(true);
-		actionForwardPage->setDisabled(true);
-	}
-	else
-	{
-		actionNextPage->setDisabled(false);
-		actionForwardPage->setDisabled(false);
-	}
-        if (sink == NULL || n == 0) //n == (actionTwoPages->isChecked() ? 1 : 0))
-	{
-                actionPreviousPage->setDisabled(true);
-		actionBackwardPage->setDisabled(true);
-	}
-	else
-	{
-		actionPreviousPage->setDisabled(false);
-		actionBackwardPage->setDisabled(false);
-	}
-
-/*if (actionTwoPages->isChecked())
-    if (actionMangaMode->isChecked())
-                                {
-                                        view->setImage(img2, img1);
-                                        statusbar->setImageInfo(&img2, &img1);
-                                }
-                                else
-                                {
-                                        view->setImage(img1, img2);
-                                        statusbar->setImageInfo(&img1, &img2);
-                                        }*/
+    //
+    // enable or disable next/prev/backward/forward page actions if first/last page shown
+    if (sink == NULL || view->nextPage(n) < 0)
+    {
+        actionNextPage->setDisabled(true);
+        actionForwardPage->setDisabled(true);
+    }
+    else
+    {
+        actionNextPage->setDisabled(false);
+        actionForwardPage->setDisabled(false);
+    }
+    if (sink == NULL || view->previousPage(n) < 0)
+    {
+        actionPreviousPage->setDisabled(true);
+        actionBackwardPage->setDisabled(true);
+    }
+    else
+    {
+        actionPreviousPage->setDisabled(false);
+        actionBackwardPage->setDisabled(false);
+    }
 
     thumbswin->view()->scrollToPage(n);
 }

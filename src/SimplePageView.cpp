@@ -13,6 +13,7 @@
 #include "SimplePageView.h"
 #include "Utility.h"
 #include "PageWidget.h"
+#include "ComicBookSettings.h"
 #include <QVBoxLayout>
 #include <QImage>
 #include <QPixmap>
@@ -98,6 +99,7 @@ void SimplePageView::scrollContentsBy(int dx, int dy)
 void SimplePageView::setImage(const Page &img1)
 {
     Q_ASSERT(numOfPages() > 0);
+    delRequest(img1.getNumber(), false, false);
     if (img1.getNumber() == m_currentPage)
     {
         imgLabel->setImage(img1);
@@ -109,6 +111,7 @@ void SimplePageView::setImage(const Page &img1)
 void SimplePageView::setImage(const Page &img1, const Page &img2)
 {
     Q_ASSERT(numOfPages() > 0);
+    delRequest(img1.getNumber(), true, false);
     if (img1.getNumber() == m_currentPage)
     {
         imgLabel->setImage(img1, img2);
@@ -130,8 +133,17 @@ void SimplePageView::gotoPage(int n)
             n -= n & 1;
         }
         m_currentPage = n;
+
         addRequest(m_currentPage, props.twoPagesMode() && !((numOfPages() % 2 !=0 ) && n == 0));
         emit currentPageChanged(n);
+
+        ComicBookSettings &cfg(ComicBookSettings::instance());
+        if (cfg.preloadPages())
+        {   
+            n = nextPage(n);
+            qDebug() << "preloading" << n;            
+            addRequest(n, props.twoPagesMode() && n < numOfPages()); // request two pages if not last page
+        }
     }
 }
 

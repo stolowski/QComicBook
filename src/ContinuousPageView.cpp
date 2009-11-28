@@ -13,6 +13,7 @@
 #include "ContinuousPageView.h"
 #include "Utility.h"
 #include "PageWidget.h"
+#include "ComicBookSettings.h"
 #include <QImage>
 #include <QPixmap>
 #include <QPainter>
@@ -219,11 +220,15 @@ void ContinuousPageView::disposeOrRequestPages()
             }
             else
             {
+                ComicBookSettings &cfg(ComicBookSettings::instance());
                 // if previous page is visible then preload this one
-                if ((i>1 && isInView(m_y1pos[i-1], m_y2pos[i-1], vy1, vy2)))
+                if (i>1 && isInView(m_y1pos[i-1], m_y2pos[i-1], vy1, vy2))
                 {
-                    qDebug() << "preloading" << w->pageNumber(); //TODO preload settings?
-                    addRequest(w->pageNumber(), props.twoPagesMode() && w->hasTwoPages());
+                    if (cfg.preloadPages())
+                    {
+                        qDebug() << "preloading" << w->pageNumber();
+                        addRequest(w->pageNumber(), props.twoPagesMode() && w->hasTwoPages());
+                    }
                 }
                 else
                 {
@@ -329,8 +334,7 @@ void ContinuousPageView::setImage(const Page &img1)
 {
     Q_ASSERT(numOfPages() > 0);
     delRequest(img1.getNumber(), false, false);
-    //if (!preserveangle)
-    //          iangle = 0;
+
     PageWidget *w = findPageWidget(img1.getNumber());
     Q_ASSERT(w != NULL);
     qDebug() << "setImage:" << img1.getNumber() << "widget page" << w->pageNumber();
@@ -342,8 +346,7 @@ void ContinuousPageView::setImage(const Page &img1, const Page &img2)
 {
     Q_ASSERT(numOfPages() > 0);
     delRequest(img1.getNumber(), true, false);
-    //  if (!preserveangle)
-    //          iangle = 0;
+
     PageWidget *w = findPageWidget(img1.getNumber());
     Q_ASSERT(w != NULL);
     qDebug() << "setImage:" << img1.getNumber() << img2.getNumber() << "widget page" << w->pageNumber();

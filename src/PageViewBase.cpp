@@ -297,17 +297,17 @@ void PageViewBase::delRequest(int page, bool twoPages, bool cancel)
 
 int PageViewBase::nextPage(int page) const
 {
-    if (props.twoPagesMode() && props.twoPagesStep() && page < m_physicalPages-2)
+    if (props.twoPagesMode() && props.twoPagesStep()) //TODO odd number of pages, single 1st page
     {
         page += 2;
     }
     else
     {
-        ++page;
-        if (page >= m_physicalPages)
-        {
-            page = -1;
-        }
+        ++page;    
+    }
+    if (page >= m_physicalPages)
+    {
+        page = -1;
     }
     return page;
 }
