@@ -32,18 +32,6 @@ int main(int argc, char *argv[])
 
 	ComicBookSettings::instance().load();
 
-	//
-	// show splashscreen
-	QSplashScreen *splash = NULL;
-	if (ComicBookSettings::instance().showSplash())
-	{
-		QPixmap splashpix(":/images/qcomicbook-splash.png");
-		if (!splashpix.isNull())
-		{
-			splash = new QSplashScreen(splashpix);
-			splash->show();
-		}
-	}
 	
 	if (!ComicBookSettings::instance().checkDirs())
         {
@@ -56,19 +44,30 @@ int main(int argc, char *argv[])
 	win->show();
 
 	//
-	// command line argument
-	if (app.argc() > 1)
-		win->open(QString::fromLocal8Bit(app.argv()[1]));
+	// show splashscreen
+	if (ComicBookSettings::instance().showSplash())
+	{
+		QPixmap splashpix(":/images/qcomicbook-splash.png");
+		if (!splashpix.isNull())
+		{
+                    QSplashScreen *splash = new QSplashScreen(splashpix, Qt::WindowStaysOnTopHint);
+                    splash->show();
+
+                    //
+                    // close splashscreen after a few seconds
+                    QTimer *timer = new QTimer(win);
+                    QObject::connect(timer, SIGNAL(timeout()), splash, SLOT(close()));
+                    timer->setSingleShot(true);
+                    timer->start(2*1000);
+		}
+	}
 
 	//
-	// close splashscreen after a few seconds
-	if (splash)
-	{
-		QTimer *timer = new QTimer(win);
-		QObject::connect(timer, SIGNAL(timeout()), splash, SLOT(close()));
-		timer->setSingleShot(true);
-		timer->start(2000);
-	}
+	// command line argument
+	if (app.argc() > 1)
+        { 
+            win->open(QString::fromLocal8Bit(app.argv()[1]));
+        }
 
 	return app.exec();
 }
