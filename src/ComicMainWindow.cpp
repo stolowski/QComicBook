@@ -266,8 +266,8 @@ void ComicMainWindow::setupComicImageView()
     if (view)
     {
         view->disconnect();
-//        pageLoader->disconnect(); not needed?
-//        view->deleteLater();
+        pageLoader->disconnect();
+        view->deleteLater();
     }
     const ViewProperties props;
     if (cfg->continuousScrolling())
@@ -294,11 +294,6 @@ void ComicMainWindow::setupComicImageView()
     connect(actionScrollDown, SIGNAL(triggered(bool)), view, SLOT(scrollDown()));       
     connect(actionScrollUpFast, SIGNAL(triggered(bool)), view, SLOT(scrollUpFast()));        
     connect(actionScrollDownFast, SIGNAL(triggered(bool)), view, SLOT(scrollDownFast()));
-    /*connect(actionFitWidth, SIGNAL(triggered(bool)), view, SLOT(setSizeFitWidth()));        
-    connect(actionFitHeight, SIGNAL(triggered(bool)), view, SLOT(setSizeFitHeight()));        
-    connect(actionWholePage, SIGNAL(triggered(bool)), view, SLOT(setSizeWholePage()));        
-    connect(actionOriginalSize, SIGNAL(triggered(bool)), view, SLOT(setSizeOriginal()));        
-    connect(actionBestFit, SIGNAL(triggered(bool)), view, SLOT(setSizeBestFit()));*/        
     connect(actionRotateRight, SIGNAL(triggered(bool)), view, SLOT(rotateRight()));        
     connect(actionRotateLeft, SIGNAL(triggered(bool)), view, SLOT(rotateLeft()));
     connect(actionNoRotation, SIGNAL(triggered(bool)), view, SLOT(resetRotation()));
