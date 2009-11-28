@@ -305,10 +305,9 @@ void ComicMainWindow::setupComicImageView()
     connect(actionJumpDown, SIGNAL(triggered()), view, SLOT(jumpDown()));
     connect(actionJumpUp, SIGNAL(triggered()), view, SLOT(jumpUp()));
     
-/*    {
-        connect(view, SIGNAL(bottomReached()), this, SLOT(nextPage()));
-        connect(view, SIGNAL(topReached()), this, SLOT(prevPageBottom()));
-    }*/
+    connect(view, SIGNAL(bottomReached()), this, SLOT(nextPage()));
+    connect(view, SIGNAL(topReached()), this, SLOT(prevPageBottom()));
+        
     connect(view, SIGNAL(doubleClick()), this, SLOT(nextPage()));
     view->enableScrollbars(cfg->scrollbarsVisible());
 

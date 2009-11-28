@@ -89,11 +89,10 @@ void SimplePageView::scrollContentsBy(int dx, int dy)
 void SimplePageView::setImage(const Page &img1)
 {
     Q_ASSERT(numOfPages() > 0);
-    //if (!preserveangle)
-    //          iangle = 0;
     if (img1.getNumber() == m_currentPage)
     {
         imgLabel->setImage(img1);
+        horizontalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
         verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
     }
 }
@@ -101,12 +100,10 @@ void SimplePageView::setImage(const Page &img1)
 void SimplePageView::setImage(const Page &img1, const Page &img2)
 {
     Q_ASSERT(numOfPages() > 0);
-
-    //  if (!preserveangle)
-    //          iangle = 0;
     if (img1.getNumber() == m_currentPage)
     {
         imgLabel->setImage(img1, img2);
+        horizontalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
         verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);        
     }
 }
