@@ -1,3 +1,5 @@
+2009-11-xx:  0.5.0       --
+
 2009-09-16:  0.4.4       -- fixed bug in subdirectories handling that resulted in missing images
 
 2009-09-04:  0.4.3       -- fixed bug with p7zip archiver detection that could result in crash when opening .7z archives

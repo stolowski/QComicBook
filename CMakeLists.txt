@@ -1,7 +1,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 PROJECT(QComicBook)
-SET(VERSION "0.4.2")
+SET(VERSION "0.5.0")
 SET(PACKAGE qcomicbook) 
 CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/src/config.h.cmake ${CMAKE_BINARY_DIR}/config.h)
 
@@ -20,7 +20,19 @@ INCLUDE(${QT_USE_FILE})
 SET(CPACK_SOURCE_PACKAGE_FILE_NAME "${PACKAGE}-${VERSION}")
 SET(CPACK_SOURCE_GENERATOR "TGZ")
 SET(CPACK_GENERATOR "TGZ")
-SET(CPACK_SOURCE_IGNORE_FILES ".git*" "CMakeFiles/" "Makefile" "CMakeCache" "cmake_install.cmake" "CPack*" "~$" ".o$" "moc_" "^ui_.+" ".cxx$" "config.h")
+SET(CPACK_SOURCE_IGNORE_FILES
+ "\\\\.git.*"
+ "/install_manifest\\\\.txt"
+ "CMakeFiles/"
+ "Makefile"
+ "CMakeCache"
+ "cmake_install\\\\.cmake"
+ "CPack*" "~$" "\\\\.o$"
+ "moc_.*"
+ "ui_.+"
+ "\\\\.cxx$"
+ "/config\\\\.h$"
+ "/qcomicbook$")
 INCLUDE(CPack)
 
 ADD_SUBDIRECTORY(src)

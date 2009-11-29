@@ -25,7 +25,6 @@ SET(qcomicbook_src
 )
 
 SET(qcomicbook_moc_hdrs
-                 ArchiverStatus.h
 		 BookmarkManager.h 
 		 ComicBookCfgDialog.h 
 		 ComicBookSettings.h 
@@ -33,7 +32,6 @@ SET(qcomicbook_moc_hdrs
 		 PageViewBase.h 
                  ContinuousPageView.h
                  SimplePageView.h
-                 ImageFormatsInfo.h
 		 ImgDirSink.h 
 		 ImgArchiveSink.h
                  LoaderThreadBase.h 
@@ -42,7 +40,6 @@ SET(qcomicbook_moc_hdrs
 		 GoToPageWidget.h 
                  PageWidget.h
 		 StatusBar.h 
-                 SystemInfoDialog.h
 		 ThumbnailsWindow.h 
 		 ThumbnailsView.h
                  ViewProperties.h
