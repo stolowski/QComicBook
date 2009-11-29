@@ -119,7 +119,7 @@ bool PageWidget::hasTwoPages() const
 
 void PageWidget::drawPageNumber(int page, QPainter &p, int x, int y)
 {
-    const QString pagestr(QString::number(page));
+    const QString pagestr(QString::number(page + 1));
     const QFontMetrics mtr(p.fontMetrics());
     const int txtw(mtr.width(pagestr));
     p.setPen(Qt::black);
