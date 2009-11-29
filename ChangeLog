@@ -1,4 +1,13 @@
-2009-11-xx:  0.5.0       --
+2009-11-29:  0.5.0       -- implemented true continuous viewing mode. 'Continuous scrolling' option moved to 'View' menu.
+	                 -- removed 'Forward two pages in two pages mode' option.
+	                 -- cmake-based build system (replaces autoconf/automake).
+	                 -- all windows/dialogs implemented via QtDesigner's .ui files and handled by uic.
+	                 -- icons and splash screen are now handled by Qt resources system and compiled-in in the resulting
+	                    qcomicbook executable. These files are no longer installed into share/data/qcomicbook directory.
+	                 -- new, improved 'System Information' dialog.
+	                 -- new splash screen (courtesy of Adam Mateja).
+	                 -- fixed splash screen showing.
+	                 -- lots of internal and architectural changes.
 
 2009-09-16:  0.4.4       -- fixed bug in subdirectories handling that resulted in missing images
 
