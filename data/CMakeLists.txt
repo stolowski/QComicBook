@@ -22,7 +22,7 @@ SET(DATA_FILES bestfit.png
 	     wholepage.png 
 	     qcomicbook-splash.png)
 
-INSTALL(FILES ${DATA_FILES} DESTINATION share/${PACKAGE})
+#INSTALL(FILES ${DATA_FILES} DESTINATION share/${PACKAGE})
 INSTALL(FILES qcomicbook.png DESTINATION share/pixmaps)
 INSTALL(FILES qcomicbook.desktop DESTINATION share/applications)
 
