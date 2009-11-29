@@ -418,7 +418,7 @@
   </action>
   <action name="actionJumpToPage" >
    <property name="text" >
-    <string>Jump to page...</string>
+    <string>Go to page...</string>
    </property>
   </action>
   <action name="actionFirstPage" >
