@@ -38,7 +38,6 @@ SET(qcomicbook_moc_hdrs
                  PageLoaderThread.h
                  ThumbnailLoaderThread.h
 		 GoToPageWidget.h 
-                 PageWidget.h
 		 StatusBar.h 
 		 ThumbnailsWindow.h 
 		 ThumbnailsView.h

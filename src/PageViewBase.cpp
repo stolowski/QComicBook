@@ -4,6 +4,7 @@
 #include <QBitmap>
 #include <QCursor>
 #include <QScrollBar>
+//#include <QGLWidget>
 #include <QPalette>
 
 using namespace QComicBook;
@@ -11,7 +12,7 @@ using namespace QComicBook;
 const float PageViewBase::JUMP_FACTOR = 0.85f;
 
 PageViewBase::PageViewBase(QWidget *parent, int physicalPages, const ViewProperties &props)
-    : QScrollArea(parent)
+    : QGraphicsView(parent)
     , m_physicalPages(physicalPages)
     , props(props)
     , smallcursor(NULL)
@@ -19,6 +20,11 @@ PageViewBase::PageViewBase(QWidget *parent, int physicalPages, const ViewPropert
     context_menu = new QMenu(this);
     connect(&this->props, SIGNAL(changed()), this, SLOT(propsChanged()));
     recalculateScrollSpeeds();
+
+    //  setViewport(new QGLWidget);
+
+    scene = new QGraphicsScene(this);
+    setScene(scene);
 }
 
 PageViewBase::~PageViewBase()
@@ -42,6 +48,8 @@ void PageViewBase::contextMenuEvent(QContextMenuEvent *e)
 
 void PageViewBase::mouseMoveEvent(QMouseEvent *e)
 {
+    if (e->buttons())
+    {
         if (lx >= 0)
         {
                 const int dx = lx - e->x();
@@ -55,6 +63,7 @@ void PageViewBase::mouseMoveEvent(QMouseEvent *e)
         }
         lx = e->x();
         ly = e->y();
+    }
 }
 
 void PageViewBase::mousePressEvent(QMouseEvent *e)
@@ -368,6 +377,7 @@ void PageViewBase::recalculateScrollSpeeds()
 
 void PageViewBase::resizeEvent(QResizeEvent *e)
 {
-    QScrollArea::resizeEvent(e);
+    QGraphicsView::resizeEvent(e);
+    setSceneRect(scene->itemsBoundingRect());
     recalculateScrollSpeeds();
 }

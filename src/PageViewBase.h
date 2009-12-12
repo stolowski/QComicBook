@@ -1,10 +1,11 @@
 #ifndef __PAGEVIEWBASE_H
 #define __PAGEVIEWBASE_H
 
-#include <QScrollArea>
+#include <QGraphicsView>
 #include "ViewProperties.h"
 
 class QMenu;
+class QGraphicsScene;
 
 namespace QComicBook
 {
@@ -13,7 +14,7 @@ namespace QComicBook
 
 	enum Scaling { Smooth, Fast };
 
-	class PageViewBase: public QScrollArea
+	class PageViewBase: public QGraphicsView
 	{
 	Q_OBJECT
 
@@ -92,6 +93,7 @@ namespace QComicBook
             void delRequests();
 
             ViewProperties props;
+            QGraphicsScene *scene;
 
         private:
             static const float JUMP_FACTOR; //factor used to calculate the amount of space to scroll when scrolling page with space

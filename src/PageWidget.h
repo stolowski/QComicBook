@@ -13,7 +13,7 @@
 #ifndef __PAGEWIDGET_H
 #define __PAGEWIDGET_H
 
-#include <QWidget>
+#include <QGraphicsItem>
 #include <QPixmap>
 
 namespace QComicBook
@@ -21,32 +21,30 @@ namespace QComicBook
     class Page;
     class PageViewBase;
 
-    class PageWidget: public QWidget
+    class PageWidget: public QGraphicsItem
     {
-    Q_OBJECT
-            
-    public slots:
-        void propsChanged();
-
     public:
         PageWidget(PageViewBase *parent, int w, int h, int pageNum, bool twoPages=false);
         virtual ~PageWidget();
 
+        void propsChanged();
         void setImage(const Page &img1);
         void setImage(const Page &img1, const Page &img2);
         void dispose();
         bool isDisposed() const;
         const QPixmap* pixmap() const;
         bool isInView(int vy1, int vy2) const;
-        virtual void paintEvent(QPaintEvent *event);
-        virtual void resizeEvent(QResizeEvent *event);
-//        virtual QSize sizeHint() const;
+        QRectF boundingRect() const;
+        void paint(QPainter *painter, const QStyleOptionGraphicsItem *opt, QWidget *widget = 0);
         void redrawImages();
         void setEstimatedSize(int w, int h);
         bool estimatedSize() const;
         int pageNumber() const;
         bool hasTwoPages() const;
         int numOfPages() const;
+        int width() const;
+        int height() const;
+        QSize size() const;
 
     protected:
         void deletePages();

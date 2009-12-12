@@ -32,21 +32,9 @@ ContinuousPageView::ContinuousPageView(QWidget *parent, int physicalPages, const
     , m_y1pos(NULL)
     , m_y2pos(NULL)
 {
-    //setFocusPolicy(QWidget::StrongFocus);
- 
-    QWidget *w = new QWidget(this);
-    w->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
-    m_layout = new QVBoxLayout(w);
-    m_layout->setContentsMargins(0, 0, 0, 0);
-    m_layout->setSpacing(0);
-    m_layout->setAlignment(Qt::AlignCenter);
-
     recreatePageWidgets();
     recalculatePageSizes();
 
-    setWidget(w);
-    setWidgetResizable(true);
-    
     setBackground(props.background());
     setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 
@@ -82,6 +70,8 @@ void ContinuousPageView::propsChanged()
     recalculatePageSizes();
     disposeOrRequestPages();
     update();
+
+    setSceneRect(scene->itemsBoundingRect()); //TODO
 }
 
 void ContinuousPageView::scrollbarRangeChanged(int min, int max)
@@ -122,13 +112,13 @@ void ContinuousPageView::recreatePageWidgets()
             {
                 PageWidget *p = new PageWidget(this, w, h, i, true);
                 imgLabel.append(p);
-                m_layout->addWidget(p);
+                scene->addItem(p);
             }
             if (numOfPages() & 1) // odd number of pages
             {
                 PageWidget *p = new PageWidget(this, w, h, i);
                 imgLabel.append(p);
-                m_layout->addWidget(p);
+                scene->addItem(p);
             }
 
         }
@@ -137,9 +127,8 @@ void ContinuousPageView::recreatePageWidgets()
             for (int i=0; i<numOfPages(); i++)
             {
                 PageWidget *p = new PageWidget(this, w, h, i);
-                p->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
                 imgLabel.append(p);
-                m_layout->addWidget(p);
+                scene->addItem(p);
             }
         }
         
@@ -277,7 +266,7 @@ void ContinuousPageView::recalculatePageSizes()
                 ++n;
             }
         }
-        if (n > 0)
+        if (n > 0) //if we had at least one real size, calculate and set estimated sizes
         {
             int y = 0;
             avgw /= n;
@@ -291,6 +280,7 @@ void ContinuousPageView::recalculatePageSizes()
                 {
                     p->setEstimatedSize(avgw, avgh);
                 }
+                p->setPos(0, y); //??
                 // update positions lookup
                 m_y1pos[i] = y;
                 m_y2pos[i] = y + p->height();
@@ -303,6 +293,7 @@ void ContinuousPageView::recalculatePageSizes()
             for (int i=0; i<imgLabel.size(); i++)
             {
                 PageWidget *p = imgLabel[i];
+                p->setPos(0, y); //??
                 // update positions lookup
                 m_y1pos[i] = y;
                 m_y2pos[i] = y + p->height();
@@ -310,6 +301,7 @@ void ContinuousPageView::recalculatePageSizes()
             }
         }
     }
+    setSceneRect(scene->itemsBoundingRect()); //TODO
 }
 
 

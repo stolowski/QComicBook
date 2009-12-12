@@ -16,14 +16,14 @@
 #include "ComicBookSettings.h"
 #include <QPaintEvent>
 #include <QPainter>
-#include <QSizePolicy>
 #include <QScrollBar>
+#include <QStyleOptionGraphicsItem>
 #include <QDebug>
 
 using namespace QComicBook;
 
 PageWidget::PageWidget(PageViewBase *parent, int w, int h, int pageNum, bool twoPages)
-    : QWidget(parent)
+    : QGraphicsItem()
     , view(parent)
     , m_pageNum(pageNum)
     , m_twoPages(twoPages)
@@ -32,13 +32,40 @@ PageWidget::PageWidget(PageViewBase *parent, int w, int h, int pageNum, bool two
     , estimated(true)
 {
     m_image[0] = m_image[1] = NULL;
-    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    setFixedSize(w, h);
 }
 
 PageWidget::~PageWidget()
 {
     dispose();
+}
+
+void PageWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt, QWidget *widget)
+{
+    if (m_pixmap)
+    {
+//        painter->drawPixmap(opt->rect().x(), opt->rect().y(), *m_pixmap, opt->rect().x()-xoff, opt->rect().y()-yoff, opt->rect().width(), opt->rect().height());
+        painter->drawPixmap(opt->exposedRect, *m_pixmap, opt->exposedRect);
+    }
+}
+
+QRectF PageWidget::boundingRect() const
+{
+    return QRectF(0.0f, 0.0f, pageSize.width(), pageSize.height());
+}
+
+int PageWidget::width() const
+{
+    return pageSize.width();
+}
+
+int PageWidget::height() const
+{
+    return pageSize.height();
+}
+
+QSize PageWidget::size() const
+{
+    return pageSize;
 }
 
 void PageWidget::deletePages()
@@ -231,6 +258,8 @@ void PageWidget::redrawImages()
         {
             delete m_pixmap;
             m_pixmap = new QPixmap(pixmapWidth, pixmapHeight);
+            qDebug() << "PageWidget: recreating pixmap";
+           
         }
         QPainter p(m_pixmap);
         p.setRenderHint(QPainter::SmoothPixmapTransform, ComicBookSettings::instance().smoothScaling());
@@ -289,10 +318,10 @@ void PageWidget::redrawImages()
         p.end();
     }
 
-    setContentsMargins(xoff, yoff, 0, 0);
-    setFixedSize(pixmapWidth + 2*xoff, pixmapHeight + 2*yoff);  
+    //setContentsMargins(xoff, yoff, 0, 0); TODO
+    //setFixedSize(pixmapWidth + 2*xoff, pixmapHeight + 2*yoff);  TODO
   
-    updateGeometry();
+    prepareGeometryChange();
     update();
 }
 
@@ -307,7 +336,7 @@ int PageWidget::numOfPages() const
     return n;
 }
 
-void PageWidget::paintEvent(QPaintEvent *event)
+/*void PageWidget::paintEvent(QPaintEvent *event)
 {
     if (m_pixmap)
     {
@@ -315,12 +344,7 @@ void PageWidget::paintEvent(QPaintEvent *event)
         p.drawPixmap(event->rect().x(), event->rect().y(), *m_pixmap, event->rect().x()-xoff, event->rect().y()-yoff, event->rect().width(), event->rect().height());
     }
     event->accept();
-}
-
-void PageWidget::resizeEvent(QResizeEvent *event)
-{
-    QWidget::resizeEvent(event);
-}
+    }*/
 
 void PageWidget::propsChanged()
 {
