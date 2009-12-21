@@ -8,10 +8,12 @@ class QTime;
 
 namespace QComicBook
 {
+    class PageViewBase;
+
     class Lens: public QGraphicsItem
     {
     public:
-        Lens();
+        Lens(PageViewBase *view);
         ~Lens();
 
         QRectF boundingRect() const;
@@ -21,6 +23,7 @@ namespace QComicBook
         QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
     private:
+        PageViewBase *m_view;
         QPixmap *m_pixmap;
         QTime *m_time;
     };

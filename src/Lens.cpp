@@ -1,10 +1,12 @@
 #include "Lens.h"
 #include "PageWidget.h"
+#include "PageViewBase.h"
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <QPixmap>
 #include <QTime>
 #include <QtAlgorithms>
+#include <QScrollBar>
 #include <QDebug>
 
 using namespace QComicBook;
@@ -14,8 +16,9 @@ bool cmpItemsY(const QGraphicsItem *i1, const QGraphicsItem *i2)
     return i1->y() < i2->y();
 }
 
-Lens::Lens(): QGraphicsItem()
-            , m_pixmap(0)
+Lens::Lens(PageViewBase *view): QGraphicsItem()
+                              , m_view(view)
+                              , m_pixmap(0)
 {
     m_time = new QTime();
     m_time->start();
@@ -46,38 +49,22 @@ QRectF Lens::boundingRect() const
 
 QVariant Lens::itemChange(GraphicsItemChange change, const QVariant &value)
 {
-    if (change == ItemPositionChange && scene() && m_time->elapsed() > 10)
+    if (change == ItemPositionChange && scene() && m_time->elapsed() > 25)
     {
-        QPointF newPos = value.toPointF();
-        qDebug() << "lens move" << newPos;
+        QPointF newPos = value.toPointF(); //lens global position (scroll area coordinates)
 
         if (!m_pixmap)
         {
             m_pixmap = new QPixmap(300, 200);
         }
+        hide(); // hide lens so that they are not rendered by view
 
-        QList<QGraphicsItem *> clist = collidingItems(Qt::IntersectsItemBoundingRect);
-        if (clist.size())
-        {
-            qSort(clist.begin(), clist.end(), cmpItemsY);
-            QPainter ptr(m_pixmap);
-            ptr.scale(2.0f, 2.0f);
-            foreach (QGraphicsItem *it, clist)
-            {
-                PageWidget *w = dynamic_cast<PageWidget*>(it);
-                Q_ASSERT(w != 0);
-                QStyleOptionGraphicsItem st;
-                
-                QPointF f = newPos - w->pos() - QPointF(75, 50);
-                ptr.translate(-f);
-                qDebug() << "pos" << f;
-                st.exposedRect = QRectF(f.x(), f.y(), 300, 200);
-                w->paint(&ptr, &st);
-            }
-            ptr.end();
-            update();
-            m_time->restart();
-        }
+        QPainter painter(m_pixmap);
+        m_view->render(&painter, QRectF(0, 0, 300, 200), QRect(newPos.x()-75, newPos.y()-50-m_view->verticalScrollBar()->value(), 150, 100));
+        painter.end();
+
+        show();        
+        m_time->restart();
     }
     return QGraphicsItem::itemChange(change, value);
 }
