@@ -4,6 +4,7 @@ SET(qcomicbook_src
         ArchiverStatus.cpp
         ArchiverStrategy.cpp
         AceArchiverStrategy.cpp
+        Lens.cpp
         P7zipArchiverStrategy.cpp
         RarArchiverStrategy.cpp
         TargzArchiverStrategy.cpp

@@ -6,6 +6,8 @@
 #include <QScrollBar>
 //#include <QGLWidget>
 #include <QPalette>
+#include <QDebug>
+#include "Lens.h"
 
 using namespace QComicBook;
 
@@ -25,6 +27,11 @@ PageViewBase::PageViewBase(QWidget *parent, int physicalPages, const ViewPropert
 
     scene = new QGraphicsScene(this);
     setScene(scene);
+
+    lens = new Lens();
+    scene->addItem(lens);
+
+    setAlignment(Qt::AlignLeft|Qt::AlignTop);
 }
 
 PageViewBase::~PageViewBase()
@@ -63,6 +70,10 @@ void PageViewBase::mouseMoveEvent(QMouseEvent *e)
         }
         lx = e->x();
         ly = e->y();
+    }
+    else
+    {
+        lens->setPos(e->pos() + QPointF(horizontalScrollBar()->value(), verticalScrollBar()->value()));
     }
 }
 

@@ -11,6 +11,7 @@ namespace QComicBook
 {
     class PageWidget;
     class Page;
+    class Lens;
 
 	enum Scaling { Smooth, Fast };
 
@@ -103,6 +104,7 @@ namespace QComicBook
             int spdx, spdy; //scroll speed
             int wheelupcnt, wheeldowncnt;
             QCursor *smallcursor;
+            Lens *lens;
             QList<int> m_requestedPages;
         };
 }
