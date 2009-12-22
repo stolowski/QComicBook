@@ -48,7 +48,7 @@ void Lens::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt, QWidget
     if (m_pixmap)
     {
         painter->drawPixmap(opt->exposedRect, *m_pixmap, QRect(opt->exposedRect.x()+m_size.width()/2, opt->exposedRect.y()+m_size.height()/2, opt->exposedRect.width(), opt->exposedRect.height()));
-        painter->setPen(QPen(Qt::red, 1.0f));
+        painter->setPen(QPen(Qt::black, 1.0f));
         painter->drawRect(-m_size.width()/2, -m_size.height()/2, m_size.width(), m_size.height());
     }
 }
@@ -67,7 +67,7 @@ QVariant Lens::itemChange(GraphicsItemChange change, const QVariant &value)
         if (!m_pixmap)
         {
             m_pixmap = new QPixmap(m_size);
-            m_pixmap->fill(); //TODO bg color?
+            m_pixmap->fill(Qt::black); //TODO bg color?
         }
         hide(); // hide lens so that they are not rendered by view
 
