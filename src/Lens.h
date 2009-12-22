@@ -23,7 +23,7 @@ namespace QComicBook
     class Lens: public QGraphicsItem
     {
     public:
-        Lens();
+        Lens(const QSize &size = QSize(300, 200));
         ~Lens();
 
         QRectF boundingRect() const;
@@ -35,6 +35,7 @@ namespace QComicBook
     private:
         QPixmap *m_pixmap;
         QTime *m_time;
+        QSize m_size;
     };
 }
 
