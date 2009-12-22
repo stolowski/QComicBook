@@ -17,7 +17,6 @@
 #include <QPixmap>
 #include <QTime>
 #include <QtAlgorithms>
-#include <QScrollBar>
 #include <QGraphicsScene>
 #include <QDebug>
 
@@ -28,9 +27,10 @@ bool cmpItemsY(const QGraphicsItem *i1, const QGraphicsItem *i2)
     return i1->y() < i2->y();
 }
 
-Lens::Lens(const QSize &size): QGraphicsItem()
-                             , m_pixmap(0)
-                             , m_size(size)
+Lens::Lens(int delay, const QSize &size): QGraphicsItem()
+                                        , m_pixmap(0)
+                                        , m_delay(delay)
+                                        , m_size(size)
 {
     m_time = new QTime();
     m_time->start();
@@ -60,7 +60,7 @@ QRectF Lens::boundingRect() const
 
 QVariant Lens::itemChange(GraphicsItemChange change, const QVariant &value)
 {
-    if (change == ItemPositionChange && scene() && m_time->elapsed() > 25)
+    if (change == ItemPositionChange && scene() && m_time->elapsed() > m_delay)
     {
         QPointF newPos = value.toPointF(); //lens global position (scroll area coordinates)
 
