@@ -28,7 +28,7 @@ PageViewBase::PageViewBase(QWidget *parent, int physicalPages, const ViewPropert
     scene = new QGraphicsScene(this);
     setScene(scene);
 
-    lens = new Lens(this);
+    lens = new Lens();
     scene->addItem(lens);
 
     setAlignment(Qt::AlignLeft|Qt::AlignTop);

@@ -1,3 +1,15 @@
+/*
+ * This file is a part of QComicBook.
+ *
+ * Copyright (C) 2005-2009 Pawel Stolowski <stolowski@gmail.com>
+ *
+ * QComicBook is free software; you can redestribute it and/or modify it
+ * under terms of GNU General Public License by Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY. See GPL for more details.
+ */
+
 #ifndef __LENS_H
 #define __LENS_H
 
@@ -8,12 +20,10 @@ class QTime;
 
 namespace QComicBook
 {
-    class PageViewBase;
-
     class Lens: public QGraphicsItem
     {
     public:
-        Lens(PageViewBase *view);
+        Lens();
         ~Lens();
 
         QRectF boundingRect() const;
@@ -23,7 +33,6 @@ namespace QComicBook
         QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
     private:
-        PageViewBase *m_view;
         QPixmap *m_pixmap;
         QTime *m_time;
     };
