@@ -1,10 +1,21 @@
+/*
+ * This file is a part of QComicBook.
+ *
+ * Copyright (C) 2005-2009 Pawel Stolowski <stolowski@gmail.com>
+ *
+ * QComicBook is free software; you can redestribute it and/or modify it
+ * under terms of GNU General Public License by Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY. See GPL for more details.
+ */
+
 #include "PageViewBase.h"
 #include <QContextMenuEvent>
 #include <QMenu>
 #include <QBitmap>
 #include <QCursor>
 #include <QScrollBar>
-//#include <QGLWidget>
 #include <QPalette>
 #include <QDebug>
 #include "Lens.h"
@@ -17,7 +28,8 @@ PageViewBase::PageViewBase(QWidget *parent, int physicalPages, const ViewPropert
     : QGraphicsView(parent)
     , m_physicalPages(physicalPages)
     , props(props)
-    , smallcursor(NULL)
+    , smallcursor(0)
+    , lens(0)
 {
     context_menu = new QMenu(this);
     connect(&this->props, SIGNAL(changed()), this, SLOT(propsChanged()));
@@ -27,15 +39,33 @@ PageViewBase::PageViewBase(QWidget *parent, int physicalPages, const ViewPropert
 
     scene = new QGraphicsScene(this);
     setScene(scene);
-
-    lens = new Lens();
-    scene->addItem(lens);
-
+   
     setAlignment(Qt::AlignLeft|Qt::AlignTop);
 }
 
 PageViewBase::~PageViewBase()
 {
+}
+
+void PageViewBase::showLens(bool f)
+{
+    if (f)
+    {
+        if (!lens)
+        {
+            lens = new Lens();
+            scene->addItem(lens);
+        }
+    }
+    else
+    {
+        if (lens)
+        {
+            scene->removeItem(lens);
+            delete lens;
+            lens = 0;
+        }
+    }
 }
 
 void PageViewBase::scrollByDelta(int dx, int dy)
@@ -73,7 +103,10 @@ void PageViewBase::mouseMoveEvent(QMouseEvent *e)
     }
     else
     {
-        lens->setPos(e->pos() + QPointF(horizontalScrollBar()->value(), verticalScrollBar()->value()));
+        if (lens)
+        {
+            lens->setPos(e->pos() + QPointF(horizontalScrollBar()->value(), verticalScrollBar()->value()));
+        }
     }
 }
 

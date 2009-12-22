@@ -39,6 +39,7 @@ Lens::Lens(): QGraphicsItem()
 Lens::~Lens()
 {
     delete m_pixmap;
+    delete m_time;
 }
 
 void Lens::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt, QWidget *widget)
@@ -60,12 +61,12 @@ QVariant Lens::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     if (change == ItemPositionChange && scene() && m_time->elapsed() > 25)
     {
-
         QPointF newPos = value.toPointF(); //lens global position (scroll area coordinates)
 
         if (!m_pixmap)
         {
             m_pixmap = new QPixmap(300, 200);
+            m_pixmap->fill(); //TODO bg color?
         }
         hide(); // hide lens so that they are not rendered by view
 

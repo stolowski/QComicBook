@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icons" >
+    <file>lens.png</file>
     <file>bestfit.png</file>
     <file>bookmark.png</file>
     <file>fbackward.png</file>

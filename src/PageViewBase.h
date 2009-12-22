@@ -1,3 +1,15 @@
+/*
+ * This file is a part of QComicBook.
+ *
+ * Copyright (C) 2005-2009 Pawel Stolowski <stolowski@gmail.com>
+ *
+ * QComicBook is free software; you can redestribute it and/or modify it
+ * under terms of GNU General Public License by Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY. See GPL for more details.
+ */
+
 #ifndef __PAGEVIEWBASE_H
 #define __PAGEVIEWBASE_H
 
@@ -30,6 +42,7 @@ namespace QComicBook
             void cancelTwoPagesRequest(int);
 
         public slots:
+            void showLens(bool f);
             virtual void setImage(const Page &img1) = 0;
             virtual void setImage(const Page &img1, const Page &img2) = 0;
             virtual void clear() = 0;
