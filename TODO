@@ -11,3 +11,5 @@
 - save Info window geometry
 - character encoding option for Info window
 - built-in decompression with third-party libraries
+- unpacking of single files on the fly
+- 'clear recently opened' menu option
