@@ -14,6 +14,9 @@
 #include <QMessageBox>
 #include <QSplashScreen>
 #include <QTimer>
+#include <QLibraryInfo>
+#include <QTranslator>
+#include <QLocale>
 #include "ComicMainWindow.h"
 #include "ComicBookSettings.h"
 #include "Thumbnail.h"
@@ -25,6 +28,17 @@ int main(int argc, char *argv[])
 	using namespace QComicBook;
 
 	QApplication app(argc, argv);
+
+        //
+        // load translation
+        QTranslator qtTrans;
+        qtTrans.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+        app.installTranslator(&qtTrans);
+
+        QTranslator qcomicbookTrans;
+        qcomicbookTrans.load("qcomicbook_" + QLocale::system().name(), DATADIR "/i18n");
+        app.installTranslator(&qcomicbookTrans);
+
 	const QString errcaption = ComicMainWindow::tr("QComicBook error");
 
         qRegisterMetaType<Page>("Page");

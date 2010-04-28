@@ -85,8 +85,11 @@ SET(qcomicbook_ui
 QT4_ADD_RESOURCES(qcomicbook_res ../data/qcomicbook.qrc)
 QT4_WRAP_CPP(qcomicbook_moc_src ${qcomicbook_moc_hdrs})
 QT4_WRAP_UI(qcomicbook_ui_src ${qcomicbook_ui})
+###QT4_ADD_TRANSLATION(qcomicbook_qm ../lang/pl_PL.ts)
 
 ADD_EXECUTABLE(qcomicbook ${qcomicbook_src} ${qcomicbook_moc_src} ${qcomicbook_ui_src} ${qcomicbook_res})
+ADD_DEPENDENCIES(qcomicbook translations)
 TARGET_LINK_LIBRARIES(qcomicbook ${QT_LIBRARIES})
 
 INSTALL(TARGETS qcomicbook DESTINATION bin)
+
