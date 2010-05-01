@@ -1,5 +1,6 @@
-Adam Mateja - for tow great splash screens
+Adam Mateja - for two great splash screens
 Donn Ingle <donn.ingle@gmail.com> - for nice QComicBook app icon and bugreports/ideas
+Lasse Liehu - patches that allow Windows compilation and improve portability
 Michal Pena (Cyb.org) - for testing, bugfixes, debian and ubuntu package and man page
 Marin Glibic - good and helpful bugreports
 Jakub Narebski - tweaks for .spec file
