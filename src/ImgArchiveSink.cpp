@@ -26,6 +26,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <time.h>
 
 using namespace QComicBook;
 using Utility::which;
@@ -251,11 +252,25 @@ void ImgArchiveSink::extractStdoutReady()
 
 QString ImgArchiveSink::makeTempDir(const QString &parent)
 {
+#ifdef Q_WS_WIN
+	const QString pattern = parent + QDir::separator() + "qcomic-";
+	srand(time(NULL));
+	int number = 0;
+	QString tmpd = pattern + QString::number(number = rand());
+	while (QFileInfo(tmpd).exists())
+	{
+		QString tmpd = pattern + QString::number(number = rand());
+	}
+	QDir dir(parent);
+	dir.mkdir(QString("qcomic-") + QString::number(number));
+	return tmpd;
+#else
 	char tmpd[1024];
 	const QString pattern = parent + QDir::separator() + "qcomic-XXXXXX";
 	strcpy(tmpd, pattern.toLatin1());
 	mkdtemp(tmpd);
 	return QString(tmpd);
+#endif
 }
 
 bool ImgArchiveSink::supportsNext() const

@@ -11,6 +11,7 @@
  */
 
 #include "Utility.h"
+#include <QCoreApplication>
 #include <QStringList>
 #include <QFileInfo>
 #include <stdlib.h>
@@ -19,10 +20,19 @@
 QString Utility::which(const QString &command)
 {
 	const QString paths = QString(getenv("PATH"));
+#ifdef Q_WS_WIN
+	QStringList plist = paths.split(";");
+	plist.prepend(QCoreApplication::applicationDirPath());
+#else
 	QStringList plist = paths.split(":");
+#endif
 	for (QStringList::const_iterator it = plist.begin(); it != plist.end(); it++)
 	{
+#ifdef Q_WS_WIN
+		QFileInfo finfo(*it + "/" + command + ".exe");
+#else
 		QFileInfo finfo(*it + "/" + command);
+#endif
 		if (finfo.isExecutable())
 			return finfo.absoluteFilePath();
 	}
