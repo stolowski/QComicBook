@@ -21,7 +21,6 @@
 #include <QRegExp>
 #include <QApplication>
 #include <QDir>
-#include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -252,25 +251,31 @@ void ImgArchiveSink::extractStdoutReady()
 
 QString ImgArchiveSink::makeTempDir(const QString &parent)
 {
-#ifdef Q_WS_WIN
-	const QString pattern = parent + QDir::separator() + "qcomic-";
-	srand(time(NULL));
-	int number = 0;
-	QString tmpd = pattern + QString::number(number = rand());
-	while (QFileInfo(tmpd).exists())
-	{
-		QString tmpd = pattern + QString::number(number = rand());
-	}
-	QDir dir(parent);
-	dir.mkdir(QString("qcomic-") + QString::number(number));
-	return tmpd;
-#else
-	char tmpd[1024];
-	const QString pattern = parent + QDir::separator() + "qcomic-XXXXXX";
-	strcpy(tmpd, pattern.toLatin1());
-	mkdtemp(tmpd);
-	return QString(tmpd);
-#endif
+    static bool initsrand = false;
+
+    //
+    // make sure srand is called only once
+    if (!initsrand)
+    {
+        srand(time(NULL));
+        initsrand = true;
+    }
+
+    QDir dir(parent);
+    for (;;)
+    {
+        const int n = rand();
+        const QString tmpd = QString("qcomic-") + QString::number(n);
+        if (!dir.exists(tmpd))
+        {
+            if (!dir.mkdir(tmpd))
+            {
+                break;
+            }
+            return parent + QDir::separator() + tmpd;
+        }
+    }
+    return QString::null;
 }
 
 bool ImgArchiveSink::supportsNext() const
