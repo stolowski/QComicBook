@@ -20,6 +20,7 @@ namespace QComicBook
 {
     class SystemInfoDialog: public QDialog, private Ui::SystemInfoDialog
     {
+        Q_OBJECT
     public:
         SystemInfoDialog(QWidget *parent);
 
