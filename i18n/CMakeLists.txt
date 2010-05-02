@@ -1,5 +1,7 @@
 QT4_ADD_TRANSLATION(qcomicbook_qm
                         qcomicbook_pl_PL.ts
+                        qcomicbook_pt_BR.ts
+                        qcomicbook_uk_UA.ts
                    )
 
 ADD_CUSTOM_TARGET(translations DEPENDS ${qcomicbook_qm})
