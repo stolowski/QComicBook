@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005-2009 Pawel Stolowski <stolowski@gmail.com>
+ * Copyright (C) 2005-2010 Pawel Stolowski <stolowski@gmail.com>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -19,6 +19,8 @@
 #include <QColor>
 #include <QDir>
 #include <QTextStream>
+#include <QDesktopServices>
+#include <iostream>
 
 #define GRP_VIEW                     "/View"
 #define OPT_TWOPAGES                 "/TwoPages"
@@ -93,20 +95,23 @@ ComicBookSettings::~ComicBookSettings()
 bool ComicBookSettings::checkDirs()
 {
 	m_dirsok = false; 
-	m_bkpath = QDir::homePath() + "/.qcomicbook";
+	m_bkpath = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+
 	QDir dir(m_bkpath);
 	if (!dir.exists())
         {
-            if (!dir.mkdir(m_bkpath))
+            if (!dir.mkpath(m_bkpath))
             {
                 return false;
             }
         }
-	
-	dir.setPath(m_thpath = m_bkpath + "/cache");
+
+        m_thpath = QDesktopServices::storageLocation(QDesktopServices::CacheLocation) + QDir::separator() + "thumbs";
+
+        dir.setPath(m_thpath);
 	if (!dir.exists())
         {
-            if (!dir.mkdir(m_thpath))
+            if (!dir.mkpath(m_thpath))
             {
                 return false;
             }

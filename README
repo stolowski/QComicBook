@@ -1,5 +1,5 @@
 QComicBook v0.5.0
-(c)by Pawel Stolowski 2005-2009
+(c)by Pawel Stolowski 2005-2010
 released under terms of GNU General Public License v2
 
 1. Introduction
@@ -12,7 +12,7 @@ mouse or keyboard navigation etc.
 
 2. Requirements
 ---------------
-QComicBook requires Qt library version >=4.3.0 (including moc and uic tools) and cmake.
+QComicBook requires Qt library version >=4.4.0 (including moc and uic tools) and cmake.
 It *may* work with earlier versions of Qt (from 4.x family), but it was not
 tested.
 
