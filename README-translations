@@ -1,0 +1,19 @@
+If you want to translate QComicBook to a language of your choice, please read on.
+
+First off, contact me to ensure no one else is working on same translation.
+Then retrieve the latest QComicBook sources using git client, or via web
+interface (download a snapshot tarball) - go to 
+http://github.com/stolowski/QComicBook
+
+Once you have the snapshot of QComicBook compiled, do the following:
+
+1. Change directory to i18n and execute "update_ts.sh qcomicbook_xx_XX.ts"
+(replace xx_XX with yours country code). This will create a skeleton
+file for your translation.
+2. Run Qt4 Linguist, open the generated .ts file and translate it.
+3. In Qt4 Linguist, click "Release As.." and save the resulting .qm file
+to /usr/share/qcomicbook/i18n/ directory (or wherever you installed
+qcomicbook).
+4. Run QComicBook; you should now see your translated messages.
+5. Once you are happy with your translation, send me the .ts file (attach the
+file "as is", or as a git diff if you're working with QComicBook git repository).
