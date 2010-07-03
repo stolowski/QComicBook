@@ -806,7 +806,7 @@ void ComicMainWindow::showAbout()
                         "QComicBook " VERSION " - comic book viewer for GNU/Linux\n"
                         "(c)by Pawel Stolowski 2005-2009\n"
                         "released under terms of GNU General Public License\n\n"
-                        "http://linux.bydg.org/~yogin\n"
+                        "http://qcomicbook.linux-projects.net\n"
                         "stolowski@gmail.com", QPixmap(":/images/qcomicbook-splash.png"));
         win->show();
 }
