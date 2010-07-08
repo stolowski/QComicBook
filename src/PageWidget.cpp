@@ -19,6 +19,7 @@
 #include <QSizePolicy>
 #include <QScrollBar>
 #include <QDebug>
+#include <stdexcept>
 
 using namespace QComicBook;
 
@@ -65,6 +66,15 @@ void PageWidget::setImage(const Page &img1, const Page &img2)
     m_image[1] = new Page(img2);
     m_twoPages = true;
     redrawImages();
+}
+
+Page PageWidget::getPage(int n)
+{
+    if (n>=0 && n<2 && m_image[n])
+    {
+        return *m_image[n];
+    }
+    throw std::runtime_error("Invalid page index");
 }
 
 const QPixmap* PageWidget::pixmap() const

@@ -105,6 +105,7 @@ void SimplePageView::setImage(const Page &img1)
         imgLabel->setImage(img1);
         horizontalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
         verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
+        emit pageReady(img1);
     }
 }
 
@@ -117,6 +118,7 @@ void SimplePageView::setImage(const Page &img1, const Page &img2)
         imgLabel->setImage(img1, img2);
         horizontalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
         verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);        
+        emit pageReady(img1, img2);
     }
 }
 

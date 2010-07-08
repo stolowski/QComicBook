@@ -26,6 +26,8 @@ namespace QComicBook
             void requestTwoPages(int);
             void cancelPageRequest(int);
             void cancelTwoPagesRequest(int);
+            void pageReady(const Page&);
+            void pageReady(const Page&, const Page &);
 
         public slots:
             virtual void setImage(const Page &img1) = 0;

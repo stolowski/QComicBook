@@ -60,8 +60,6 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
     cfg->restoreGeometry(this);
 
     pageLoader = new PageLoaderThread();
-    connect(pageLoader, SIGNAL(pageLoaded(const Page &)), this, SLOT(pageLoaded(const Page &)));
-    connect(pageLoader, SIGNAL(pageLoaded(const Page &, const Page &)), this, SLOT(pageLoaded(const Page &, const Page &)));
 
     //
     // Thumbnails window
@@ -309,6 +307,8 @@ void ComicMainWindow::setupComicImageView()
     connect(view, SIGNAL(currentPageChanged(int)), this, SLOT(currentPageChanged(int)));
     connect(pageLoader, SIGNAL(pageLoaded(const Page&)), view, SLOT(setImage(const Page&)));
     connect(pageLoader, SIGNAL(pageLoaded(const Page&, const Page&)), view, SLOT(setImage(const Page&, const Page&)));
+    connect(view, SIGNAL(pageReady(const Page &)), this, SLOT(pageLoaded(const Page &)));
+    connect(view, SIGNAL(pageReady(const Page &, const Page &)), this, SLOT(pageLoaded(const Page &, const Page &)));
     connect(view, SIGNAL(requestPage(int)), pageLoader, SLOT(request(int)));
     connect(view, SIGNAL(requestTwoPages(int)), pageLoader, SLOT(requestTwoPages(int)));
     connect(view, SIGNAL(cancelPageRequest(int)), pageLoader, SLOT(cancel(int)));
@@ -507,6 +507,7 @@ void ComicMainWindow::recentSelected(QAction *action)
 
 void ComicMainWindow::pageLoaded(const Page &page)
 {
+    qDebug() << "page ready " << page.getNumber();
     if (currpage == page.getNumber())
     {
         statusbar->setImageInfo(&page);
@@ -515,6 +516,7 @@ void ComicMainWindow::pageLoaded(const Page &page)
 
 void ComicMainWindow::pageLoaded(const Page &page1, const Page &page2)
 {
+    qDebug() << "page ready " << page1.getNumber() << ", " << page2.getNumber();
     if (currpage == page1.getNumber() || currpage == page2.getNumber())
     {
         statusbar->setImageInfo(&page1, &page2);

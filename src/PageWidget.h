@@ -34,6 +34,8 @@ namespace QComicBook
 
         void setImage(const Page &img1);
         void setImage(const Page &img1, const Page &img2);
+        Page getPage(int n);
+
         void dispose();
         bool isDisposed() const;
         const QPixmap* pixmap() const;

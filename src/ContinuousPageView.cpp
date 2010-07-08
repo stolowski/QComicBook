@@ -194,6 +194,7 @@ void ContinuousPageView::disposeOrRequestPages()
             else
             {
                 qDebug() << "already loaded" << w->pageNumber();
+                emit w->hasTwoPages() ? pageReady(w->getPage(0), w->getPage(1)) : pageReady(w->getPage(0));
             }
             if (m_firstVisible < 0)
             {
@@ -336,6 +337,8 @@ void ContinuousPageView::setImage(const Page &img1)
     qDebug() << "setImage:" << img1.getNumber() << "widget page" << w->pageNumber();
     w->setImage(img1);
     recalculatePageSizes();
+
+    emit pageReady(img1);
 }
 
 void ContinuousPageView::setImage(const Page &img1, const Page &img2)
@@ -348,6 +351,8 @@ void ContinuousPageView::setImage(const Page &img1, const Page &img2)
     qDebug() << "setImage:" << img1.getNumber() << img2.getNumber() << "widget page" << w->pageNumber();
     w->setImage(img1, img2);
     recalculatePageSizes();
+
+    emit pageReady(img1, img2);
 }
 
 void ContinuousPageView::resizeEvent(QResizeEvent *e)
