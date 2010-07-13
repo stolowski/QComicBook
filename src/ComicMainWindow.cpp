@@ -486,23 +486,33 @@ void ComicMainWindow::setRecentFilesMenu(const History &hist)
         foreach (QAction *a, actions) {
             a->deleteLater();
         }
-        for (QStringList::const_iterator it = list.begin(); it != list.end(); it++)
-                menuRecentFiles->addAction(*it);
+
+        foreach (const QString &s, list)
+        {
+            const QFileInfo finfo(s);
+            QString pth(finfo.absolutePath());
+            if (pth.size() > 8)
+            {
+                pth = pth.replace(4, pth.size()-8, "...");
+            }
+            QAction *a = menuRecentFiles->addAction(pth + QDir::separator() + finfo.completeBaseName());
+            a->setData(s);
+        }
 }
 
 void ComicMainWindow::recentSelected(QAction *action) 
 {
-        const QString &fname = action->text();
-        if (fname != QString::null)
+    const QString fname(action->data().toString());
+    if (fname != QString::null)
+    {
+        QFileInfo finfo(fname);
+        if (!finfo.exists())
         {
-                QFileInfo finfo(fname);
-                if (!finfo.exists())
-                {
-                        recentfiles->remove(fname);
-                        menuRecentFiles->removeAction(action);
-                }
-                open(fname, 0);
+            recentfiles->remove(fname);
+            menuRecentFiles->removeAction(action);
         }
+        open(fname, 0);
+    }
 }
 
 void ComicMainWindow::pageLoaded(const Page &page)
