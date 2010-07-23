@@ -1,3 +1,13 @@
+2010-07-23:  0.6.0       -- use standard directories for cache and bookmarks file (e.g ~/.local/share/data and ~/.cache) obtained
+	                    from QDesktopServices. Qt >= 4.4.0 is now required.
+	                 -- added support for translations. Brazilian Portuguese, Finnish, French, Italian, Polish, Spanish and
+	                    Ukrainian translations added.
+	                 -- active web page and email links in 'About' dialog.
+	                 -- shorten path names in 'Recently opened' menu.
+	                 -- fixed regression: display image size info in statusbar.
+	                 -- minor fixes for better portability; QComicBook should now compile and work (with limitations) on Windows.
+	                 -- cmake build fix: make it possible to compile the program outside of the source directory.
+	
 2009-11-29:  0.5.0       -- implemented true continuous viewing mode. 'Continuous scrolling' option moved to 'View' menu.
 	                 -- removed 'Forward two pages in two pages mode' option.
 	                 -- cmake-based build system (replaces autoconf/automake).

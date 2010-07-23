@@ -1,7 +1,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 PROJECT(QComicBook)
-SET(VERSION "0.5.0")
+SET(VERSION "0.6.0")
 SET(PACKAGE qcomicbook) 
 CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/src/config.h.cmake ${CMAKE_BINARY_DIR}/config.h)
 
@@ -30,6 +30,7 @@ SET(CPACK_SOURCE_IGNORE_FILES
  "CPack*" "~$" "\\\\.o$"
  "moc_.*"
  "ui_.+"
+ "\\\\.qm$"
  "\\\\.cxx$"
  "/config\\\\.h$"
  "/qcomicbook$")
