@@ -43,3 +43,27 @@ void Utility::touch(const QString &fname)
 {
     utime(fname.toLocal8Bit(), NULL);
 }
+
+QString Utility::shortenPath(const QString &path, const QString &filler, int maxlen)
+{
+    if (path.length() > maxlen)
+    {
+        QString shortPath("/" + filler );
+        QFileInfo finf(path);
+        maxlen -= finf.fileName().length() + shortPath.length();
+        const QString p(finf.absolutePath());
+        if (p.length() > shortPath.length())
+        {
+            if (maxlen>0)
+            {
+                int i = p.length() - maxlen;
+                for (; i<p.length() && p[i]!='/'; i++);
+                shortPath.append(p.right(p.length() - i ));
+            }
+            shortPath.append("/");            
+            shortPath.append(finf.fileName());
+            return shortPath;
+        }
+    }
+    return path;
+}

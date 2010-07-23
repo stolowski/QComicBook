@@ -489,13 +489,7 @@ void ComicMainWindow::setRecentFilesMenu(const History &hist)
 
         foreach (const QString &s, list)
         {
-            const QFileInfo finfo(s);
-            QString pth(finfo.absolutePath());
-            if (pth.size() > 8)
-            {
-                pth = pth.replace(4, pth.size()-8, "...");
-            }
-            QAction *a = menuRecentFiles->addAction(pth + QDir::separator() + finfo.completeBaseName());
+            QAction *a = menuRecentFiles->addAction(Utility::shortenPath(s, "...", 64));
             a->setData(s);
         }
 }

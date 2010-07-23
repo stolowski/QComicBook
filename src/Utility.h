@@ -19,6 +19,7 @@ namespace Utility
 {
 	QString which(const QString &command); //similiar to shell 'which' command
         void touch(const QString &path);
+        QString shortenPath(const QString &path, const QString &filler, int maxlen);
 }
 
 #endif
