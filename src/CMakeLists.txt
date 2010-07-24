@@ -42,6 +42,7 @@ SET(qcomicbook_src
 	PageViewBase.cpp
 	SimplePageView.cpp
 	ContinuousPageView.cpp
+        RecentFilesMenu.cpp
 	StatusBar.cpp
 	SystemInfoDialog.cpp
 	Thumbnail.cpp
@@ -67,6 +68,7 @@ SET(qcomicbook_moc_hdrs
 	ThumbnailLoaderThread.h
 	GoToPageWidget.h 
 	PageWidget.h
+        RecentFilesMenu.h
 	StatusBar.h 
         SystemInfoDialog.h
 	ThumbnailsWindow.h 

@@ -229,7 +229,7 @@ QString ComicBookSettings::lastDir() const
     return m_lastdir;
 }
 
-const History& ComicBookSettings::recentlyOpened() const
+const QStringList& ComicBookSettings::recentlyOpened() const
 {
     return m_recent;
 }
@@ -396,10 +396,10 @@ void ComicBookSettings::lastDir(const QString &d)
     }
 }
 
-void ComicBookSettings::recentlyOpened(const History &hist)
+void ComicBookSettings::recentlyOpened(const QStringList &hist)
 {
     m_recent = hist;
-    m_cfg->setValue(GRP_RUNTIME OPT_RECENT, m_recent.getAll());
+    m_cfg->setValue(GRP_RUNTIME OPT_RECENT, m_recent);
 }
 
 void ComicBookSettings::background(const QColor &color)

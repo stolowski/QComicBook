@@ -14,7 +14,6 @@
 #define __SETTINGS_H
 
 #include "PageViewBase.h"
-#include "History.h"
 #include "EnumMap.h"
 #include <QObject>
 #include <QFont>
@@ -48,7 +47,7 @@ namespace QComicBook
 			Size pageSize() const;
 			bool smoothScaling() const;
 			QString lastDir() const;
-			const History& recentlyOpened() const;
+			const QStringList& recentlyOpened() const;
 			QColor background() const;
 			int cacheSize() const;
 			bool cacheAutoAdjust() const;
@@ -76,7 +75,7 @@ namespace QComicBook
 			void pageSize(Size s);
 			void smoothScaling(bool s);
 			void lastDir(const QString &d);
-			void recentlyOpened(const History &hist);
+			void recentlyOpened(const QStringList &hist);
 			void background(const QColor &color);
 			void cacheSize(int s);
 			void cacheAutoAdjust(bool f);
@@ -121,7 +120,7 @@ namespace QComicBook
 			bool m_smoothscaling;
 			QString m_lastdir;
 			QColor m_bgcolor;
-			History m_recent;
+			QStringList m_recent;
 			int m_cachesize;
 			int m_thumbsage;
 			bool m_cacheadjust;

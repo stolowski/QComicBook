@@ -33,6 +33,7 @@
 #include "SystemInfoDialog.h"
 #include "GoToPageWidget.h"
 #include "PageLoaderThread.h"
+#include "RecentFilesMenu.h"
 #include <QMenu>
 #include <QStringList>
 #include <QAction>
@@ -120,10 +121,11 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
 
     //
     // File menu
-    menuRecentFiles = new QMenu(tr("Recently opened"), this);
+    menuRecentFiles = new RecentFilesMenu(tr("Recently opened"), this, 10);
     menuFile->insertMenu(actionSavePageAs, menuRecentFiles);
     menuFile->insertSeparator(actionSavePageAs);
-    connect(menuRecentFiles, SIGNAL(triggered(QAction *)), this, SLOT(recentSelected(QAction *)));
+    connect(menuRecentFiles, SIGNAL(selected(const QString &)), this, SLOT(recentSelected(const QString &)));
+    connect(menuRecentFiles, SIGNAL(cleanupRequest()), menuRecentFiles, SLOT(removeAll()));
     connect(actionClose, SIGNAL(triggered()), this, SLOT(closeSink()));
 
     // View menu
@@ -186,9 +188,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
     addAction(actionJumpUp);
     
     lastdir = cfg->lastDir();
-    recentfiles = new History(10);
-    *recentfiles = cfg->recentlyOpened();
-    setRecentFilesMenu(*recentfiles);
+    menuRecentFiles->set(cfg->recentlyOpened());
     
     cfg->restoreDockLayout(this);
     
@@ -211,7 +211,6 @@ ComicMainWindow::~ComicMainWindow()
 
     saveSettings();        
     
-    delete recentfiles;
     delete bookmarks;
     
     pageLoader->stop();
@@ -477,36 +476,14 @@ void ComicMainWindow::updateCaption()
     setWindowTitle(c);
 }
 
-void ComicMainWindow::setRecentFilesMenu(const History &hist)
+void ComicMainWindow::recentSelected(const QString &fname) 
 {
-        QStringList list = hist.getAll();
-        //workaround for crash when removing recent items via clear()
-        //when it's called from recentSelected handler.
-        QList<QAction *> actions = menuRecentFiles->actions();
-        foreach (QAction *a, actions) {
-            a->deleteLater();
-        }
-
-        foreach (const QString &s, list)
-        {
-            QAction *a = menuRecentFiles->addAction(Utility::shortenPath(s, "...", 64));
-            a->setData(s);
-        }
-}
-
-void ComicMainWindow::recentSelected(QAction *action) 
-{
-    const QString fname(action->data().toString());
-    if (fname != QString::null)
+    QFileInfo finfo(fname);
+    if (!finfo.exists())
     {
-        QFileInfo finfo(fname);
-        if (!finfo.exists())
-        {
-            recentfiles->remove(fname);
-            menuRecentFiles->removeAction(action);
-        }
-        open(fname, 0);
+        menuRecentFiles->remove(fname);
     }
+    open(fname, 0);
 }
 
 void ComicMainWindow::pageLoaded(const Page &page)
@@ -532,8 +509,7 @@ void ComicMainWindow::sinkReady(const QString &path)
 	statusbar->setShown(actionToggleStatusbar->isChecked() && !(isFullScreen() && cfg->fullScreenHideStatusbar())); //applies back user's statusbar&toolbar preferences
 	//toolbar->setShown(actiontoggleToolbar->isOn() && !(isFullScreen() && cfg->fullScreenHideToolbar()));
 
-        recentfiles->append(path);
-        setRecentFilesMenu(*recentfiles);
+        menuRecentFiles->add(path);
 
         enableComicBookActions(true);
         updateCaption();
@@ -935,7 +911,7 @@ void ComicMainWindow::saveSettings()
         cfg->saveGeometry(this);
         cfg->saveDockLayout(this);
         cfg->lastDir(lastdir);
-        cfg->recentlyOpened(*recentfiles);
+        cfg->recentlyOpened(menuRecentFiles->get());
         
         cfg->showStatusbar(actionToggleStatusbar->isChecked());
 

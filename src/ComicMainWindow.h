@@ -17,7 +17,6 @@
 
 #include <QMainWindow>
 #include "ui_ComicMainWindow.h"
-#include "History.h"
 
 class QMenu;
 class QLabel;
@@ -35,7 +34,7 @@ namespace QComicBook
         class PageLoaderThread;
         class Page;
         class ThumbnailLoaderThread;
-	using Utility::History;
+        class RecentFilesMenu;
 
 	//! The main window of QComicBook.
 	class ComicMainWindow: public QMainWindow, private Ui::ComicMainWindow
@@ -46,7 +45,6 @@ namespace QComicBook
 			ImgDirSink *sink;
 			PageViewBase *view;
 			ThumbnailsWindow *thumbswin;
-			History *recentfiles;
 			Bookmarks *bookmarks;
 			StatusBar *statusbar;
 			ComicBookSettings *cfg;
@@ -54,7 +52,7 @@ namespace QComicBook
 					
 			bool savedToolbarState;
 			QMenu *context_menu;
-			QMenu *menuRecentFiles;
+			RecentFilesMenu *menuRecentFiles;
                         QAction *actionToggleThumbnails;
                         QAction *actionExitFullScreen;
 			QLabel *pageinfo; //!<page info displayed in right-click context menu
@@ -81,8 +79,7 @@ namespace QComicBook
 			void sinkReady(const QString &path);
 			void sinkError(int code);
 			void updateCaption();
-			void setRecentFilesMenu(const History &hist);
-			void recentSelected(QAction *action);
+			void recentSelected(const QString &fname);
 			void bookmarkSelected(QAction *action);
 			void thumbnailsWindowShown();
 			void savePageAs();
