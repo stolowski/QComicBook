@@ -22,6 +22,7 @@ class QMenu;
 class QLabel;
 class QKeyEvent;
 class QAction;
+class QPrinter;
 
 namespace QComicBook
 {
@@ -35,6 +36,7 @@ namespace QComicBook
         class Page;
         class ThumbnailLoaderThread;
         class RecentFilesMenu;
+        class PrinterThread;
 
 	//! The main window of QComicBook.
 	class ComicMainWindow: public QMainWindow, private Ui::ComicMainWindow
@@ -59,6 +61,8 @@ namespace QComicBook
 			QString lastdir; //!<last opened directory for Open File/Directory dialog
                         PageLoaderThread *pageLoader;
                         ThumbnailLoaderThread *thumbnailLoader;
+                        QPrinter *printer;
+                        PrinterThread *printThread;
                         		
 		protected:
 			virtual void dragEnterEvent(QDragEnterEvent *e);
@@ -117,6 +121,7 @@ namespace QComicBook
 			void toggleContinousScroll(bool f);
 			void toggleJapaneseMode(bool f);
 			void reloadPage();
+                        void openPrintDialog();
 
 		public:
 			ComicMainWindow(QWidget *parent);

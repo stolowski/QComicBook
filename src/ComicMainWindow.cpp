@@ -34,6 +34,7 @@
 #include "GoToPageWidget.h"
 #include "PageLoaderThread.h"
 #include "RecentFilesMenu.h"
+#include "PrinterThread.h"
 #include <QMenu>
 #include <QStringList>
 #include <QAction>
@@ -46,6 +47,8 @@
 #include <QWidgetAction>
 #include <QList>
 #include <QUrl>
+#include <QPrinter>
+#include <QPrintDialog>
 #include <QDebug>
 
 using namespace QComicBook;
@@ -95,6 +98,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
     connect(actionOpenDirectory, SIGNAL(triggered(bool)), this, SLOT(browseDirectory()));
     connect(actionOpenNext, SIGNAL(triggered(bool)), this, SLOT(openNext()));
     connect(actionOpenPrevious, SIGNAL(triggered(bool)), this, SLOT(openPrevious()));
+    connect(actionPrint, SIGNAL(triggered(bool)), this, SLOT(openPrintDialog()));
     connect(actionSavePageAs, SIGNAL(triggered(bool)), this, SLOT(savePageAs()));
     connect(actionShowInfo, SIGNAL(triggered(bool)), this, SLOT(showInfo()));
     connect(actionExitFullScreen, SIGNAL(triggered(bool)), this, SLOT(exitFullscreen()));
@@ -331,6 +335,7 @@ void ComicMainWindow::enableComicBookActions(bool f)
         actionOpenNext->setEnabled(x);
         actionOpenPrevious->setEnabled(x);
 	actionSavePageAs->setEnabled(x);
+        actionPrint->setEnabled(x);
 
         //
         // view menu
@@ -876,6 +881,18 @@ void ComicMainWindow::savePageAs()
                         }
 		}
 	}
+}
+
+void ComicMainWindow::openPrintDialog()
+{
+    printer = new QPrinter();
+    QPrintDialog printdlg(printer, this);
+    printdlg.setMinMax(1, sink->numOfImages());
+    if (printdlg.exec() == QDialog::Accepted)
+    {
+        printThread = new PrinterThread(sink, printer, printdlg.printRange(), printdlg.fromPage(), printdlg.toPage());
+        printThread->start();
+    }
 }
 
 void ComicMainWindow::bookmarkSelected(QAction *action) 
