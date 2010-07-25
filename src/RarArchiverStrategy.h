@@ -24,6 +24,10 @@ namespace QComicBook
         virtual ~RarArchiverStrategy();
 
         virtual void configure();
+        virtual QList<ArchiverHint> getHints() const;
+
+    private:
+        bool nonfree_unrar;
     };
 }
 

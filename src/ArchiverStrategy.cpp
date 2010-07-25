@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005-2009 Pawel Stolowski <stolowski@gmail.com>
+ * Copyright (C) 2005-2010 Pawel Stolowski <stolowski@gmail.com>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -119,6 +119,16 @@ bool ArchiverStrategy::canOpen(const QString &filename) const
     {
         return canOpen(&file);
     }
+}
+
+QList<ArchiverHint> ArchiverStrategy::getHints() const
+{
+    return QList<ArchiverHint>(); // no hints by default
+}
+
+bool ArchiverStrategy::isSupported() const
+{
+    return supported;
 }
 
 ArchiverStrategy::operator ArchiverStatus() const

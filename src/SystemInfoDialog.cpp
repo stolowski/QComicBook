@@ -27,6 +27,7 @@ void SystemInfoDialog::updateInfoText()
     QString text;
     
     QList<ArchiverStatus> supported, unsupported;
+    const QList<ArchiverHint> hints(ArchiversConfiguration::instance().getHints());
 
     foreach (ArchiverStatus s, ArchiversConfiguration::instance().getArchiversStatus())
     {
@@ -100,15 +101,32 @@ void SystemInfoDialog::updateInfoText()
         }
         text.append("</table>");
         text.append("</p>");
+    }
 
+    if (hints.size())
+    {
         text.append("<p>");
-        text.append("<h3>");
-        text.append(tr("Hint"));
-        text.append("</h3>");
-
-        text.append(tr("Some archives are not supported because essential external utilities are missing. "
-                       "Please install required executables and restart QComicBook. "
-                       "Note: if more than one executable is listed for given archive type, then it is sufficient to install just one of them."));
+        text.append("<h2>");
+        text.append(tr("Hints"));
+        text.append("</h2>");
+        text.append("<table width=100% cellspacing=0 cellpadding=5 border=0>");
+        foreach (ArchiverHint h, hints)
+        {
+            text.append("<tr><td>");
+            text.append("<img src=\":/icons/hint_");
+            switch (h.getSeverity())
+            {
+                case ArchiverHint::Info: text.append("info"); break;
+                case ArchiverHint::Warning: text.append("warning"); break;
+                case ArchiverHint::Error: text.append("error"); break;
+                default: break;
+            }
+            text.append(".png\"/>");
+            text.append("</td><td>");
+            text.append(h.getMessage());
+            text.append("</td></tr>");
+        }
+        text.append("</table>");
         text.append("</p>");
     }
 

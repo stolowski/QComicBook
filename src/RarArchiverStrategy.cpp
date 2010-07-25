@@ -11,14 +11,16 @@
  */
 
 #include "RarArchiverStrategy.h"
+#include "ArchiversConfiguration.h"
 #include "Utility.h"
 #include <QTextStream>
+#include <QString>
 
 using namespace QComicBook;
 using Utility::which;
 
 RarArchiverStrategy::RarArchiverStrategy()
-    : ArchiverStrategy("rar", FileSignature(0, "\x52\x61\x72\x21", 4))
+    : ArchiverStrategy("rar", FileSignature(0, "\x52\x61\x72\x21", 4)), nonfree_unrar(false)
 {
 }
 
@@ -41,7 +43,6 @@ void RarArchiverStrategy::configure()
     else if (which("unrar") != QString::null)
     {
         FILE *f;
-        bool nonfree_unrar = false;
         //
         // now determine which unrar it is - free or non-free
         if ((f = popen("unrar", "r")) != NULL)
@@ -75,4 +76,18 @@ void RarArchiverStrategy::configure()
         setListArguments("unrar-free -t @F");
         setSupported();
     }
+}
+
+QList<ArchiverHint> RarArchiverStrategy::getHints() const
+{
+    QList<ArchiverHint> hints;
+    if (!nonfree_unrar)
+    {
+        hints.append(ArchiverHint(
+                         ArchiversConfiguration::tr("Free (opensource) version of unrar was detected. "
+                                                    "This version has problems with many rar archives. "
+                                                    "It is recommended to install the non-free unrar and restart QComicBook."),
+                         ArchiverHint::Warning));
+    }
+    return hints;
 }

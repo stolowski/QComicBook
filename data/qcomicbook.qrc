@@ -1,5 +1,8 @@
 <RCC>
-  <qresource prefix="icons" >
+  <qresource prefix="icons">
+    <file>hint_info.png</file>
+    <file>hint_warning.png</file>
+    <file>hint_error.png</file>
     <file>bestfit.png</file>
     <file>bookmark.png</file>
     <file>fbackward.png</file>
@@ -23,7 +26,7 @@
     <file>twopages.png</file>
     <file>wholepage.png</file>
   </qresource>
-  <qresource prefix="images" >
+  <qresource prefix="images">
     <file>qcomicbook-splash.png</file>
   </qresource>
 </RCC>

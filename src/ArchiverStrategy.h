@@ -1,9 +1,22 @@
+/*
+ * This file is a part of QComicBook.
+ *
+ * Copyright (C) 2005-2010 Pawel Stolowski <stolowski@gmail.com>
+ *
+ * QComicBook is free software; you can redestribute it and/or modify it
+ * under terms of GNU General Public License by Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY. See GPL for more details.
+ */
+
 #ifndef __ARCHIVER_STRATEGY
 #define __ARCHIVER_STRATEGY
 
 #include <QString>
 #include <QStringList>
 #include "FileSignature.h"
+#include "ArchiverHint.h"
 #include "ArchiverStatus.h"
 
 class QFile;
@@ -23,8 +36,10 @@ namespace QComicBook
         QStringList getListArguments(const QString &filename) const;
         QStringList getListArguments() const;
         QStringList getExtensions() const;
+        bool isSupported() const;
         static QStringList fillTemplateArguments(const QStringList &args, const QString &filename);
         virtual void configure() = 0;
+        virtual QList<ArchiverHint> getHints() const;
 
         operator ArchiverStatus() const;
 

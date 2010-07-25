@@ -14,7 +14,9 @@
 #define __ARCHIVER_STATUS_H
 
 #include <QString>
+#include <QList>
 #include <QStringList>
+#include "ArchiverHint.h"
 
 namespace QComicBook
 {

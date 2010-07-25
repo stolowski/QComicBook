@@ -13,6 +13,7 @@
 #ifndef __ARCHIVERS_CONFIGURATION_H
 #define __ARCHIVERS_CONFIGURATION_H
 
+#include <QObject>
 #include <QList>
 #include <QStringList>
 #include "ArchiverStatus.h"
@@ -21,7 +22,7 @@ namespace QComicBook
 {
     class ArchiverStrategy;
 
-    class ArchiversConfiguration
+    class ArchiversConfiguration: public QObject
     {
     public:
         static ArchiversConfiguration& instance();
@@ -30,6 +31,7 @@ namespace QComicBook
         QStringList getListArguments(const QString &filename) const;
         QStringList supportedOpenExtensions() const;
         QList<ArchiverStatus> getArchiversStatus() const;
+        QList<ArchiverHint> getHints() const;
 
     private:
         ArchiversConfiguration();

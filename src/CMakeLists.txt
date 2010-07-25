@@ -6,6 +6,7 @@ INCLUDE_DIRECTORIES(
 
 SET(qcomicbook_src
 	ArchiversConfiguration.cpp
+        ArchiverHint.cpp
 	ArchiverStatus.cpp
 	ArchiverStrategy.cpp
 	AceArchiverStrategy.cpp

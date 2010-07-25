@@ -137,7 +137,27 @@ QList<ArchiverStatus> ArchiversConfiguration::getArchiversStatus() const
     foreach (ArchiverStrategy *s, archivers)
     {
         status.append(ArchiverStatus(*s));
+
     }
     return status;
 
+}
+
+QList<ArchiverHint> ArchiversConfiguration::getHints() const
+{
+    QList<ArchiverHint> hints;
+    bool all_supported(true);
+    foreach (ArchiverStrategy *s, archivers)
+    {
+        hints.append(s->getHints());
+        all_supported = all_supported && s->isSupported();
+    }
+    if (!all_supported)
+    {
+        hints.append(ArchiverHint(tr("Some archives are not supported because essential external utilities are missing. "
+                       "Please install required executables and restart QComicBook. "
+                       "Note: if more than one executable is listed for given archive type, then it is sufficient to install "
+                       " just one of them."), ArchiverHint::Error));
+    }
+    return hints;
 }
