@@ -1,4 +1,4 @@
-QComicBook v0.5.0
+QComicBook v0.6.0
 (c)by Pawel Stolowski 2005-2010
 released under terms of GNU General Public License v2
 
@@ -12,9 +12,8 @@ mouse or keyboard navigation etc.
 
 2. Requirements
 ---------------
-QComicBook requires Qt library version >=4.4.0 (including moc and uic tools) and cmake.
-It *may* work with earlier versions of Qt (from 4.x family), but it was not
-tested.
+QComicBook requires Qt library version >=4.5.0 (including moc, uic and lrelease tools)
+and cmake.
 
 You will also need unzip, rar (or unrar), unace, p7zip and tar (with gzip and
 bzip2 support compiled in) somewhere in your PATH to handle archives. If one of

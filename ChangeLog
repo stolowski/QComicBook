@@ -1,4 +1,5 @@
-2010-xx-yy:  0.x.0       -- Added hints (wanring, information) to System information dialog; display warning if free unrar is used.
+2010-xx-yy:  0.x.0       -- added hints (warning, information) to System information dialog; display warning if free unrar is used.
+	                 -- added 'Cleanup list' option to Recently opened files menu.
 	
 2010-07-23:  0.6.0       -- use standard directories for cache and bookmarks file (e.g ~/.local/share/data and ~/.cache) obtained
 	                    from QDesktopServices. Qt >= 4.4.0 is now required.
