@@ -46,8 +46,11 @@ void PrinterThread::run()
         Page page = m_sink->getImage(i, result);
         // TODO check result
         emit printing(i);
-        painter.drawImage(QPointF(0.0f, 0.0f), page.getImage());
-        m_printer->newPage();
+        painter.drawImage(m_printer->pageRect(), page.getImage());
+        if (i != m_to-1)
+        {
+            m_printer->newPage();
+        }
     }
     painter.end();
 }
