@@ -37,6 +37,7 @@ namespace QComicBook
 			virtual void accept();
 			void showBackgroundDialog();
 			void showFontDialog();
+                        void showTempDirDialog();
 
 		public:
 			ComicBookCfgDialog(QWidget *parent, ComicBookSettings *cfg);

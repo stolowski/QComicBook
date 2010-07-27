@@ -13,6 +13,7 @@
 #include "ImgArchiveSink.h"
 #include "Utility.h"
 #include "ArchiversConfiguration.h"
+#include "ComicBookSettings.h"
 #include <QStringList>
 #include <QProcess>
 #include <QTextStream>
@@ -171,7 +172,7 @@ int ImgArchiveSink::open(const QString &path) //TODO: cleanup if already opened?
 	{
 		if (info.isReadable())
 		{
-			tmppath = makeTempDir();
+                        tmppath = makeTempDir(ComicBookSettings::instance().tmpDir());
 			archdirs.prepend(tmppath);
                         QStringList extractargs, listargs;
                         ArchiversConfiguration::instance().getExtractArguments(path, extractargs, listargs);

@@ -174,7 +174,7 @@ void ComicBookSettings::load()
 		QDir dir(m_tmpdir);
 		if (m_tmpdir.isNull() || !dir.exists())
                 {
-                    m_tmpdir = "/tmp";
+                    m_tmpdir = QDir::tempPath();
                 }
 	m_cfg->endGroup();
 }

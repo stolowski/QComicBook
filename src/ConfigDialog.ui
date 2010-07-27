@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>ConfigDialog</class>
- <widget class="QDialog" name="ConfigDialog" >
-  <property name="geometry" >
+ <widget class="QDialog" name="ConfigDialog">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,68 +10,68 @@
     <height>513</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>QComicBook Settings</string>
   </property>
-  <property name="accessibleName" >
+  <property name="accessibleName">
    <string/>
   </property>
-  <property name="modal" >
+  <property name="modal">
    <bool>true</bool>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" >
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QTabWidget" name="tabWidget" >
-     <property name="currentIndex" >
-      <number>0</number>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>2</number>
      </property>
-     <widget class="QWidget" name="tab" >
-      <attribute name="title" >
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
        <string>Display</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_4" >
+      <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QGroupBox" name="groupBox_2" >
-         <property name="title" >
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
           <string>General</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3" >
+         <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <widget class="QCheckBox" name="cb_smallcursor" >
-            <property name="text" >
+           <widget class="QCheckBox" name="cb_smallcursor">
+            <property name="text">
              <string>Small mouse cursor</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="cb_embedpagenumbers" >
-            <property name="text" >
+           <widget class="QCheckBox" name="cb_embedpagenumbers">
+            <property name="text">
              <string>Embed page numbers</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="cb_smoothscaling" >
-            <property name="text" >
+           <widget class="QCheckBox" name="cb_smoothscaling">
+            <property name="text">
              <string>Smooth scaling</string>
             </property>
            </widget>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout" >
+           <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
-             <widget class="QLabel" name="label" >
-              <property name="text" >
+             <widget class="QLabel" name="label">
+              <property name="text">
                <string>Background color</string>
               </property>
              </widget>
             </item>
             <item>
-             <spacer name="horizontalSpacer" >
-              <property name="orientation" >
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
-              <property name="sizeHint" stdset="0" >
+              <property name="sizeHint" stdset="0">
                <size>
                 <width>40</width>
                 <height>20</height>
@@ -79,8 +80,8 @@
              </spacer>
             </item>
             <item>
-             <widget class="QPushButton" name="pb_color" >
-              <property name="text" >
+             <widget class="QPushButton" name="pb_color">
+              <property name="text">
                <string/>
               </property>
              </widget>
@@ -88,36 +89,36 @@
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_2" >
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
-             <widget class="QLabel" name="label_2" >
-              <property name="text" >
+             <widget class="QLabel" name="label_2">
+              <property name="text">
                <string>Info text font</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="fontname" >
-              <property name="sizePolicy" >
-               <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
+             <widget class="QLabel" name="fontname">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="frameShape" >
+              <property name="frameShape">
                <enum>QFrame::Panel</enum>
               </property>
-              <property name="frameShadow" >
+              <property name="frameShadow">
                <enum>QFrame::Sunken</enum>
               </property>
-              <property name="text" >
+              <property name="text">
                <string/>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pb_font" >
-              <property name="text" >
+             <widget class="QPushButton" name="pb_font">
+              <property name="text">
                <string>Choose</string>
               </property>
              </widget>
@@ -128,28 +129,28 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox" >
-         <property name="title" >
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
           <string>Fullscreen mode</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2" >
+         <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <widget class="QCheckBox" name="cb_hidemenu" >
-            <property name="text" >
+           <widget class="QCheckBox" name="cb_hidemenu">
+            <property name="text">
              <string>Hide menubar</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="cb_hidetoolbar" >
-            <property name="text" >
+           <widget class="QCheckBox" name="cb_hidetoolbar">
+            <property name="text">
              <string>Hide toolbar</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="cb_hidestatus" >
-            <property name="text" >
+           <widget class="QCheckBox" name="cb_hidestatus">
+            <property name="text">
              <string>Hide statusbar</string>
             </property>
            </widget>
@@ -158,11 +159,11 @@
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer" >
-         <property name="orientation" >
+        <spacer name="verticalSpacer">
+         <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeHint" stdset="0" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
            <height>37</height>
@@ -172,32 +173,32 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_2" >
-      <attribute name="title" >
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
        <string>Performance</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_8" >
+      <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
-        <widget class="QGroupBox" name="groupBox_3" >
-         <property name="title" >
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="title">
           <string>Cache</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_5" >
+         <layout class="QVBoxLayout" name="verticalLayout_5">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_3" >
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
-             <widget class="QLabel" name="label_4" >
-              <property name="text" >
+             <widget class="QLabel" name="label_4">
+              <property name="text">
                <string>Cache Size</string>
               </property>
              </widget>
             </item>
             <item>
-             <spacer name="horizontalSpacer_2" >
-              <property name="orientation" >
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
-              <property name="sizeHint" stdset="0" >
+              <property name="sizeHint" stdset="0">
                <size>
                 <width>40</width>
                 <height>20</height>
@@ -206,17 +207,17 @@
              </spacer>
             </item>
             <item>
-             <widget class="QSpinBox" name="sb_cachesize" >
-              <property name="suffix" >
+             <widget class="QSpinBox" name="sb_cachesize">
+              <property name="suffix">
                <string>Mb</string>
               </property>
-              <property name="prefix" >
+              <property name="prefix">
                <string/>
               </property>
-              <property name="minimum" >
+              <property name="minimum">
                <number>1</number>
               </property>
-              <property name="maximum" >
+              <property name="maximum">
                <number>128</number>
               </property>
              </widget>
@@ -224,15 +225,15 @@
            </layout>
           </item>
           <item>
-           <widget class="QCheckBox" name="cb_cacheadjust" >
-            <property name="text" >
+           <widget class="QCheckBox" name="cb_cacheadjust">
+            <property name="text">
              <string>Auto adjust cache size</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="cb_preload" >
-            <property name="text" >
+           <widget class="QCheckBox" name="cb_preload">
+            <property name="text">
              <string>Preload next page</string>
             </property>
            </widget>
@@ -241,33 +242,33 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_4" >
-         <property name="title" >
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="title">
           <string>Thumbnails</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_6" >
+         <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
-           <widget class="QCheckBox" name="cb_thumbs" >
-            <property name="text" >
+           <widget class="QCheckBox" name="cb_thumbs">
+            <property name="text">
              <string>Use disk cache for thumbnails</string>
             </property>
            </widget>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_4" >
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
-             <widget class="QLabel" name="label_5" >
-              <property name="text" >
+             <widget class="QLabel" name="label_5">
+              <property name="text">
                <string>Thumbnails aging</string>
               </property>
              </widget>
             </item>
             <item>
-             <spacer name="horizontalSpacer_3" >
-              <property name="orientation" >
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
-              <property name="sizeHint" stdset="0" >
+              <property name="sizeHint" stdset="0">
                <size>
                 <width>40</width>
                 <height>20</height>
@@ -276,8 +277,8 @@
              </spacer>
             </item>
             <item>
-             <widget class="QSpinBox" name="sb_thumbsage" >
-              <property name="maximum" >
+             <widget class="QSpinBox" name="sb_thumbsage">
+              <property name="maximum">
                <number>365</number>
               </property>
              </widget>
@@ -288,11 +289,11 @@
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer_2" >
-         <property name="orientation" >
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeHint" stdset="0" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>398</width>
            <height>149</height>
@@ -302,34 +303,34 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_3" >
-      <attribute name="title" >
+     <widget class="QWidget" name="tab_3">
+      <attribute name="title">
        <string>Misc</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_9" >
+      <layout class="QVBoxLayout" name="verticalLayout_9">
        <item>
-        <widget class="QGroupBox" name="groupBox_5" >
-         <property name="title" >
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="title">
           <string>Convenience</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_7" >
+         <layout class="QVBoxLayout" name="verticalLayout_7">
           <item>
-           <widget class="QCheckBox" name="cb_autoinfo" >
-            <property name="text" >
+           <widget class="QCheckBox" name="cb_autoinfo">
+            <property name="text">
              <string>Open info dialog after opening a comicbook</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="cb_splash" >
-            <property name="text" >
+           <widget class="QCheckBox" name="cb_splash">
+            <property name="text">
              <string>Show splashscreen</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="cb_confirmexit" >
-            <property name="text" >
+           <widget class="QCheckBox" name="cb_confirmexit">
+            <property name="text">
              <string>Confirm exit</string>
             </property>
            </widget>
@@ -338,11 +339,32 @@
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer_3" >
-         <property name="orientation" >
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Temporary directory</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="le_tempdir"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="b_browsetemp">
+           <property name="text">
+            <string>Browse</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeHint" stdset="0" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
            <height>255</height>
@@ -355,11 +377,11 @@
     </widget>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="buttons" >
-     <property name="orientation" >
+    <widget class="QDialogButtonBox" name="buttons">
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="standardButtons" >
+     <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
@@ -374,11 +396,11 @@
    <receiver>ConfigDialog</receiver>
    <slot>accept()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>248</x>
      <y>254</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>157</x>
      <y>274</y>
     </hint>
@@ -390,11 +412,11 @@
    <receiver>ConfigDialog</receiver>
    <slot>reject()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>316</x>
      <y>260</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
     </hint>

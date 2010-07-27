@@ -15,6 +15,7 @@
 #include "PageViewBase.h"
 #include <QColorDialog>
 #include <QFontDialog>
+#include <QFileDialog>
 
 using namespace QComicBook;
 
@@ -55,6 +56,8 @@ ComicBookCfgDialog::ComicBookCfgDialog(QWidget *parent, ComicBookSettings *cfg):
     sb_thumbsage->setValue(cfg->thumbnailsAge());
     cb_splash->setChecked(cfg->showSplash());
     cb_confirmexit->setChecked(cfg->confirmExit());
+    le_tempdir->setText(cfg->tmpDir());
+    connect(b_browsetemp, SIGNAL(clicked()), this, SLOT(showTempDirDialog()));
 }
 
 ComicBookCfgDialog::~ComicBookCfgDialog()
@@ -84,6 +87,7 @@ void ComicBookCfgDialog::accept()
 	cfg->autoInfo(cb_autoinfo->isChecked());
 	cfg->showSplash(cb_splash->isChecked());
 	cfg->confirmExit(cb_confirmexit->isChecked());
+        cfg->tmpDir(le_tempdir->text());
 
         emit displaySettingsChanged(); //FIXME only if needed
 	QDialog::accept();
@@ -112,4 +116,13 @@ void ComicBookCfgDialog::showFontDialog()
 	font = QFontDialog::getFont(&ok, font, this);
 	if (ok)
 		updateFontPreview();
+}
+
+void ComicBookCfgDialog::showTempDirDialog()
+{
+    QString dir(QFileDialog::getExistingDirectory(this, tr("Choose temporary directory"), le_tempdir->text()));
+    if (!(dir.isNull() || dir.isEmpty()))
+    {
+        le_tempdir->setText(dir);
+    }
 }
