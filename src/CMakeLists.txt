@@ -33,6 +33,7 @@ SET(qcomicbook_src
 	ImgDirSink.cpp
 	LoaderThreadBase.cpp
 	PageLoaderThread.cpp
+        PrintProgressDialog.cpp
 	ImgSinkFactory.cpp
 	GoToPageWidget.cpp
 	ListViewThumbnail.cpp
@@ -71,6 +72,7 @@ SET(qcomicbook_moc_hdrs
 	GoToPageWidget.h 
 	PageWidget.h
         PrinterThread.h
+        PrintProgressDialog.h
         RecentFilesMenu.h
 	StatusBar.h 
         SystemInfoDialog.h
@@ -85,6 +87,7 @@ SET(qcomicbook_ui
 	BookmarkManager.ui
 	ComicMainWindow.ui
 	GoToPageWidget.ui
+        PrintProgressDialog.ui
 	SystemInfoDialog.ui
 )
 

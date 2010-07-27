@@ -14,6 +14,7 @@
 #define __PRINTER_THREAD_H
 
 #include <QThread>
+#include <QMutex>
 #include <QAbstractPrintDialog>
 
 class QPrinter;
@@ -31,10 +32,15 @@ namespace QComicBook
         ~PrinterThread();
         void run();
 
+   public slots:
+        void abort();
+
     signals:
         void printing(int n);
 
     private:
+        QMutex m_printMtx;
+        bool m_abort;
         QPrinter *m_printer;
         ImgDirSink *m_sink;
         QAbstractPrintDialog::PrintRange m_range;

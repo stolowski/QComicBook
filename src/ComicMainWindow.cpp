@@ -35,6 +35,7 @@
 #include "PageLoaderThread.h"
 #include "RecentFilesMenu.h"
 #include "PrinterThread.h"
+#include "PrintProgressDialog.h"
 #include <QMenu>
 #include <QStringList>
 #include <QAction>
@@ -62,6 +63,8 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
     
     cfg = &ComicBookSettings::instance();
     cfg->restoreGeometry(this);
+
+    printer = new QPrinter();
 
     pageLoader = new PageLoaderThread();
 
@@ -222,6 +225,7 @@ ComicMainWindow::~ComicMainWindow()
     pageLoader->wait();
     thumbnailLoader->wait();
     
+    delete printer;
     delete pageLoader;
     delete thumbnailLoader;
     
@@ -885,12 +889,17 @@ void ComicMainWindow::savePageAs()
 
 void ComicMainWindow::openPrintDialog()
 {
-    printer = new QPrinter();
     QPrintDialog printdlg(printer, this);
     printdlg.setMinMax(1, sink->numOfImages());
     if (printdlg.exec() == QDialog::Accepted)
     {
+        PrintProgressDialog *progressdlg = new PrintProgressDialog(this);
         printThread = new PrinterThread(sink, printer, printdlg.printRange(), printdlg.fromPage(), printdlg.toPage());
+        connect(printThread, SIGNAL(printing(int)), progressdlg, SLOT(setPage(int)));
+        connect(printThread, SIGNAL(finished()), progressdlg, SLOT(close()));
+        connect(printThread, SIGNAL(finished()), this, SLOT(printingFinished()));
+        connect(progressdlg, SIGNAL(abort()), printThread, SLOT(abort()));
+        progressdlg->show();
         printThread->start();
     }
 }
@@ -940,4 +949,9 @@ void ComicMainWindow::reconfigureDisplay()
     view->setSmallCursor(cfg->smallCursor());
     view->showPageNumbers(cfg->embedPageNumbers());
     view->setBackground(cfg->background());
+}
+
+void ComicMainWindow::printingFinished()
+{
+    printThread->deleteLater();
 }

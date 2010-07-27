@@ -90,6 +90,7 @@ namespace QComicBook
                         void reconfigureDisplay();
                         void currentPageChanged(int n);
                         void setPageSize(QAction *action);
+                        void printingFinished();
 
 		public slots:
 			void firstPage();
