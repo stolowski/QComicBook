@@ -129,8 +129,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
     //
     // File menu
     menuRecentFiles = new RecentFilesMenu(tr("Recently opened"), this, 10);
-    menuFile->insertMenu(actionSavePageAs, menuRecentFiles);
-    menuFile->insertSeparator(actionSavePageAs);
+    menuFile->insertMenu(actionOpenNext, menuRecentFiles);
     connect(menuRecentFiles, SIGNAL(selected(const QString &)), this, SLOT(recentSelected(const QString &)));
     connect(menuRecentFiles, SIGNAL(cleanupRequest()), menuRecentFiles, SLOT(removeAll()));
     connect(actionClose, SIGNAL(triggered()), this, SLOT(closeSink()));
