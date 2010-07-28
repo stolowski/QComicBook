@@ -57,6 +57,7 @@ SET(qcomicbook_src
 )
 
 SET(qcomicbook_moc_hdrs
+	ArchiversConfiguration.h
 	BookmarkManager.h 
 	ComicBookCfgDialog.h 
 	ComicBookSettings.h 

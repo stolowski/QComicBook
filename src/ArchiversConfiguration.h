@@ -24,6 +24,8 @@ namespace QComicBook
 
     class ArchiversConfiguration: public QObject
     {
+    Q_OBJECT
+
     public:
         static ArchiversConfiguration& instance();
         void getExtractArguments(const QString &filename, QStringList &extract, QStringList &list) const;
