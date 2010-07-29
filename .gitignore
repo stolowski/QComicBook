@@ -1,0 +1,10 @@
+*~
+*.o
+*.cxx
+ui_*
+Makefile*
+CMakeFiles
+CMakeCache.txt
+*.cmake
+*.qm
+qcomicbook
