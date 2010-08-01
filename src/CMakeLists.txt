@@ -1,4 +1,9 @@
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR})
+INCLUDE_DIRECTORIES(
+	${CMAKE_SOURCE_DIR}/src
+	${CMAKE_BINARY_DIR}/src
+	${CMAKE_BINARY_DIR}
+)
+
 SET(qcomicbook_src
         ArchiversConfiguration.cpp
         ArchiverStatus.cpp
