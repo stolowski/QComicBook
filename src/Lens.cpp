@@ -35,6 +35,7 @@ Lens::Lens(int delay, const QSize &size): QGraphicsItem()
     m_time = new QTime();
     m_time->start();
     setZValue(1000.0f);
+    setFlags(ItemSendsGeometryChanges);
 }
 
 Lens::~Lens()

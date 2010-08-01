@@ -53,6 +53,7 @@ void PageViewBase::showLens(bool f)
     {
         if (!lens)
         {
+            setMouseTracking(true);
             lens = new Lens();
             scene->addItem(lens);
         }
@@ -61,6 +62,7 @@ void PageViewBase::showLens(bool f)
     {
         if (lens)
         {
+            setMouseTracking(false);
             scene->removeItem(lens);
             delete lens;
             lens = 0;
