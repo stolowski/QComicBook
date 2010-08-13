@@ -19,6 +19,8 @@ namespace QComicBook
 		class AbstractImage
 		{
 			public:
+				typedef T ImageDataType;
+
 				AbstractImage(int w, int h)
 					: m_width(w)
 					  , m_height(h)
@@ -44,6 +46,11 @@ namespace QComicBook
 				const T& at(int x, int y) const
 				{
 					return data[x + y*m_width];
+				}
+
+				const T* scanline(int y) const
+				{
+					return data + y*m_width;
 				}
 
 				void fill(const T &val)
