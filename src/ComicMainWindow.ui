@@ -33,7 +33,7 @@
      <x>0</x>
      <y>0</y>
      <width>1184</width>
-     <height>21</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -72,7 +72,9 @@
     <addaction name="actionTwoPages"/>
     <addaction name="actionMangaMode"/>
     <addaction name="separator"/>
-    <addaction name="actionToggleContinuousScroll"/>
+    <addaction name="actionSimpleView"/>
+    <addaction name="actionContinuousView"/>
+    <addaction name="actionFrameView"/>
     <addaction name="actionFullscreen"/>
    </widget>
    <widget class="QMenu" name="menuNavigation">
@@ -81,6 +83,9 @@
     </property>
     <addaction name="actionNextPage"/>
     <addaction name="actionPreviousPage"/>
+    <addaction name="separator"/>
+    <addaction name="actionNextFrame"/>
+    <addaction name="actionPreviousFrame"/>
     <addaction name="separator"/>
     <addaction name="actionForwardPage"/>
     <addaction name="actionBackwardPage"/>
@@ -148,6 +153,8 @@
    <addaction name="actionNextPage"/>
    <addaction name="actionBackwardPage"/>
    <addaction name="actionForwardPage"/>
+   <addaction name="actionPreviousFrame"/>
+   <addaction name="actionNextFrame"/>
    <addaction name="actionPageTop"/>
    <addaction name="actionPageBottom"/>
    <addaction name="separator"/>
@@ -464,7 +471,7 @@
     <string>End</string>
    </property>
   </action>
-  <action name="actionToggleContinuousScroll">
+  <action name="actionContinuousView">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -615,6 +622,40 @@
   <action name="actionPrint">
    <property name="text">
     <string>Print</string>
+   </property>
+  </action>
+  <action name="actionFrameView">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Frame view</string>
+   </property>
+  </action>
+  <action name="actionSimpleView">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Simple view</string>
+   </property>
+  </action>
+  <action name="actionNextFrame">
+   <property name="icon">
+    <iconset resource="../data/qcomicbook.qrc">
+     <normaloff>:/icons/nextframe.png</normaloff>:/icons/nextframe.png</iconset>
+   </property>
+   <property name="text">
+    <string>Next Frame</string>
+   </property>
+  </action>
+  <action name="actionPreviousFrame">
+   <property name="icon">
+    <iconset resource="../data/qcomicbook.qrc">
+     <normaloff>:/icons/prevframe.png</normaloff>:/icons/prevframe.png</iconset>
+   </property>
+   <property name="text">
+    <string>Previous Frame</string>
    </property>
   </action>
  </widget>

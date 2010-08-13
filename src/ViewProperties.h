@@ -21,6 +21,7 @@ namespace QComicBook
 {
     enum Size { Original, FitWidth, FitHeight, WholePage, BestFit };
     enum Rotation { None, Left, Right };
+	enum ViewType { Simple, Continuous, Frame };
 
     class ViewProperties: public QObject
     {

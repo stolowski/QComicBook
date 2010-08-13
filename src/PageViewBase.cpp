@@ -180,6 +180,19 @@ void PageViewBase::jumpDown()
         scrollByDelta(0, static_cast<int>(JUMP_FACTOR * viewport()->height()));
     }
 }
+			
+void PageViewBase::setFrames(int page, const QList<ComicFrame> &frames)
+{
+	// default implementation does nothing
+}
+
+void PageViewBase::nextFrame()
+{
+}
+
+void PageViewBase::prevFrame()
+{
+}
 
 void PageViewBase::setNumOfPages(int n)
 {

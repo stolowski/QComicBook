@@ -26,23 +26,24 @@ namespace QComicBook
 {
 	using namespace Utility;
 
-        class ComicMainWindow;
+	class ComicMainWindow;
         
 	class ComicBookSettings: public QObject
 	{
 		Q_OBJECT
 
 		signals:
-                        void displaySettingsChanged(const QString &option);
+			void displaySettingsChanged(const QString &option);
 
 		public:
 			void load();
 
-                        bool embedPageNumbers() const;
+			bool embedPageNumbers() const;
 			bool smallCursor() const;
 			bool twoPagesMode() const;
 			bool japaneseMode() const;
 			bool continuousScrolling() const;
+			ViewType viewType() const;
 			bool scrollbarsVisible() const;
 			Size pageSize() const;
 			bool smoothScaling() const;
@@ -66,11 +67,12 @@ namespace QComicBook
 			bool showSplash() const;
 			QString tmpDir() const;
 
-                        void embedPageNumbers(bool f);
+			void embedPageNumbers(bool f);
 			void smallCursor(bool f);
 			void twoPagesMode(bool f);
 			void japaneseMode(bool f);
 			void continuousScrolling(bool f);
+			void viewType(ViewType t);
 			void scrollbarsVisible(bool f);
 			void pageSize(Size s);
 			void smoothScaling(bool s);
@@ -105,7 +107,7 @@ namespace QComicBook
 
 		private:
 			QSettings *m_cfg;
-                        bool m_embedpagenumbers;
+			bool m_embedpagenumbers;
 			bool m_smallcursor;
 			bool m_twopages;
 			bool m_twopagesstep;
@@ -117,6 +119,7 @@ namespace QComicBook
 			bool m_fscrhidestatus;
 			bool m_fscrhidetoolbar;
 			Size m_pagesize;
+			ViewType m_viewtype;
 			bool m_smoothscaling;
 			QString m_lastdir;
 			QColor m_bgcolor;
@@ -138,11 +141,12 @@ namespace QComicBook
 			bool m_dirsok; //is above dirs are ok
 
 			static const EnumMap<Size> size2string[];
+			static const EnumMap<ViewType> viewtype2string[];
 
-                        ComicBookSettings();
-                        ComicBookSettings(const ComicBookSettings &);
-                        ComicBookSettings operator =(const ComicBookSettings &);
-                        virtual ~ComicBookSettings();
+			ComicBookSettings();
+			ComicBookSettings(const ComicBookSettings &);
+			ComicBookSettings operator =(const ComicBookSettings &);
+			virtual ~ComicBookSettings();
 
 
 	};

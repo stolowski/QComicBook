@@ -1,10 +1,16 @@
 INCLUDE_DIRECTORIES(
 	${CMAKE_SOURCE_DIR}/src
+	${CMAKE_SOURCE_DIR}/src/FrameDetect
 	${CMAKE_BINARY_DIR}/src
+	${CMAKE_BINARY_DIR}/src/FrameDetect
 	${CMAKE_BINARY_DIR}
 )
 
 SET(qcomicbook_src
+	FrameDetect/BinarizedImage.cpp
+	FrameDetect/FrameDetect.cpp
+	FrameDetect/FrameDetectThread.cpp
+	FrameDetect/FrameCache.cpp
 	ArchiversConfiguration.cpp
         ArchiverHint.cpp
 	ArchiverStatus.cpp
@@ -25,6 +31,7 @@ SET(qcomicbook_src
 	ComicBookSettings.cpp
 	ComicMainWindow.cpp
 	DirReader.cpp
+	FrameView.cpp
 	History.cpp
 	IconViewThumbnail.cpp
 	ImgArchiveSink.cpp
@@ -57,11 +64,14 @@ SET(qcomicbook_src
 )
 
 SET(qcomicbook_moc_hdrs
+	FrameDetect/FrameCache.h
+	FrameDetect/FrameDetectThread.h
 	ArchiversConfiguration.h
 	BookmarkManager.h 
 	ComicBookCfgDialog.h 
 	ComicBookSettings.h 
 	ComicMainWindow.h 
+	FrameView.h
 	PageViewBase.h 
 	ContinuousPageView.h
 	SimplePageView.h

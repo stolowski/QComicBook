@@ -17,6 +17,7 @@
 #include "ComicBookInfo.h"
 #include "ContinuousPageView.h"
 #include "SimplePageView.h"
+#include "FrameView.h"
 #include "ArchiversConfiguration.h"
 #include "ImgArchiveSink.h"
 #include "ImgSinkFactory.h"
@@ -35,6 +36,7 @@
 #include "PageLoaderThread.h"
 #include "RecentFilesMenu.h"
 #include "PrinterThread.h"
+#include <FrameDetectThread.h>
 #include "PrintProgressDialog.h"
 #include <QMenu>
 #include <QStringList>
@@ -67,6 +69,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
     printer = new QPrinter();
 
     pageLoader = new PageLoaderThread();
+    frameDetect = new FrameDetectThread();
 
     //
     // Thumbnails window
@@ -86,6 +89,12 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
     scaleActions->addAction(actionOriginalSize);
     scaleActions->addAction(actionBestFit);
     connect(scaleActions, SIGNAL(triggered(QAction *)), this, SLOT(setPageSize(QAction *)));
+
+    QActionGroup *viewTypeActions = new QActionGroup(this);
+    viewTypeActions->addAction(actionContinuousView);
+    viewTypeActions->addAction(actionSimpleView);
+    viewTypeActions->addAction(actionFrameView);
+    connect(viewTypeActions, SIGNAL(triggered(QAction *)), this, SLOT(changeViewType(QAction *)));
        
     actionExitFullScreen = new QAction(QString::null, this);
     actionExitFullScreen->setShortcut(tr("Escape"));
@@ -115,6 +124,8 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
     connect(actionPreviousPage, SIGNAL(triggered(bool)), this, SLOT(prevPage()));   
     connect(actionMangaMode, SIGNAL(toggled(bool)), this, SLOT(toggleJapaneseMode(bool)));        
     connect(actionTwoPages, SIGNAL(toggled(bool)), this, SLOT(toggleTwoPages(bool)));
+    connect(actionNextFrame, SIGNAL(triggered(bool)), this, SLOT(nextFrame()));
+    connect(actionPreviousFrame, SIGNAL(triggered(bool)), this, SLOT(prevFrame()));
 
     //
     // Statusbar
@@ -141,11 +152,11 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
     //
     // Navigation menu
     connect(actionJumpToPage, SIGNAL(triggered()), this, SLOT(showJumpToPage()));
-    connect(actionToggleContinuousScroll, SIGNAL(toggled(bool)), this, SLOT(toggleContinousScroll(bool)));
+    connect(actionContinuousView, SIGNAL(toggled(bool)), this, SLOT(toggleContinousView(bool)));
     actionTwoPages->setChecked(cfg->twoPagesMode());
     actionMangaMode->setChecked(cfg->japaneseMode());
     actionMangaMode->setDisabled(!cfg->twoPagesMode());
-    actionToggleContinuousScroll->setChecked(cfg->continuousScrolling());
+    actionContinuousView->setChecked(cfg->continuousScrolling());
 
     //
     // Bookmarks menu
@@ -178,6 +189,15 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
         case Original:  which = actionOriginalSize; break;
     }
     which->setChecked(true);
+
+    which = actionContinuousView;
+    switch (cfg->viewType())
+    {
+    	case Simple: which = actionSimpleView; break;
+	case Continuous: which = actionContinuousView; break;
+	case Frame: which = actionFrameView; break;
+    }
+    which->setChecked(true);
     
     //
     // copy all menu actions; this is needed for fullscreen mode if menubar is hidden
@@ -202,6 +222,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
     enableComicBookActions(false);
     
     pageLoader->start();
+    frameDetect->start();
 
     thumbnailLoader = new ThumbnailLoaderThread();
     connect(thumbnailLoader, SIGNAL(thumbnailLoaded(const Thumbnail &)), thumbswin, SLOT(setThumbnail(const Thumbnail &)));
@@ -273,14 +294,25 @@ void ComicMainWindow::setupComicImageView()
         pageLoader->disconnect();
         view->deleteLater();
     }
+
     const ViewProperties props;
-    if (cfg->continuousScrolling())
+    actionNextFrame->setDisabled(true);
+    actionPreviousFrame->setDisabled(true);
+    switch (cfg->viewType())
     {
-        view = new ContinuousPageView(this, n, props);
-    }
-    else
-    {
-        view = new SimplePageView(this, n, props);
+	case Continuous:
+	        view = new ContinuousPageView(this, n, props);
+		break;
+	case Simple:
+		view = new SimplePageView(this, n, props);
+		break;
+	case Frame:
+		view = new FrameView(this, n, props);
+		actionNextFrame->setDisabled(false);
+		actionPreviousFrame->setDisabled(false);
+		break;
+	default:
+		break;
     }
     
     setCentralWidget(view);
@@ -319,6 +351,11 @@ void ComicMainWindow::setupComicImageView()
     connect(view, SIGNAL(requestTwoPages(int)), pageLoader, SLOT(requestTwoPages(int)));
     connect(view, SIGNAL(cancelPageRequest(int)), pageLoader, SLOT(cancel(int)));
     connect(view, SIGNAL(cancelTwoPagesRequest(int)), pageLoader, SLOT(cancelTwoPages(int)));
+
+    //
+    // connect frame processing thread
+    connect(pageLoader, SIGNAL(pageLoaded(const Page &)), frameDetect, SLOT(process(const Page &)));
+    connect(frameDetect, SIGNAL(framesReady(int, const QList<ComicFrame> &)), view, SLOT(setFrames(int, const QList<ComicFrame> &)));
 
     setupContextMenu();
 
@@ -419,7 +456,7 @@ void ComicMainWindow::toggleScrollbars(bool f)
     view->enableScrollbars(f);
 }
 
-void ComicMainWindow::toggleContinousScroll(bool f)
+void ComicMainWindow::toggleContinousView(bool f)
 {
     cfg->continuousScrolling(f);
     setupComicImageView();
@@ -685,6 +722,16 @@ void ComicMainWindow::prevPage()
     }
 }
 
+void ComicMainWindow::prevFrame()
+{
+    view->prevFrame();
+}
+
+void ComicMainWindow::nextFrame()
+{
+    view->nextFrame();
+}
+
 void ComicMainWindow::prevPageBottom()
 {
     if (currpage > 0)
@@ -929,6 +976,23 @@ void ComicMainWindow::bookmarkSelected(QAction *action)
                         open(fname, b.getPage());
                 }
         }
+}
+			
+void ComicMainWindow::changeViewType(QAction *action)
+{
+    if (action == actionContinuousView)
+    {
+	cfg->viewType(Continuous);
+    }
+    else if (action == actionSimpleView)
+    {
+	cfg->viewType(Simple);
+    }
+    else // actionFrameView
+    {
+	cfg->viewType(Frame);
+    }
+    setupComicImageView();
 }
 
 void ComicMainWindow::saveSettings()
