@@ -80,33 +80,16 @@ void FrameDetect::process()
 	qDebug() << label-1 << "labels";
 }
 
-void FrameDetect::nextPoint(int &x, int &y, int pos)
-{
-	switch (pos)
-	{
-		case 0: ++x; break;
-		case 1: ++x; ++y; break;
-		case 2: ++y; break;
-		case 3: ++y; --x; break;
-		case 4: --x; break;
-		case 5: --x; --y; break;
-		case 6: --y; break;
-		case 7: ++x; --y; break;
-		default:
-			throw std::runtime_error("Invalid position");
-	}
-}
-
 FrameDetect::Point FrameDetect::tracer(int x, int y, int &pos, int lbl)
 {
-	for (int i=0; i<8; i++)
+	for (int i=7; i>=0; i--)
 	{
 		int tx(x);
 		int ty(y);
 		nextPoint(tx, ty, pos);
-		if (tx >0 && ty >0 && tx < bimg->width() && ty < bimg->height())
+		if (tx>0 && ty>0 && tx < bimg->width() && ty < bimg->height())
 		{
-			const int l( ldata->at(tx, ty) );
+			const int &l( ldata->at(tx, ty) );
 			if (bimg->at(tx, ty) == ccolor && (l == 0 || l == lbl))
 			{
 				return Point(tx, ty);
@@ -141,10 +124,9 @@ void FrameDetect::contourTracking(int x, int y, int initialPos, int lbl)
 
 	while (startReached == false || tFollowsS == false)
 	{
-		d = (d+4)%8;
-		d = (d + 2)%8;
-
-		Point f = tracer(x, y, d, lbl);
+		d = (d + 6)%8; // previous contour: d + 4; next initial pos: d + 2
+			
+		const Point f(tracer(x, y, d, lbl));
 		if (f.x < 0)
 		{
 			qDebug() << "img boundary";
@@ -223,6 +205,8 @@ QList<ComicFrame> FrameDetect::frames() const
 			y1[lbl] = ldata->height();
 	}
 
+	//
+	// find bounding boxes for all labels
 	for (int y=0; y<ldata->height(); y++)
 	{
 		for (int x=0; x<ldata->width(); x++)

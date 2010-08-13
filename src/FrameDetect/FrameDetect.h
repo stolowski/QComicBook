@@ -42,9 +42,26 @@ namespace QComicBook
 	    struct Point {
 		int x, y;
 		Point(int x, int y): x(x), y(y) {}
-		bool operator==(const Point &p) { return x == p.x && y == p.y; }
+		bool operator==(const Point &p) const { return x == p.x && y == p.y; }
 	    };
-	    void nextPoint(int &x, int &y, int pos);
+
+		inline static void nextPoint(int &x, int &y, int pos) 
+		{
+			switch (pos)
+			{
+				case 0: ++x; break;
+				case 1: ++x; ++y; break;
+				case 2: ++y; break;
+				case 3: ++y; --x; break;
+				case 4: --x; break;
+				case 5: --x; --y; break;
+				case 6: --y; break;
+				case 7: ++x; --y; break;
+				default:
+						throw std::runtime_error("Invalid position");
+			}
+		}
+
 		inline void nextPoint(int &offset, int pos)
 		{
 			switch (pos)
