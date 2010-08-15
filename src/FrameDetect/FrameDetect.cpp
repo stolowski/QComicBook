@@ -224,7 +224,7 @@ ComicFrameList FrameDetect::frames() const
 		}
 	}
 	
-	ComicFrameList frms(page);
+	ComicFrameList frms(page, ldata->width(), ldata->height());
 	for (int lbl=0; lbl<label; lbl++)
 	{
 		const int w(x2[lbl]-x1[lbl]);

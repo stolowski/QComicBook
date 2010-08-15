@@ -12,37 +12,21 @@
 
 #include <ComicFrameList.h>
 #include <algorithm>
+#include <CompareFrames.h>
 #include <QDebug>
 
 using namespace QComicBook;
 
-ComicFrameList::ComicFrameList(int page)
+ComicFrameList::ComicFrameList(int page, int width, int height)
 	: m_page(page)
+	  , m_pageWidth(width)
+	  , m_pageHeight(height)
 {
-
 }
 
 ComicFrameList::~ComicFrameList()
 {
-
 }
-
-struct CompareFrames
-{
-	bool operator()(const ComicFrame &f1, const ComicFrame &f2)
-	{
-		const int m = 10;
-
-		if (std::abs(f1.yPos() - f2.yPos()) < m)
-		{
-			return f1.xPos() < f2.xPos();
-		}
-		else
-		{
-			return f1.yPos() < f2.yPos();
-		}
-	}
-};
 
 void ComicFrameList::append(const ComicFrame &f)
 {
@@ -52,7 +36,7 @@ void ComicFrameList::append(const ComicFrame &f)
 void ComicFrameList::sort()
 {
 	qDebug() << "frames sort";
-	std::sort(m_frames.begin(), m_frames.end(), CompareFrames());
+	std::sort(m_frames.begin(), m_frames.end(), CompareFrames(static_cast<double>(m_pageHeight) * 0.05f));
 }
 
 const ComicFrame& ComicFrameList::operator[](int idx)

@@ -21,7 +21,7 @@ namespace QComicBook
 	class ComicFrameList
 	{
 		public:
-			ComicFrameList(int page=-1);
+			ComicFrameList(int page=-1, int width=0, int height=0);
 			virtual ~ComicFrameList();
 
 			void append(const ComicFrame &f);
@@ -32,6 +32,8 @@ namespace QComicBook
 
 		private:
 			int m_page;
+			int m_pageWidth;
+			int m_pageHeight;
 			QVector<ComicFrame> m_frames;
 	};
 }
