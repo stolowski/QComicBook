@@ -18,18 +18,20 @@
 #include <fstream>
 #include <algorithm>
 #include <QDebug>
+#include "Page.h"
 
 using namespace QComicBook;
 
-FrameDetect::FrameDetect(const QImage &img)
+FrameDetect::FrameDetect(const Page &page)
+	: page(page.getNumber())
 {
-    bimg = new BinarizedImage(img, 250);
+    bimg = new BinarizedImage(page.getImage(), 250);
     bimg->invert();
     bimg->toImage().save("binimg.jpg");
     w = bimg->width();
     h = bimg->height();
 
-    ldata = new LabelData(img.width(), img.height());
+    ldata = new LabelData(page.width(), page.height());
     ldata->fill(0);
 
     ccolor = 255;
@@ -189,7 +191,7 @@ void FrameDetect::dump()
 	str.close();
 }
 
-QList<ComicFrame> FrameDetect::frames() const
+ComicFrameList FrameDetect::frames() const
 {
 	int *x1 = new int [label];
 	int *x2 = new int [label];
@@ -222,7 +224,7 @@ QList<ComicFrame> FrameDetect::frames() const
 		}
 	}
 	
-	QList<ComicFrame> frms;
+	ComicFrameList frms(page);
 	for (int lbl=0; lbl<label; lbl++)
 	{
 		const int w(x2[lbl]-x1[lbl]);

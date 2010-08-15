@@ -14,6 +14,12 @@
 
 using namespace QComicBook;
 
+FrameCache& FrameCache::instance()
+{
+	static FrameCache cache;
+	return cache;
+}
+
 FrameCache::FrameCache()
 {
 }
@@ -22,7 +28,23 @@ FrameCache::~FrameCache()
 {
 }
 
-void FrameCache::insert(int page, QList<ComicFrame> frames)
+void FrameCache::insert(const ComicFrameList &frames)
 {
+	m_frames[frames.pageNumber()] = frames;
+}
+
+bool FrameCache::has(int page) const
+{
+	return m_frames.contains(page);
+}
+
+ComicFrameList FrameCache::get(int page) const
+{
+	return m_frames[page];
+}
+
+void FrameCache::clear()
+{
+	m_frames.clear();
 }
 

@@ -240,6 +240,7 @@ ComicMainWindow::~ComicMainWindow()
     
     delete bookmarks;
     
+    frameDetect->stop();
     pageLoader->stop();
     thumbnailLoader->stop();
     pageLoader->wait();
@@ -355,7 +356,7 @@ void ComicMainWindow::setupComicImageView()
     //
     // connect frame processing thread
     connect(pageLoader, SIGNAL(pageLoaded(const Page &)), frameDetect, SLOT(process(const Page &)));
-    connect(frameDetect, SIGNAL(framesReady(int, const QList<ComicFrame> &)), view, SLOT(setFrames(int, const QList<ComicFrame> &)));
+    connect(frameDetect, SIGNAL(framesReady(const ComicFrameList &)), view, SLOT(setFrames(const ComicFrameList &)));
 
     setupContextMenu();
 
@@ -871,6 +872,7 @@ void ComicMainWindow::closeSink()
 
     if (sink)
     {
+	frameDetect->clear();
         pageLoader->cancelAll();
         pageLoader->setSink(NULL);
         thumbnailLoader->cancelAll();

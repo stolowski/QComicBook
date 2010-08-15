@@ -8,6 +8,7 @@ INCLUDE_DIRECTORIES(
 
 SET(qcomicbook_src
 	FrameDetect/BinarizedImage.cpp
+	FrameDetect/ComicFrameList.cpp
 	FrameDetect/FrameDetect.cpp
 	FrameDetect/FrameDetectThread.cpp
 	FrameDetect/FrameCache.cpp

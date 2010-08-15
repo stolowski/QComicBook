@@ -14,6 +14,7 @@
 #define __FRAMEDETECT_H
 
 #include <QList>
+#include <ComicFrameList.h>
 #include <AbstractImage.h>
 #include <ComicFrame.h>
 #include <stdexcept>
@@ -24,16 +25,17 @@ namespace QComicBook
 {
     class BinarizedImage;
     class ComicFrame;
+	class Page;
 
     typedef AbstractImage<int> LabelData;
 
     class FrameDetect
     {
 	public:
-	    FrameDetect(const QImage &img);
+	    FrameDetect(const Page &page);
 	    ~FrameDetect();
 	    void process();
-	    QList<ComicFrame> frames() const;
+	    ComicFrameList frames() const;
 
 	    QImage labelToImage();
 	    void dump();
@@ -84,6 +86,7 @@ namespace QComicBook
 	private:
 	    BinarizedImage *bimg;
 	    LabelData *ldata;
+		int page;
 	    int ccolor; //contour color
 	    int bcolor; //background color
 	    int label;

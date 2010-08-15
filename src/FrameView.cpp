@@ -1,6 +1,19 @@
+/*
+ * This file is a part of QComicBook.
+ *
+ * Copyright (C) 2005-2010 Pawel Stolowski <stolowski@gmail.com>
+ *
+ * QComicBook is free software; you can redestribute it and/or modify it
+ * under terms of GNU General Public License by Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY. See GPL for more details.
+ */
+
 #include "FrameView.h"
 #include "ComicBookSettings.h"
 #include "Page.h"
+#include <ComicFrameList.h>
 #include <QLabel>
 #include <QPixmap>
 #include <QVBoxLayout>
@@ -53,11 +66,12 @@ void FrameView::setImage(const Page &img1, const Page &img2)
 	}
 }
 
-void FrameView::setFrames(int page, const QList<ComicFrame> &frames)
+void FrameView::setFrames(const ComicFrameList &frames)
 {
-	if (page == m_currentPage)
+	if (frames.pageNumber() == m_currentPage)
 	{
 		m_frames = frames;
+		m_frames.sort();
 		m_currentFrame = 0;
 		gotoFrame(m_currentFrame);
 	}
@@ -94,7 +108,7 @@ void FrameView::gotoFrame(int n)
 	if (n < m_frames.count())
 	{
 		m_currentFrame = n;
-		const ComicFrame f(m_frames.at(n));
+		const ComicFrame f(m_frames[n]);
 		QPixmap pix(f.width(), f.height());
 		QPainter paint;
 		paint.begin(&pix);
@@ -106,6 +120,7 @@ void FrameView::gotoFrame(int n)
 
 void FrameView::clear()
 {
+	m_img->clear();
 }
 
 void FrameView::gotoPage(int n)

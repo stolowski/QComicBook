@@ -17,7 +17,7 @@
 #include <QMutex>
 #include <QWaitCondition>
 #include <QList>
-#include <ComicFrame.h>
+#include <ComicFrameList.h>
 
 namespace QComicBook
 {
@@ -39,7 +39,7 @@ namespace QComicBook
 			void process(const Page &p);
 
 		signals:
-			void framesReady(int page, const QList<ComicFrame> &frames);
+			void framesReady(const ComicFrameList &frames);
 
 		private:
 			volatile bool m_stop;

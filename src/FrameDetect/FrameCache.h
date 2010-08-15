@@ -14,7 +14,8 @@
 #define __FRAME_CACHE_H
 
 #include <QObject>
-#include <ComicFrame.h>
+#include <QMap>
+#include <ComicFrameList.h>
 
 namespace QComicBook
 {
@@ -23,11 +24,20 @@ namespace QComicBook
 		Q_OBJECT
 
 		public:
-			FrameCache();
-			~FrameCache();
+			static FrameCache& instance();
 
 		public slots:
-			void insert(int page, QList<ComicFrame> frames);
+			void insert(const ComicFrameList &frames);
+			bool has(int page) const;
+			ComicFrameList get(int page) const;
+			void clear();
+		
+		private:
+			FrameCache();
+			FrameCache(const FrameCache &);
+			~FrameCache();
+
+			QMap<int, ComicFrameList> m_frames;
 	};
 }
 

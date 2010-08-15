@@ -1,5 +1,18 @@
+/*
+ * This file is a part of QComicBook.
+ *
+ * Copyright (C) 2005-2010 Pawel Stolowski <stolowski@gmail.com>
+ *
+ * QComicBook is free software; you can redestribute it and/or modify it
+ * under terms of GNU General Public License by Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY. See GPL for more details.
+ */
+
 #include <FrameDetectThread.h>
 #include <FrameDetect.h>
+#include <FrameCache.h>
 #include "Page.h"
 #include <QDebug>
 
@@ -25,18 +38,33 @@ void FrameDetectThread::run()
         m_reqCond.wait(&m_condMtx);
         m_condMtx.unlock();
 
-		for (;;) //TODO stop
+		for (;;)
 		{
 			m_processListMtx.lock();
+			if (m_stop)
+			{
+				m_processListMtx.unlock();
+				break;
+			}
 			Page p = m_pages.first();
 			m_pages.pop_front();
 			m_processListMtx.unlock();
 
 			qDebug() << "FrameDetectThread: processing page" << p.getNumber();
 
-			FrameDetect fd(p.getImage());
-			fd.process();
-			emit framesReady(p.getNumber(), fd.frames());
+			FrameCache &fc(FrameCache::instance());
+			if (fc.has(p.getNumber()))
+			{
+				qDebug() << "frames for page" << p.getNumber() << "in cache";
+				emit framesReady(fc.get(p.getNumber()));
+			}
+			else
+			{
+				FrameDetect fd(p);
+				fd.process();
+				fc.insert(fd.frames());
+				emit framesReady(fd.frames());
+			}
 
 			m_processListMtx.lock();
 			volatile int n = m_pages.count();
@@ -51,7 +79,10 @@ void FrameDetectThread::run()
 
 void FrameDetectThread::clear()
 {
-	//TODO
+	m_processListMtx.lock();
+	m_pages.clear();
+	m_processListMtx.unlock();
+	FrameCache::instance().clear();
 }
 
 void FrameDetectThread::process(const Page &p)
@@ -68,4 +99,5 @@ void FrameDetectThread::stop()
 	m_processListMtx.lock();
 	m_stop = true;
 	m_processListMtx.unlock();
+	m_reqCond.wakeOne();
 }

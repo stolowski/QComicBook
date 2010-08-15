@@ -18,6 +18,7 @@ namespace QComicBook
 	class ComicFrame
 	{
 		public:
+			ComicFrame() {}
 			ComicFrame(int x, int y, int w, int h, int label): x(x), y(y), w(w), h(h), lbl(label) {}
 			~ComicFrame() {};
 
