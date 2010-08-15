@@ -303,14 +303,20 @@ void ComicMainWindow::setupComicImageView()
     {
 	case Continuous:
 	        view = new ContinuousPageView(this, n, props);
+		frameDetect->clear();
 		break;
 	case Simple:
 		view = new SimplePageView(this, n, props);
+		frameDetect->clear();
 		break;
 	case Frame:
 		view = new FrameView(this, n, props);
 		actionNextFrame->setDisabled(false);
-		actionPreviousFrame->setDisabled(false);
+		actionPreviousFrame->setDisabled(false);   
+		//
+		// connect frame processing thread
+		connect(pageLoader, SIGNAL(pageLoaded(const Page &)), frameDetect, SLOT(process(const Page &)));
+		connect(frameDetect, SIGNAL(framesReady(const ComicFrameList &)), view, SLOT(setFrames(const ComicFrameList &)));
 		break;
 	default:
 		break;
@@ -352,11 +358,6 @@ void ComicMainWindow::setupComicImageView()
     connect(view, SIGNAL(requestTwoPages(int)), pageLoader, SLOT(requestTwoPages(int)));
     connect(view, SIGNAL(cancelPageRequest(int)), pageLoader, SLOT(cancel(int)));
     connect(view, SIGNAL(cancelTwoPagesRequest(int)), pageLoader, SLOT(cancelTwoPages(int)));
-
-    //
-    // connect frame processing thread
-    connect(pageLoader, SIGNAL(pageLoaded(const Page &)), frameDetect, SLOT(process(const Page &)));
-    connect(frameDetect, SIGNAL(framesReady(const ComicFrameList &)), view, SLOT(setFrames(const ComicFrameList &)));
 
     setupContextMenu();
 
