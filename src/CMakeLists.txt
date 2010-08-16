@@ -30,9 +30,11 @@ SET(qcomicbook_src
 	ComicBookCfgDialog.cpp
 	ComicBookInfo.cpp
 	ComicBookSettings.cpp
+	ComicImageWidget.cpp
 	ComicMainWindow.cpp
 	DirReader.cpp
 	FrameView.cpp
+	FrameWidget.cpp
 	History.cpp
 	IconViewThumbnail.cpp
 	ImgArchiveSink.cpp
@@ -71,6 +73,7 @@ SET(qcomicbook_moc_hdrs
 	BookmarkManager.h 
 	ComicBookCfgDialog.h 
 	ComicBookSettings.h 
+	ComicImageWidget.h
 	ComicMainWindow.h 
 	FrameView.h
 	PageViewBase.h 

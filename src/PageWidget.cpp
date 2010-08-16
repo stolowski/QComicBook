@@ -24,22 +24,18 @@
 using namespace QComicBook;
 
 PageWidget::PageWidget(PageViewBase *parent, int w, int h, int pageNum, bool twoPages)
-    : QWidget(parent)
-    , view(parent)
+    : ComicImageWidget(parent, w, h)
     , m_pageNum(pageNum)
     , m_twoPages(twoPages)
-    , m_pixmap(NULL)
     , pageSize(w, h)
     , estimated(true)
 {
     m_image[0] = m_image[1] = NULL;
-    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    setFixedSize(w, h);
 }
 
 PageWidget::~PageWidget()
 {
-    dispose();
+	deletePages();
 }
 
 void PageWidget::deletePages()
@@ -56,6 +52,7 @@ void PageWidget::setImage(const Page &img1)
     deletePages();
     m_image[0] = new Page(img1);
     m_twoPages = false;
+	estimated = false;
     redrawImages();
 }
 
@@ -65,6 +62,7 @@ void PageWidget::setImage(const Page &img1, const Page &img2)
     m_image[0] = new Page(img1);
     m_image[1] = new Page(img2);
     m_twoPages = true;
+	estimated = false;
     redrawImages();
 }
 
@@ -77,21 +75,15 @@ Page PageWidget::getPage(int n)
     throw std::runtime_error("Invalid page index");
 }
 
-const QPixmap* PageWidget::pixmap() const
-{
-    return m_pixmap;
-}
-
 void PageWidget::dispose()
 {
-    delete m_pixmap;
-    m_pixmap = NULL;
+	ComicImageWidget::dispose();
     deletePages();
 }
-
+		
 bool PageWidget::isDisposed() const
 {
-    return m_pixmap == NULL;
+	return ComicImageWidget::isDisposed() || (m_image[0] == NULL);
 }
 
 void PageWidget::setEstimatedSize(int w, int h)
@@ -137,173 +129,72 @@ void PageWidget::drawPageNumber(int page, QPainter &p, int x, int y)
     p.drawText(x - txtw - 4, y - 4, pagestr);
 }
 
+void PageWidget::redraw(QPainter &p)
+{
+	const int pages = numOfPages();
+	ViewProperties &props = view()->properties();
+
+	if (pages == 1)
+	{
+		p.drawImage(0, 0, m_image[0]->getImage(), 0, 0);
+		if (props.pageNumbers())
+		{
+			p.setWorldMatrixEnabled(false);
+			drawPageNumber(m_image[0]->getNumber(), p, getScaledSize().width(), getScaledSize().height());
+		}
+	}
+	else if (pages == 2)
+	{
+		const int swap(props.mangaMode());
+		// clear areas not covered by page (if pages sizes differ)
+		for (int i=0; i<2; i++)
+		{
+			const int j(i^swap);
+			if (m_image[j]->height() < std::max(m_image[0]->height(), m_image[1]->height()))
+			{
+				p.fillRect(i*m_image[j]->width(), m_image[j]->height(), m_image[j]->width(), getSourceSize().height() - m_image[j]->height(), props.background());
+				break; //only one page may be smaller
+			}
+		}
+
+		p.drawImage(0, 0, m_image[0^swap]->getImage(), 0, 0);
+		p.drawImage(m_image[0^swap]->width(), 0, m_image[1^swap]->getImage(), 0, 0);
+		if (props.pageNumbers())
+		{
+			p.setWorldMatrixEnabled(false);
+			drawPageNumber(std::max(m_image[swap]->getNumber(), m_image[1^swap]->getNumber()), p, getScaledSize().width(), getScaledSize().height());
+		}
+	}
+}
+
 void PageWidget::redrawImages()
 {
-    const int viewW = view->viewport()->width();
-    const int viewH = view->viewport()->height();
-
     const int pages = numOfPages();
 
     int totalWidth, totalHeight;
-    ViewProperties &props = view->properties();
+    ViewProperties &props = view()->properties();
 
     if (pages == 0) // images not set or disposed, use last known or estimated size
     {
-        if (props.angle() == 0 || props.angle() == 2)
-        {
-            totalWidth = pageSize.width();
-            totalHeight = pageSize.height();
-        }
-        else
-        {
-            totalWidth = pageSize.height();
-            totalHeight = pageSize.width();
-        }
+		totalWidth = pageSize.width();
+		totalHeight = pageSize.height();
     }
     else if (pages == 1)
     {
-        if (props.angle() == 0 || props.angle() == 2)
-        {
-            totalWidth = m_image[0]->width();
-            totalHeight = m_image[0]->height();
-        }
-        else
-        {
-            totalWidth = m_image[0]->height();
-            totalHeight = m_image[0]->width();
-        }
+		totalWidth = m_image[0]->width();
+		totalHeight = m_image[0]->height();
     }
     else // 2 pages
     {
-        if (props.angle() == 0 || props.angle() == 2)
-        {
-            totalWidth = m_image[0]->width() + m_image[1]->width();
-            totalHeight = std::max(m_image[0]->height(), m_image[1]->height());
-        }
-        else
-        {
-            totalWidth = std::max(m_image[0]->height(), m_image[1]->height());
-            totalHeight = m_image[0]->width() + m_image[1]->width();
-        }
+		totalWidth = m_image[0]->width() + m_image[1]->width();
+		totalHeight = std::max(m_image[0]->height(), m_image[1]->height());
     }
     
-    Size size = props.size();
-
-    const double hRatio = static_cast<double>(viewH) / totalHeight;
-    const double wRatio = static_cast<double>(viewW) / totalWidth;
-
-    int pixmapWidth, pixmapHeight; //resulting image size (1 or 2 pages with scaling and rotation applied)
-
-    if (size == BestFit)
-    {
-        if (totalWidth > totalHeight)
-            size = FitWidth;
-        else
-            size = FitHeight;
-    }
-    if (size == Original)
-    {
-        pixmapWidth = totalWidth;
-        pixmapHeight = totalHeight;
-    }
-    else if (size == FitWidth)
-    {
-        pixmapWidth = viewW;
-        pixmapHeight = static_cast<int>(static_cast<double>(totalHeight) * wRatio);
-    }
-    else if (size == FitHeight)
-    {
-        pixmapWidth = static_cast<int>(static_cast<double>(totalWidth) * hRatio);
-        pixmapHeight = viewH;
-    }
-    else if (size == WholePage)
-    {
-        const double ratio = std::min(wRatio, hRatio);
-        pixmapWidth = static_cast<int>(static_cast<double>(ratio) * totalWidth);
-        pixmapHeight = static_cast<int>(static_cast<double>(ratio) * totalHeight);
-    }
-    
-    xoff = (viewW - pixmapWidth) / 2;
-    yoff = props.continuousScrolling() ? 0 : (viewH - pixmapHeight) / 2;
-
-    pageSize = QSize(pixmapWidth, pixmapHeight);
-    
-    if (xoff < 0)
-        xoff = 0;
-    if (yoff < 0)
-        yoff = 0;
-
-    if (pages > 0)
-    {
-        estimated = false;
-
-        if (m_pixmap == NULL || m_pixmap->width() != pixmapWidth || m_pixmap->height() != pixmapHeight)
-        {
-            delete m_pixmap;
-            m_pixmap = new QPixmap(pixmapWidth, pixmapHeight);
-        }
-        QPainter p(m_pixmap);
-        p.setRenderHint(QPainter::SmoothPixmapTransform, ComicBookSettings::instance().smoothScaling());
- 
-        QMatrix rmtx;
-        rmtx.reset();   
-        if (props.angle() > 0)
-        {
-            if (props.angle() == 1)
-                rmtx.translate(pixmapWidth, 0);
-            else if (props.angle() == 3)
-                rmtx.translate(0, pixmapHeight);
-            else
-                rmtx.translate(pixmapWidth, pixmapHeight);
-            rmtx.rotate(static_cast<double>(props.angle()) * 90.0f);
-            p.setWorldMatrix(rmtx);
-            p.setWorldMatrixEnabled(true);
-        }
-
-        rmtx.scale(static_cast<double>(pixmapWidth)/totalWidth, static_cast<double>(pixmapHeight)/totalHeight);
-        p.setWorldMatrix(rmtx);
-        p.setWorldMatrixEnabled(true);
-    
-        if (pages == 1)
-        {
-            p.drawImage(0, 0, m_image[0]->getImage(), 0, 0);
-            if (props.pageNumbers())
-            {
-                p.setWorldMatrixEnabled(false);
-                drawPageNumber(m_image[0]->getNumber(), p, m_pixmap->width(), m_pixmap->height());
-            }
-        }
-        else if (pages == 2)
-        {
-            const int swap(props.mangaMode());
-            // clear areas not covered by page (if pages sizes differ)
-            for (int i=0; i<2; i++)
-            {
-                const int j(i^swap);
-                if (m_image[j]->height() < std::max(m_image[0]->height(), m_image[1]->height()))
-                {
-                    p.fillRect(i*m_image[j]->width(), m_image[j]->height(), m_image[j]->width(), totalHeight - m_image[j]->height(), props.background());
-                    break; //only one page may be smaller
-                }
-            }
-        
-            p.drawImage(0, 0, m_image[0^swap]->getImage(), 0, 0);
-            p.drawImage(m_image[0^swap]->width(), 0, m_image[1^swap]->getImage(), 0, 0);
-            if (props.pageNumbers())
-            {
-                p.setWorldMatrixEnabled(false);
-                drawPageNumber(std::max(m_image[swap]->getNumber(), m_image[1^swap]->getNumber()), p, m_pixmap->width(), m_pixmap->height());
-            }
-        }
-    
-        p.end();
-    }
-
-    setContentsMargins(xoff, yoff, 0, 0);
-    setFixedSize(pixmapWidth + 2*xoff, pixmapHeight + 2*yoff);  
-  
-    updateGeometry();
-    update();
+	setSourceSize(totalWidth, totalHeight);
+	if (!estimated)
+	{
+		redrawScaledImage();
+	}
 }
 
 int PageWidget::numOfPages() const
@@ -315,21 +206,6 @@ int PageWidget::numOfPages() const
             break;
     }
     return n;
-}
-
-void PageWidget::paintEvent(QPaintEvent *event)
-{
-    if (m_pixmap)
-    {
-        QPainter p(this);
-        p.drawPixmap(event->rect().x(), event->rect().y(), *m_pixmap, event->rect().x()-xoff, event->rect().y()-yoff, event->rect().width(), event->rect().height());
-    }
-    event->accept();
-}
-
-void PageWidget::resizeEvent(QResizeEvent *event)
-{
-    QWidget::resizeEvent(event);
 }
 
 void PageWidget::propsChanged()

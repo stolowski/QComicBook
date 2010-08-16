@@ -14,7 +14,7 @@
 #define __FRAME_VIEW_H
 
 #include "PageViewBase.h"
-#include <QList>
+#include "Page.h"
 #include <ComicFrameList.h>
 
 class QVBoxLayout;
@@ -22,6 +22,8 @@ class QLabel;
 
 namespace QComicBook
 {
+	class FrameWidget;
+
 	class FrameView: public PageViewBase
 	{
 		Q_OBJECT
@@ -30,6 +32,8 @@ namespace QComicBook
 			FrameView(QWidget *parent, int physicalPages, const ViewProperties& props);
 			virtual ~FrameView();
 			
+			virtual void resizeEvent(QResizeEvent *e);
+
 		public slots:
 			virtual void setImage(const Page &img1);
             virtual void setImage(const Page &img1, const Page &img2);
@@ -49,10 +53,10 @@ namespace QComicBook
 		protected:
 			int m_currentPage;
 			int m_currentFrame;
+			FrameWidget *m_frame;
+			Page m_page;
 			ComicFrameList m_frames;
-			QImage m_page;
 			QVBoxLayout *m_layout;
-			QLabel *m_img;
 	};
 }
 

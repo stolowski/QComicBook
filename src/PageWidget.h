@@ -13,15 +13,14 @@
 #ifndef __PAGEWIDGET_H
 #define __PAGEWIDGET_H
 
-#include <QWidget>
-#include <QPixmap>
+#include "ComicImageWidget.h"
 
 namespace QComicBook
 {
     class Page;
     class PageViewBase;
 
-    class PageWidget: public QWidget
+    class PageWidget: public ComicImageWidget
     {
     Q_OBJECT
             
@@ -32,17 +31,15 @@ namespace QComicBook
         PageWidget(PageViewBase *parent, int w, int h, int pageNum, bool twoPages=false);
         virtual ~PageWidget();
 
+		virtual void redraw(QPainter &p);
+
         void setImage(const Page &img1);
         void setImage(const Page &img1, const Page &img2);
         Page getPage(int n);
 
-        void dispose();
-        bool isDisposed() const;
-        const QPixmap* pixmap() const;
+        virtual void dispose();
+		virtual bool isDisposed() const;
         bool isInView(int vy1, int vy2) const;
-        virtual void paintEvent(QPaintEvent *event);
-        virtual void resizeEvent(QResizeEvent *event);
-//        virtual QSize sizeHint() const;
         void redrawImages();
         void setEstimatedSize(int w, int h);
         bool estimatedSize() const;
@@ -55,11 +52,8 @@ namespace QComicBook
         void drawPageNumber(int page, QPainter &p, int x, int y);
 
     private:
-        PageViewBase *view;
         int m_pageNum; //number of physical page
         Page *m_image[2];
-        int xoff, yoff;
-        QPixmap *m_pixmap;
         QSize pageSize; //size of 1 or 2 pages without scaling
         bool estimated;
         bool m_twoPages; //whether this widget holds one or two pages; this is independent from current two pages mode setting

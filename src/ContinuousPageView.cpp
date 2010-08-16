@@ -121,12 +121,14 @@ void ContinuousPageView::recreatePageWidgets()
             for (; i<roundPageNumber(numOfPages()); i+=2)
             {
                 PageWidget *p = new PageWidget(this, w, h, i, true);
+		qDebug() << "creating PageWidget for two pages" << i;
                 imgLabel.append(p);
                 m_layout->addWidget(p);
             }
             if (numOfPages() & 1) // odd number of pages
             {
                 PageWidget *p = new PageWidget(this, w, h, i);
+		qDebug() << "creating PageWidget for one page" << i;
                 imgLabel.append(p);
                 m_layout->addWidget(p);
             }
@@ -137,6 +139,7 @@ void ContinuousPageView::recreatePageWidgets()
             for (int i=0; i<numOfPages(); i++)
             {
                 PageWidget *p = new PageWidget(this, w, h, i);
+		qDebug() << "creating PageWidget for one page" << i;
                 p->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
                 imgLabel.append(p);
                 m_layout->addWidget(p);

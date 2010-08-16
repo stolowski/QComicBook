@@ -13,8 +13,8 @@
 #include "FrameView.h"
 #include "ComicBookSettings.h"
 #include "Page.h"
+#include "FrameWidget.h"
 #include <ComicFrameList.h>
-#include <QLabel>
 #include <QPixmap>
 #include <QVBoxLayout>
 #include <QPainter>
@@ -26,7 +26,7 @@ FrameView::FrameView(QWidget *parent, int physicalPages, const ViewProperties& p
     : PageViewBase(parent, physicalPages, props)
 	, m_currentPage(0) //??
 	, m_currentFrame(0)
-	, m_img(0)
+	, m_frame(0)
 {
     QWidget *w = new QWidget(this);
     w->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
@@ -36,8 +36,8 @@ FrameView::FrameView(QWidget *parent, int physicalPages, const ViewProperties& p
     m_layout->setAlignment(Qt::AlignCenter);
     setWidget(w);
 
-	m_img = new QLabel(this);
-	m_layout->addWidget(m_img);
+	m_frame = new FrameWidget(this, viewport()->width() - 10, viewport()->height() - 10);
+	m_layout->addWidget(m_frame);
 
     setWidgetResizable(true);
     
@@ -54,7 +54,7 @@ void FrameView::setImage(const Page &img1)
 {
     if (img1.getNumber() == m_currentPage)
 	{
-		m_page = img1.getImage();
+		m_page = img1;
 	}
 }
 
@@ -62,7 +62,7 @@ void FrameView::setImage(const Page &img1, const Page &img2)
 {   
 	if (img1.getNumber() == m_currentPage)
 	{
-		m_page = img1.getImage();
+		m_page = img1;
 	}
 }
 
@@ -109,18 +109,13 @@ void FrameView::gotoFrame(int n)
 	{
 		m_currentFrame = n;
 		const ComicFrame f(m_frames[n]);
-		QPixmap pix(f.width(), f.height());
-		QPainter paint;
-		paint.begin(&pix);
-		paint.drawImage(0, 0, m_page, f.xPos(), f.yPos(), f.width(), f.height());
-		paint.end();
-		m_img->setPixmap(pix);
+		m_frame->setFrame(m_page, f);
 	}
 }
 
 void FrameView::clear()
 {
-	m_img->clear();
+	m_frame->clear();
 }
 
 void FrameView::gotoPage(int n)
@@ -172,5 +167,15 @@ int FrameView::viewWidth() const
 int FrameView::currentPage() const
 {
 	return m_currentPage;
+}
+
+void FrameView::resizeEvent(QResizeEvent *e)
+{
+    if (m_frame)
+    {
+        m_frame->recalcScaledSize();
+		m_frame->redrawScaledImage();
+    }
+    PageViewBase::resizeEvent(e);
 }
 
