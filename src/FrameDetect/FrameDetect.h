@@ -47,6 +47,8 @@ namespace QComicBook
 		bool operator==(const Point &p) const { return x == p.x && y == p.y; }
 	    };
 
+		static int determineBackground(const BinarizedImage &img);
+
 		inline static void nextPoint(int &x, int &y, int pos) 
 		{
 			switch (pos)

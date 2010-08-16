@@ -25,17 +25,20 @@ using namespace QComicBook;
 FrameDetect::FrameDetect(const Page &page)
 	: page(page.getNumber())
 {
-    bimg = new BinarizedImage(page.getImage(), 250);
-    bimg->invert();
-    bimg->toImage().save("binimg.jpg");
+    bimg = new BinarizedImage(page.getImage(), 228);
+    bcolor = determineBackground(*bimg);
+    ccolor = 255 - bcolor;
+
+    qDebug() << "background is" << bcolor;
+
+#ifdef QT_DEBUG
+    bimg->toImage().save("binimg-" + QString::number(page.getNumber()) + ".jpg");
+#endif
     w = bimg->width();
     h = bimg->height();
 
     ldata = new LabelData(page.width(), page.height());
     ldata->fill(0);
-
-    ccolor = 255;
-    bcolor = 0;
 }
 
 FrameDetect::~FrameDetect()
@@ -191,6 +194,41 @@ void FrameDetect::dump()
 	str.close();
 }
 
+int FrameDetect::determineBackground(const BinarizedImage &img)
+{
+	const int stripw(img.width()/100);
+
+	qDebug() << "determineBackground: strip" << stripw;
+
+	int black = 0;
+	int white = 0;
+
+	for (int y=0; y<img.height(); y++)
+	{
+		for (int x=0; x<stripw; x++)
+		{
+			if (img.at(x, y) == 0)
+			{
+				++black;
+			}
+			else
+			{
+				++white;
+			}
+			
+			if (img.at(img.width() - x - 1, y) == 0)
+			{
+				++black;
+			}
+			else
+			{
+				++white;
+			}
+		}
+	}
+	return white>black ? 255 : 0;
+}
+
 ComicFrameList FrameDetect::frames() const
 {
 	int *x1 = new int [label];
@@ -234,6 +272,7 @@ ComicFrameList FrameDetect::frames() const
 			frms.append(ComicFrame(x1[lbl], y1[lbl], w, h, lbl));
 		}
 	}
+	// TODO remove frames enclosed by other frames
 
 	delete [] x1;
 	delete [] x2;
