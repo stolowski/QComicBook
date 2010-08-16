@@ -39,7 +39,7 @@ namespace QComicBook
 
 			bool operator()(const ComicFrame &f1, const ComicFrame &f2)
 			{
-				if (std::abs(f1.yPos() - f2.yPos()) <= m_ytolerance)
+				if (std::abs(f1.yPos() - f2.yPos()) <= m_ytolerance || std::abs(f1.yPos() + f1.height() - f2.yPos() - f2.height() <= m_ytolerance))
 				{
 					return f1.xPos() < f2.xPos();
 				}
