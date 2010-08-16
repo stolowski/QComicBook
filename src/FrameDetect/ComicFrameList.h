@@ -25,7 +25,7 @@ namespace QComicBook
 			virtual ~ComicFrameList();
 
 			void append(const ComicFrame &f);
-			void sort();
+			void sort(bool manga=false);
 			const ComicFrame& operator[](int idx);
 			int count() const { return m_frames.count(); }
 			int pageNumber() const { return m_page; }

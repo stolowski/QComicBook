@@ -33,10 +33,10 @@ void ComicFrameList::append(const ComicFrame &f)
 	m_frames.append(f);
 }
 
-void ComicFrameList::sort()
+void ComicFrameList::sort(bool manga)
 {
 	qDebug() << "frames sort";
-	std::sort(m_frames.begin(), m_frames.end(), CompareFrames(static_cast<double>(m_pageHeight) * 0.05f));
+	std::sort(m_frames.begin(), m_frames.end(), CompareFrames(static_cast<double>(m_pageHeight) * 0.05f, manga));
 }
 
 const ComicFrame& ComicFrameList::operator[](int idx)

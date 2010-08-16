@@ -155,7 +155,6 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
     connect(actionContinuousView, SIGNAL(toggled(bool)), this, SLOT(toggleContinousView(bool)));
     actionTwoPages->setChecked(cfg->twoPagesMode());
     actionMangaMode->setChecked(cfg->japaneseMode());
-    actionMangaMode->setDisabled(!cfg->twoPagesMode());
     actionContinuousView->setChecked(cfg->continuousScrolling());
 
     //
@@ -299,6 +298,8 @@ void ComicMainWindow::setupComicImageView()
     const ViewProperties props;
     actionNextFrame->setDisabled(true);
     actionPreviousFrame->setDisabled(true);
+    actionTwoPages->setDisabled(false);
+    actionMangaMode->setDisabled(!cfg->twoPagesMode());
     switch (cfg->viewType())
     {
 	case Continuous:
@@ -312,7 +313,9 @@ void ComicMainWindow::setupComicImageView()
 	case Frame:
 		view = new FrameView(this, n, props);
 		actionNextFrame->setDisabled(false);
-		actionPreviousFrame->setDisabled(false);   
+		actionPreviousFrame->setDisabled(false);
+		actionTwoPages->setDisabled(true);
+		actionMangaMode->setDisabled(false);
 		//
 		// connect frame processing thread
 		connect(pageLoader, SIGNAL(pageLoaded(const Page &)), frameDetect, SLOT(process(const Page &)));

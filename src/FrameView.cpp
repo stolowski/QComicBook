@@ -71,7 +71,7 @@ void FrameView::setFrames(const ComicFrameList &frames)
 	if (frames.pageNumber() == m_currentPage)
 	{
 		m_frames = frames;
-		m_frames.sort();
+		m_frames.sort(props.mangaMode());
 		m_currentFrame = 0;
 		gotoFrame(m_currentFrame);
 	}
@@ -154,7 +154,8 @@ void FrameView::scrollToBottom()
             
 void FrameView::propsChanged()
 {
-
+	m_frames.sort(props.mangaMode());
+	gotoFrame(m_currentFrame);
 }
 
 int FrameView::visiblePages() const

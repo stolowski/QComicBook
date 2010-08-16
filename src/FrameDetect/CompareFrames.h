@@ -25,7 +25,7 @@ namespace QComicBook
 	class CompareFrames
 	{
 		public:
-			CompareFrames(int ytolerance): m_ytolerance(ytolerance) {}
+			CompareFrames(int ytolerance, bool manga): m_ytolerance(ytolerance), m_manga(manga) {}
 
 			static bool between(int x, int a, int b)
 			{
@@ -41,15 +41,29 @@ namespace QComicBook
 			{
 				if (std::abs(f1.yPos() - f2.yPos()) <= m_ytolerance || std::abs(f1.yPos() + f1.height() - f2.yPos() - f2.height() <= m_ytolerance))
 				{
-					return f1.xPos() < f2.xPos();
+					const bool f = (f1.xPos() < f2.xPos());
+					return m_manga ? !f : f;
 				}
 				else
 				{
-					if (f1.xPos() < f2.xPos() && between(f1.yPos(), f2.yPos(), f2.yPos() + f2.height()))
+					if (m_manga)
 					{
-						if (static_cast<double>(sharedHeight(f1.yPos(), f1.height(), f2.yPos(), f2.height())) / static_cast<double>(f1.height()) > 0.5f)
+						if (f1.xPos() < f2.xPos() && between(f1.yPos(), f2.yPos(), f2.yPos() + f2.height()))
 						{
-							return false;
+							if (static_cast<double>(sharedHeight(f1.yPos(), f1.height(), f2.yPos(), f2.height())) / static_cast<double>(f1.height()) > 0.5f)
+							{
+								return false;
+							}
+						}
+					}
+					else
+					{
+						if (f1.xPos() > f2.xPos() && between(f1.yPos(), f2.yPos(), f2.yPos() + f2.height()))
+						{
+							if (static_cast<double>(sharedHeight(f1.yPos(), f1.height(), f2.yPos(), f2.height())) / static_cast<double>(f1.height()) > 0.5f)
+							{
+								return false;
+							}
 						}
 					}
 				}
@@ -58,6 +72,7 @@ namespace QComicBook
 
 		private:
 			const int m_ytolerance;
+			const bool m_manga;
 	};
 }
 
