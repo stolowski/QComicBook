@@ -31,6 +31,8 @@ FrameDetect::FrameDetect(const Page &page)
 
     qDebug() << "background is" << bcolor;
 
+    addWhiteBorders();
+
 #ifdef QT_DEBUG
     bimg->toImage().save("binimg-" + QString::number(page.getNumber()) + ".jpg");
 #endif
@@ -45,6 +47,19 @@ FrameDetect::~FrameDetect()
 {
     delete bimg;
     delete ldata;
+}
+
+void FrameDetect::addWhiteBorders()
+{
+	for (int x=0; x<bimg->width(); x++)
+	{
+		bimg->at(x, 0) = bimg->at(x, bimg->height()-1) = bcolor;
+	}
+	
+	for (int y=1; y<bimg->height()-1; y++)
+	{
+		bimg->at(0, y) = bimg->at(bimg->width()-1, y) = bcolor;
+	}
 }
 
 void FrameDetect::process()
