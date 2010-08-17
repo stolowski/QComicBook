@@ -34,13 +34,15 @@ namespace QComicBook
 	public:
 	    FrameDetect(const Page &page);
 	    ~FrameDetect();
-	    void process();
-	    ComicFrameList frames() const;
+	    ComicFrameList process();
 
-	    QImage labelToImage();
-	    void dump();
+	    QImage labelToImage(const LabelData *ldata);
+	    void dump(const LabelData *ldata);
 
 	protected:
+	    ComicFrameList frames(LabelData *ldata) const;
+		ComicFrameList process(int px, int py, int pw, int ph);
+
 	    struct Point {
 		int x, y;
 		Point(int x, int y): x(x), y(y) {}
@@ -83,12 +85,11 @@ namespace QComicBook
 						throw std::runtime_error("Invalid position");
 			}
 		}
-	    Point tracer(int x, int y, int &pos, int label);
-	    void contourTracking(int x, int y, int initialPos, int label);
+	    Point tracer(LabelData *ldata, int x, int y, int &pos, int label);
+	    void contourTracking(LabelData *ldata, int x, int y, int initialPos, int label);
 
 	private:
 	    BinarizedImage *bimg;
-	    LabelData *ldata;
 		int page;
 	    int ccolor; //contour color
 	    int bcolor; //background color

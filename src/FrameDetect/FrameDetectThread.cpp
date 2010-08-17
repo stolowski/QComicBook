@@ -61,9 +61,9 @@ void FrameDetectThread::run()
 			else
 			{
 				FrameDetect fd(p);
-				fd.process();
-				fc.insert(fd.frames());
-				emit framesReady(fd.frames());
+				ComicFrameList frames(fd.process());
+				fc.insert(frames);
+				emit framesReady(frames);
 			}
 
 			m_processListMtx.lock();

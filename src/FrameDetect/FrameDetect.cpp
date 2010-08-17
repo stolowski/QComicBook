@@ -33,20 +33,13 @@ FrameDetect::FrameDetect(const Page &page)
 
     addWhiteBorders();
 
-#ifdef QT_DEBUG
-    bimg->toImage().save("binimg-" + QString::number(page.getNumber()) + ".jpg");
-#endif
     w = bimg->width();
     h = bimg->height();
-
-    ldata = new LabelData(page.width(), page.height());
-    ldata->fill(0);
 }
 
 FrameDetect::~FrameDetect()
 {
     delete bimg;
-    delete ldata;
 }
 
 void FrameDetect::addWhiteBorders()
@@ -62,14 +55,22 @@ void FrameDetect::addWhiteBorders()
 	}
 }
 
-void FrameDetect::process()
+ComicFrameList FrameDetect::process()
 {
+	return process(1, 1, bimg->width(), bimg->height()-1);
+}
+
+ComicFrameList FrameDetect::process(int px, int py, int pw, int ph)
+{
+	LabelData ldata(w, h); //TODO allocate minimal needed size for given window
+	ldata.fill(0);
+
 	label = 1;
-	for (int y=1; y<bimg->height()-1; y++)
+	for (int y=py; y<py+ph; y++)
 	{
-		for (int x=1; x<bimg->width(); x++)
+		for (int x=px; x<px+pw; x++)
 		{
-			int &p = ldata->at(x, y);
+			int &p = ldata.at(x, y);
 
 			if (bimg->at(x, y) == ccolor) // find contour pixel
 			{
@@ -78,29 +79,36 @@ void FrameDetect::process()
 				if (p == 0 && bimg->at(x, y-1) == bcolor)
 				{
 					p = label;
-					contourTracking(x, y, 7, label++);
+					contourTracking(&ldata, x, y, 7, label++);
 				}
 				//
 				// step 2
-				else if (ldata->at(x, y+1) == 0 && bimg->at(x, y+1) == bcolor) //if pixel below is unmarked white pixel
+				else if (ldata.at(x, y+1) == 0 && bimg->at(x, y+1) == bcolor) //if pixel below is unmarked white pixel
 				{
 					if (p == 0) //P is unlabeled
 					{
-						p = ldata->at(x-1, y); //copy label
+						p = ldata.at(x-1, y); //copy label
 					}
-					contourTracking(x, y, 3, p);
+					contourTracking(&ldata, x, y, 3, p);
 				}
 				else if (p == 0)
 				{
-					p = ldata->at(x-1, y);
+					p = ldata.at(x-1, y);
 				}
 			}
 		}
 	}
+
+#ifdef QT_DEBUG
+    bimg->toImage().save("binimg-" + QString::number(page) + ".jpg");
+    labelToImage(&ldata).save("labels-" + QString::number(page) + ".jpg");
+#endif
+
 	qDebug() << label-1 << "labels";
+	return frames(&ldata);
 }
 
-FrameDetect::Point FrameDetect::tracer(int x, int y, int &pos, int lbl)
+FrameDetect::Point FrameDetect::tracer(LabelData *ldata, int x, int y, int &pos, int lbl)
 {
 	for (int i=7; i>=0; i--)
 	{
@@ -124,14 +132,14 @@ FrameDetect::Point FrameDetect::tracer(int x, int y, int &pos, int lbl)
 	return Point(-1, -1);
 }
     
-void FrameDetect::contourTracking(int x, int y, int initialPos, int lbl)
+void FrameDetect::contourTracking(LabelData *ldata, int x, int y, int initialPos, int lbl)
 {
 	int d(initialPos);
 	const Point s(x, y);
 	bool startReached(false);
 	bool tFollowsS(false);
 
-	Point t = tracer(x, y, d, lbl);
+	Point t = tracer(ldata, x, y, d, lbl);
 	if (t.x < 0) // isolated point
 	{
 		return;
@@ -146,7 +154,7 @@ void FrameDetect::contourTracking(int x, int y, int initialPos, int lbl)
 	{
 		d = (d + 6)%8; // previous contour: d + 4; next initial pos: d + 2
 			
-		const Point f(tracer(x, y, d, lbl));
+		const Point f(tracer(ldata, x, y, d, lbl));
 		if (f.x < 0)
 		{
 			qDebug() << "img boundary";
@@ -177,7 +185,7 @@ void FrameDetect::contourTracking(int x, int y, int initialPos, int lbl)
 	}
 }
 
-QImage FrameDetect::labelToImage()
+QImage FrameDetect::labelToImage(const LabelData *ldata)
 {
 	const int m(std::max(1, 255/label));
 	QImage img(ldata->width(), ldata->height(), QImage::Format_RGB32);
@@ -195,7 +203,7 @@ QImage FrameDetect::labelToImage()
 	return img;
 }
 
-void FrameDetect::dump()
+void FrameDetect::dump(const LabelData *ldata)
 {
 	std::ofstream str("dump.txt");
 	for (int y=0; y<ldata->height(); y++)
@@ -244,7 +252,7 @@ int FrameDetect::determineBackground(const BinarizedImage &img)
 	return white>black ? 255 : 0;
 }
 
-ComicFrameList FrameDetect::frames() const
+ComicFrameList FrameDetect::frames(LabelData *ldata) const
 {
 	int *x1 = new int [label];
 	int *x2 = new int [label];
