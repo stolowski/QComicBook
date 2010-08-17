@@ -33,7 +33,7 @@
      <x>0</x>
      <y>0</y>
      <width>1184</width>
-     <height>24</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -75,6 +75,7 @@
     <addaction name="actionSimpleView"/>
     <addaction name="actionContinuousView"/>
     <addaction name="actionFrameView"/>
+    <addaction name="separator"/>
     <addaction name="actionFullscreen"/>
    </widget>
    <widget class="QMenu" name="menuNavigation">
