@@ -399,6 +399,8 @@ void ComicMainWindow::enableComicBookActions(bool f)
         actionForwardPage->setEnabled(f);
         actionPageTop->setEnabled(f);
         actionPageBottom->setEnabled(f);
+	actionNextFrame->setEnabled(f);
+	actionPreviousFrame->setEnabled(f);
 
         //
         // bookmarks menu
