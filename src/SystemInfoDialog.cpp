@@ -11,7 +11,7 @@
  */
 
 #include "SystemInfoDialog.h"
-#include "ArchiversConfiguration.h"
+#include "Archivers/ArchiversConfiguration.h"
 #include "ImageFormatsInfo.h"
 
 using namespace QComicBook;

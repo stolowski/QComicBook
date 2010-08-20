@@ -12,7 +12,7 @@
 
 #include "ImgArchiveSink.h"
 #include "Utility.h"
-#include "ArchiversConfiguration.h"
+#include "Archivers/ArchiversConfiguration.h"
 #include "ComicBookSettings.h"
 #include <QStringList>
 #include <QProcess>

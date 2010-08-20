@@ -18,7 +18,7 @@
 #include "ContinuousPageView.h"
 #include "SimplePageView.h"
 #include "FrameView.h"
-#include "ArchiversConfiguration.h"
+#include "Archivers/ArchiversConfiguration.h"
 #include "ImgArchiveSink.h"
 #include "ImgSinkFactory.h"
 #include "AboutDialog.h"

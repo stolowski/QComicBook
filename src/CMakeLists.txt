@@ -12,16 +12,16 @@ SET(qcomicbook_src
 	FrameDetect/FrameDetect.cpp
 	FrameDetect/FrameDetectThread.cpp
 	FrameDetect/FrameCache.cpp
-	ArchiversConfiguration.cpp
-        ArchiverHint.cpp
-	ArchiverStatus.cpp
-	ArchiverStrategy.cpp
-	AceArchiverStrategy.cpp
-	P7zipArchiverStrategy.cpp
-	RarArchiverStrategy.cpp
-	TargzArchiverStrategy.cpp
-	Tarbz2ArchiverStrategy.cpp
-	ZipArchiverStrategy.cpp
+	Archivers/ArchiversConfiguration.cpp
+        Archivers/ArchiverHint.cpp
+	Archivers/ArchiverStatus.cpp
+	Archivers/ArchiverStrategy.cpp
+	Archivers/AceArchiverStrategy.cpp
+	Archivers/P7zipArchiverStrategy.cpp
+	Archivers/RarArchiverStrategy.cpp
+	Archivers/TargzArchiverStrategy.cpp
+	Archivers/Tarbz2ArchiverStrategy.cpp
+	Archivers/ZipArchiverStrategy.cpp
 	FileSignature.cpp 
 	AboutDialog.cpp
 	Bookmark.cpp
@@ -69,7 +69,7 @@ SET(qcomicbook_src
 SET(qcomicbook_moc_hdrs
 	FrameDetect/FrameCache.h
 	FrameDetect/FrameDetectThread.h
-	ArchiversConfiguration.h
+	Archivers/ArchiversConfiguration.h
 	BookmarkManager.h 
 	ComicBookCfgDialog.h 
 	ComicBookSettings.h 
