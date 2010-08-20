@@ -18,6 +18,7 @@
 #include <QPixmap>
 #include <QVBoxLayout>
 #include <QPainter>
+#include <QScrollBar>
 #include <QDebug>
 
 using namespace QComicBook;
@@ -140,11 +141,12 @@ void FrameView::gotoPage(int n)
 void FrameView::scrollToTop()
 {
 
+	verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
 }
 
 void FrameView::scrollToBottom()
 {
-
+	verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMaximum);
 }
             
 void FrameView::propsChanged()
