@@ -44,6 +44,7 @@
     <addaction name="actionOpenDirectory"/>
     <addaction name="actionOpenNext"/>
     <addaction name="actionOpenPrevious"/>
+    <addaction name="actionLibrary"/>
     <addaction name="separator"/>
     <addaction name="actionShowInfo"/>
     <addaction name="separator"/>
@@ -657,6 +658,11 @@
    </property>
    <property name="text">
     <string>Previous Frame</string>
+   </property>
+  </action>
+  <action name="actionLibrary">
+   <property name="text">
+    <string>Library</string>
    </property>
   </action>
  </widget>

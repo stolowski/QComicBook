@@ -128,6 +128,7 @@ namespace QComicBook
 			void toggleJapaneseMode(bool f);
 			void reloadPage();
 			void openPrintDialog();
+			void openLibraryWindow();
 
 		public:
 			ComicMainWindow(QWidget *parent);

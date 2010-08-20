@@ -22,6 +22,7 @@ SET(qcomicbook_src
 	Archivers/TargzArchiverStrategy.cpp
 	Archivers/Tarbz2ArchiverStrategy.cpp
 	Archivers/ZipArchiverStrategy.cpp
+	Library/LibraryWindow.cpp
 	FileSignature.cpp 
 	AboutDialog.cpp
 	Bookmark.cpp
@@ -70,6 +71,7 @@ SET(qcomicbook_moc_hdrs
 	FrameDetect/FrameCache.h
 	FrameDetect/FrameDetectThread.h
 	Archivers/ArchiversConfiguration.h
+	Library/LibraryWindow.h
 	BookmarkManager.h 
 	ComicBookCfgDialog.h 
 	ComicBookSettings.h 
@@ -104,6 +106,8 @@ SET(qcomicbook_ui
 	GoToPageWidget.ui
         PrintProgressDialog.ui
 	SystemInfoDialog.ui
+	Library/LibraryEdit.ui
+	Library/LibraryWindow.ui
 )
 
 QT4_ADD_RESOURCES(qcomicbook_res ../data/qcomicbook.qrc)

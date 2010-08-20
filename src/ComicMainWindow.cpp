@@ -36,6 +36,7 @@
 #include "PageLoaderThread.h"
 #include "RecentFilesMenu.h"
 #include "PrinterThread.h"
+#include "Library/LibraryWindow.h"
 #include <FrameDetectThread.h>
 #include "PrintProgressDialog.h"
 #include <QMenu>
@@ -110,6 +111,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
     connect(actionOpenDirectory, SIGNAL(triggered(bool)), this, SLOT(browseDirectory()));
     connect(actionOpenNext, SIGNAL(triggered(bool)), this, SLOT(openNext()));
     connect(actionOpenPrevious, SIGNAL(triggered(bool)), this, SLOT(openPrevious()));
+    connect(actionLibrary, SIGNAL(triggered(bool)), this, SLOT(openLibraryWindow()));
     connect(actionPrint, SIGNAL(triggered(bool)), this, SLOT(openPrintDialog()));
     connect(actionSavePageAs, SIGNAL(triggered(bool)), this, SLOT(savePageAs()));
     connect(actionShowInfo, SIGNAL(triggered(bool)), this, SLOT(showInfo()));
@@ -956,6 +958,13 @@ void ComicMainWindow::openPrintDialog()
         progressdlg->show();
         printThread->start();
     }
+}
+			
+void ComicMainWindow::openLibraryWindow()
+{
+    //TODO keep one instance
+    LibraryWindow *w = new LibraryWindow(NULL);
+    w->show();
 }
 
 void ComicMainWindow::bookmarkSelected(QAction *action) 
