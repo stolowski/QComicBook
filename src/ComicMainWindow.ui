@@ -477,7 +477,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Continuous scrolling</string>
+    <string>Continuous view</string>
    </property>
   </action>
   <action name="actionSetBookmark">
