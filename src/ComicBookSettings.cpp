@@ -37,6 +37,7 @@
 #define OPT_SMALLCURSOR              "/SmallCursor"
 #define OPT_EMBEDPAGENUMBERS         "/EmbedPageNumbers"
 #define OPT_CONTSCROLL               "/ContinuousScroll"
+#define OPT_VIEWTYPE                 "/ViewType"
 
 #define GRP_NAVI                     "/Navigation"
 
@@ -67,6 +68,13 @@ const EnumMap<Size> ComicBookSettings::size2string[] = {
 	{"fitheight", FitHeight},
 	{"wholepage", WholePage},
 	{"bestfit",   BestFit},
+	{QString::null}
+};
+
+const EnumMap<ViewType> ComicBookSettings::viewtype2string[] = {
+	{"simple",  Simple},
+	{"continuous", Continuous},
+	{"frame", Frame},
 	{QString::null}
 };
 
@@ -152,6 +160,7 @@ void ComicBookSettings::load()
 			m_font.setPointSize(10);
 		}
 		m_contscroll = m_cfg->value(OPT_CONTSCROLL, true).toBool();
+		m_viewtype = convert(viewtype2string, m_cfg->value(OPT_VIEWTYPE, viewtype2string[0].str).toString());
 	m_cfg->endGroup();
 	m_cfg->beginGroup(GRP_RUNTIME);
 		m_lastdir = m_cfg->value(OPT_LASTDIR, QString()).toString();
@@ -202,6 +211,11 @@ bool ComicBookSettings::japaneseMode() const
 bool ComicBookSettings::continuousScrolling() const
 {
     return m_contscroll;
+}
+
+ViewType ComicBookSettings::viewType() const
+{
+	return m_viewtype;
 }
 
 bool ComicBookSettings::scrollbarsVisible() const
@@ -356,6 +370,14 @@ void ComicBookSettings::continuousScrolling(bool f)
     {
         m_cfg->setValue(GRP_VIEW OPT_CONTSCROLL, m_contscroll = f);
     }
+}
+
+void ComicBookSettings::viewType(ViewType t)
+{
+	if (t != m_viewtype)
+	{
+		m_cfg->setValue(GRP_VIEW OPT_VIEWTYPE, convert(viewtype2string, m_viewtype = t));
+	}
 }
 
 void ComicBookSettings::scrollbarsVisible(bool f)

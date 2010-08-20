@@ -32,11 +32,12 @@ namespace QComicBook
 	class ThumbnailsWindow;
 	class Bookmarks;
 	class StatusBar;
-        class PageLoaderThread;
-        class Page;
-        class ThumbnailLoaderThread;
-        class RecentFilesMenu;
-        class PrinterThread;
+	class PageLoaderThread;
+	class Page;
+	class ThumbnailLoaderThread;
+	class RecentFilesMenu;
+	class PrinterThread;
+	class FrameDetectThread;
 
 	//! The main window of QComicBook.
 	class ComicMainWindow: public QMainWindow, private Ui::ComicMainWindow
@@ -55,14 +56,15 @@ namespace QComicBook
 			bool savedToolbarState;
 			QMenu *context_menu;
 			RecentFilesMenu *menuRecentFiles;
-                        QAction *actionToggleThumbnails;
-                        QAction *actionExitFullScreen;
+			QAction *actionToggleThumbnails;
+			QAction *actionExitFullScreen;
 			QLabel *pageinfo; //!<page info displayed in right-click context menu
 			QString lastdir; //!<last opened directory for Open File/Directory dialog
-                        PageLoaderThread *pageLoader;
-                        ThumbnailLoaderThread *thumbnailLoader;
-                        QPrinter *printer;
-                        PrinterThread *printThread;
+			PageLoaderThread *pageLoader;
+			ThumbnailLoaderThread *thumbnailLoader;
+			QPrinter *printer;
+			PrinterThread *printThread;
+			FrameDetectThread *frameDetect;
                         		
 		protected:
 			virtual void dragEnterEvent(QDragEnterEvent *e);
@@ -78,8 +80,8 @@ namespace QComicBook
 			void setupComicImageView();
 
 		protected slots:
-                        void pageLoaded(const Page &page);
-                        void pageLoaded(const Page &page1, const Page &page2);
+			void pageLoaded(const Page &page);
+			void pageLoaded(const Page &page1, const Page &page2);
 			void sinkReady(const QString &path);
 			void sinkError(int code);
 			void updateCaption();
@@ -87,15 +89,18 @@ namespace QComicBook
 			void bookmarkSelected(QAction *action);
 			void thumbnailsWindowShown();
 			void savePageAs();
-                        void reconfigureDisplay();
-                        void currentPageChanged(int n);
-                        void setPageSize(QAction *action);
-                        void printingFinished();
+			void reconfigureDisplay();
+			void currentPageChanged(int n);
+			void setPageSize(QAction *action);
+			void changeViewType(QAction *action);
+			void printingFinished();
 
 		public slots:
 			void firstPage();
 			void lastPage();
 			void nextPage();
+			void nextFrame();
+			void prevFrame();
 			void prevPage();
 			void prevPageBottom();
 			void forwardPages();
@@ -119,10 +124,10 @@ namespace QComicBook
 			void toggleScrollbars(bool f);
 			void toggleTwoPages(bool f);
 			void toggleFullScreen();
-			void toggleContinousScroll(bool f);
+			void toggleContinousView(bool f);
 			void toggleJapaneseMode(bool f);
 			void reloadPage();
-                        void openPrintDialog();
+			void openPrintDialog();
 
 		public:
 			ComicMainWindow(QWidget *parent);

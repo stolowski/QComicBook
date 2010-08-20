@@ -3,6 +3,7 @@
 
 #include <QScrollArea>
 #include "ViewProperties.h"
+#include <ComicFrame.h>
 
 class QMenu;
 
@@ -38,6 +39,9 @@ namespace QComicBook
             virtual void scrollToBottom() = 0;
             virtual void jumpUp();
             virtual void jumpDown();
+			virtual void setFrames(int page, const QList<ComicFrame> &frames);
+			virtual void nextFrame();
+			virtual void prevFrame();
 
             virtual void setTwoPagesMode(bool f);
             virtual void setMangaMode(bool f);
