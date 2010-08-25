@@ -94,6 +94,7 @@ namespace QComicBook
 			void setPageSize(QAction *action);
 			void changeViewType(QAction *action);
 			void printingFinished();
+			void showAboutQt();
 
 		public slots:
 			void firstPage();

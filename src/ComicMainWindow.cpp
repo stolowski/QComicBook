@@ -52,6 +52,7 @@
 #include <QUrl>
 #include <QPrinter>
 #include <QPrintDialog>
+#include <QApplication>
 #include <QDebug>
 
 using namespace QComicBook;
@@ -177,6 +178,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
     // Help menu
     connect(actionShowSystemInfo, SIGNAL(triggered()), this, SLOT(showSysInfo()));
     connect(actionShowAbout, SIGNAL(triggered()), this, SLOT(showAbout()));
+    connect(actionAboutQt, SIGNAL(triggered()),  this, SLOT(showAboutQt()));
 
     QAction *which = actionOriginalSize;
     switch (cfg->pageSize())
@@ -870,6 +872,11 @@ void ComicMainWindow::showJumpToPage(const QString &number)
                 connect(&win, SIGNAL(pageSelected(int)), this, SLOT(jumpToPage(int)));
                 win.exec();
         }
+}
+			
+void ComicMainWindow::showAboutQt()
+{
+	QApplication::aboutQt();	
 }
 
 void ComicMainWindow::closeSink()

@@ -123,6 +123,7 @@
     <addaction name="actionShowSystemInfo"/>
     <addaction name="separator"/>
     <addaction name="actionShowAbout"/>
+    <addaction name="actionAboutQt"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
@@ -657,6 +658,11 @@
    </property>
    <property name="text">
     <string>Previous Frame</string>
+   </property>
+  </action>
+  <action name="actionAboutQt">
+   <property name="text">
+    <string>About Qt</string>
    </property>
   </action>
  </widget>
