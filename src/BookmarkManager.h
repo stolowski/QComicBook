@@ -10,7 +10,7 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-/*! \file bookmarkmanager.h */
+/*! \file BookmarkManager.h */
 
 #ifndef __BOOKMARKMANAGER_H
 #define __BOOKMARKMANAGER_H
@@ -26,6 +26,9 @@ namespace QComicBook
 	class Bookmarks;
 	class Bookmark;
 
+	/**
+	 * @brief Widget for managing Bookmarks.
+	 */
 	class BookmarkManager: public QWidget, private Ui::BookmarkManager
 	{
 		Q_OBJECT
