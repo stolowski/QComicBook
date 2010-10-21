@@ -290,7 +290,7 @@ QString ImgArchiveSink::getNext() const
 	QDir dir(finfo.absolutePath()); //get the full path of current cb
 	QStringList files = dir.entryList(ArchiversConfiguration::instance().supportedOpenExtensions(), QDir::Files|QDir::Readable, QDir::Name);
 	int i = files.indexOf(finfo.fileName()); //find current cb
-	if ((i > 0) && (i < files.size()-1))
+	if ((i >= 0) && (i < files.size()-1))
 		return dir.absoluteFilePath(files.at(i+1));  //get next file name
 	return QString::null;
 }
