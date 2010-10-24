@@ -95,6 +95,7 @@ namespace QComicBook
 			void changeViewType(QAction *action);
 			void printingFinished();
 			void showAboutQt();
+			void showAboutDonating();
 
 		public slots:
 			void firstPage();

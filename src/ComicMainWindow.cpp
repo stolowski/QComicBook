@@ -22,6 +22,7 @@
 #include "ImgArchiveSink.h"
 #include "ImgSinkFactory.h"
 #include "AboutDialog.h"
+#include "ui_DonationDialog.h"
 #include "ComicBookSettings.h"
 #include "History.h"
 #include "ComicBookCfgDialog.h"
@@ -179,6 +180,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
     connect(actionShowSystemInfo, SIGNAL(triggered()), this, SLOT(showSysInfo()));
     connect(actionShowAbout, SIGNAL(triggered()), this, SLOT(showAbout()));
     connect(actionAboutQt, SIGNAL(triggered()),  this, SLOT(showAboutQt()));
+    connect(actionAboutDonating, SIGNAL(triggered()),  this, SLOT(showAboutDonating()));
 
     QAction *which = actionOriginalSize;
     switch (cfg->pageSize())
@@ -855,6 +857,14 @@ void ComicMainWindow::showAbout()
                         "<a href=\"http://qcomicbook.linux-projects.net\">http://qcomicbook.linux-projects.net</a><br>"
                         "<a href=\"mailto:stolowski@gmail.com\">stolowski@gmail.com</a>", QPixmap(":/images/qcomicbook-splash.png"));
         win->show();
+}
+
+void ComicMainWindow::showAboutDonating()
+{
+    QDialog dlg;
+    Ui::DonationDialog d;
+    d.setupUi(&dlg);
+    dlg.exec();
 }
 
 void ComicMainWindow::showConfigDialog()

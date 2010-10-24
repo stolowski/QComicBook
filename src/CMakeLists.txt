@@ -99,6 +99,7 @@ SET(qcomicbook_moc_hdrs
 SET(qcomicbook_ui
 	AboutDialog.ui
 	ConfigDialog.ui
+	DonationDialog.ui
 	BookmarkManager.ui
 	ComicMainWindow.ui
 	GoToPageWidget.ui

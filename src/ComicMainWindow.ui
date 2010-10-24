@@ -123,6 +123,7 @@
     <addaction name="actionShowSystemInfo"/>
     <addaction name="separator"/>
     <addaction name="actionShowAbout"/>
+    <addaction name="actionAboutDonating"/>
     <addaction name="actionAboutQt"/>
    </widget>
    <addaction name="menuFile"/>
@@ -663,6 +664,11 @@
   <action name="actionAboutQt">
    <property name="text">
     <string>About Qt</string>
+   </property>
+  </action>
+  <action name="actionAboutDonating">
+   <property name="text">
+    <string>About donating</string>
    </property>
   </action>
  </widget>
