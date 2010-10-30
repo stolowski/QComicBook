@@ -859,12 +859,24 @@ void ComicMainWindow::showAbout()
         win->show();
 }
 
-void ComicMainWindow::showAboutDonating()
+void ComicMainWindow::showAboutDonating(bool startup)
 {
     QDialog dlg;
     Ui::DonationDialog d;
     d.setupUi(&dlg);
-    dlg.exec();
+    if (startup)
+    {
+    	d.closeBtn->hide();
+    }
+    else
+    {
+	d.remindBtn->hide();
+	d.donateBtn->hide();
+    }
+    if (startup && dlg.exec() == QDialog::Accepted)
+    {
+	cfg->showDonationDialog(false);	
+    }
 }
 
 void ComicMainWindow::showConfigDialog()

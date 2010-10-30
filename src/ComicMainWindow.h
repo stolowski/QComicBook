@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005-2006 Pawel Stolowski <pawel.stolowski@wp.pl>
+ * Copyright (C) 2005-2010 Pawel Stolowski <stolowski@gmail.com>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -95,7 +95,6 @@ namespace QComicBook
 			void changeViewType(QAction *action);
 			void printingFinished();
 			void showAboutQt();
-			void showAboutDonating();
 
 		public slots:
 			void firstPage();
@@ -130,6 +129,7 @@ namespace QComicBook
 			void toggleJapaneseMode(bool f);
 			void reloadPage();
 			void openPrintDialog();
+			void showAboutDonating(bool startup=false);
 
 		public:
 			ComicMainWindow(QWidget *parent);

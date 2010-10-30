@@ -59,6 +59,7 @@
 #define OPT_CONFIRMEXIT "/ConfirmExit"
 #define OPT_SHOWSPLASH  "/ShowSplashscreen"
 #define OPT_TMPDIR      "/TmpDir"
+#define OPT_DONATION    "/DonationDialog"
 
 using namespace QComicBook;
 
@@ -167,6 +168,7 @@ void ComicBookSettings::load()
 		m_recent = m_cfg->value(OPT_RECENT).toStringList(); 
         m_cfg->endGroup();
 	m_cfg->beginGroup(GRP_MISC);
+		m_donationdlg = m_cfg->value(OPT_DONATION, true).toBool();
 		m_cachesize = m_cfg->value(OPT_CACHESIZE, 3).toInt();
 		if (m_cachesize < 1)
                 {
@@ -326,6 +328,11 @@ void ComicBookSettings::restoreDockLayout(ComicMainWindow *w) const
 QString ComicBookSettings::tmpDir() const
 {
     return m_tmpdir;
+}
+
+bool ComicBookSettings::showDonationDialog() const
+{
+	return m_donationdlg;
 }
 
 void ComicBookSettings::embedPageNumbers(bool f)
@@ -555,5 +562,13 @@ void ComicBookSettings::tmpDir(const QString &dir)
     {
         m_cfg->setValue(GRP_MISC OPT_TMPDIR, m_tmpdir = dir);
     }
+}
+			
+bool ComicBookSettings::showDonationDialog(bool f)
+{
+	if (f != m_donationdlg)
+	{
+		m_cfg->setValue(GRP_MISC OPT_DONATION, m_donationdlg = f);
+	}
 }
 
