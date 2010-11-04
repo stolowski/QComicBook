@@ -5,13 +5,11 @@
     <name>AboutDialog</name>
     <message>
         <location filename="../src/AboutDialog.ui" line="23"/>
-        <location filename="../src/ui_AboutDialog.h" line="105"/>
         <source>About</source>
         <translation>Informazioni su</translation>
     </message>
     <message>
         <location filename="../src/AboutDialog.ui" line="91"/>
-        <location filename="../src/ui_AboutDialog.h" line="107"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
@@ -20,55 +18,46 @@
     <name>BookmarkManager</name>
     <message>
         <location filename="../src/BookmarkManager.ui" line="17"/>
-        <location filename="../src/ui_BookmarkManager.h" line="107"/>
         <source>QComicBook Bookmarks</source>
         <translation>Segnalibri di QComicBook</translation>
     </message>
     <message>
         <location filename="../src/BookmarkManager.ui" line="42"/>
-        <location filename="../src/ui_BookmarkManager.h" line="110"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
         <location filename="../src/BookmarkManager.ui" line="47"/>
-        <location filename="../src/ui_BookmarkManager.h" line="109"/>
         <source>Page</source>
         <translation>Pagina</translation>
     </message>
     <message>
         <location filename="../src/BookmarkManager.ui" line="57"/>
-        <location filename="../src/ui_BookmarkManager.h" line="111"/>
         <source>Select all</source>
         <translation>Seleziona tutto</translation>
     </message>
     <message>
         <location filename="../src/BookmarkManager.ui" line="64"/>
-        <location filename="../src/ui_BookmarkManager.h" line="112"/>
         <source>Invert selection</source>
         <translation>Inverti la selezione</translation>
     </message>
     <message>
         <location filename="../src/BookmarkManager.ui" line="71"/>
-        <location filename="../src/ui_BookmarkManager.h" line="113"/>
         <source>Select invalid</source>
-        <translation>Selezione non valida</translation>
+        <translation>Selezionare non validi</translation>
     </message>
     <message>
         <location filename="../src/BookmarkManager.ui" line="78"/>
-        <location filename="../src/ui_BookmarkManager.h" line="114"/>
         <source>Clear selection</source>
         <translation>Pulisci selezione</translation>
     </message>
     <message>
         <location filename="../src/BookmarkManager.ui" line="98"/>
-        <location filename="../src/ui_BookmarkManager.h" line="115"/>
         <source>Remove selected</source>
         <translation>Rimuovi selezionati</translation>
     </message>
     <message>
         <location filename="../src/BookmarkManager.ui" line="105"/>
-        <location filename="../src/ui_BookmarkManager.h" line="116"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
@@ -76,518 +65,471 @@
 <context>
     <name>ComicMainWindow</name>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="22"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="382"/>
+        <location filename="../src/ComicMainWindow.ui" line="23"/>
         <source>QComicBook</source>
         <translation>QComicBook</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="40"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="461"/>
+        <location filename="../src/ComicMainWindow.ui" line="41"/>
         <source>&amp;File</source>
         <translation>&amp;File</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="56"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="462"/>
+        <location filename="../src/ComicMainWindow.ui" line="59"/>
         <source>&amp;View</source>
         <translation>&amp;Visualizza</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="77"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="463"/>
+        <location filename="../src/ComicMainWindow.ui" line="83"/>
         <source>&amp;Navigation</source>
         <translation>&amp;Navigazione</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="94"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="464"/>
+        <location filename="../src/ComicMainWindow.ui" line="103"/>
         <source>&amp;Bookmarks</source>
         <translation>&amp;Segnalibri</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="103"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="465"/>
+        <location filename="../src/ComicMainWindow.ui" line="112"/>
         <source>&amp;Settings</source>
         <translation>&amp;Impostazioni</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="112"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="466"/>
+        <location filename="../src/ComicMainWindow.ui" line="121"/>
         <source>&amp;Help</source>
         <translation>&amp;Guida</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="128"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="467"/>
+        <location filename="../src/ComicMainWindow.ui" line="139"/>
         <source>Toolbar</source>
         <translation>Barra degli strumenti</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="166"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="383"/>
+        <location filename="../src/ComicMainWindow.ui" line="179"/>
         <source>Open archive</source>
         <translation>Apri un archivio</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="169"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="384"/>
+        <location filename="../src/ComicMainWindow.ui" line="182"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="178"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="385"/>
+        <location filename="../src/ComicMainWindow.ui" line="191"/>
         <source>Open directory</source>
         <translation>Apri una cartella</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="181"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="386"/>
+        <location filename="../src/ComicMainWindow.ui" line="194"/>
         <source>Ctrl+D</source>
         <translation>Ctrl+D</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="186"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="387"/>
+        <location filename="../src/ComicMainWindow.ui" line="199"/>
         <source>Open next</source>
         <translation>Apri successivo</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="189"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="388"/>
+        <location filename="../src/ComicMainWindow.ui" line="202"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="194"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="389"/>
+        <location filename="../src/ComicMainWindow.ui" line="207"/>
         <source>Open previous</source>
         <translation>Apri precedente</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="197"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="390"/>
+        <location filename="../src/ComicMainWindow.ui" line="210"/>
         <source>Ctrl+P</source>
         <translation>Ctrl+P</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="202"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="391"/>
+        <location filename="../src/ComicMainWindow.ui" line="215"/>
         <source>Save page as</source>
         <translation>Salva con nome</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="211"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="392"/>
+        <location filename="../src/ComicMainWindow.ui" line="224"/>
         <source>Info</source>
         <translation>Informazioni</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="214"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="393"/>
+        <location filename="../src/ComicMainWindow.ui" line="227"/>
         <source>Alt+I</source>
         <translation>Alt+I</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="219"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="394"/>
+        <location filename="../src/ComicMainWindow.ui" line="232"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="224"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="395"/>
+        <location filename="../src/ComicMainWindow.ui" line="237"/>
         <source>Quit</source>
         <translation>Esci</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="227"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="396"/>
+        <location filename="../src/ComicMainWindow.ui" line="240"/>
         <source>Ctrl+Q</source>
         <translation>Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="242"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="397"/>
+        <location filename="../src/ComicMainWindow.ui" line="255"/>
         <source>Original size</source>
         <translation>Dimensione originale</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="245"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="398"/>
+        <location filename="../src/ComicMainWindow.ui" line="258"/>
         <source>Alt+O</source>
         <translation>Alt+O</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="257"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="399"/>
+        <location filename="../src/ComicMainWindow.ui" line="270"/>
         <source>Fit width</source>
         <translation>Adatta alla larghezza</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="260"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="400"/>
+        <location filename="../src/ComicMainWindow.ui" line="273"/>
         <source>Alt+W</source>
         <translation>Alt+W</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="272"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="401"/>
+        <location filename="../src/ComicMainWindow.ui" line="285"/>
         <source>Fit height</source>
         <translation>Adatta all&apos;altezza</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="275"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="402"/>
+        <location filename="../src/ComicMainWindow.ui" line="288"/>
         <source>Alt+H</source>
         <translation>Alt+H</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="287"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="403"/>
+        <location filename="../src/ComicMainWindow.ui" line="300"/>
         <source>Whole page</source>
         <translation>Pagina intera</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="290"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="404"/>
+        <location filename="../src/ComicMainWindow.ui" line="303"/>
         <source>Alt+A</source>
         <translation>Alt+A</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="302"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="405"/>
+        <location filename="../src/ComicMainWindow.ui" line="315"/>
         <source>Best fit</source>
         <translation>Miglior adattamento</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="305"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="406"/>
+        <location filename="../src/ComicMainWindow.ui" line="318"/>
         <source>Alt+B</source>
         <translation>Alt+B</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="314"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="407"/>
+        <location filename="../src/ComicMainWindow.ui" line="327"/>
         <source>Rotate right</source>
         <translation>Ruota a destra</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="323"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="408"/>
+        <location filename="../src/ComicMainWindow.ui" line="336"/>
         <source>Rotate left</source>
         <translation>Ruota a sinistra</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="328"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="409"/>
+        <location filename="../src/ComicMainWindow.ui" line="341"/>
         <source>No rotation</source>
         <translation>Nessuna rotazione</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="336"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="410"/>
+        <location filename="../src/ComicMainWindow.ui" line="349"/>
         <source>Preserve rotation</source>
         <translation>Mantieni rotazione</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="348"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="411"/>
+        <location filename="../src/ComicMainWindow.ui" line="361"/>
         <source>Two pages</source>
         <translation>Due pagine</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="351"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="412"/>
+        <location filename="../src/ComicMainWindow.ui" line="364"/>
         <source>Ctrl+T</source>
         <translation>Ctrl+T</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="363"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="413"/>
+        <location filename="../src/ComicMainWindow.ui" line="376"/>
         <source>Japanese mode</source>
         <translation>Modalità giapponese</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="366"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="414"/>
+        <location filename="../src/ComicMainWindow.ui" line="379"/>
         <source>Ctrl+J</source>
         <translation>Ctrl+J</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="371"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="415"/>
+        <location filename="../src/ComicMainWindow.ui" line="384"/>
         <source>Fullscreen</source>
         <translation>Schermo intero</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="374"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="416"/>
+        <location filename="../src/ComicMainWindow.ui" line="387"/>
         <source>F11</source>
         <translation>F11</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="383"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="417"/>
+        <location filename="../src/ComicMainWindow.ui" line="396"/>
         <source>Next page</source>
         <translation>Pagina successiva</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="386"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="418"/>
+        <location filename="../src/ComicMainWindow.ui" line="399"/>
         <source>PgDown</source>
         <translation>Pag Giù</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="395"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="419"/>
+        <location filename="../src/ComicMainWindow.ui" line="408"/>
         <source>Previous page</source>
         <translation>Pagina precedente</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="398"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="420"/>
+        <location filename="../src/ComicMainWindow.ui" line="411"/>
         <source>PgUp</source>
         <translation>Pag Su</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="407"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="421"/>
+        <location filename="../src/ComicMainWindow.ui" line="420"/>
         <source>5 pages forward</source>
         <translation>5 pagine avanti</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="416"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="422"/>
+        <location filename="../src/ComicMainWindow.ui" line="429"/>
         <source>5 pages backward</source>
         <translation>5 pagine indietro</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="421"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="423"/>
+        <location filename="../src/ComicMainWindow.ui" line="434"/>
         <source>Go to page...</source>
         <translation>Vai a pagina...</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="426"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="424"/>
+        <location filename="../src/ComicMainWindow.ui" line="439"/>
         <source>First page</source>
         <translation>Prima pagina</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="429"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="425"/>
+        <location filename="../src/ComicMainWindow.ui" line="442"/>
         <source>Ctrl+Home</source>
         <translation>Ctrl+Home</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="434"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="426"/>
+        <location filename="../src/ComicMainWindow.ui" line="447"/>
         <source>Last page</source>
         <translation>Ultima pagina</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="437"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="427"/>
+        <location filename="../src/ComicMainWindow.ui" line="450"/>
         <source>Ctrl+End</source>
         <translation>Ctrl+End</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="446"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="428"/>
+        <location filename="../src/ComicMainWindow.ui" line="459"/>
         <source>Page top</source>
         <translation>Cima della pagina</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="449"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="429"/>
+        <location filename="../src/ComicMainWindow.ui" line="462"/>
         <source>Home</source>
         <translation>Inizio</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="458"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="430"/>
+        <location filename="../src/ComicMainWindow.ui" line="471"/>
         <source>Page bottom</source>
         <translation>Fondo della pagina</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="461"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="431"/>
+        <location filename="../src/ComicMainWindow.ui" line="474"/>
         <source>End</source>
         <translation>Fine</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="469"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="432"/>
-        <source>Continuous scrolling</source>
-        <translation>Scorrimento continuo</translation>
+        <location filename="../src/ComicMainWindow.ui" line="482"/>
+        <source>Continuous view</source>
+        <translation>Vista continua</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="478"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="433"/>
+        <location filename="../src/ComicMainWindow.ui" line="627"/>
+        <source>Print</source>
+        <translation>Stampa</translation>
+    </message>
+    <message>
+        <location filename="../src/ComicMainWindow.ui" line="635"/>
+        <source>Frame view</source>
+        <translation>Vista a vignette</translation>
+    </message>
+    <message>
+        <location filename="../src/ComicMainWindow.ui" line="643"/>
+        <source>Simple view</source>
+        <translation>Vista semplice</translation>
+    </message>
+    <message>
+        <location filename="../src/ComicMainWindow.ui" line="652"/>
+        <source>Next Frame</source>
+        <translation>Vignetta successiva</translation>
+    </message>
+    <message>
+        <location filename="../src/ComicMainWindow.ui" line="661"/>
+        <source>Previous Frame</source>
+        <translation>Vignetta precedente</translation>
+    </message>
+    <message>
+        <location filename="../src/ComicMainWindow.ui" line="666"/>
+        <source>About Qt</source>
+        <translation>Informazioni sulle Qt</translation>
+    </message>
+    <message>
+        <location filename="../src/ComicMainWindow.ui" line="671"/>
+        <source>About donating</source>
+        <translation>Come donare</translation>
+    </message>
+    <message>
+        <source>Continuous scrolling</source>
+        <translation type="obsolete">Scorrimento continuo</translation>
+    </message>
+    <message>
+        <location filename="../src/ComicMainWindow.ui" line="491"/>
         <source>Add bookmark</source>
         <translation>Aggiungi segnalibro</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="483"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="434"/>
+        <location filename="../src/ComicMainWindow.ui" line="496"/>
         <source>Remove bookmark</source>
         <translation>Rimuovi segnalibro</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="488"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="435"/>
+        <location filename="../src/ComicMainWindow.ui" line="501"/>
         <source>Manage bookmarks</source>
         <translation>Gestione segnalibri</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="496"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="436"/>
+        <location filename="../src/ComicMainWindow.ui" line="509"/>
         <source>Scrollbars</source>
         <translation>Barre di scorrimento</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="504"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="437"/>
+        <location filename="../src/ComicMainWindow.ui" line="517"/>
         <source>Statusbar</source>
         <translation>Barra di stato</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="513"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="438"/>
+        <location filename="../src/ComicMainWindow.ui" line="526"/>
         <source>Configure QComicBook</source>
         <translation>Configurazione QComicBook</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="521"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="439"/>
+        <location filename="../src/ComicMainWindow.ui" line="534"/>
         <source>System information</source>
         <translation>Informazioni sul sistema</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="526"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="440"/>
+        <location filename="../src/ComicMainWindow.ui" line="539"/>
         <source>About</source>
         <translation>Informazioni su QComicBook</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="534"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="441"/>
+        <location filename="../src/ComicMainWindow.ui" line="547"/>
         <source>Scroll right</source>
         <translation>Scorri a destra</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="537"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="442"/>
+        <location filename="../src/ComicMainWindow.ui" line="550"/>
         <source>Right</source>
         <translation>Destra</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="542"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="443"/>
+        <location filename="../src/ComicMainWindow.ui" line="555"/>
         <source>Scroll left</source>
         <translation>Scorri a sinistra</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="545"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="444"/>
+        <location filename="../src/ComicMainWindow.ui" line="558"/>
         <source>Left</source>
         <translation>Sinistra</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="550"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="445"/>
+        <location filename="../src/ComicMainWindow.ui" line="563"/>
         <source>Jump down</source>
         <translation>In basso</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="553"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="446"/>
+        <location filename="../src/ComicMainWindow.ui" line="566"/>
         <source>Space</source>
         <translation>Spazio</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="558"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="447"/>
+        <location filename="../src/ComicMainWindow.ui" line="571"/>
         <source>Jump up</source>
         <translation>In alto</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="561"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="448"/>
+        <location filename="../src/ComicMainWindow.ui" line="574"/>
         <source>Backspace</source>
         <translation>Backspace</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="566"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="449"/>
+        <location filename="../src/ComicMainWindow.ui" line="579"/>
         <source>Scroll right fast</source>
         <translation>Scorri velocemente a destra</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="569"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="450"/>
+        <location filename="../src/ComicMainWindow.ui" line="582"/>
         <source>Shift+Right</source>
         <translation>Shift+Destra</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="574"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="451"/>
+        <location filename="../src/ComicMainWindow.ui" line="587"/>
         <source>Scroll left fast</source>
         <translation>Scorri velocemente a sinistra</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="577"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="452"/>
+        <location filename="../src/ComicMainWindow.ui" line="590"/>
         <source>Shift+Left</source>
         <translation>Shift+Sinistra</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="582"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="453"/>
+        <location filename="../src/ComicMainWindow.ui" line="595"/>
         <source>Scroll up fast</source>
         <translation>Scorri velocemente in alto</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="585"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="454"/>
+        <location filename="../src/ComicMainWindow.ui" line="598"/>
         <source>Shift+Up</source>
         <translation>Shift+Su</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="590"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="455"/>
+        <location filename="../src/ComicMainWindow.ui" line="603"/>
         <source>Scroll down fast</source>
         <translation>Scorri velocemente in basso</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="593"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="456"/>
+        <location filename="../src/ComicMainWindow.ui" line="606"/>
         <source>Shift+Down</source>
         <translation>Shift+Giù</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="598"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="457"/>
+        <location filename="../src/ComicMainWindow.ui" line="611"/>
         <source>Scroll up</source>
         <translation>Scorri in alto</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="601"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="458"/>
+        <location filename="../src/ComicMainWindow.ui" line="614"/>
         <source>Up</source>
         <translation>Su</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="606"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="459"/>
+        <location filename="../src/ComicMainWindow.ui" line="619"/>
         <source>Scroll down</source>
         <translation>Scorri in basso</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="609"/>
-        <location filename="../src/ui_ComicMainWindow.h" line="460"/>
+        <location filename="../src/ComicMainWindow.ui" line="622"/>
         <source>Down</source>
         <translation>Giù</translation>
     </message>
@@ -595,193 +537,262 @@
 <context>
     <name>ConfigDialog</name>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="13"/>
-        <location filename="../src/ui_ConfigDialog.h" line="329"/>
+        <location filename="../src/ConfigDialog.ui" line="14"/>
         <source>QComicBook Settings</source>
         <translation>Impostazioni di QComicBook</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="29"/>
-        <location filename="../src/ui_ConfigDialog.h" line="346"/>
+        <location filename="../src/ConfigDialog.ui" line="30"/>
         <source>Display</source>
         <translation>Visualizzazione</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="35"/>
-        <location filename="../src/ui_ConfigDialog.h" line="333"/>
+        <location filename="../src/ConfigDialog.ui" line="36"/>
         <source>General</source>
         <translation>Generali</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="41"/>
-        <location filename="../src/ui_ConfigDialog.h" line="334"/>
+        <location filename="../src/ConfigDialog.ui" line="42"/>
         <source>Small mouse cursor</source>
         <translation>Cursore del mouse piccolo</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="48"/>
-        <location filename="../src/ui_ConfigDialog.h" line="335"/>
+        <location filename="../src/ConfigDialog.ui" line="49"/>
         <source>Embed page numbers</source>
         <translation>Numeri di pagina</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="55"/>
-        <location filename="../src/ui_ConfigDialog.h" line="336"/>
+        <location filename="../src/ConfigDialog.ui" line="56"/>
         <source>Smooth scaling</source>
         <translation>Ridimensiona dolcemente</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="64"/>
-        <location filename="../src/ui_ConfigDialog.h" line="337"/>
+        <location filename="../src/ConfigDialog.ui" line="65"/>
         <source>Background color</source>
         <translation>Colore di sfondo</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="95"/>
-        <location filename="../src/ui_ConfigDialog.h" line="339"/>
+        <location filename="../src/ConfigDialog.ui" line="96"/>
         <source>Info text font</source>
         <translation>Carattere del testo</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="121"/>
-        <location filename="../src/ui_ConfigDialog.h" line="341"/>
+        <location filename="../src/ConfigDialog.ui" line="122"/>
         <source>Choose</source>
-        <translation>Scegli</translation>
+        <translation>Scegliere</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="133"/>
-        <location filename="../src/ui_ConfigDialog.h" line="342"/>
+        <location filename="../src/ConfigDialog.ui" line="134"/>
         <source>Fullscreen mode</source>
         <translation>Modalità a tutto schermo</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="139"/>
-        <location filename="../src/ui_ConfigDialog.h" line="343"/>
+        <location filename="../src/ConfigDialog.ui" line="140"/>
         <source>Hide menubar</source>
         <translation>Nascondi barra dei menu</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="146"/>
-        <location filename="../src/ui_ConfigDialog.h" line="344"/>
+        <location filename="../src/ConfigDialog.ui" line="147"/>
         <source>Hide toolbar</source>
         <translation>Nascondi barra degli strumenti</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="153"/>
-        <location filename="../src/ui_ConfigDialog.h" line="345"/>
+        <location filename="../src/ConfigDialog.ui" line="154"/>
         <source>Hide statusbar</source>
         <translation>Nascondi barra di stato</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="177"/>
-        <location filename="../src/ui_ConfigDialog.h" line="356"/>
+        <location filename="../src/ConfigDialog.ui" line="178"/>
         <source>Performance</source>
         <translation>Prestazioni</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="183"/>
-        <location filename="../src/ui_ConfigDialog.h" line="347"/>
+        <location filename="../src/ConfigDialog.ui" line="184"/>
         <source>Cache</source>
         <translation>Cache</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="191"/>
-        <location filename="../src/ui_ConfigDialog.h" line="348"/>
+        <location filename="../src/ConfigDialog.ui" line="192"/>
         <source>Cache Size</source>
         <translation>Dimensione della cache</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="211"/>
-        <location filename="../src/ui_ConfigDialog.h" line="349"/>
+        <location filename="../src/ConfigDialog.ui" line="212"/>
         <source>Mb</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="229"/>
-        <location filename="../src/ui_ConfigDialog.h" line="351"/>
+        <location filename="../src/ConfigDialog.ui" line="230"/>
         <source>Auto adjust cache size</source>
         <translation>Regolazione automatica dimensione della cache</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="236"/>
-        <location filename="../src/ui_ConfigDialog.h" line="352"/>
+        <location filename="../src/ConfigDialog.ui" line="237"/>
         <source>Preload next page</source>
         <translation>Precarica pagina successiva</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="246"/>
-        <location filename="../src/ui_ConfigDialog.h" line="353"/>
+        <location filename="../src/ConfigDialog.ui" line="247"/>
         <source>Thumbnails</source>
         <translation>Miniature</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="252"/>
-        <location filename="../src/ui_ConfigDialog.h" line="354"/>
+        <location filename="../src/ConfigDialog.ui" line="253"/>
         <source>Use disk cache for thumbnails</source>
         <translation>Usa cache su disco per le miniature</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="261"/>
-        <location filename="../src/ui_ConfigDialog.h" line="355"/>
+        <location filename="../src/ConfigDialog.ui" line="262"/>
         <source>Thumbnails aging</source>
         <translation>Età massima delle miniature</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="307"/>
-        <location filename="../src/ui_ConfigDialog.h" line="361"/>
+        <location filename="../src/ConfigDialog.ui" line="308"/>
         <source>Misc</source>
         <translation>Varie</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="313"/>
-        <location filename="../src/ui_ConfigDialog.h" line="357"/>
+        <location filename="../src/ConfigDialog.ui" line="314"/>
         <source>Convenience</source>
         <translation>Comodità</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="319"/>
-        <location filename="../src/ui_ConfigDialog.h" line="358"/>
+        <location filename="../src/ConfigDialog.ui" line="320"/>
         <source>Open info dialog after opening a comicbook</source>
         <translation>Mostra informazioni all&apos;apertura di un fumetto</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="326"/>
-        <location filename="../src/ui_ConfigDialog.h" line="359"/>
+        <location filename="../src/ConfigDialog.ui" line="327"/>
         <source>Show splashscreen</source>
         <translation>Mostra schermata di avvio</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="333"/>
-        <location filename="../src/ui_ConfigDialog.h" line="360"/>
+        <location filename="../src/ConfigDialog.ui" line="334"/>
         <source>Confirm exit</source>
         <translation>Conferma l&apos;uscita</translation>
+    </message>
+    <message>
+        <location filename="../src/ConfigDialog.ui" line="346"/>
+        <source>Temporary directory</source>
+        <translation>Cartella temporanea</translation>
+    </message>
+    <message>
+        <location filename="../src/ConfigDialog.ui" line="356"/>
+        <source>Browse</source>
+        <translation>Sfoglia</translation>
+    </message>
+</context>
+<context>
+    <name>DonationDialog</name>
+    <message>
+        <location filename="../src/DonationDialog.ui" line="14"/>
+        <source>Please donate QComicBook!</source>
+        <translation>Fai una donazione a QComicBook!</translation>
+    </message>
+    <message>
+        <location filename="../src/DonationDialog.ui" line="54"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Droid Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Dear QComicBook user! &lt;/span&gt;If you like QComicBook, please consider a small donation for its continued development. I develop QComicBook in my spare time and give it away free of charge. Your donation will fund web hosting fees and will encourage me to add new features and spend even more time on its development! &lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Donating is easy - just click the Flattr button below!&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://flattr.com/thing/72360/QComicBook-project&quot;&gt;&lt;img src=&quot;:/images/flattr.png&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Note: You can access this information via &lt;span style=&quot; font-weight:600;&quot;&gt;Help / About donating&lt;/span&gt; menu item.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Droid Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Caro utente di QComicBook! &lt;/span&gt;Se apprezzi QComicBook, potresti effettuare una piccola donazione per il proseguimento del suo sviluppo. Ho creato QComicBook nel mio tempo libero e lo distribusco gratuitamente. La tua donazione finanzierà le spese di hosting e mi stimolerà ad aggiungere nuove funzionalità e a trascorrere più tempo per il suo sviluppo! &lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Donare è semplice - clicca semplicemente sul pulsante Flattr!&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://flattr.com/thing/72360/QComicBook-project&quot;&gt;&lt;img src=&quot;:/images/flattr.png&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Nota: Puoi accedere a quest&apos;informazione dalla voce del menu &lt;span style=&quot; font-weight:600;&quot;&gt;Aiuto / Come donare&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/DonationDialog.ui" line="95"/>
+        <source>Remind me later</source>
+        <translation>Ricordamelo in seguito</translation>
+    </message>
+    <message>
+        <location filename="../src/DonationDialog.ui" line="102"/>
+        <source>I&apos;ll donate. Don&apos;t show this dialog again</source>
+        <translation>Non mostrare più questo messaggio</translation>
+    </message>
+    <message>
+        <location filename="../src/DonationDialog.ui" line="109"/>
+        <source>Close</source>
+        <translation>Chiudi</translation>
     </message>
 </context>
 <context>
     <name>GoToPageWidget</name>
     <message>
         <location filename="../src/GoToPageWidget.ui" line="22"/>
-        <location filename="../src/ui_GoToPageWidget.h" line="99"/>
         <source>Go to page...</source>
         <translation>Vai a pagina...</translation>
     </message>
     <message>
         <location filename="../src/GoToPageWidget.ui" line="46"/>
-        <location filename="../src/ui_GoToPageWidget.h" line="100"/>
         <source>Page number</source>
         <translation>Numero di pagina</translation>
     </message>
     <message>
         <location filename="../src/GoToPageWidget.ui" line="56"/>
-        <location filename="../src/ui_GoToPageWidget.h" line="101"/>
         <source>/0</source>
         <translation>/0</translation>
     </message>
     <message>
         <location filename="../src/GoToPageWidget.ui" line="63"/>
-        <location filename="../src/ui_GoToPageWidget.h" line="102"/>
         <source>Go</source>
         <translation>Vai</translation>
+    </message>
+</context>
+<context>
+    <name>PrintProgressDialog</name>
+    <message>
+        <location filename="../src/PrintProgressDialog.ui" line="23"/>
+        <source>Printing. Please wait...</source>
+        <translation>In stampa. Attendere prego...</translation>
+    </message>
+    <message>
+        <location filename="../src/PrintProgressDialog.ui" line="40"/>
+        <source>Printing page:</source>
+        <translation>Stampando pagina:</translation>
+    </message>
+    <message>
+        <location filename="../src/PrintProgressDialog.ui" line="47"/>
+        <source>0</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../src/PrintProgressDialog.ui" line="77"/>
+        <source>Cancel</source>
+        <translation>Annulla</translation>
+    </message>
+</context>
+<context>
+    <name>QComicBook::ArchiversConfiguration</name>
+    <message>
+        <location filename="../src/Archivers/ArchiversConfiguration.cpp" line="152"/>
+        <source>Some archives are not supported because essential external utilities are missing. Please install required executables and restart QComicBook. Note: if more than one executable is listed for given archive type, then it is sufficient to install  just one of them.</source>
+        <translation>Alcuni archivi non sono supportati a causa dell&apos;assenza di applicazioni esterne. Installa gli eseguibili richiesti e riavvia QComicBook. Nota: se è elencato più di un eseguibile per un tipo di archivio, è sufficiente installare solamente uno di essi.</translation>
+    </message>
+    <message>
+        <location filename="../src/Archivers/RarArchiverStrategy.cpp" line="87"/>
+        <source>Free (opensource) version of unrar was detected. This version has problems with many rar archives. It is recommended to install the non-free unrar and restart QComicBook.</source>
+        <translation>Trovata una versione libera (open source) di unrar. Questa versione può causare problemi con numerosi archivi rar. Si raccomanda di installare la versione non libera di unrar e riavviare QComicBook.</translation>
     </message>
 </context>
 <context>
@@ -798,6 +809,14 @@
     </message>
 </context>
 <context>
+    <name>QComicBook::ComicBookCfgDialog</name>
+    <message>
+        <location filename="../src/ComicBookCfgDialog.cpp" line="123"/>
+        <source>Choose temporary directory</source>
+        <translation>Scegliere cartella temporanea</translation>
+    </message>
+</context>
+<context>
     <name>QComicBook::ComicBookInfo</name>
     <message>
         <location filename="../src/ComicBookInfo.cpp" line="27"/>
@@ -808,121 +827,121 @@
 <context>
     <name>QComicBook::ComicMainWindow</name>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="84"/>
+        <location filename="../src/ComicMainWindow.cpp" line="102"/>
         <source>Escape</source>
         <translation>Escape</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="89"/>
+        <location filename="../src/ComicMainWindow.cpp" line="107"/>
         <source>Alt+t</source>
         <translation>Alt+t</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="123"/>
+        <location filename="../src/ComicMainWindow.cpp" line="144"/>
         <source>Recently opened</source>
         <translation>Aperti di recente</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="391"/>
+        <location filename="../src/ComicMainWindow.cpp" line="446"/>
         <source>Leave QComicBook?</source>
         <translation>Uscire da QComicBook?</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="391"/>
+        <location filename="../src/ComicMainWindow.cpp" line="446"/>
         <source>Do you really want to quit QComicBook?</source>
         <translation>Vuoi veramente uscire da QComicBook?</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="575"/>
+        <location filename="../src/ComicMainWindow.cpp" line="601"/>
         <source>no images found</source>
         <translation>nessuna immagine trovata</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="576"/>
+        <location filename="../src/ComicMainWindow.cpp" line="602"/>
         <source>unknown archive</source>
         <translation>archivio sconosciuto</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="577"/>
+        <location filename="../src/ComicMainWindow.cpp" line="603"/>
         <source>can&apos;t access directory</source>
         <translation>impossibile accedere alla cartella</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="578"/>
+        <location filename="../src/ComicMainWindow.cpp" line="604"/>
         <source>file/directory not found</source>
         <translation>file/cartella non trovata</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="579"/>
+        <location filename="../src/ComicMainWindow.cpp" line="605"/>
         <source>archive not supported</source>
         <translation>archivio non supportato</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="580"/>
+        <location filename="../src/ComicMainWindow.cpp" line="606"/>
         <source>archive extractor exited with error</source>
         <translation>l&apos;estrattore di archivi è terminato con errore</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="583"/>
-        <location filename="../src/ComicMainWindow.cpp" line="904"/>
-        <location filename="../src/main.cpp" line="45"/>
+        <location filename="../src/ComicMainWindow.cpp" line="609"/>
+        <location filename="../src/ComicMainWindow.cpp" line="966"/>
+        <location filename="../src/main.cpp" line="46"/>
         <source>QComicBook error</source>
         <translation>errore di QComicBook</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="583"/>
+        <location filename="../src/ComicMainWindow.cpp" line="609"/>
         <source>Error opening comicbook</source>
-        <translation>errore nell&apos;aperture del fumetto</translation>
+        <translation>errore nell&apos;apertura del fumetto</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="590"/>
+        <location filename="../src/ComicMainWindow.cpp" line="616"/>
         <source>Choose a directory</source>
         <translation>Scegli una cartella</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="597"/>
+        <location filename="../src/ComicMainWindow.cpp" line="623"/>
         <source>Choose a file</source>
         <translation>Scegli un file</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="770"/>
+        <location filename="../src/ComicMainWindow.cpp" line="806"/>
         <source>Page</source>
         <translation>Pagina</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="870"/>
+        <location filename="../src/ComicMainWindow.cpp" line="932"/>
         <source>Removing bookmark</source>
         <translation>Rimuovendo segnalibro</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="871"/>
+        <location filename="../src/ComicMainWindow.cpp" line="933"/>
         <source>Do you really want to remove bookmark
 for this comic book?</source>
         <translation>Vuoi veramente rimuovere il segnalibro
 per questo fumetto?</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="886"/>
+        <location filename="../src/ComicMainWindow.cpp" line="948"/>
         <source>Save image as</source>
         <translation>Salva immagine come</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="893"/>
+        <location filename="../src/ComicMainWindow.cpp" line="955"/>
         <source>page</source>
         <translation>pagina</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="904"/>
+        <location filename="../src/ComicMainWindow.cpp" line="966"/>
         <source>Error saving image</source>
         <translation>Errore durante il salvataggio dell&apos;immagine</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="928"/>
+        <location filename="../src/ComicMainWindow.cpp" line="1007"/>
         <source>Comic book not found</source>
         <translation>Fumetto non trovato</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="929"/>
+        <location filename="../src/ComicMainWindow.cpp" line="1008"/>
         <source>Selected bookmark points to
 non-existing comic book
 Do you want to remove it?</source>
@@ -931,7 +950,7 @@ a fumetto inesistente
 Vuoi rimuoverlo?</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="55"/>
+        <location filename="../src/main.cpp" line="57"/>
         <source>Can&apos;t initialize QComicBook directories</source>
         <translation>Inizializzazione cartelle QComicBook fallita</translation>
     </message>
@@ -955,6 +974,14 @@ Vuoi rimuoverlo?</translation>
     </message>
 </context>
 <context>
+    <name>QComicBook::RecentFilesMenu</name>
+    <message>
+        <location filename="../src/RecentFilesMenu.cpp" line="24"/>
+        <source>Cleanup list</source>
+        <translation>Pulisci elenco</translation>
+    </message>
+</context>
+<context>
     <name>QComicBook::StatusBar</name>
     <message>
         <location filename="../src/StatusBar.cpp" line="115"/>
@@ -965,43 +992,46 @@ Vuoi rimuoverlo?</translation>
 <context>
     <name>QComicBook::SystemInfoDialog</name>
     <message>
-        <location filename="../src/SystemInfoDialog.cpp" line="47"/>
+        <location filename="../src/SystemInfoDialog.cpp" line="48"/>
         <source>Supported archivers</source>
         <translation>Archivi supportati</translation>
     </message>
     <message>
-        <location filename="../src/SystemInfoDialog.cpp" line="53"/>
-        <location filename="../src/SystemInfoDialog.cpp" line="84"/>
+        <location filename="../src/SystemInfoDialog.cpp" line="54"/>
+        <location filename="../src/SystemInfoDialog.cpp" line="85"/>
         <source>Archive type</source>
         <translation>Tipo di archivio</translation>
     </message>
     <message>
-        <location filename="../src/SystemInfoDialog.cpp" line="56"/>
+        <location filename="../src/SystemInfoDialog.cpp" line="57"/>
         <source>Supported file extensions</source>
         <translation>Estensioni supportate</translation>
     </message>
     <message>
-        <location filename="../src/SystemInfoDialog.cpp" line="78"/>
+        <location filename="../src/SystemInfoDialog.cpp" line="79"/>
         <source>Unsupported archivers</source>
         <translation>Archivi non supportati</translation>
     </message>
     <message>
-        <location filename="../src/SystemInfoDialog.cpp" line="87"/>
+        <location filename="../src/SystemInfoDialog.cpp" line="88"/>
         <source>Required executable(s)</source>
         <translation>Eseguibili richiesti</translation>
     </message>
     <message>
-        <location filename="../src/SystemInfoDialog.cpp" line="106"/>
+        <location filename="../src/SystemInfoDialog.cpp" line="110"/>
+        <source>Hints</source>
+        <translation>Suggerimenti</translation>
+    </message>
+    <message>
         <source>Hint</source>
-        <translation>Suggerimento</translation>
+        <translation type="obsolete">Suggerimento</translation>
     </message>
     <message>
-        <location filename="../src/SystemInfoDialog.cpp" line="109"/>
         <source>Some archives are not supported because essential external utilities are missing. Please install required executables and restart QComicBook. Note: if more than one executable is listed for given archive type, then it is sufficient to install just one of them.</source>
-        <translation>Alcuni archivi non sono supportati a causa dell&apos;assenza di applicazioni esterni. Installa gli eseguibili richiesti e riavvia QComicBook. Nota: se è elencato più di un eseguibile per un tipo di archivio, è sufficiente installare solamente uno di essi.</translation>
+        <translation type="obsolete">Alcuni archivi non sono supportati a causa dell&apos;assenza di applicazioni esterni. Installa gli eseguibili richiesti e riavvia QComicBook. Nota: se è elencato più di un eseguibile per un tipo di archivio, è sufficiente installare solamente uno di essi.</translation>
     </message>
     <message>
-        <location filename="../src/SystemInfoDialog.cpp" line="117"/>
+        <location filename="../src/SystemInfoDialog.cpp" line="135"/>
         <source>Supported image formats</source>
         <translation>Formati di immagini supportati</translation>
     </message>
@@ -1026,7 +1056,6 @@ Vuoi rimuoverlo?</translation>
     <name>SystemInfoDialog</name>
     <message>
         <location filename="../src/SystemInfoDialog.ui" line="16"/>
-        <location filename="../src/ui_SystemInfoDialog.h" line="82"/>
         <source>System information</source>
         <translation>Informazioni sul sistema</translation>
     </message>
