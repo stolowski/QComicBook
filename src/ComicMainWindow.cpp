@@ -620,7 +620,7 @@ void ComicMainWindow::browseDirectory()
 
 void ComicMainWindow::browseArchive()
 {
-    const QString file = QFileDialog::getOpenFileName(this, tr("Choose a file"), lastdir, "Archives (" + ArchiversConfiguration::instance().supportedOpenExtensions().join(" ") + ");;All files (*)");
+    const QString file = QFileDialog::getOpenFileName(this, tr("Choose a file"), lastdir, "Archives (" + ArchiversConfiguration::instance().supportedOpenExtensions().join(" ") + " *.pdf);;All files (*)");
         if (!file.isEmpty())
                 open(file, 0);
 }

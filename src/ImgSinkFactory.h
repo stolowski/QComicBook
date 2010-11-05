@@ -22,10 +22,11 @@ namespace QComicBook
 	enum SinkType
 	{
 		ArchiveSink = 1,
-		DirSink
+		DirSink,
+		PdfSink
 	};
 
-	class ImgDirSink;
+	class ImgSink;
 
 	class ImgSinkFactory
 	{
@@ -35,8 +36,8 @@ namespace QComicBook
 
 		public:
 			static ImgSinkFactory& instance();
-			ImgDirSink* createImgSink(SinkType s);
-			ImgDirSink* createImgSink(const QString &path);
+			ImgSink* createImgSink(SinkType s);
+			ImgSink* createImgSink(const QString &path);
 	};
 }
 

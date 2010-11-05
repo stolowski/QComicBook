@@ -17,7 +17,7 @@
 
 using namespace QComicBook;
 
-PrinterThread::PrinterThread(ImgDirSink *sink, QPrinter *printer, QAbstractPrintDialog::PrintRange range, int from, int to)
+PrinterThread::PrinterThread(ImgSink *sink, QPrinter *printer, QAbstractPrintDialog::PrintRange range, int from, int to)
     : QThread()
     , m_sink(sink)
     , m_printer(printer)

@@ -11,6 +11,7 @@
  */
 
 #include "ImgSinkFactory.h"
+#include "ImgPdfSink.h"
 #include "ImgDirSink.h"
 #include "ImgArchiveSink.h"
 #include <QString>
@@ -32,20 +33,24 @@ ImgSinkFactory& ImgSinkFactory::instance()
 	return f;
 }
 
-ImgDirSink* ImgSinkFactory::createImgSink(SinkType s)
+ImgSink* ImgSinkFactory::createImgSink(SinkType s)
 {
 	if (s == ArchiveSink)
 		return new ImgArchiveSink();
 	if (s == DirSink)
 		return new ImgDirSink();
+	if (s == PdfSink)
+		return new ImgPdfSink();
 	return NULL;
 }
 
-ImgDirSink* ImgSinkFactory::createImgSink(const QString &path)
+ImgSink* ImgSinkFactory::createImgSink(const QString &path)
 {
 	const QFileInfo finfo(path);
 	if (finfo.isDir())
 		return createImgSink(DirSink);
+	else if (path.endsWith("pdf")) //FIXME
+		return createImgSink(PdfSink);
 	else
 		return createImgSink(ArchiveSink);
 }

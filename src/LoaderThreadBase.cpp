@@ -11,7 +11,7 @@
  */
 
 #include "LoaderThreadBase.h"
-#include "ImgDirSink.h"
+#include "ImgSink.h"
 #include <QPixmap>
 #include <QtDebug>
 
@@ -31,7 +31,7 @@ void LoaderThreadBase::setPriority(QThread::Priority p)
     loaderMutex.unlock();
 }
 
-void LoaderThreadBase::setSink(ImgDirSink *sink)
+void LoaderThreadBase::setSink(ImgSink *sink)
 {
     sinkMutex.lock();
     this->sink = sink;

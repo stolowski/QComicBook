@@ -16,12 +16,12 @@
 #define __IMGDIRSINK_H
 
 #include <QString>
-#include <QObject>
 #include <QStringList>
 #include <QDateTime>
 #include <QMap>
 #include <QMutex>
 #include "DirReader.h"
+#include "ImgSink.h"
 #include "Page.h"
 
 class QImage;
@@ -29,37 +29,13 @@ class QImage;
 namespace QComicBook
 {
 
-	//! Possible errors.
-	enum SinkError
-	{
-		SINKERR_ACCESS = 1, //!<can't access file or directory
-		SINKERR_UNKNOWNFILE, //!<unknown archive format
-		SINKERR_NOTSUPPORTED, //!<known archive type, but not supported
-		SINKERR_LOADERROR,  //!<can't load image file
-		SINKERR_NOTFOUND, //!<file not found
-		SINKERR_NOTFILE,   //!<not a regular file
-		SINKERR_NOTDIR,    //!<not a directory
-		SINKERR_EMPTY,     //!<no images inside
-		SINKERR_ARCHEXIT, //!<archiver exited with error
-		SINKERR_OTHER  //!<another kind of error
-	};
-
 	class Thumbnail;
 	class ImgCache;
 
 	//! Comic book directory sink.
 	/*! Allows opening directories containing image files. */
-	class ImgDirSink: public QObject, protected DirReader
+	class ImgDirSink: public ImgSink, protected DirReader
 	{
-		Q_OBJECT
-		
-		signals:
-			//! Emited to report progress of comic book reading.
-			/*! This signal may be used in conjunction with QProgressBar class.
-			 *  @param current current progress value
-			 *  @param total total number of steps */
-			void progress(int current, int total);
-
 		protected:
 			class FileStatus
 			{

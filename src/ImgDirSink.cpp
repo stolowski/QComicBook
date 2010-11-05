@@ -29,18 +29,18 @@ using namespace QComicBook;
 // maximum size of description file (won't load files larger than that)
 const int ImgDirSink::MAX_TEXTFILE_SIZE = 65535;
                         
-ImgDirSink::ImgDirSink(bool dirs, int cacheSize): QObject(), dirpath(QString::null), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
+ImgDirSink::ImgDirSink(bool dirs, int cacheSize): ImgSink(), dirpath(QString::null), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
 {
 	cache = new ImgCache(cacheSize);
 }
 
-ImgDirSink::ImgDirSink(const QString &path, bool dirs, int cacheSize): QObject(), dirpath(QString::null), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
+ImgDirSink::ImgDirSink(const QString &path, bool dirs, int cacheSize): ImgSink(), dirpath(QString::null), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
 {
 	cache = new ImgCache(cacheSize);
         open(path);
 }
 
-ImgDirSink::ImgDirSink(const ImgDirSink &sink, int cacheSize): QObject(), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
+ImgDirSink::ImgDirSink(const ImgDirSink &sink, int cacheSize): ImgSink(), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
 {
 	cache = new ImgCache(cacheSize);
 
