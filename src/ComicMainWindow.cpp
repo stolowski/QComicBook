@@ -66,8 +66,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
     setAttribute(Qt::WA_DeleteOnClose);
     
     cfg = &ComicBookSettings::instance();
-    cfg->restoreGeometry(this);
-
+    
     printer = new QPrinter();
 
     pageLoader = new PageLoaderThread();
@@ -220,7 +219,13 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
     menuRecentFiles->set(cfg->recentlyOpened());
     
     cfg->restoreDockLayout(this);
-    
+    cfg->restoreGeometry(this);
+
+    if (isFullScreen())
+    {
+    	applyFullscreenSettings();
+    }
+
     //connect(cfg, SIGNAL(displaySettingsChanged(const QString &)), this, SLOT(reconfigureDisplay())); ??
     enableComicBookActions(false);
     
@@ -371,6 +376,21 @@ void ComicMainWindow::setupComicImageView()
     if (sink) 
     {
          jumpToPage(currpage, true);
+    }
+}
+
+void ComicMainWindow::applyFullscreenSettings()
+{
+    savedToolbarState = toolBar->toggleViewAction()->isChecked() || toolBar->isVisible();
+
+    if (cfg->fullScreenHideMenu())
+	menuBar()->hide();
+    if (cfg->fullScreenHideStatusbar())
+	statusbar->hide();
+    if (cfg->fullScreenHideToolbar())
+    {
+	toolBar->toggleViewAction()->setChecked(false);
+	toolBar->hide();
     }
 }
 
@@ -684,18 +704,8 @@ void ComicMainWindow::toggleFullScreen()
         }
         else
         {
-		savedToolbarState = toolBar->toggleViewAction()->isChecked();
-
-                if (cfg->fullScreenHideMenu())
-                        menuBar()->hide();
-                if (cfg->fullScreenHideStatusbar())
-                        statusbar->hide();
-                if (cfg->fullScreenHideToolbar())
-		{
-			toolBar->toggleViewAction()->setChecked(false);
-                        toolBar->hide();
-		}
-                showFullScreen();
+	    applyFullscreenSettings();
+	    showFullScreen();
         }
 }
 
@@ -706,11 +716,12 @@ void ComicMainWindow::exitFullscreen()
                 menuBar()->show();
                 if (actionToggleStatusbar->isChecked())
                         statusbar->show();
-		toolBar->toggleViewAction()->setChecked(savedToolbarState);
-		if (savedToolbarState)
+		if (!toolBar->isVisible())
+		{
+		    toolBar->toggleViewAction()->setChecked(savedToolbarState);
+		    if (savedToolbarState)
 			toolBar->show();
-		else
-			toolBar->hide();
+		}
 		showNormal();
         }
 }
