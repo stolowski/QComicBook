@@ -11,7 +11,7 @@
  */
 
 #include "ThumbnailLoaderThread.h"
-#include "ImgDirSink.h"
+#include "Sink/ImgDirSink.h"
 #include "Thumbnail.h"
 #include <QDebug>
  

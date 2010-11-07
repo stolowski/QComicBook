@@ -38,16 +38,16 @@ SET(qcomicbook_src
 	FrameWidget.cpp
 	History.cpp
 	IconViewThumbnail.cpp
-	ImgArchiveSink.cpp
+	Sink/ImgArchiveSink.cpp
+        Sink/ImgPdfSink.cpp
+	Sink/ImgDirSink.cpp
+	Sink/ImgSink.cpp
+	Sink/ImgSinkFactory.cpp
 	ImageFormatsInfo.cpp
 	ImgCache.cpp
-        ImgPdfSink.cpp
-	ImgDirSink.cpp
-	ImgSink.cpp
 	LoaderThreadBase.cpp
 	PageLoaderThread.cpp
         PrintProgressDialog.cpp
-	ImgSinkFactory.cpp
 	GoToPageWidget.cpp
 	ListViewThumbnail.cpp
 	main.cpp
@@ -82,8 +82,8 @@ SET(qcomicbook_moc_hdrs
 	PageViewBase.h 
 	ContinuousPageView.h
 	SimplePageView.h
-	ImgSink.h 
-	ImgArchiveSink.h
+	Sink/ImgSink.h 
+	Sink/ImgArchiveSink.h
 	LoaderThreadBase.h 
 	PageLoaderThread.h
 	ThumbnailLoaderThread.h

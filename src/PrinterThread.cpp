@@ -11,7 +11,7 @@
  */
 
 #include "PrinterThread.h"
-#include "ImgDirSink.h"
+#include "Sink/ImgDirSink.h"
 #include <QPrinter>
 #include <QPainter>
 

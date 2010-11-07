@@ -11,7 +11,7 @@
  */
 
 #include "LoaderThreadBase.h"
-#include "ImgSink.h"
+#include "Sink/ImgSink.h"
 #include <QPixmap>
 #include <QtDebug>
 

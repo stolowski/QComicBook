@@ -11,7 +11,7 @@
  */
 
 #include "ComicBookInfo.h"
-#include "ImgSink.h"
+#include "Sink/ImgSink.h"
 #include <QTabWidget>
 #include <QStringList>
 #include <QTextEdit>
