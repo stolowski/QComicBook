@@ -30,7 +30,6 @@ namespace QComicBook
 {
 
 	class Thumbnail;
-	class ImgCache;
 
 	//! Comic book directory sink.
 	/*! Allows opening directories containing image files. */
@@ -70,7 +69,6 @@ namespace QComicBook
 			virtual bool fileHandler(const QFileInfo &finfo);
 		
 		private:
-			ImgCache *cache;
 			mutable QMutex listmtx; //!< mutex for imgfiles
 			QStringList imgfiles; //!< list of images files in directory
 			QStringList txtfiles; //!< text files (.nfo, file_id.diz)
@@ -87,8 +85,6 @@ namespace QComicBook
 			ImgDirSink(const ImgDirSink &sink, int cacheSize=0);
 			virtual ~ImgDirSink();
 
-			void setCacheSize(int cacheSize, bool autoAdjust);
-
 			//! Opens this comic book sink with specifiled path.
 			/*! @param path comic book location
 			 *  @return value grater than 0 for error; 0 on success */
@@ -103,7 +99,7 @@ namespace QComicBook
 			 *  @param num page number
 			 *  @param result contains 0 on succes or value greater than 0 for error
 			 *  @return an image */
-			virtual Page getImage(unsigned int num, int &result);
+			virtual QImage image(unsigned int num, int &result);
 
 			//! Returns thumbnail image for specified page.
 			/*! Thumbnail is loaded from disk if found and caching is enabled. Otherwise,

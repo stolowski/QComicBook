@@ -15,6 +15,7 @@
 
 #include "ImgSink.h"
 #include <QStringList>
+#include <QMutex>
 #include <poppler-qt4.h>
 
 namespace QComicBook
@@ -22,13 +23,12 @@ namespace QComicBook
 	class ImgPdfSink: public ImgSink
 	{
 		public:
-			ImgPdfSink();
+			ImgPdfSink(int cacheSize=0);
 			~ImgPdfSink();
 
-			void setCacheSize(int cacheSize, bool autoAdjust) {}
 			int open(const QString &path);
 			void close();
-			Page getImage(unsigned int num, int &result);
+			QImage image(unsigned int num, int &result);
 			Thumbnail getThumbnail(int num, bool thumbcache=true);
 			int numOfImages() const;
 			QString getName(int maxlen = 50) { return ""; }
@@ -43,6 +43,7 @@ namespace QComicBook
 
 		private:
 			Poppler::Document *pdfdoc;
+			mutable QMutex docmtx; //!< mutex for pdf document
 	};
 }
 

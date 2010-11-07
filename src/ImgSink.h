@@ -15,10 +15,13 @@
 
 #include <QObject>
 
+class QImage;
+
 namespace QComicBook
 {
 	class Page;
 	class Thumbnail;
+	class ImgCache;
 
 	//! Possible errors.
 	enum SinkError
@@ -47,11 +50,11 @@ namespace QComicBook
 			void progress(int current, int total);
 
 		public:
-			ImgSink(): QObject() {}
+			ImgSink(int cacheSize=0);
 
-			virtual ~ImgSink() {};
+			virtual ~ImgSink();
 
-			virtual void setCacheSize(int cacheSize, bool autoAdjust) = 0;
+			virtual void setCacheSize(int cacheSize, bool autoAdjust);
 
 			//! Opens this comic book sink with specified path.
 			/*! @param path comic book location
@@ -61,12 +64,18 @@ namespace QComicBook
 			//! Closes this comic book sink cleaning resources.
 			virtual void close() = 0;
 
+
+			//! Returns given page. Has to be implemented by subclass.
+			/*!
+			*/
+			virtual QImage image(unsigned int num, int &result) = 0;
+
 			//! Returns an image for specified page.
 			/*! The cache is first checked for image. If not found, the image is loaded.
 			 *  @param num page number
 			 *  @param result contains 0 on succes or value greater than 0 for error
 			 *  @return an image */
-			virtual Page getImage(unsigned int num, int &result) = 0;
+			virtual Page getImage(unsigned int num, int &result);
 
 			//! Returns thumbnail image for specified page.
 			/*! Thumbnail is loaded from disk if found and caching is enabled. Otherwise,
@@ -103,6 +112,8 @@ namespace QComicBook
 
 			virtual QString getPrevious() const = 0;
 
+		private:
+			ImgCache *cache;
 	};
 }
 

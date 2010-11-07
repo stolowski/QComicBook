@@ -43,6 +43,7 @@ SET(qcomicbook_src
 	ImgCache.cpp
         ImgPdfSink.cpp
 	ImgDirSink.cpp
+	ImgSink.cpp
 	LoaderThreadBase.cpp
 	PageLoaderThread.cpp
         PrintProgressDialog.cpp

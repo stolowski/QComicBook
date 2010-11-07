@@ -17,7 +17,7 @@
 
 using namespace QComicBook;
 
-ImgPdfSink::ImgPdfSink(): pdfdoc(0)
+ImgPdfSink::ImgPdfSink(int cacheSize): ImgSink(cacheSize), pdfdoc(0)
 {
 }
 
@@ -36,7 +36,10 @@ int ImgPdfSink::open(const QString &path)
 		pdfdoc = 0;
 		return SINKERR_NOTFOUND;
 	}
-	pdfdoc->setRenderHint(Poppler::Document::Antialiasing);
+
+	pdfdoc->setRenderHint(Poppler::Document::Antialiasing, true);
+	pdfdoc->setRenderHint(Poppler::Document::TextAntialiasing, true);
+
 	emit progress(1, 1);
 	return 0;
 }
@@ -47,20 +50,21 @@ void ImgPdfSink::close()
 	pdfdoc = 0;
 }
 
-Page ImgPdfSink::getImage(unsigned int num, int &result)
+QImage ImgPdfSink::image(unsigned int num, int &result)
 {
+	docmtx.lock();
 	if (pdfdoc)
 	{
 		Poppler::Page* pdfpage = pdfdoc->page(num);
+		docmtx.unlock();
 		if (pdfpage)
 		{
 			QImage img = pdfpage->renderToImage(QX11Info::appDpiX(), QX11Info::appDpiY()); //TODO use defaults if not using X11 (e.g. MS Win)
 			delete pdfpage;
-			Page p(num, img);
-			return p;
+			return img;
 		}
 	}
-	return Page(); //TODO
+	return QImage(); //TODO
 }
 
 Thumbnail ImgPdfSink::getThumbnail(int num, bool thumbcache)
@@ -69,5 +73,8 @@ Thumbnail ImgPdfSink::getThumbnail(int num, bool thumbcache)
 
 int ImgPdfSink::numOfImages() const
 {
-	return pdfdoc ? pdfdoc->numPages() : -1;
+	docmtx.lock();
+	const int n = pdfdoc ? pdfdoc->numPages() : -1;
+	docmtx.unlock();
+	return n;
 }
