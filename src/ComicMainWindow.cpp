@@ -884,9 +884,12 @@ void ComicMainWindow::showAboutDonating(bool startup)
 	d.remindBtn->hide();
 	d.donateBtn->hide();
     }
-    if (startup && dlg.exec() == QDialog::Accepted)
+    if (dlg.exec() == QDialog::Accepted)
     {
-	cfg->showDonationDialog(false);	
+	if (startup)
+	{
+		cfg->showDonationDialog(false);
+	}
     }
 }
 
