@@ -52,25 +52,25 @@
     </message>
     <message>
         <source>Deleting bookmarks</source>
-        <translation>Suppression de signet</translation>
+        <translation type="obsolete">Suppression de signet</translation>
     </message>
     <message>
         <source>Delete selected bookmarks?</source>
-        <translation>Supprimer le(s) signet(s) Sélectionné(s) ?</translation>
+        <translation type="obsolete">Supprimer le(s) signet(s) Sélectionné(s) ?</translation>
     </message>
 </context>
 <context>
     <name>ComicBookCfgDialog</name>
     <message>
         <source>Choose temporary directory</source>
-        <translation>Sélectionner le dossier temporaire</translation>
+        <translation type="obsolete">Sélectionner le dossier temporaire</translation>
     </message>
 </context>
 <context>
     <name>ComicBookInfo</name>
     <message>
         <source>QComicBook info</source>
-        <translation>Info QComicBook</translation>
+        <translation type="obsolete">Info QComicBook</translation>
     </message>
 </context>
 <context>
@@ -305,7 +305,7 @@
     </message>
     <message>
         <source>Continuous scrolling</source>
-        <translation>Défilement continu</translation>
+        <translation type="obsolete">Défilement continu</translation>
     </message>
     <message>
         <source>Add bookmark</source>
@@ -421,99 +421,99 @@
     </message>
     <message>
         <source>Escape</source>
-        <translation>Sortie</translation>
+        <translation type="obsolete">Sortie</translation>
     </message>
     <message>
         <source>Alt+t</source>
-        <translation>Alt+t</translation>
+        <translation type="obsolete">Alt+t</translation>
     </message>
     <message>
         <source>Recently opened</source>
-        <translation>Récent</translation>
+        <translation type="obsolete">Récent</translation>
     </message>
     <message>
         <source>Leave QComicBook?</source>
-        <translation>Quitter QComicBook?</translation>
+        <translation type="obsolete">Quitter QComicBook?</translation>
     </message>
     <message>
         <source>Do you really want to quit QComicBook?</source>
-        <translation>Voulez-vous vraiment quitter QComicBook?</translation>
+        <translation type="obsolete">Voulez-vous vraiment quitter QComicBook?</translation>
     </message>
     <message>
         <source>no images found</source>
-        <translation>Aucune image trouvée</translation>
+        <translation type="obsolete">Aucune image trouvée</translation>
     </message>
     <message>
         <source>unknown archive</source>
-        <translation>Format d&apos;archive inconnu</translation>
+        <translation type="obsolete">Format d&apos;archive inconnu</translation>
     </message>
     <message>
         <source>can&apos;t access directory</source>
-        <translation>Impossible d&apos;accèder au dossier</translation>
+        <translation type="obsolete">Impossible d&apos;accèder au dossier</translation>
     </message>
     <message>
         <source>file/directory not found</source>
-        <translation>Fichier/Dossier introuvable</translation>
+        <translation type="obsolete">Fichier/Dossier introuvable</translation>
     </message>
     <message>
         <source>archive not supported</source>
-        <translation>Archive non prise en charge</translation>
+        <translation type="obsolete">Archive non prise en charge</translation>
     </message>
     <message>
         <source>archive extractor exited with error</source>
-        <translation>L&apos;extracteur d&apos;archive a retourné une erreur</translation>
+        <translation type="obsolete">L&apos;extracteur d&apos;archive a retourné une erreur</translation>
     </message>
     <message>
         <source>QComicBook error</source>
-        <translation>Erreur - QComicBook</translation>
+        <translation type="obsolete">Erreur - QComicBook</translation>
     </message>
     <message>
         <source>Error opening comicbook</source>
-        <translation>Erreur à l&apos;ouverture</translation>
+        <translation type="obsolete">Erreur à l&apos;ouverture</translation>
     </message>
     <message>
         <source>Choose a directory</source>
-        <translation>Sélectionner un dossier</translation>
+        <translation type="obsolete">Sélectionner un dossier</translation>
     </message>
     <message>
         <source>Choose a file</source>
-        <translation>Sélectionner un fichier</translation>
+        <translation type="obsolete">Sélectionner un fichier</translation>
     </message>
     <message>
         <source>Page</source>
-        <translation>Page</translation>
+        <translation type="obsolete">Page</translation>
     </message>
     <message>
         <source>Removing bookmark</source>
-        <translation>Supprimer un signet</translation>
+        <translation type="obsolete">Supprimer un signet</translation>
     </message>
     <message>
         <source>Do you really want to remove bookmark
 for this comic book?</source>
-        <translation>Voulez-vous vraiment supprimer le
+        <translation type="obsolete">Voulez-vous vraiment supprimer le
 signet pour ce livre ?</translation>
     </message>
     <message>
         <source>Save image as</source>
-        <translation>Enregistrer l&apos;image sous</translation>
+        <translation type="obsolete">Enregistrer l&apos;image sous</translation>
     </message>
     <message>
         <source>page</source>
-        <translation>page</translation>
+        <translation type="obsolete">page</translation>
     </message>
     <message>
         <source>Error saving image</source>
-        <translation>Erreur lors de la sauvegarde de l&apos;image</translation>
+        <translation type="obsolete">Erreur lors de la sauvegarde de l&apos;image</translation>
     </message>
     <message>
         <source>Comic book not found</source>
-        <translation>Archive introuvable</translation>
+        <translation type="obsolete">Archive introuvable</translation>
     </message>
     <message>
         <source>Selected bookmark points to
 non-existing comic book
 Do you want to remove it?</source>
-        <translation>L&apos;emplacement du signet
+        <translation type="obsolete">L&apos;emplacement du signet
 n&apos;existe pas/plus.
 Voulez-vous le supprimer ?</translation>
     </message>
@@ -551,7 +551,7 @@ Voulez-vous le supprimer ?</translation>
     </message>
     <message>
         <source>Can&apos;t initialize QComicBook directories</source>
-        <translation>Impossible d&apos;initialiser les répertoires utilisés par QComicBook</translation>
+        <translation type="obsolete">Impossible d&apos;initialiser les répertoires utilisés par QComicBook</translation>
     </message>
 </context>
 <context>
@@ -694,7 +694,7 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Note: You can access this information via &lt;span style=&quot; font-weight:600;&quot;&gt;Help / About donating&lt;/span&gt; menu item.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <translation type="obsolete">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Droid Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
@@ -721,6 +721,18 @@ p, li { white-space: pre-wrap; }
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
+    <message>
+        <source>Dear QComicBook user! If you like QComicBook, please consider a small donation for its continued development. I develop QComicBook in my spare time and give it away free of charge. Your donation will fund web hosting fees and will encourage me to add new features and spend even more time on its development! 
+
+Donating is easy - just click the Flattr button below! Note: You can access this information via Help / About donating menu item.</source>
+        <translation>Cher utilisateur de QComicBookv! Si vous aimez QComicBook, pensez à apporter votre contribution au développement de ce projet. QComicBook est developpé dans mes temps libre, et il est distribué gratuitement !. Votre don servira à payer l&apos;hébergement web sera un encouragement pour continuer à ajouter de nouvelles fonctionnalité et passer encore plus de temps sur son développement !
+
+Contribuer est facile - vous n&apos;avez qu&apos;à cliquer sur bouton &quot;Flattr&quot; ci-dessous! Note: Vous pourrez toujours accèder à cette information par le menu  Aide / À propos - Contribution.</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;http://flattr.com/thing/72360/QComicBook-project&quot;&gt;&lt;img src=&quot;:/images/flattr.png&quot; /&gt;&lt;/a&gt;</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>GoToPageWidget</name>
@@ -745,15 +757,15 @@ p, li { white-space: pre-wrap; }
     <name>ImgDirSink</name>
     <message>
         <source>bytes</source>
-        <translation>bytes</translation>
+        <translation type="obsolete">bytes</translation>
     </message>
     <message>
         <source>Kbytes</source>
-        <translation>Kbytes</translation>
+        <translation type="obsolete">Kbytes</translation>
     </message>
     <message>
         <source>Mbytes</source>
-        <translation>Мbytes</translation>
+        <translation type="obsolete">Мbytes</translation>
     </message>
 </context>
 <context>
@@ -776,45 +788,14 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>StatusBar</name>
+    <name>QComicBook::ArchiversConfiguration</name>
     <message>
-        <source>Page</source>
-        <translation>Page</translation>
-    </message>
-</context>
-<context>
-    <name>SystemInfoDialog</name>
-    <message>
-        <source>System information</source>
-        <translation>Information système</translation>
+        <source>Some archives are not supported because essential external utilities are missing. Please install required executables and restart QComicBook. Note: if more than one executable is listed for given archive type, then it is sufficient to install  just one of them.</source>
+        <translation></translation>
     </message>
     <message>
-        <source>Supported archivers</source>
-        <translation>Archives prise en charge</translation>
-    </message>
-    <message>
-        <source>Archive type</source>
-        <translation>Type d&apos;archive</translation>
-    </message>
-    <message>
-        <source>Supported file extensions</source>
-        <translation>Extensions de fichiers supportées</translation>
-    </message>
-    <message>
-        <source>Unsupported archivers</source>
-        <translation>Archive non supportée</translation>
-    </message>
-    <message>
-        <source>Required executable(s)</source>
-        <translation>Éxécutable(s) requis</translation>
-    </message>
-    <message>
-        <source>Hints</source>
-        <translation>Astuces</translation>
-    </message>
-    <message>
-        <source>Supported image formats</source>
-        <translation>Format d&apos;image pris en charge</translation>
+        <source>Free (opensource) version of unrar was detected. This version has problems with many rar archives. It is recommended to install the non-free unrar and restart QComicBook.</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -826,6 +807,13 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Delete selected bookmarks?</source>
         <translation>Supprimer le(s) signet(s) Sélectionné(s) ?</translation>
+    </message>
+</context>
+<context>
+    <name>QComicBook::ComicBookCfgDialog</name>
+    <message>
+        <source>Choose temporary directory</source>
+        <translation>Sélectionner le dossier temporaire</translation>
     </message>
 </context>
 <context>
@@ -956,6 +944,13 @@ Voulez-vous le supprimer ?</translation>
     </message>
 </context>
 <context>
+    <name>QComicBook::RecentFilesMenu</name>
+    <message>
+        <source>Cleanup list</source>
+        <translation>Vider la liste</translation>
+    </message>
+</context>
+<context>
     <name>QComicBook::StatusBar</name>
     <message>
         <source>Page</source>
@@ -986,15 +981,19 @@ Voulez-vous le supprimer ?</translation>
     </message>
     <message>
         <source>Hint</source>
-        <translation>Conseil</translation>
+        <translation type="obsolete">Conseil</translation>
     </message>
     <message>
         <source>Some archives are not supported because essential external utilities are missing. Please install required executables and restart QComicBook. Note: if more than one executable is listed for given archive type, then it is sufficient to install just one of them.</source>
-        <translation>Certaines archives ne sont pas prise en charge, car certains programmes sont manquant. Installez les programmes requis et exécutez QComicBook à nouveau. Note: Si plus d&apos;un programme est listé pour un type d&apos;archive, il suffit d&apos;installer l&apos;un d&apos;entre eux.</translation>
+        <translation type="obsolete">Certaines archives ne sont pas prise en charge, car certains programmes sont manquant. Installez les programmes requis et exécutez QComicBook à nouveau. Note: Si plus d&apos;un programme est listé pour un type d&apos;archive, il suffit d&apos;installer l&apos;un d&apos;entre eux.</translation>
     </message>
     <message>
         <source>Supported image formats</source>
         <translation>Format d&apos;image pris en charge</translation>
+    </message>
+    <message>
+        <source>Hints</source>
+        <translation>Astuces</translation>
     </message>
 </context>
 <context>
@@ -1015,21 +1014,63 @@ Voulez-vous le supprimer ?</translation>
     <name>RecentFilesMenu</name>
     <message>
         <source>Cleanup list</source>
-        <translation>Vider la liste</translation>
+        <translation type="obsolete">Vider la liste</translation>
+    </message>
+</context>
+<context>
+    <name>StatusBar</name>
+    <message>
+        <source>Page</source>
+        <translation type="obsolete">Page</translation>
+    </message>
+</context>
+<context>
+    <name>SystemInfoDialog</name>
+    <message>
+        <source>System information</source>
+        <translation>Information système</translation>
+    </message>
+    <message>
+        <source>Supported archivers</source>
+        <translation type="obsolete">Archives prise en charge</translation>
+    </message>
+    <message>
+        <source>Archive type</source>
+        <translation type="obsolete">Type d&apos;archive</translation>
+    </message>
+    <message>
+        <source>Supported file extensions</source>
+        <translation type="obsolete">Extensions de fichiers supportées</translation>
+    </message>
+    <message>
+        <source>Unsupported archivers</source>
+        <translation type="obsolete">Archive non supportée</translation>
+    </message>
+    <message>
+        <source>Required executable(s)</source>
+        <translation type="obsolete">Éxécutable(s) requis</translation>
+    </message>
+    <message>
+        <source>Hints</source>
+        <translation type="obsolete">Astuces</translation>
+    </message>
+    <message>
+        <source>Supported image formats</source>
+        <translation type="obsolete">Format d&apos;image pris en charge</translation>
     </message>
 </context>
 <context>
     <name>ThumbnailsView</name>
     <message>
         <source>Go to</source>
-        <translation>Aller à</translation>
+        <translation type="obsolete">Aller à</translation>
     </message>
 </context>
 <context>
     <name>ThumbnailsWindow</name>
     <message>
         <source>Thumbnails</source>
-        <translation>Vignettes</translation>
+        <translation type="obsolete">Vignettes</translation>
     </message>
 </context>
 </TS>

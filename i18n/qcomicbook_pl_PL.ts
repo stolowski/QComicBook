@@ -694,7 +694,7 @@
         <source>Dear QComicBook user! If you like QComicBook, please consider a small donation for its continued development. I develop QComicBook in my spare time and give it away free of charge. Your donation will fund web hosting fees and will encourage me to add new features and spend even more time on its development! 
 
 Donating is easy - just click the Flattr button below! Note: You can access this information via Help / About donating menu item.</source>
-        <translation type="unfinished">Drogi użytkowniku programu QComicBook! Jeśli lubisz QComicBook, rozważ niewielką dotację na jego dalszy rozwój. Tworzę QComicBook w wolnym czasie i udostępniam go za darmo. Twoja dotacja pokryje koszty utrzymywania strony internetowej i zachęci mnie do dodawania nowych funkcji oraz poświęcenia większej ilości czasu na rozwój programu!
+        <translation>Drogi użytkowniku programu QComicBook! Jeśli lubisz QComicBook, rozważ niewielką dotację na jego dalszy rozwój. Tworzę QComicBook w wolnym czasie i udostępniam go za darmo. Twoja dotacja pokryje koszty utrzymywania strony internetowej i zachęci mnie do dodawania nowych funkcji oraz poświęcenia większej ilości czasu na rozwój programu!
 Dotacja jest bardzo prosta - wystarczy kliknąć przycisk Flattr poniżej! Uwaga: te informacje są w menu Pomoc / Informacje o dotacjach.</translation>
     </message>
     <message>

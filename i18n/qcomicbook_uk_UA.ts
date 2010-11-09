@@ -690,7 +690,6 @@
         <translation>Будь-ласка, підтримайте QComicBook!</translation>
     </message>
     <message>
-        <location filename="../src/DonationDialog.ui" line="54"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -705,7 +704,7 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Note: You can access this information via &lt;span style=&quot; font-weight:600;&quot;&gt;Help / About donating&lt;/span&gt; menu item.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <translation type="obsolete">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Droid Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
@@ -721,17 +720,31 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Примітка: Ви можете отримати доступ до цієї інформації через меню &lt;span style=&quot; font-weight:600;&quot;&gt;Допомога / Про пожертвування&lt;/span&gt; &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/DonationDialog.ui" line="95"/>
+        <location filename="../src/DonationDialog.ui" line="39"/>
+        <source>Dear QComicBook user! If you like QComicBook, please consider a small donation for its continued development. I develop QComicBook in my spare time and give it away free of charge. Your donation will fund web hosting fees and will encourage me to add new features and spend even more time on its development! 
+
+Donating is easy - just click the Flattr button below! Note: You can access this information via Help / About donating menu item.</source>
+        <translation>Шановний користувач QComicBook! Якщо вам подобається QComicBook, то чому б вам не зробити невеличкий внесок на його подальший розвиток. Я розробляю QComicBook у свій вільний час і розповсюджую її безкоштовно. Ваші пожертви підуть на оплату веб-хостингу і будуть заохочувати мене додавати нові функції і присвячувати ще більше часу на його розвиток! 
+
+Пожертвувати легко - просто натисніть кнопку нижче! Примітка: Ви можете отримати доступ до цієї інформації через меню Допомога / Про пожертвування.</translation>
+    </message>
+    <message>
+        <location filename="../src/DonationDialog.ui" line="57"/>
+        <source>&lt;a href=&quot;http://flattr.com/thing/72360/QComicBook-project&quot;&gt;&lt;img src=&quot;:/images/flattr.png&quot; /&gt;&lt;/a&gt;</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../src/DonationDialog.ui" line="88"/>
         <source>Remind me later</source>
         <translation>Нагадати пізніше</translation>
     </message>
     <message>
-        <location filename="../src/DonationDialog.ui" line="102"/>
+        <location filename="../src/DonationDialog.ui" line="95"/>
         <source>I&apos;ll donate. Don&apos;t show this dialog again</source>
         <translation>Я буду жертвувати. Більше не нагадувати</translation>
     </message>
     <message>
-        <location filename="../src/DonationDialog.ui" line="109"/>
+        <location filename="../src/DonationDialog.ui" line="102"/>
         <source>Close</source>
         <translation>Закрити</translation>
     </message>
@@ -827,121 +840,121 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>QComicBook::ComicMainWindow</name>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="102"/>
+        <location filename="../src/ComicMainWindow.cpp" line="101"/>
         <source>Escape</source>
         <translation>Вихід</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="107"/>
+        <location filename="../src/ComicMainWindow.cpp" line="106"/>
         <source>Alt+t</source>
         <translation>Alt+t</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="144"/>
+        <location filename="../src/ComicMainWindow.cpp" line="143"/>
         <source>Recently opened</source>
         <translation>Нещодавно відкриті</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="446"/>
+        <location filename="../src/ComicMainWindow.cpp" line="466"/>
         <source>Leave QComicBook?</source>
         <translation>Вийти з QComicBook?</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="446"/>
+        <location filename="../src/ComicMainWindow.cpp" line="466"/>
         <source>Do you really want to quit QComicBook?</source>
         <translation>Ви дійсно хочете вийти з QComicBook?</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="601"/>
+        <location filename="../src/ComicMainWindow.cpp" line="621"/>
         <source>no images found</source>
         <translation>зображень не знайдено</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="602"/>
+        <location filename="../src/ComicMainWindow.cpp" line="622"/>
         <source>unknown archive</source>
         <translation>невідомий архів</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="603"/>
+        <location filename="../src/ComicMainWindow.cpp" line="623"/>
         <source>can&apos;t access directory</source>
         <translation>доступ до каталогу заборонено</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="604"/>
+        <location filename="../src/ComicMainWindow.cpp" line="624"/>
         <source>file/directory not found</source>
         <translation>файл/каталог не знайдено</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="605"/>
+        <location filename="../src/ComicMainWindow.cpp" line="625"/>
         <source>archive not supported</source>
         <translation>архів не підтримується</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="606"/>
+        <location filename="../src/ComicMainWindow.cpp" line="626"/>
         <source>archive extractor exited with error</source>
         <translation>при видобуванні з архіву сталася помилка</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="609"/>
-        <location filename="../src/ComicMainWindow.cpp" line="966"/>
+        <location filename="../src/ComicMainWindow.cpp" line="629"/>
+        <location filename="../src/ComicMainWindow.cpp" line="980"/>
         <location filename="../src/main.cpp" line="46"/>
         <source>QComicBook error</source>
         <translation>Помилка QComicBook</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="609"/>
+        <location filename="../src/ComicMainWindow.cpp" line="629"/>
         <source>Error opening comicbook</source>
         <translation>Помилка при відкритті comicbook</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="616"/>
+        <location filename="../src/ComicMainWindow.cpp" line="636"/>
         <source>Choose a directory</source>
         <translation>Вибрати каталог</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="623"/>
+        <location filename="../src/ComicMainWindow.cpp" line="643"/>
         <source>Choose a file</source>
         <translation>Вибрати файл</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="806"/>
+        <location filename="../src/ComicMainWindow.cpp" line="817"/>
         <source>Page</source>
         <translation>Сторінка</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="932"/>
+        <location filename="../src/ComicMainWindow.cpp" line="946"/>
         <source>Removing bookmark</source>
         <translation>Видалити закладку</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="933"/>
+        <location filename="../src/ComicMainWindow.cpp" line="947"/>
         <source>Do you really want to remove bookmark
 for this comic book?</source>
         <translation>Ви дійсно хочете видалити закладку
 у цьому коміксі?</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="948"/>
+        <location filename="../src/ComicMainWindow.cpp" line="962"/>
         <source>Save image as</source>
         <translation>Зберегти зображення</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="955"/>
+        <location filename="../src/ComicMainWindow.cpp" line="969"/>
         <source>page</source>
         <translation>сторінка</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="966"/>
+        <location filename="../src/ComicMainWindow.cpp" line="980"/>
         <source>Error saving image</source>
         <translation>Помилка при збереженні зображення</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="1007"/>
+        <location filename="../src/ComicMainWindow.cpp" line="1021"/>
         <source>Comic book not found</source>
         <translation>Коміксів не знайдено</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="1008"/>
+        <location filename="../src/ComicMainWindow.cpp" line="1022"/>
         <source>Selected bookmark points to
 non-existing comic book
 Do you want to remove it?</source>

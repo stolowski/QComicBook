@@ -690,7 +690,6 @@
         <translation>Doneer alstublieft aan QComicBook!</translation>
     </message>
     <message>
-        <location filename="../src/DonationDialog.ui" line="54"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -705,7 +704,7 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Note: You can access this information via &lt;span style=&quot; font-weight:600;&quot;&gt;Help / About donating&lt;/span&gt; menu item.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <translation type="obsolete">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;
 &lt;head&gt;
     &lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;
@@ -738,17 +737,31 @@ QComicBook!&lt;/p&gt;
 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/DonationDialog.ui" line="95"/>
+        <location filename="../src/DonationDialog.ui" line="39"/>
+        <source>Dear QComicBook user! If you like QComicBook, please consider a small donation for its continued development. I develop QComicBook in my spare time and give it away free of charge. Your donation will fund web hosting fees and will encourage me to add new features and spend even more time on its development! 
+
+Donating is easy - just click the Flattr button below! Note: You can access this information via Help / About donating menu item.</source>
+        <translation>Geachte QComicBook gebruiker! Ik ontwikkel QComicBook in mijn vrije tijd en vraag er niks voor. Jouw donatie zal worden gebruikt om de webhosting te betalen en zal me aanmoedigen om nieuwe functies toe te voegen en nog meer tijd besteden aan de ontwikkeling van QComicBook!
+
+Doneren is makkelijk - gewoon op de onderstaande Flattr knop klikken! Opmerking: Je kan deze informatie bekijken via de Help / Over doneren menu item.</translation>
+    </message>
+    <message>
+        <location filename="../src/DonationDialog.ui" line="57"/>
+        <source>&lt;a href=&quot;http://flattr.com/thing/72360/QComicBook-project&quot;&gt;&lt;img src=&quot;:/images/flattr.png&quot; /&gt;&lt;/a&gt;</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../src/DonationDialog.ui" line="88"/>
         <source>Remind me later</source>
         <translation>Herinner mij later</translation>
     </message>
     <message>
-        <location filename="../src/DonationDialog.ui" line="102"/>
+        <location filename="../src/DonationDialog.ui" line="95"/>
         <source>I&apos;ll donate. Don&apos;t show this dialog again</source>
         <translation>Ik zal doneren. Dit venster niet meer tonen</translation>
     </message>
     <message>
-        <location filename="../src/DonationDialog.ui" line="109"/>
+        <location filename="../src/DonationDialog.ui" line="102"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
@@ -844,120 +857,120 @@ QComicBook!&lt;/p&gt;
 <context>
     <name>QComicBook::ComicMainWindow</name>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="102"/>
+        <location filename="../src/ComicMainWindow.cpp" line="101"/>
         <source>Escape</source>
         <translation>Escape</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="107"/>
+        <location filename="../src/ComicMainWindow.cpp" line="106"/>
         <source>Alt+t</source>
         <translation>Alt+t</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="144"/>
+        <location filename="../src/ComicMainWindow.cpp" line="143"/>
         <source>Recently opened</source>
         <translation>Onlangs geopend</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="446"/>
+        <location filename="../src/ComicMainWindow.cpp" line="466"/>
         <source>Leave QComicBook?</source>
         <translation>verlaat QComicBook?</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="446"/>
+        <location filename="../src/ComicMainWindow.cpp" line="466"/>
         <source>Do you really want to quit QComicBook?</source>
         <translation>Wilt u echt QComicBook afsluiten?</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="601"/>
+        <location filename="../src/ComicMainWindow.cpp" line="621"/>
         <source>no images found</source>
         <translation>geen afbeeldingen gevonden</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="602"/>
+        <location filename="../src/ComicMainWindow.cpp" line="622"/>
         <source>unknown archive</source>
         <translation>onbekend archief</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="603"/>
+        <location filename="../src/ComicMainWindow.cpp" line="623"/>
         <source>can&apos;t access directory</source>
         <translation>geen toegang tot map</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="604"/>
+        <location filename="../src/ComicMainWindow.cpp" line="624"/>
         <source>file/directory not found</source>
         <translation>bestand/map niet gevonden</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="605"/>
+        <location filename="../src/ComicMainWindow.cpp" line="625"/>
         <source>archive not supported</source>
         <translation>archief wordt niet ondersteund</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="606"/>
+        <location filename="../src/ComicMainWindow.cpp" line="626"/>
         <source>archive extractor exited with error</source>
         <translation>archiveer programma sloot af met een fout</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="609"/>
-        <location filename="../src/ComicMainWindow.cpp" line="966"/>
+        <location filename="../src/ComicMainWindow.cpp" line="629"/>
+        <location filename="../src/ComicMainWindow.cpp" line="980"/>
         <location filename="../src/main.cpp" line="46"/>
         <source>QComicBook error</source>
         <translation>QComicBook fout</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="609"/>
+        <location filename="../src/ComicMainWindow.cpp" line="629"/>
         <source>Error opening comicbook</source>
         <translation>Er trad een fout op tijdens het openen van een stripboek</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="616"/>
+        <location filename="../src/ComicMainWindow.cpp" line="636"/>
         <source>Choose a directory</source>
         <translation>Kies een map</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="623"/>
+        <location filename="../src/ComicMainWindow.cpp" line="643"/>
         <source>Choose a file</source>
         <translation>Kies een bestand</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="806"/>
+        <location filename="../src/ComicMainWindow.cpp" line="817"/>
         <source>Page</source>
         <translation>Pagina</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="932"/>
+        <location filename="../src/ComicMainWindow.cpp" line="946"/>
         <source>Removing bookmark</source>
         <translation>Verwijder bladwijzer</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="933"/>
+        <location filename="../src/ComicMainWindow.cpp" line="947"/>
         <source>Do you really want to remove bookmark
 for this comic book?</source>
         <translation>Wilt u de bladwijzer van dit stripboek echt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="948"/>
+        <location filename="../src/ComicMainWindow.cpp" line="962"/>
         <source>Save image as</source>
         <translation>Sla afbeelding op als</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="955"/>
+        <location filename="../src/ComicMainWindow.cpp" line="969"/>
         <source>page</source>
         <translation>pagina</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="966"/>
+        <location filename="../src/ComicMainWindow.cpp" line="980"/>
         <source>Error saving image</source>
         <translation>Fout tijdens het opslaan van de afbeelding</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="1007"/>
+        <location filename="../src/ComicMainWindow.cpp" line="1021"/>
         <source>Comic book not found</source>
         <translation>Stripboek niet gevonden</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="1008"/>
+        <location filename="../src/ComicMainWindow.cpp" line="1022"/>
         <source>Selected bookmark points to
 non-existing comic book
 Do you want to remove it?</source>
