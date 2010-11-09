@@ -725,7 +725,7 @@ p, li { white-space: pre-wrap; }
         <source>Dear QComicBook user! If you like QComicBook, please consider a small donation for its continued development. I develop QComicBook in my spare time and give it away free of charge. Your donation will fund web hosting fees and will encourage me to add new features and spend even more time on its development! 
 
 Donating is easy - just click the Flattr button below! Note: You can access this information via Help / About donating menu item.</source>
-        <translation>Cher utilisateur de QComicBookv! Si vous aimez QComicBook, pensez à apporter votre contribution au développement de ce projet. QComicBook est developpé dans mes temps libre, et il est distribué gratuitement !. Votre don servira à payer l&apos;hébergement web sera un encouragement pour continuer à ajouter de nouvelles fonctionnalité et passer encore plus de temps sur son développement ! 
+        <translation>Chers utilisateurs de QComicBook! Si vous aimez QComicBook, pensez à apporter votre contribution au développement de ce projet. QComicBook est developpé dans mes temps libre, et il est distribué gratuitement ! Votre don servira à payer l&apos;hébergement web et sera un encouragement pour continuer à ajouter de nouvelles fonctionnalité et passer encore plus de temps sur son développement ! 
 
 Contribuer est facile - vous n&apos;avez qu&apos;à cliquer sur bouton &quot;Flattr&quot; ci-dessous! Note: Vous pourrez toujours accèder à cette information par le menu Aide / À propos - Contribution.</translation>
     </message>
@@ -791,11 +791,11 @@ Contribuer est facile - vous n&apos;avez qu&apos;à cliquer sur bouton &quot;Fla
     <name>QComicBook::ArchiversConfiguration</name>
     <message>
         <source>Some archives are not supported because essential external utilities are missing. Please install required executables and restart QComicBook. Note: if more than one executable is listed for given archive type, then it is sufficient to install  just one of them.</source>
-        <translation type="unfinished"></translation>
+        <translation>Certaines archives ne sont pas prises en charge car des utilitaires externes sont manquants. S&apos;il vous plaît installer les exécutables nécessaires et redémarrez QComicBook. Note: si plus d&apos;un exécutable est listé pour le type d&apos;archives donné, alors il suffit d&apos;installer un seul d&apos;entre eux.</translation>
     </message>
     <message>
         <source>Free (opensource) version of unrar was detected. This version has problems with many rar archives. It is recommended to install the non-free unrar and restart QComicBook.</source>
-        <translation type="unfinished"></translation>
+        <translation>La version libre (opensource) de unrar a été détectée. Cette version a des problèmes avec de nombreuses archives rar. Il est recommandé d&apos;installer la version non-libre (ie.:unrar non-free )et redémarrez QComicBook.</translation>
     </message>
 </context>
 <context>
@@ -813,7 +813,7 @@ Contribuer est facile - vous n&apos;avez qu&apos;à cliquer sur bouton &quot;Fla
     <name>QComicBook::ComicBookCfgDialog</name>
     <message>
         <source>Choose temporary directory</source>
-        <translation type="unfinished">Sélectionner le dossier temporaire</translation>
+        <translation>Sélectionner le dossier temporaire</translation>
     </message>
 </context>
 <context>
@@ -947,7 +947,7 @@ Voulez-vous le supprimer ?</translation>
     <name>QComicBook::RecentFilesMenu</name>
     <message>
         <source>Cleanup list</source>
-        <translation type="unfinished">Vider la liste</translation>
+        <translation>Vider la liste</translation>
     </message>
 </context>
 <context>
@@ -993,7 +993,7 @@ Voulez-vous le supprimer ?</translation>
     </message>
     <message>
         <source>Hints</source>
-        <translation type="unfinished">Astuces</translation>
+        <translation>Astuces</translation>
     </message>
 </context>
 <context>
