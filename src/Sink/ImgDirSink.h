@@ -51,18 +51,7 @@ namespace QComicBook
 					operator QDateTime() const { return timestamp; }
 			};
 
-			//! Scans directories recursively for image and text files.
-			/*! Scans directories for jpg, png, gif, xpm image files and .nfo and file_id.diz text files.
-			 *  Images file names are stored in imgfiles; text file names are stored in txtfiles.
-			 *  Other files are store in otherfiles. All directories are stored in dirs.
-			 *  @param s starting directory 
-			 *  @see imgfiles
-			 *  @see txtfiles
-			 *  @see otherfiles
-			 *  @see dirs */
-			//void recurseDir(const QString &s);
 			static QString memPrefix(int &s);
-			void setComicBookName(const QString &name);
 
 			static const int MAX_TEXTFILE_SIZE;
 		
@@ -75,7 +64,6 @@ namespace QComicBook
 			QStringList otherfiles; //!< list of other files
 			QStringList dirs; //!< directories
 			QString dirpath; //!< path to directory
-			QString cbname; //!< comic book name (directory path by default)
 			QMap<QString, FileStatus> timestamps; //!< last modifications timestamps for all pages
 			mutable QStringList desc; //txt files
 
@@ -101,25 +89,9 @@ namespace QComicBook
 			 *  @return an image */
 			virtual QImage image(unsigned int num, int &result);
 
-			//! Returns thumbnail image for specified page.
-			/*! Thumbnail is loaded from disk if found and caching is enabled. Otherwise,
-			 *  the image is loaded and thumbnail is generated.
-			 *  @param num page number
-			 *  @param thumbcache specifies if thumbnails disk cache should be used */
-			virtual Thumbnail getThumbnail(int num, bool thumbcache=true);
-
 			/*! @return number of images for this comic book sink */
 			virtual int numOfImages() const;
 			
-			/*! Returns abbreviated name of maxlen. This name is not reliable, eg. it can't
-			 *  be used as file or directory name. It is meant for viewing only.
-			 *  @param maxlen maximum length of the name that will be returned
-			 *  @return abbreviated comic book name */
-			virtual QString getName(int maxlen = 50);
-
-			/*! Returns full name of the comic book.
-			 *  @return name of comic book */
-			virtual QString getFullName() const;
 			virtual QString getFullFileName(int page) const;
 
 			/*! @return contents of .nfo and file_id.diz files; file name goes first, then contents. */

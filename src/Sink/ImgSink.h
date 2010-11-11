@@ -82,20 +82,23 @@ namespace QComicBook
 			 *  the image is loaded and thumbnail is generated.
 			 *  @param num page number
 			 *  @param thumbcache specifies if thumbnails disk cache should be used */
-			virtual Thumbnail getThumbnail(int num, bool thumbcache=true) = 0;
+			virtual Thumbnail getThumbnail(unsigned int num, bool thumbcache=true);
 
 			/*! @return number of images for this comic book sink */
 			virtual int numOfImages() const = 0;
 			
+			void setComicBookName(const QString &name, const QString &fullName);
+
 			/*! Returns abbreviated name of maxlen. This name is not reliable, eg. it can't
 			 *  be used as file or directory name. It is meant for viewing only.
 			 *  @param maxlen maximum length of the name that will be returned
 			 *  @return abbreviated comic book name */
-			virtual QString getName(int maxlen = 50) = 0;
+			QString getName(int maxlen = 50) const;
 
 			/*! Returns full name of the comic book.
 			 *  @return name of comic book */
-			virtual QString getFullName() const = 0;
+			QString getFullName() const;
+
 			virtual QString getFullFileName(int page) const = 0;
 
 			/*! @return contents of .nfo and file_id.diz files; file name goes first, then contents. */
@@ -114,6 +117,8 @@ namespace QComicBook
 
 		private:
 			ImgCache *cache;
+			QString cbname; //!< comic book name
+			QString cbfullname; //!< full comic book name (e.g. path)
 	};
 }
 

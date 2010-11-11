@@ -13,12 +13,13 @@
 #include "ImgSink.h"
 #include "ImgCache.h"
 #include "Page.h"
+#include "Thumbnail.h"
 #include <QImage>
 #include <QDebug>
 
 using namespace QComicBook;
 
-ImgSink::ImgSink(int cacheSize): QObject()
+ImgSink::ImgSink(int cacheSize): cbname(QString::null), cbfullname(QString::null), QObject()
 {
 	cache = new ImgCache(cacheSize);
 }
@@ -49,5 +50,58 @@ Page ImgSink::getImage(unsigned int num, int &result)
 	}
 	const Page page(num, im);
 	return page;
+}
+
+Thumbnail ImgSink::getThumbnail(unsigned int num, bool thumbcache)
+{
+        Thumbnail t(num, cbname.remove('/'));
+
+        //
+        // try to load cached thumbnail
+        if (thumbcache)
+        {
+            if (t.tryLoad())
+            {
+                qDebug() << "thumbnail" << num << "loaded from disk";
+                return t;
+            }
+        }
+
+		int result;
+        //
+        // try to load image
+        const Page p(getImage(num, result));
+		if (result == 0)
+        {
+			t.setImage(p.getImage());
+            //
+            // save thumbnail if caching enabled
+            if (thumbcache)
+            {
+                t.save();
+            }
+        }
+
+        return t;
+}
+
+
+void ImgSink::setComicBookName(const QString &name, const QString &fullName)
+{
+	cbname = name;
+	cbfullname = fullName;
+}
+
+QString ImgSink::getFullName() const
+{
+	return cbfullname;
+}
+
+QString ImgSink::getName(int maxlen) const
+{
+	if (cbname.length() < maxlen)
+		return cbname;
+	const QString tmpname(cbname.left(maxlen-3) + "...");
+	return tmpname;
 }
 

@@ -14,6 +14,7 @@
 #include "Thumbnail.h"
 #include "Page.h"
 #include <QX11Info>
+#include <QFileInfo>
 
 using namespace QComicBook;
 
@@ -39,6 +40,9 @@ int ImgPdfSink::open(const QString &path)
 
 	pdfdoc->setRenderHint(Poppler::Document::Antialiasing, true);
 	pdfdoc->setRenderHint(Poppler::Document::TextAntialiasing, true);
+	
+	QFileInfo info(path);
+	setComicBookName(info.fileName(), path);
 
 	emit progress(1, 1);
 	return 0;

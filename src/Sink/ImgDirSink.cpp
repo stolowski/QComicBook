@@ -12,7 +12,6 @@
 
 #include "ImgDirSink.h"
 #include "ComicBookSettings.h"
-#include "Thumbnail.h"
 #include "ImageFormatsInfo.h"
 #include <QImage>
 #include <QStringList>
@@ -40,7 +39,6 @@ ImgDirSink::ImgDirSink(const QString &path, bool dirs, int cacheSize): ImgSink(c
 ImgDirSink::ImgDirSink(const ImgDirSink &sink, int cacheSize): ImgSink(cacheSize), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
 {
 	dirpath = sink.dirpath;
-	cbname = sink.cbname;
 	imgfiles = sink.imgfiles;
 	txtfiles = sink.txtfiles;
 	otherfiles = sink.otherfiles;
@@ -51,11 +49,6 @@ ImgDirSink::ImgDirSink(const ImgDirSink &sink, int cacheSize): ImgSink(cacheSize
 ImgDirSink::~ImgDirSink()
 {
         close();
-}
-
-void ImgDirSink::setComicBookName(const QString &name)
-{
-        cbname = name;
 }
 
 QString ImgDirSink::memPrefix(int &s)
@@ -118,7 +111,7 @@ int ImgDirSink::open(const QString &path)
                 }
                 else status = SINKERR_NOTDIR;
         }
-        setComicBookName(path);
+        setComicBookName(path, dirpath);
         if (status == 0)
                 emit progress(1, 1);
         return status;
@@ -133,19 +126,6 @@ void ImgDirSink::close()
         otherfiles.clear();
         dirs.clear();
         listmtx.unlock();
-}
-
-QString ImgDirSink::getName(int maxlen)
-{
-        if (dirpath.length() < maxlen)
-                return dirpath;
-        QString tmpname = "..." + dirpath.right(maxlen-3);
-        return tmpname;
-}
-
-QString ImgDirSink::getFullName() const
-{
-        return dirpath;
 }
 
 QString ImgDirSink::getFullFileName(int page) const
@@ -212,47 +192,6 @@ QImage ImgDirSink::image(unsigned int num, int &result)
 
 	const Page page(num, im);
 	return page;
-}
-
-Thumbnail ImgDirSink::getThumbnail(int num, bool thumbcache)
-{
-        QString fname;
-        listmtx.lock();
-        if (num < imgfiles.count())
-                fname = imgfiles[num];
-        else
-        {
-                listmtx.unlock();
-                return Thumbnail(); //TODO exception?
-        }
-        listmtx.unlock();
-
-        Thumbnail t(num, cbname.remove('/'));
-
-        //
-        // try to load cached thumbnail
-        if (thumbcache)
-        {
-            if (t.tryLoad())
-            {
-                qDebug() << "thumbnail" << num << "loaded from disk";
-                return t;
-            }
-        }
-
-        //
-        // try to load image
-        if (t.fromOriginalImage(fname))
-        {
-            //
-            // save thumbnail if caching enabled
-            if (thumbcache)
-            {
-                t.save();
-            }
-        }
-
-        return t;
 }
 
 int ImgDirSink::numOfImages() const
