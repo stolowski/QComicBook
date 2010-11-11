@@ -16,6 +16,7 @@
 #define __COMIC_MAIN_H
 
 #include <QMainWindow>
+#include <QSharedPointer>
 #include "ui_ComicMainWindow.h"
 
 class QMenu;
@@ -62,7 +63,7 @@ namespace QComicBook
 			QString lastdir; //!<last opened directory for Open File/Directory dialog
 			PageLoaderThread *pageLoader;
 			ThumbnailLoaderThread *thumbnailLoader;
-			QPrinter *printer;
+			QSharedPointer<QPrinter> printer;
 			PrinterThread *printThread;
 			FrameDetectThread *frameDetect;
                         		

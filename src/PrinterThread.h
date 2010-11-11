@@ -16,6 +16,7 @@
 #include <QThread>
 #include <QMutex>
 #include <QAbstractPrintDialog>
+#include <QSharedPointer>
 
 class QPrinter;
 
@@ -28,7 +29,7 @@ namespace QComicBook
     Q_OBJECT
 
     public:
-        PrinterThread(ImgDirSink *sink, QPrinter *printer, QAbstractPrintDialog::PrintRange range, int from, int to);
+        PrinterThread(ImgDirSink *sink, QSharedPointer<QPrinter> printer, QAbstractPrintDialog::PrintRange range, int from, int to);
         ~PrinterThread();
         void run();
 
@@ -41,7 +42,7 @@ namespace QComicBook
     private:
         QMutex m_printMtx;
         bool m_abort;
-        QPrinter *m_printer;
+        QSharedPointer<QPrinter> m_printer;
         ImgDirSink *m_sink;
         QAbstractPrintDialog::PrintRange m_range;
         int m_from;

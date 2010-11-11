@@ -67,7 +67,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
     
     cfg = &ComicBookSettings::instance();
     
-    printer = new QPrinter();
+    printer = QSharedPointer<QPrinter>(new QPrinter());
 
     pageLoader = new PageLoaderThread();
     frameDetect = new FrameDetectThread();
@@ -254,7 +254,7 @@ ComicMainWindow::~ComicMainWindow()
     pageLoader->wait();
     thumbnailLoader->wait();
     
-    delete printer;
+    printer.clear();
     delete pageLoader;
     delete thumbnailLoader;
     
@@ -986,7 +986,7 @@ void ComicMainWindow::savePageAs()
 
 void ComicMainWindow::openPrintDialog()
 {
-    QPrintDialog printdlg(printer, this);
+    QPrintDialog printdlg(printer.data(), this);
     printdlg.setMinMax(1, sink->numOfImages());
     if (printdlg.exec() == QDialog::Accepted)
     {
