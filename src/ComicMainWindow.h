@@ -17,6 +17,7 @@
 
 #include <QMainWindow>
 #include <QSharedPointer>
+#include <QPointer>
 #include "ui_ComicMainWindow.h"
 
 class QMenu;
@@ -47,9 +48,9 @@ namespace QComicBook
 
 		private:
 			QSharedPointer<ImgSink> sink;
-			PageViewBase *view;
-			ThumbnailsWindow *thumbswin;
-			Bookmarks *bookmarks;
+			QPointer<PageViewBase> view;
+			QPointer<ThumbnailsWindow> thumbswin;
+			QSharedPointer<Bookmarks> bookmarks;
 			StatusBar *statusbar;
 			ComicBookSettings *cfg;
 			int currpage; //!<current page number

@@ -17,6 +17,7 @@
 
 #include <QWidget>
 #include <QList>
+#include <QSharedPointer>
 #include "ui_BookmarkManager.h"
 
 class QTreeWidgetItem;
@@ -34,7 +35,7 @@ namespace QComicBook
 		Q_OBJECT
 
 		private:
-			Bookmarks *bookmarks;
+			QSharedPointer<Bookmarks> bookmarks;
 			QList<QTreeWidgetItem *> invalid; //!<the list of invalid bookmarks
 
 			void initBookmarkView();
@@ -48,7 +49,7 @@ namespace QComicBook
 			void invertSelection();
 
 		public:
-			BookmarkManager(QWidget *parent, Bookmarks *b);
+			BookmarkManager(QWidget *parent, QSharedPointer<Bookmarks> b);
 			virtual ~BookmarkManager();
 	};
 }

@@ -59,7 +59,7 @@
 using namespace QComicBook;
 using namespace Utility;
 
-ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NULL), sink(NULL), currpage(0)
+ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), currpage(0)
 {
     setupUi(this);
     updateCaption();
@@ -74,7 +74,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
 
     //
     // Thumbnails window
-    thumbswin = new ThumbnailsWindow(this);
+    thumbswin = QPointer<ThumbnailsWindow>(new ThumbnailsWindow(this));
     thumbswin->setObjectName("ThumbnailsWindow");
     thumbswin->setAllowedAreas(Qt::AllDockWidgetAreas);
     addDockWidget(Qt::LeftDockWidgetArea, thumbswin);
@@ -160,7 +160,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
 
     //
     // Bookmarks menu
-    bookmarks = new Bookmarks(menuBookmarks);
+    bookmarks = QSharedPointer<Bookmarks>(new Bookmarks(menuBookmarks));
     connect(actionSetBookmark, SIGNAL(triggered()), this, SLOT(setBookmark()));
     connect(actionRemoveBookmark, SIGNAL(triggered()), this, SLOT(removeBookmark()));
     connect(menuBookmarks, SIGNAL(triggered(QAction *)), this, SLOT(bookmarkSelected(QAction *)));
@@ -246,8 +246,6 @@ ComicMainWindow::~ComicMainWindow()
 
     saveSettings();        
     
-    delete bookmarks;
-    
     frameDetect->stop();
     pageLoader->stop();
     thumbnailLoader->stop();
@@ -312,15 +310,15 @@ void ComicMainWindow::setupComicImageView()
     switch (cfg->viewType())
     {
 	case Continuous:
-	        view = new ContinuousPageView(this, n, props);
+	        view = QPointer<PageViewBase>(new ContinuousPageView(this, n, props));
 		frameDetect->clear();
 		break;
 	case Simple:
-		view = new SimplePageView(this, n, props);
+		view = QPointer<PageViewBase>(new SimplePageView(this, n, props));
 		frameDetect->clear();
 		break;
 	case Frame:
-		view = new FrameView(this, n, props);
+		view = QPointer<PageViewBase>(new FrameView(this, n, props));
 		actionNextFrame->setDisabled(false);
 		actionPreviousFrame->setDisabled(false);
 		actionTwoPages->setDisabled(true);
