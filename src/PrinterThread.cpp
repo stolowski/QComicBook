@@ -11,13 +11,14 @@
  */
 
 #include "PrinterThread.h"
-#include "ImgDirSink.h"
+#include "Sink/ImgSink.h"
+#include "Page.h"
 #include <QPrinter>
 #include <QPainter>
 
 using namespace QComicBook;
 
-PrinterThread::PrinterThread(ImgDirSink *sink, QSharedPointer<QPrinter> printer, QAbstractPrintDialog::PrintRange range, int from, int to)
+PrinterThread::PrinterThread(ImgSink *sink, QSharedPointer<QPrinter> printer, QAbstractPrintDialog::PrintRange range, int from, int to)
     : QThread()
     , m_sink(sink)
     , m_printer(printer)

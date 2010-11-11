@@ -27,7 +27,7 @@ class QPrinter;
 
 namespace QComicBook
 {
-	class ImgDirSink;
+	class ImgSink;
 	class ComicBookSettings;
 	class PageViewBase;
 	class ThumbnailsWindow;
@@ -46,7 +46,7 @@ namespace QComicBook
 		Q_OBJECT
 
 		private:
-			ImgDirSink *sink;
+			ImgSink *sink;
 			PageViewBase *view;
 			ThumbnailsWindow *thumbswin;
 			Bookmarks *bookmarks;

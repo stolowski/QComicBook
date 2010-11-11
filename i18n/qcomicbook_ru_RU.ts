@@ -728,7 +728,8 @@ p, li { white-space: pre-wrap; }
 Donating is easy - just click the Flattr button below! Note: You can access this information via Help / About donating menu item.</source>
         <translation>Уважаемый пользователь QComicBook! Если вам нравится эта программа, пожалуйста, подумайте о том, чтобы поддержать её развитие. Я работаю над QComicBook в своё свободное время, и предоставляю её бесплатно. Ваша поддержка поможет оплатить хостинг и вдохновит меня на совершенствование QComicBook, на внесение в неё новых функций, и на выделение большего времени на разработку! 
 
-Пожертвовать просто — всего лишь нажмите на кнопку Flattr! Заметка: вы всегда можете открыть это окно из меню Помощь/О пожертвовании.</translation>
+Пожертвовать просто — всего лишь нажмите на кнопку Flattr! 
+Заметка: вы всегда можете открыть это окно из меню Помощь/О пожертвовании.</translation>
     </message>
     <message>
         <location filename="../src/DonationDialog.ui" line="57"/>
