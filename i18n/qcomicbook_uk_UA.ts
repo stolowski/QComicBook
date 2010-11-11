@@ -709,9 +709,9 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Droid Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Шановний користувач QComicBook! &lt;/span&gt;Якщо вам подобається QComicBook, то чому б вам не зробити невеличкий внесок на його подальший розвиток. Я розробляю QComicBook у свій вільний час і розповсюджую її безкоштовно. Ваші пожертви підуть на оплату веб-хостингу і будуть заохочувати мене додавати нові функції і присвячувати ще більше часу на його розвиток! &lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Шановний користувач QComicBook! &lt;/span&gt;Якщо вам подобається QComicBook, то чому б вам не зробити невеличкий внесок на його подальший розвиток. QComicBook розробляється у вільний час і розповсюджується безкоштовно. Ваші пожертви підуть на оплату веб-хостингу і будуть заохочувати додавати нові функції і присвячувати ще більше часу на його розвиток! &lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Пожертвувати легко - просто натисніть кнопку нижче!&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Пожертвувати можна просто натиснувши кнопку нижче!&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://flattr.com/thing/72360/QComicBook-project&quot;&gt;&lt;img src=&quot;:/images/flattr.png&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
@@ -719,6 +719,14 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Примітка: Ви можете отримати доступ до цієї інформації через меню &lt;span style=&quot; font-weight:600;&quot;&gt;Допомога / Про пожертвування&lt;/span&gt; &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>Dear QComicBook user! If you like QComicBook, please consider a small donation for its continued development. I develop QComicBook in my spare time and give it away free of charge. Your donation will fund web hosting fees and will encourage me to add new features and spend even more time on its development! 
+
+Donating is easy - just click the Flattr button below! Note: You can access this information via Help / About donating menu item.</source>
+        <translation type="obsolete">Шановний користувач QComicBook! Якщо вам подобається QComicBook, то чому б вам не зробити невеличкий внесок на його подальший розвиток. QComicBook розробляється у вільний час і розповсюджується безкоштовно. Ваші пожертви підуть на оплату веб-хостингу і будуть заохочувати додавати нові функції і присвячувати ще більше часу на його розвиток! 
+
+Пожертвувати можна просто натиснувши кнопку нижче! Примітка: Ви можете отримати доступ до цієї інформації через меню Допомога / Про пожертвування.</translation>
     </message>
     <message>
         <location filename="../src/DonationDialog.ui" line="95"/>

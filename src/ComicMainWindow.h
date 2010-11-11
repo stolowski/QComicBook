@@ -78,6 +78,7 @@ namespace QComicBook
 
                         void setupContextMenu();
 			void setupComicImageView();
+			void applyFullscreenSettings();
 
 		protected slots:
 			void pageLoaded(const Page &page);
