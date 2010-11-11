@@ -46,7 +46,7 @@ namespace QComicBook
 		Q_OBJECT
 
 		private:
-			ImgSink *sink;
+			QSharedPointer<ImgSink> sink;
 			PageViewBase *view;
 			ThumbnailsWindow *thumbswin;
 			Bookmarks *bookmarks;
@@ -77,7 +77,7 @@ namespace QComicBook
 			void enableComicBookActions(bool f=true);
 			void saveSettings();
 
-                        void setupContextMenu();
+			void setupContextMenu();
 			void setupComicImageView();
 			void applyFullscreenSettings();
 

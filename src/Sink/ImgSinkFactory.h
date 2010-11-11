@@ -15,6 +15,8 @@
 
 /*! \file imgsinkfactory.h */
 
+#include <QSharedPointer>
+
 class QString;
 	
 namespace QComicBook
@@ -36,8 +38,9 @@ namespace QComicBook
 
 		public:
 			static ImgSinkFactory& instance();
-			ImgSink* createImgSink(SinkType s);
-			ImgSink* createImgSink(const QString &path);
+			static void deleteLater(ImgSink *sink);
+			QSharedPointer<ImgSink> createImgSink(SinkType s);
+			QSharedPointer<ImgSink> createImgSink(const QString &path);
 	};
 }
 

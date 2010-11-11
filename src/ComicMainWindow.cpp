@@ -260,7 +260,7 @@ ComicMainWindow::~ComicMainWindow()
     
     if (sink)
     {
-        delete sink;
+        sink.clear();
     }
 }
 
@@ -665,7 +665,7 @@ void ComicMainWindow::open(const QString &path, int page)
         thumbnailLoader->setSink(sink);
         thumbnailLoader->setUseCache(cfg->cacheThumbnails());
 
-        connect(sink, SIGNAL(progress(int, int)), statusbar, SLOT(setProgress(int, int)));
+        connect(sink.data(), SIGNAL(progress(int, int)), statusbar, SLOT(setProgress(int, int)));
 
         statusbar->setShown(true); //ensures status bar is visible when opening regardless of user settings
 
@@ -923,11 +923,10 @@ void ComicMainWindow::closeSink()
     {
 	frameDetect->clear();
         pageLoader->cancelAll();
-        pageLoader->setSink(NULL);
+        pageLoader->setSink();
         thumbnailLoader->cancelAll();
-        thumbnailLoader->setSink(NULL);
-        sink->deleteLater();
-        sink = NULL;
+        thumbnailLoader->setSink();
+        sink.clear();
     }
     view->clear();
     thumbswin->view()->clear();

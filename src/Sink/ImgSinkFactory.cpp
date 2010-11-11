@@ -33,18 +33,23 @@ ImgSinkFactory& ImgSinkFactory::instance()
 	return f;
 }
 
-ImgSink* ImgSinkFactory::createImgSink(SinkType s)
+void ImgSinkFactory::deleteLater(ImgSink *sink)
 {
-	if (s == ArchiveSink)
-		return new ImgArchiveSink();
-	if (s == DirSink)
-		return new ImgDirSink();
-	if (s == PdfSink)
-		return new ImgPdfSink();
-	return NULL;
+	sink->deleteLater();
 }
 
-ImgSink* ImgSinkFactory::createImgSink(const QString &path)
+QSharedPointer<ImgSink> ImgSinkFactory::createImgSink(SinkType s)
+{
+	if (s == ArchiveSink)
+		return QSharedPointer<ImgSink>(new ImgArchiveSink(), ImgSinkFactory::deleteLater);
+	if (s == DirSink)
+		return QSharedPointer<ImgSink>(new ImgDirSink(), ImgSinkFactory::deleteLater);
+	if (s == PdfSink)
+		return QSharedPointer<ImgSink>(new ImgPdfSink(), ImgSinkFactory::deleteLater);
+	return QSharedPointer<ImgSink>();
+}
+
+QSharedPointer<ImgSink> ImgSinkFactory::createImgSink(const QString &path)
 {
 	const QFileInfo finfo(path);
 	if (finfo.isDir())

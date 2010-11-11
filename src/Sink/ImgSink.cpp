@@ -26,6 +26,7 @@ ImgSink::ImgSink(int cacheSize): cbname(QString::null), cbfullname(QString::null
 
 ImgSink::~ImgSink()
 {
+	qDebug() << "deleting ImgSink";
 	delete cache;
 }
 

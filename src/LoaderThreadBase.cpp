@@ -31,7 +31,7 @@ void LoaderThreadBase::setPriority(QThread::Priority p)
     loaderMutex.unlock();
 }
 
-void LoaderThreadBase::setSink(ImgSink *sink)
+void LoaderThreadBase::setSink(QSharedPointer<ImgSink> sink)
 {
     sinkMutex.lock();
     this->sink = sink;
