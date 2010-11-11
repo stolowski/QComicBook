@@ -15,6 +15,7 @@
 #include "Page.h"
 #include <QX11Info>
 #include <QFileInfo>
+#include <QMutexLocker>
 
 using namespace QComicBook;
 
@@ -56,29 +57,25 @@ void ImgPdfSink::close()
 
 QImage ImgPdfSink::image(unsigned int num, int &result)
 {
-	docmtx.lock();
+	result = 1;
+	QMutexLocker lock(&docmtx);
 	if (pdfdoc)
 	{
 		Poppler::Page* pdfpage = pdfdoc->page(num);
-		docmtx.unlock();
 		if (pdfpage)
 		{
 			QImage img = pdfpage->renderToImage(QX11Info::appDpiX(), QX11Info::appDpiY()); //TODO use defaults if not using X11 (e.g. MS Win)
 			delete pdfpage;
+			result = 0;
 			return img;
 		}
 	}
-	return QImage(); //TODO
-}
-
-Thumbnail ImgPdfSink::getThumbnail(int num, bool thumbcache)
-{
+	return QImage();
 }
 
 int ImgPdfSink::numOfImages() const
 {
-	docmtx.lock();
+	QMutexLocker lock(&docmtx);
 	const int n = pdfdoc ? pdfdoc->numPages() : -1;
-	docmtx.unlock();
 	return n;
 }

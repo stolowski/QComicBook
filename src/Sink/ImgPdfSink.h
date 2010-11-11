@@ -29,7 +29,6 @@ namespace QComicBook
 			int open(const QString &path);
 			void close();
 			QImage image(unsigned int num, int &result);
-			Thumbnail getThumbnail(int num, bool thumbcache=true);
 			int numOfImages() const;
 			QString getName(int maxlen = 50) { return ""; }
 			QString getFullName() const { return ""; }
