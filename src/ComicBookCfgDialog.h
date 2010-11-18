@@ -25,7 +25,6 @@ namespace QComicBook
 
 		private:
 			ComicBookSettings *cfg;
-			QColor bgcolor;
 			QFont font;
 
 			void updateFontPreview();

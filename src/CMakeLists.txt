@@ -22,6 +22,7 @@ SET(qcomicbook_src
 	Archivers/TargzArchiverStrategy.cpp
 	Archivers/Tarbz2ArchiverStrategy.cpp
 	Archivers/ZipArchiverStrategy.cpp
+	ColorPushButton.cpp
 	FileSignature.cpp 
 	AboutDialog.cpp
 	Bookmark.cpp

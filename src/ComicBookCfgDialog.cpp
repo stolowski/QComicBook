@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005-2009 Pawel Stolowski <pawel.stolowski@wp.pl>
+ * Copyright (C) 2005-2010 Pawel Stolowski <stolowski@gmail.com>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -34,9 +34,7 @@ ComicBookCfgDialog::ComicBookCfgDialog(QWidget *parent, ComicBookSettings *cfg):
 
     //
     // background color
-    QPalette palette;
-    palette.setColor(pb_color->backgroundRole(), bgcolor = cfg->background());
-    pb_color->setPalette(palette);
+    pb_color->setColor(cfg->background());
     
     connect(pb_color, SIGNAL(clicked()), this, SLOT(showBackgroundDialog()));
 
@@ -68,12 +66,12 @@ void ComicBookCfgDialog::accept()
 {
 	//
 	// display
-	cfg->background(bgcolor);
+	cfg->background(pb_color->getColor());
 	cfg->fullScreenHideMenu(cb_hidemenu->isChecked());
 	cfg->fullScreenHideStatusbar(cb_hidestatus->isChecked());
 	cfg->fullScreenHideToolbar(cb_hidetoolbar->isChecked());
 	cfg->smallCursor(cb_smallcursor->isChecked());
-        cfg->embedPageNumbers(cb_embedpagenumbers->isChecked());
+	cfg->embedPageNumbers(cb_embedpagenumbers->isChecked());
 	cfg->smoothScaling(cb_smoothscaling->isChecked());
 	cfg->infoFont(font);
 
@@ -104,9 +102,7 @@ void ComicBookCfgDialog::showBackgroundDialog()
 	QColor c = QColorDialog::getColor(cfg->background(), this);
 	if (c.isValid())
 	{
-		QPalette palette;
-		palette.setColor(pb_color->backgroundRole(), bgcolor = c);
-		pb_color->setPalette(palette);
+		pb_color->setColor(c);
 	}
 }
 
