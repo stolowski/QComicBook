@@ -4,6 +4,7 @@ QT4_ADD_TRANSLATION(qcomicbook_qm
                         qcomicbook_fi_FI.ts
                         qcomicbook_fr_FR.ts
                         qcomicbook_fr_CA.ts
+			qcomicbook_cs_CZ.ts
                         qcomicbook_ko_KR.ts
                         qcomicbook_nl_NL.ts
                         qcomicbook_pl_PL.ts
