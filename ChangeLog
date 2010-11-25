@@ -1,3 +1,8 @@
+2010-11-25:  0.7.1   -- fixed background color display bug in the Configuration Dialog.
+                     -- fixed Ukrainian translation -- missing translation in
+					    Donation Dialog.
+				     -- added Czech translation.
+
 2010-11-15:  0.7.0   -- added hints (warning, information) to System information dialog; display warning if free unrar is used.
                      -- added 'Cleanup list' option to Recently opened files menu.
                      -- added Dutch, Korean, Russian and Simplified Chinese translations.
