@@ -544,7 +544,7 @@
     <message>
         <location filename="../src/ConfigDialog.ui" line="30"/>
         <source>Display</source>
-        <translation>Zobrazit</translation>
+        <translation>Zobrazení</translation>
     </message>
     <message>
         <location filename="../src/ConfigDialog.ui" line="36"/>
@@ -629,7 +629,7 @@
     <message>
         <location filename="../src/ConfigDialog.ui" line="237"/>
         <source>Preload next page</source>
-        <translation>|Nahrát dopředu další stranu</translation>
+        <translation>Nahrát dopředu další stranu</translation>
     </message>
     <message>
         <location filename="../src/ConfigDialog.ui" line="247"/>
