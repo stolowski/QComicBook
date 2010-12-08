@@ -1,4 +1,6 @@
 2010-xx-yy:  0.7.2   -- added German translation
+                     -- added .cb7 (p7zip) to the list of supported file
+					    extensions.
 
 2010-11-25:  0.7.1   -- fixed background color display bug in the Configuration Dialog.
                      -- fixed Ukrainian translation -- missing translation in
