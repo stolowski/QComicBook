@@ -11,6 +11,7 @@
  */
 
 #include "ImgSinkFactory.h"
+#include "ImgPdfSink.h"
 #include "ImgDirSink.h"
 #include "ImgArchiveSink.h"
 #include <QString>
@@ -32,20 +33,29 @@ ImgSinkFactory& ImgSinkFactory::instance()
 	return f;
 }
 
-ImgDirSink* ImgSinkFactory::createImgSink(SinkType s)
+void ImgSinkFactory::deleteLater(ImgSink *sink)
 {
-	if (s == ArchiveSink)
-		return new ImgArchiveSink();
-	if (s == DirSink)
-		return new ImgDirSink();
-	return NULL;
+	sink->deleteLater();
 }
 
-ImgDirSink* ImgSinkFactory::createImgSink(const QString &path)
+QSharedPointer<ImgSink> ImgSinkFactory::createImgSink(SinkType s)
+{
+	if (s == ArchiveSink)
+		return QSharedPointer<ImgSink>(new ImgArchiveSink(), ImgSinkFactory::deleteLater);
+	if (s == DirSink)
+		return QSharedPointer<ImgSink>(new ImgDirSink(), ImgSinkFactory::deleteLater);
+	if (s == PdfSink)
+		return QSharedPointer<ImgSink>(new ImgPdfSink(), ImgSinkFactory::deleteLater);
+	return QSharedPointer<ImgSink>();
+}
+
+QSharedPointer<ImgSink> ImgSinkFactory::createImgSink(const QString &path)
 {
 	const QFileInfo finfo(path);
 	if (finfo.isDir())
 		return createImgSink(DirSink);
+	else if (path.endsWith("pdf")) //FIXME
+		return createImgSink(PdfSink);
 	else
 		return createImgSink(ArchiveSink);
 }

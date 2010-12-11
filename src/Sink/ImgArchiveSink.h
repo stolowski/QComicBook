@@ -43,8 +43,8 @@ namespace QComicBook
 			int filesnum; ///< number of files gathered from parsing archiver output, used for progress bar
 			int extcnt; ///< extracted files counter for progress bar
 
-                        static int waitForFinished(QProcess *p);
-                        int extract(const QString &filename, const QString &destdir, QStringList extargs, QStringList infargs);
+			static int waitForFinished(QProcess *p);
+			int extract(const QString &filename, const QString &destdir, QStringList extargs, QStringList infargs);
 			void init();
 			virtual void doCleanup();
 			
@@ -64,8 +64,6 @@ namespace QComicBook
 
 			virtual int open(const QString &path);
 			virtual void close();
-			virtual QString getName(int maxlen = 50);
-			virtual QString getFullName() const;
 
 			virtual bool supportsNext() const;
 			virtual QString getNext() const;

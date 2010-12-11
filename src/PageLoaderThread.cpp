@@ -12,7 +12,7 @@
 
 #include "PageLoaderThread.h"
 #include "Page.h"
-#include "ImgDirSink.h"
+#include "Sink/ImgDirSink.h"
 
 using namespace QComicBook;
 

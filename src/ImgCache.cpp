@@ -26,9 +26,9 @@ ImgCache::~ImgCache()
 void ImgCache::setSize(int size, bool autoAdjust)
 {
 	mtx.lock();
-        if (size < 0)
-                size = 0;
-        cache.setMaxCost(size);
+	if (size < 0)
+		size = 0;
+	cache.setMaxCost(size);
 	this->autoAdjust = autoAdjust;
 	mtx.unlock();
 }

@@ -21,7 +21,7 @@ class QTabWidget;
 
 namespace QComicBook
 {
-	class ImgDirSink;
+	class ImgSink;
 	
 	class ComicBookInfo: public QDialog
 	{
@@ -31,11 +31,11 @@ namespace QComicBook
 		protected:
 			QFont font;
 
-			void setupGeneralTab(ImgDirSink &sink);
-			void setupDescriptionTabs(const ImgDirSink &sink);
+			void setupGeneralTab(ImgSink &sink);
+			void setupDescriptionTabs(const ImgSink &sink);
 
 		public:
-			ComicBookInfo(QWidget *parent, ImgDirSink &sink, const QFont& f);
+			ComicBookInfo(QWidget *parent, ImgSink &sink, const QFont& f);
 			virtual ~ComicBookInfo();
 	};
 }

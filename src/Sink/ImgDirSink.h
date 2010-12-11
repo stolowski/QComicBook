@@ -16,12 +16,12 @@
 #define __IMGDIRSINK_H
 
 #include <QString>
-#include <QObject>
 #include <QStringList>
 #include <QDateTime>
 #include <QMap>
 #include <QMutex>
 #include "DirReader.h"
+#include "ImgSink.h"
 #include "Page.h"
 
 class QImage;
@@ -29,37 +29,12 @@ class QImage;
 namespace QComicBook
 {
 
-	//! Possible errors.
-	enum SinkError
-	{
-		SINKERR_ACCESS = 1, //!<can't access file or directory
-		SINKERR_UNKNOWNFILE, //!<unknown archive format
-		SINKERR_NOTSUPPORTED, //!<known archive type, but not supported
-		SINKERR_LOADERROR,  //!<can't load image file
-		SINKERR_NOTFOUND, //!<file not found
-		SINKERR_NOTFILE,   //!<not a regular file
-		SINKERR_NOTDIR,    //!<not a directory
-		SINKERR_EMPTY,     //!<no images inside
-		SINKERR_ARCHEXIT, //!<archiver exited with error
-		SINKERR_OTHER  //!<another kind of error
-	};
-
 	class Thumbnail;
-	class ImgCache;
 
 	//! Comic book directory sink.
 	/*! Allows opening directories containing image files. */
-	class ImgDirSink: public QObject, protected DirReader
+	class ImgDirSink: public ImgSink, protected DirReader
 	{
-		Q_OBJECT
-		
-		signals:
-			//! Emited to report progress of comic book reading.
-			/*! This signal may be used in conjunction with QProgressBar class.
-			 *  @param current current progress value
-			 *  @param total total number of steps */
-			void progress(int current, int total);
-
 		protected:
 			class FileStatus
 			{
@@ -76,32 +51,19 @@ namespace QComicBook
 					operator QDateTime() const { return timestamp; }
 			};
 
-			//! Scans directories recursively for image and text files.
-			/*! Scans directories for jpg, png, gif, xpm image files and .nfo and file_id.diz text files.
-			 *  Images file names are stored in imgfiles; text file names are stored in txtfiles.
-			 *  Other files are store in otherfiles. All directories are stored in dirs.
-			 *  @param s starting directory 
-			 *  @see imgfiles
-			 *  @see txtfiles
-			 *  @see otherfiles
-			 *  @see dirs */
-			//void recurseDir(const QString &s);
 			static QString memPrefix(int &s);
-			void setComicBookName(const QString &name);
 
 			static const int MAX_TEXTFILE_SIZE;
 		
 			virtual bool fileHandler(const QFileInfo &finfo);
 		
 		private:
-			ImgCache *cache;
 			mutable QMutex listmtx; //!< mutex for imgfiles
 			QStringList imgfiles; //!< list of images files in directory
 			QStringList txtfiles; //!< text files (.nfo, file_id.diz)
 			QStringList otherfiles; //!< list of other files
 			QStringList dirs; //!< directories
 			QString dirpath; //!< path to directory
-			QString cbname; //!< comic book name (directory path by default)
 			QMap<QString, FileStatus> timestamps; //!< last modifications timestamps for all pages
 			mutable QStringList desc; //txt files
 
@@ -110,8 +72,6 @@ namespace QComicBook
 			ImgDirSink(const QString &path, bool dirs=false, int cacheSize=0);
 			ImgDirSink(const ImgDirSink &sink, int cacheSize=0);
 			virtual ~ImgDirSink();
-
-			void setCacheSize(int cacheSize, bool autoAdjust);
 
 			//! Opens this comic book sink with specifiled path.
 			/*! @param path comic book location
@@ -127,27 +87,11 @@ namespace QComicBook
 			 *  @param num page number
 			 *  @param result contains 0 on succes or value greater than 0 for error
 			 *  @return an image */
-			virtual Page getImage(unsigned int num, int &result);
-
-			//! Returns thumbnail image for specified page.
-			/*! Thumbnail is loaded from disk if found and caching is enabled. Otherwise,
-			 *  the image is loaded and thumbnail is generated.
-			 *  @param num page number
-			 *  @param thumbcache specifies if thumbnails disk cache should be used */
-			virtual Thumbnail getThumbnail(int num, bool thumbcache=true);
+			virtual QImage image(unsigned int num, int &result);
 
 			/*! @return number of images for this comic book sink */
 			virtual int numOfImages() const;
 			
-			/*! Returns abbreviated name of maxlen. This name is not reliable, eg. it can't
-			 *  be used as file or directory name. It is meant for viewing only.
-			 *  @param maxlen maximum length of the name that will be returned
-			 *  @return abbreviated comic book name */
-			virtual QString getName(int maxlen = 50);
-
-			/*! Returns full name of the comic book.
-			 *  @return name of comic book */
-			virtual QString getFullName() const;
 			virtual QString getFullFileName(int page) const;
 
 			/*! @return contents of .nfo and file_id.diz files; file name goes first, then contents. */
