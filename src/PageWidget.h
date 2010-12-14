@@ -22,11 +22,6 @@ namespace QComicBook
 
     class PageWidget: public ComicImageWidget
     {
-    Q_OBJECT
-            
-    public slots:
-        void propsChanged();
-
     public:
         PageWidget(PageViewBase *parent, int w, int h, int pageNum, bool twoPages=false);
         virtual ~PageWidget();
@@ -39,13 +34,16 @@ namespace QComicBook
 
         virtual void dispose();
 		virtual bool isDisposed() const;
-        bool isInView(int vy1, int vy2) const;
+
         void redrawImages();
         void setEstimatedSize(int w, int h);
-        bool estimatedSize() const;
+        bool isEstimated() const;
         int pageNumber() const;
         bool hasTwoPages() const;
         int numOfPages() const;
+        QSize estimatedSize() const;
+		
+		virtual void propsChanged();
 
     protected:
         void deletePages();

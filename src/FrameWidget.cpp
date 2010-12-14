@@ -20,7 +20,7 @@
 using namespace QComicBook;
 
 FrameWidget::FrameWidget(FrameView *parent, int w, int h)
-	: ComicImageWidget(parent, w, h)
+	: ComicImageWidget(parent)
 	  , m_image(0)
 {
 }
@@ -52,4 +52,8 @@ void FrameWidget::clear()
 	delete m_image;
 	m_image = 0;
 	dispose();
+}
+			
+void FrameWidget::propsChanged()
+{
 }

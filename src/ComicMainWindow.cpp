@@ -352,6 +352,7 @@ void ComicMainWindow::setupComicImageView()
     connect(actionNoRotation, SIGNAL(triggered(bool)), view, SLOT(resetRotation()));
     connect(actionJumpDown, SIGNAL(triggered()), view, SLOT(jumpDown()));
     connect(actionJumpUp, SIGNAL(triggered()), view, SLOT(jumpUp()));
+    connect(actionLens, SIGNAL(triggered(bool)), view, SLOT(showLens(bool)));
     
     connect(view, SIGNAL(bottomReached()), this, SLOT(nextPage()));
     connect(view, SIGNAL(topReached()), this, SLOT(prevPageBottom()));
@@ -375,6 +376,8 @@ void ComicMainWindow::setupComicImageView()
     {
          jumpToPage(currpage, true);
     }
+
+    view->showLens(actionLens->isChecked());
 }
 
 void ComicMainWindow::applyFullscreenSettings()

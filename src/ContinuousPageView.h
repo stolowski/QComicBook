@@ -70,7 +70,6 @@ namespace QComicBook
                         int *m_y2pos;
                         int m_firstVisible; //first visible page in the view
                         double m_firstVisibleOffset; //visible portion (%) of first visible page
-                        QVBoxLayout *m_layout;
 	};
 }
 

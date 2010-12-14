@@ -1,20 +1,34 @@
+/*
+ * This file is a part of QComicBook.
+ *
+ * Copyright (C) 2005-2009 Pawel Stolowski <stolowski@gmail.com>
+ *
+ * QComicBook is free software; you can redestribute it and/or modify it
+ * under terms of GNU General Public License by Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY. See GPL for more details.
+ */
+
 #ifndef __PAGEVIEWBASE_H
 #define __PAGEVIEWBASE_H
 
-#include <QScrollArea>
+#include <QGraphicsView>
 #include "ViewProperties.h"
 #include <ComicFrame.h>
 
 class QMenu;
+class QGraphicsScene;
 
 namespace QComicBook
 {
     class PageWidget;
     class Page;
+    class Lens;
 
 	enum Scaling { Smooth, Fast };
 
-	class PageViewBase: public QScrollArea
+	class PageViewBase: public QGraphicsView
 	{
 	Q_OBJECT
 
@@ -31,6 +45,7 @@ namespace QComicBook
             void pageReady(const Page&, const Page &);
 
         public slots:
+            void showLens(bool f);
             virtual void setImage(const Page &img1) = 0;
             virtual void setImage(const Page &img1, const Page &img2) = 0;
             virtual void clear() = 0;
@@ -98,6 +113,7 @@ namespace QComicBook
             void delRequests();
 
             ViewProperties props;
+            QGraphicsScene *scene;
 
         private:
             static const float JUMP_FACTOR; //factor used to calculate the amount of space to scroll when scrolling page with space
@@ -107,6 +123,7 @@ namespace QComicBook
             int spdx, spdy; //scroll speed
             int wheelupcnt, wheeldowncnt;
             QCursor *smallcursor;
+            Lens *lens;
             QList<int> m_requestedPages;
         };
 }

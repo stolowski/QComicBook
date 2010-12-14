@@ -16,7 +16,6 @@
 #include "ComicBookSettings.h"
 #include <QPaintEvent>
 #include <QPainter>
-#include <QSizePolicy>
 #include <QScrollBar>
 #include <QDebug>
 #include <stdexcept>
@@ -24,7 +23,7 @@
 using namespace QComicBook;
 
 PageWidget::PageWidget(PageViewBase *parent, int w, int h, int pageNum, bool twoPages)
-    : ComicImageWidget(parent, w, h)
+    : ComicImageWidget(parent)
     , m_pageNum(pageNum)
     , m_twoPages(twoPages)
     , pageSize(w, h)
@@ -36,6 +35,11 @@ PageWidget::PageWidget(PageViewBase *parent, int w, int h, int pageNum, bool two
 PageWidget::~PageWidget()
 {
 	deletePages();
+}
+
+QSize PageWidget::estimatedSize() const
+{
+    return estimated ? pageSize : getScaledSize();
 }
 
 void PageWidget::deletePages()
@@ -98,15 +102,9 @@ void PageWidget::setEstimatedSize(int w, int h)
     }
 }
 
-bool PageWidget::estimatedSize() const
+bool PageWidget::isEstimated() const
 {
     return estimated;
-}
-
-bool PageWidget::isInView(int vy1, int vy2) const
-{
-    const int y1 = pos().y();
-    return std::min(y1 + pageSize.height(), vy2) > std::max(y1, vy1);
 }
 
 int PageWidget::pageNumber() const

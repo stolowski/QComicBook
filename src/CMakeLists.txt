@@ -46,6 +46,7 @@ SET(qcomicbook_src
 	Sink/ImgSinkFactory.cpp
 	ImageFormatsInfo.cpp
 	ImgCache.cpp
+	Lens.cpp
 	LoaderThreadBase.cpp
 	PageLoaderThread.cpp
         PrintProgressDialog.cpp
@@ -77,7 +78,6 @@ SET(qcomicbook_moc_hdrs
 	BookmarkManager.h 
 	ComicBookCfgDialog.h 
 	ComicBookSettings.h 
-	ComicImageWidget.h
 	ComicMainWindow.h 
 	FrameView.h
 	PageViewBase.h 
@@ -89,7 +89,6 @@ SET(qcomicbook_moc_hdrs
 	PageLoaderThread.h
 	ThumbnailLoaderThread.h
 	GoToPageWidget.h 
-	PageWidget.h
         PrinterThread.h
         PrintProgressDialog.h
         RecentFilesMenu.h

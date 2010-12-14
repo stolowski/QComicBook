@@ -6,6 +6,7 @@ SET(DATA_FILES bestfit.png
 	     fbackward.png 
 	     info.png 
 	     japanese.png 
+             lens.png
 	     nextpage.png 
 	     openarch.png 
 	     opendir.png 

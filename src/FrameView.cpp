@@ -29,18 +29,18 @@ FrameView::FrameView(QWidget *parent, int physicalPages, const ViewProperties& p
 	, m_currentFrame(0)
 	, m_frame(0)
 {
-    QWidget *w = new QWidget(this);
+    /*  QWidget *w = new QWidget(this);
     w->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
     m_layout = new QVBoxLayout(w);
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
     m_layout->setAlignment(Qt::AlignCenter);
-    setWidget(w);
+    setWidget(w);*/
 
 	m_frame = new FrameWidget(this, viewport()->width() - 10, viewport()->height() - 10);
-	m_layout->addWidget(m_frame);
+	scene->addItem(m_frame);
 
-    setWidgetResizable(true);
+    ///setWidgetResizable(true);
     
     setBackground(props.background());
     setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);

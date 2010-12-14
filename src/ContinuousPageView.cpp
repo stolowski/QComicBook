@@ -32,21 +32,9 @@ ContinuousPageView::ContinuousPageView(QWidget *parent, int physicalPages, const
     , m_y1pos(NULL)
     , m_y2pos(NULL)
 {
-    //setFocusPolicy(QWidget::StrongFocus);
- 
-    QWidget *w = new QWidget(this);
-    w->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
-    m_layout = new QVBoxLayout(w);
-    m_layout->setContentsMargins(0, 0, 0, 0);
-    m_layout->setSpacing(0);
-    m_layout->setAlignment(Qt::AlignCenter);
-
     recreatePageWidgets();
     recalculatePageSizes();
 
-    setWidget(w);
-    setWidgetResizable(true);
-    
     setBackground(props.background());
     setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 
@@ -82,6 +70,8 @@ void ContinuousPageView::propsChanged()
     recalculatePageSizes();
     disposeOrRequestPages();
     update();
+
+    setSceneRect(scene->itemsBoundingRect()); //TODO
 }
 
 void ContinuousPageView::scrollbarRangeChanged(int min, int max)
@@ -113,6 +103,8 @@ void ContinuousPageView::recreatePageWidgets()
     int w = viewport()->width() - 10;
     int h = viewport()->height() - 10;
 
+    qDebug() << "viewport w" << w << "h" << h;
+
     if (numOfPages())
     {
         if (props.twoPagesMode())
@@ -123,14 +115,14 @@ void ContinuousPageView::recreatePageWidgets()
                 PageWidget *p = new PageWidget(this, w, h, i, true);
 		qDebug() << "creating PageWidget for two pages" << i;
                 imgLabel.append(p);
-                m_layout->addWidget(p);
+                scene->addItem(p);
             }
             if (numOfPages() & 1) // odd number of pages
             {
                 PageWidget *p = new PageWidget(this, w, h, i);
 		qDebug() << "creating PageWidget for one page" << i;
                 imgLabel.append(p);
-                m_layout->addWidget(p);
+                scene->addItem(p);
             }
 
         }
@@ -140,9 +132,8 @@ void ContinuousPageView::recreatePageWidgets()
             {
                 PageWidget *p = new PageWidget(this, w, h, i);
 		qDebug() << "creating PageWidget for one page" << i;
-                p->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
                 imgLabel.append(p);
-                m_layout->addWidget(p);
+                scene->addItem(p);
             }
         }
         
@@ -273,47 +264,37 @@ void ContinuousPageView::recalculatePageSizes()
         int n = 0;
         foreach (PageWidget *p, imgLabel)
         {
-            if (!p->estimatedSize())
+            if (!p->isEstimated())
             {
-                const QSize s(p->size());
+                const QSize s(p->estimatedSize());
                 avgw += s.width();
                 avgh += s.height();
                 ++n;
             }
         }
-        if (n > 0)
-        {
-            int y = 0;
-            avgw /= n;
-            avgh /= n;
-            qDebug() << "estimated w=" << avgw << "h=" << avgh;
-           
-            for (int i=0; i<imgLabel.size(); i++)
-            {
-                PageWidget *p = imgLabel[i];
-                if (p->estimatedSize())
-                {
-                    p->setEstimatedSize(avgw, avgh);
-                }
-                // update positions lookup
-                m_y1pos[i] = y;
-                m_y2pos[i] = y + p->height();
-                y += p->height();
-            }
-        }
-        else
-        {
-            int y = 0;
-            for (int i=0; i<imgLabel.size(); i++)
-            {
-                PageWidget *p = imgLabel[i];
-                // update positions lookup
-                m_y1pos[i] = y;
-                m_y2pos[i] = y + p->height();
-                y += p->height();
-            }
-        }
+        int y = 0;
+	if (n > 0) //if we had at least one real size, calculate and set estimated sizes
+	{
+		avgw /= n;
+		avgh /= n;
+		qDebug() << "estimated w=" << avgw << "h=" << avgh;
+	}
+
+	for (int i=0; i<imgLabel.size(); i++)
+	{
+		PageWidget *p = imgLabel[i];
+		if (n > 0 && p->isEstimated())
+		{
+			p->setEstimatedSize(avgw, avgh);
+		}
+		p->setPos(0, y); //??
+		// update positions lookup
+		m_y1pos[i] = y;
+		m_y2pos[i] = y + p->estimatedSize().height();
+		y += p->estimatedSize().height();
+	}
     }
+    setSceneRect(scene->itemsBoundingRect()); //TODO
 }
 
 

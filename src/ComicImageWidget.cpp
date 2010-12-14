@@ -11,23 +11,21 @@
  */
 
 #include "ComicImageWidget.h"
-#include <QPaintEvent>
 #include <QPainter>
+#include <QStyleOptionGraphicsItem>
 #include "ComicBookSettings.h"
 #include "PageViewBase.h"
 #include <QDebug>
 
 using namespace QComicBook;
 
-ComicImageWidget::ComicImageWidget(PageViewBase *parent, int w, int h)
-	: QWidget(parent)
+ComicImageWidget::ComicImageWidget(PageViewBase *parent)
+	: QGraphicsItem()
 	  , m_view(parent)
 	  , imageSize(0, 0)
 	  , scaledSize(0, 0)
 	  , m_pixmap(0)
 {
-    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    setFixedSize(w, h);
 }
 
 ComicImageWidget::~ComicImageWidget()
@@ -47,6 +45,17 @@ bool ComicImageWidget::isDisposed() const
     return m_pixmap == NULL;
 }
 
+QRectF ComicImageWidget::boundingRect() const
+{
+    return QRectF(0.0f, 0.0f, scaledSize.width(), scaledSize.height());
+}
+
+bool ComicImageWidget::isInView(int vy1, int vy2) const
+{
+    const int y1 = pos().y();
+    return std::min(y1 + scaledSize.height(), vy2) > std::max(y1, vy1);
+}
+
 void ComicImageWidget::setSourceSize(int w, int h)
 {
 	imageSize = QSize(w, h);
@@ -62,6 +71,16 @@ QSize ComicImageWidget::getSourceSize() const
 QSize ComicImageWidget::getScaledSize() const
 {
 	return scaledSize;
+}
+
+int ComicImageWidget::width() const
+{
+	return scaledSize.width();
+}
+
+int ComicImageWidget::height() const
+{
+	return scaledSize.height();
 }
 
 void ComicImageWidget::recalcScaledSize()
@@ -142,24 +161,21 @@ void ComicImageWidget::recalcScaledSize()
 
 	rmtx.scale(static_cast<double>(pixmapWidth)/totalWidth, static_cast<double>(pixmapHeight)/totalHeight);
 	
-	setContentsMargins(xoff, yoff, 0, 0);
-	setFixedSize(scaledSize.width() + 2*xoff, scaledSize.height() + 2*yoff);  
+	//setContentsMargins(xoff, yoff, 0, 0);
+	//setFixedSize(scaledSize.width() + 2*xoff, scaledSize.height() + 2*yoff);  
 
-	updateGeometry();
+	//updateGeometry();
+	prepareGeometryChange();
+	update();
 }
 
-void ComicImageWidget::paintEvent(QPaintEvent *event)
+void ComicImageWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt, QWidget *widget)
 {
-	QPainter p(this);
-	if (m_pixmap)
+    if (m_pixmap)
     {
-        p.drawPixmap(event->rect().x(), event->rect().y(), *m_pixmap, event->rect().x()-xoff, event->rect().y()-yoff, event->rect().width(), event->rect().height());
+//        painter->drawPixmap(opt->rect().x(), opt->rect().y(), *m_pixmap, opt->rect().x()-xoff, opt->rect().y()-yoff, opt->rect().width(), opt->rect().height());
+        painter->drawPixmap(opt->exposedRect, *m_pixmap, opt->exposedRect);
     }
-	else
-	{
-		p.fillRect(event->rect(), m_view->properties().background()); //?
-	}
-    event->accept();
 }
 
 void ComicImageWidget::redrawScaledImage()

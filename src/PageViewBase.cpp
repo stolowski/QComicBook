@@ -1,3 +1,15 @@
+/*
+ * This file is a part of QComicBook.
+ *
+ * Copyright (C) 2005-2009 Pawel Stolowski <stolowski@gmail.com>
+ *
+ * QComicBook is free software; you can redestribute it and/or modify it
+ * under terms of GNU General Public License by Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY. See GPL for more details.
+ */
+
 #include "PageViewBase.h"
 #include <QContextMenuEvent>
 #include <QMenu>
@@ -5,24 +17,57 @@
 #include <QCursor>
 #include <QScrollBar>
 #include <QPalette>
+#include <QDebug>
+#include "Lens.h"
 
 using namespace QComicBook;
 
 const float PageViewBase::JUMP_FACTOR = 0.85f;
 
 PageViewBase::PageViewBase(QWidget *parent, int physicalPages, const ViewProperties &props)
-    : QScrollArea(parent)
+    : QGraphicsView(parent)
     , m_physicalPages(physicalPages)
     , props(props)
-    , smallcursor(NULL)
+    , smallcursor(0)
+    , lens(0)
 {
     context_menu = new QMenu(this);
     connect(&this->props, SIGNAL(changed()), this, SLOT(propsChanged()));
     recalculateScrollSpeeds();
+
+    //  setViewport(new QGLWidget);
+
+    scene = new QGraphicsScene(this);
+    setScene(scene);
+   
+    setAlignment(Qt::AlignLeft|Qt::AlignTop);
 }
 
 PageViewBase::~PageViewBase()
 {
+}
+
+void PageViewBase::showLens(bool f)
+{
+    if (f)
+    {
+        if (!lens)
+        {
+            setMouseTracking(true);
+            lens = new Lens();
+            scene->addItem(lens);
+        }
+    }
+    else
+    {
+        if (lens)
+        {
+            setMouseTracking(false);
+            scene->removeItem(lens);
+            delete lens;
+            lens = 0;
+        }
+    }
 }
 
 void PageViewBase::scrollByDelta(int dx, int dy)
@@ -42,6 +87,8 @@ void PageViewBase::contextMenuEvent(QContextMenuEvent *e)
 
 void PageViewBase::mouseMoveEvent(QMouseEvent *e)
 {
+    if (e->buttons())
+    {
         if (lx >= 0)
         {
                 const int dx = lx - e->x();
@@ -55,6 +102,14 @@ void PageViewBase::mouseMoveEvent(QMouseEvent *e)
         }
         lx = e->x();
         ly = e->y();
+    }
+    else
+    {
+        if (lens)
+        {
+            lens->setPos(e->pos() + QPointF(horizontalScrollBar()->value(), verticalScrollBar()->value()));
+        }
+    }
 }
 
 void PageViewBase::mousePressEvent(QMouseEvent *e)
@@ -381,6 +436,7 @@ void PageViewBase::recalculateScrollSpeeds()
 
 void PageViewBase::resizeEvent(QResizeEvent *e)
 {
-    QScrollArea::resizeEvent(e);
+    QGraphicsView::resizeEvent(e);
+    setSceneRect(scene->itemsBoundingRect());
     recalculateScrollSpeeds();
 }

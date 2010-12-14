@@ -16,6 +16,8 @@
 #include <QWidget>
 #include <QSize>
 #include <QMatrix>
+#include <QGraphicsItem>
+#include <QPixmap>
 
 class QPixmap;
 class QPainter;
@@ -24,25 +26,29 @@ namespace QComicBook
 {
 	class PageViewBase;
 
-	class ComicImageWidget: public QWidget
+	class ComicImageWidget: public QGraphicsItem
 	{
-    Q_OBJECT
-
 		public:
-			ComicImageWidget(PageViewBase *parent, int w, int h);
+			ComicImageWidget(PageViewBase *parent);
 			virtual ~ComicImageWidget();
         
 			virtual void dispose();
 			virtual bool isDisposed() const;
         
+        	bool isInView(int vy1, int vy2) const;
 			void setSourceSize(int w, int h);
 			QSize getSourceSize() const;
 			QSize getScaledSize() const;
 			const QPixmap* pixmap() const;
-			virtual void paintEvent(QPaintEvent *event);
+        	QRectF boundingRect() const;
+	        void paint(QPainter *painter, const QStyleOptionGraphicsItem *opt, QWidget *widget = 0);
 			void redrawScaledImage();
 			PageViewBase* view() const;
 			void recalcScaledSize();
+			int width() const;
+			int height() const;
+
+			virtual void propsChanged() = 0;
 
 		protected:
 			virtual void redraw(QPainter &p) = 0;

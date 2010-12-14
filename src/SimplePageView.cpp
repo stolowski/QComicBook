@@ -33,18 +33,7 @@ SimplePageView::SimplePageView(QWidget *parent, int physicalPages, const ViewPro
     , m_currentPage(0) //??
     , imgLabel(NULL)
 {
-    //setFocusPolicy(QWidget::StrongFocus);
-    QWidget *w = new QWidget(this);
-    w->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
-    m_layout = new QVBoxLayout(w);
-    m_layout->setContentsMargins(0, 0, 0, 0);
-    m_layout->setSpacing(0);
-    m_layout->setAlignment(Qt::AlignCenter);
-    setWidget(w);
-
     recreatePageWidget();
-    
-    setWidgetResizable(true);
     
     setBackground(props.background());
     setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -66,7 +55,7 @@ void SimplePageView::recreatePageWidget()
     if (numOfPages())
     {
         imgLabel = new PageWidget(this, w, h, 0, props.twoPagesMode());
-        m_layout->addWidget(imgLabel); 
+        scene->addItem(imgLabel);
     }
 }
 
@@ -88,7 +77,8 @@ void SimplePageView::propsChanged()
         imgLabel->redrawImages();
         update();
         gotoPage(m_currentPage);
-    }    
+    }
+    setSceneRect(scene->itemsBoundingRect()); //TODO
 }
 
 void SimplePageView::scrollContentsBy(int dx, int dy)
@@ -156,7 +146,6 @@ void SimplePageView::resizeEvent(QResizeEvent *e)
 
 void SimplePageView::wheelEvent(QWheelEvent *e)
 {
-    
     if (e->delta() > 0) //scrolling up
     {
         if (imgLabel->height() <= height() || (onTop() && ++wheelupcnt > EXTRA_WHEEL_SPIN))
@@ -167,7 +156,7 @@ void SimplePageView::wheelEvent(QWheelEvent *e)
         }
         else
         {
-            QScrollArea::wheelEvent(e);
+            QGraphicsView::wheelEvent(e);
             wheeldowncnt = 0; //reset opposite direction counter
         }
     }
@@ -181,7 +170,7 @@ void SimplePageView::wheelEvent(QWheelEvent *e)
         }
         else
         {
-            QScrollArea::wheelEvent(e);
+            QGraphicsView::wheelEvent(e);
             wheelupcnt = 0; //reset opposite direction counter
         }
     }

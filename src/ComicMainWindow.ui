@@ -63,6 +63,7 @@
     <addaction name="actionFitHeight"/>
     <addaction name="actionWholePage"/>
     <addaction name="actionBestFit"/>
+    <addaction name="actionLens"/>
     <addaction name="separator"/>
     <addaction name="actionRotateRight"/>
     <addaction name="actionRotateLeft"/>
@@ -166,6 +167,7 @@
    <addaction name="actionFitHeight"/>
    <addaction name="actionWholePage"/>
    <addaction name="actionBestFit"/>
+   <addaction name="actionLens"/>
    <addaction name="separator"/>
    <addaction name="actionRotateRight"/>
    <addaction name="actionRotateLeft"/>
@@ -620,6 +622,18 @@
    </property>
    <property name="shortcut">
     <string>Down</string>
+   </property>
+  </action>
+<action name="actionLens">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../data/qcomicbook.qrc">
+     <normaloff>:/icons/lens.png</normaloff>:/icons/lens.png</iconset>
+   </property>
+   <property name="text">
+    <string>Lens</string>
    </property>
   </action>
   <action name="actionPrint">
