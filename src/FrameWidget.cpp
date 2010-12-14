@@ -11,7 +11,7 @@
  */
 
 #include "FrameWidget.h"
-#include "FrameView.h"
+#include "View/FrameView.h"
 #include <ComicFrame.h>
 #include "Page.h"
 #include <QPainter>

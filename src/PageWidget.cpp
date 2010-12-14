@@ -12,7 +12,7 @@
 
 #include "PageWidget.h"
 #include "Page.h"
-#include "PageViewBase.h"
+#include "View/PageViewBase.h"
 #include "ComicBookSettings.h"
 #include <QPaintEvent>
 #include <QPainter>

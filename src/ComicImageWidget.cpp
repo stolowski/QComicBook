@@ -14,7 +14,7 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include "ComicBookSettings.h"
-#include "PageViewBase.h"
+#include "View/PageViewBase.h"
 #include <QDebug>
 
 using namespace QComicBook;

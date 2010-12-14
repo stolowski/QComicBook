@@ -15,10 +15,10 @@ SET(qcomicbook_moc_hdrs
 	ComicBookCfgDialog.h 
 	ComicBookSettings.h 
 	ComicMainWindow.h 
-	FrameView.h
-	PageViewBase.h 
-	ContinuousPageView.h
-	SimplePageView.h
+	View/FrameView.h
+	View/PageViewBase.h 
+	View/ContinuousPageView.h
+	View/SimplePageView.h
 	Sink/ImgSink.h
         Sink/ImgDirSink.h 
 	Sink/ImgArchiveSink.h

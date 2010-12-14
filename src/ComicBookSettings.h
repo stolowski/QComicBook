@@ -13,7 +13,7 @@
 #ifndef __SETTINGS_H
 #define __SETTINGS_H
 
-#include "PageViewBase.h"
+#include "View/PageViewBase.h"
 #include "EnumMap.h"
 #include <QObject>
 #include <QFont>
