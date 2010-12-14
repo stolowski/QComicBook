@@ -7,70 +7,6 @@ INCLUDE_DIRECTORIES(
 	${POPPLER_INCLUDE_DIRS}
 )
 
-SET(qcomicbook_src
-	FrameDetect/BinarizedImage.cpp
-	FrameDetect/ComicFrameList.cpp
-	FrameDetect/FrameDetect.cpp
-	FrameDetect/FrameDetectThread.cpp
-	FrameDetect/FrameCache.cpp
-	Archivers/ArchiversConfiguration.cpp
-        Archivers/ArchiverHint.cpp
-	Archivers/ArchiverStatus.cpp
-	Archivers/ArchiverStrategy.cpp
-	Archivers/AceArchiverStrategy.cpp
-	Archivers/P7zipArchiverStrategy.cpp
-	Archivers/RarArchiverStrategy.cpp
-	Archivers/TargzArchiverStrategy.cpp
-	Archivers/Tarbz2ArchiverStrategy.cpp
-	Archivers/ZipArchiverStrategy.cpp
-	ColorPushButton.cpp
-	FileSignature.cpp 
-	AboutDialog.cpp
-	Bookmark.cpp
-	BookmarkManager.cpp
-	Bookmarks.cpp
-	ComicBookCfgDialog.cpp
-	ComicBookInfo.cpp
-	ComicBookSettings.cpp
-	ComicImageWidget.cpp
-	ComicMainWindow.cpp
-	DirReader.cpp
-	FrameView.cpp
-	FrameWidget.cpp
-	History.cpp
-	IconViewThumbnail.cpp
-	Sink/ImgArchiveSink.cpp
-        Sink/ImgPdfSink.cpp
-	Sink/ImgDirSink.cpp
-	Sink/ImgSink.cpp
-	Sink/ImgSinkFactory.cpp
-	ImageFormatsInfo.cpp
-	ImgCache.cpp
-	Lens.cpp
-	LoaderThreadBase.cpp
-	PageLoaderThread.cpp
-        PrintProgressDialog.cpp
-	GoToPageWidget.cpp
-	ListViewThumbnail.cpp
-	main.cpp
-	Utility.cpp
-	Page.cpp
-	PageWidget.cpp
-	PageViewBase.cpp
-        PrinterThread.cpp
-	SimplePageView.cpp
-	ContinuousPageView.cpp
-        RecentFilesMenu.cpp
-	StatusBar.cpp
-	SystemInfoDialog.cpp
-	Thumbnail.cpp
-	ThumbnailItem.cpp
-	ThumbnailLoaderThread.cpp
-	ThumbnailsView.cpp
-	ThumbnailsWindow.cpp
-	ViewProperties.cpp
-)
-
 SET(qcomicbook_moc_hdrs
 	FrameDetect/FrameCache.h
 	FrameDetect/FrameDetectThread.h
@@ -83,7 +19,8 @@ SET(qcomicbook_moc_hdrs
 	PageViewBase.h 
 	ContinuousPageView.h
 	SimplePageView.h
-	Sink/ImgSink.h 
+	Sink/ImgSink.h
+        Sink/ImgDirSink.h 
 	Sink/ImgArchiveSink.h
 	LoaderThreadBase.h 
 	PageLoaderThread.h
@@ -99,21 +36,16 @@ SET(qcomicbook_moc_hdrs
 	ViewProperties.h
 )
 
-SET(qcomicbook_ui
-	AboutDialog.ui
-	ConfigDialog.ui
-	DonationDialog.ui
-	BookmarkManager.ui
-	ComicMainWindow.ui
-	GoToPageWidget.ui
-        PrintProgressDialog.ui
-	SystemInfoDialog.ui
-)
+file (GLOB_RECURSE qcomicbook_hdr *.h *.hpp)
+file (GLOB_RECURSE qcomicbook_src *.cpp)
+file (GLOB qcomicbook_ui *.ui)
+
+SET(FILES_TO_TRANSLATE ${FILES_TO_TRANSLATE} ${qcomicbook_src}
+	${qcomicbook_ui} ${qcomicbook_hdr} PARENT_SCOPE)
 
 QT4_ADD_RESOURCES(qcomicbook_res ../data/qcomicbook.qrc)
 QT4_WRAP_CPP(qcomicbook_moc_src ${qcomicbook_moc_hdrs})
 QT4_WRAP_UI(qcomicbook_ui_src ${qcomicbook_ui})
-###QT4_ADD_TRANSLATION(qcomicbook_qm ../lang/pl_PL.ts)
 
 ADD_EXECUTABLE(qcomicbook ${qcomicbook_src} ${qcomicbook_moc_src} ${qcomicbook_ui_src} ${qcomicbook_res})
 ADD_DEPENDENCIES(qcomicbook translations)

@@ -35,6 +35,8 @@ namespace QComicBook
 	/*! Allows opening directories containing image files. */
 	class ImgDirSink: public ImgSink, protected DirReader
 	{
+		Q_OBJECT
+
 		protected:
 			class FileStatus
 			{
