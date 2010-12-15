@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005-2009 Pawel Stolowski <stolowski@gmail.com>
+ * Copyright (C) 2005-2010 Pawel Stolowski <stolowski@gmail.com>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -11,26 +11,20 @@
  */
 
 #include "Lens.h"
-#include "PageWidget.h"
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <QPixmap>
 #include <QTime>
-#include <QtAlgorithms>
 #include <QGraphicsScene>
 #include <QDebug>
 
 using namespace QComicBook;
 
-bool cmpItemsY(const QGraphicsItem *i1, const QGraphicsItem *i2)
-{
-    return i1->y() < i2->y();
-}
-
-Lens::Lens(int delay, const QSize &size): QGraphicsItem()
+Lens::Lens(const QSize &size, double ratio, int delay): QGraphicsItem()
                                         , m_pixmap(0)
                                         , m_delay(delay)
                                         , m_size(size)
+					, m_ratio(ratio)
 {
     m_time = new QTime();
     m_time->start();
@@ -40,15 +34,22 @@ Lens::Lens(int delay, const QSize &size): QGraphicsItem()
 
 Lens::~Lens()
 {
-    delete m_pixmap;
+    m_pixmap.clear();
     delete m_time;
+}
+
+void Lens::setZoom(double ratio)
+{
+	m_ratio = ratio;
+	m_pixmap.clear();
+	// TODO force redraw
 }
 
 void Lens::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt, QWidget *widget)
 {
     if (m_pixmap)
     {
-        painter->drawPixmap(opt->exposedRect, *m_pixmap, QRect(opt->exposedRect.x()+m_size.width()/2, opt->exposedRect.y()+m_size.height()/2, opt->exposedRect.width(), opt->exposedRect.height()));
+        painter->drawPixmap(opt->exposedRect, *m_pixmap, QRectF(0, 0, m_pixmap->width(), m_pixmap->height()));
         painter->setPen(QPen(Qt::black, 1.0f));
         painter->drawRect(-m_size.width()/2, -m_size.height()/2, m_size.width(), m_size.height());
     }
@@ -65,20 +66,61 @@ QVariant Lens::itemChange(GraphicsItemChange change, const QVariant &value)
     {
         QPointF newPos = value.toPointF(); //lens global position (scroll area coordinates)
 
-        if (!m_pixmap)
-        {
-            m_pixmap = new QPixmap(m_size);
-            m_pixmap->fill(Qt::black); //TODO bg color?
+	QList<QGraphicsItem*> items = scene()->collidingItems(this);
+	if (items.size() == 0)
+	{
+		m_pixmap.clear();
+	}
+	else
+	{
+		if (!m_pixmap)
+		{
+		    m_pixmap = QSharedPointer<QPixmap>(new QPixmap(m_size.width()/m_ratio, m_size.height()/m_ratio));
+		    m_pixmap->fill(Qt::black); //TODO bg color?
+		}
+
+		QPainter painter(m_pixmap.data());
+		
+		QStyleOptionGraphicsItem so;
+			
+		QRectF tbr(boundingRect());
+		//
+		// translate bounding rect coordinates to global coords
+		tbr.translate(newPos.x(), newPos.y());
+		tbr.translate((tbr.width()-(tbr.width()/m_ratio))/2, (tbr.height() - (tbr.height()/m_ratio))/2);
+		tbr.setWidth(tbr.width()/m_ratio);
+		tbr.setHeight(tbr.height()/m_ratio);
+
+		foreach (QGraphicsItem *it, items)
+		{
+			//
+			// translate item rect to global coords
+			QRectF itbr(it->boundingRect());
+			itbr.translate(it->x(), it->y());
+
+			//
+			// get rect intersection
+			QRectF ins(itbr.intersected(tbr));
+
+			qDebug() << "lens intersect" << itbr << "&" << tbr << "=" << ins;
+
+			const int xoff(ins.x() - tbr.x());
+			const int yoff(ins.y() - tbr.y());
+			qDebug() << "off" << xoff << yoff;
+
+			ins.translate(-it->x(), -it->y());
+			so.exposedRect = ins;
+			qDebug() << "exposed" << so.exposedRect;
+		
+			painter.resetTransform();
+			painter.translate(-ins.x() + xoff, -ins.y() + yoff);
+
+			it->paint(&painter, &so);
+		}	
+		painter.end();
+
+		m_time->restart();
         }
-        hide(); // hide lens so that they are not rendered by view
-
-        Q_ASSERT(scene() != 0);
-        QPainter painter(m_pixmap);
-        scene()->render(&painter, QRectF(0, 0, m_size.width(), m_size.height()), QRect(newPos.x()-m_size.width()/4, newPos.y()-m_size.height()/4, m_size.width()/2, m_size.height()/2));
-        painter.end();
-
-        show();        
-        m_time->restart();
     }
     return QGraphicsItem::itemChange(change, value);
 }

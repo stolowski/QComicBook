@@ -136,6 +136,21 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), currpage
     actionToggleStatusbar->setChecked(cfg->showStatusbar());
     statusbar->setShown(cfg->showStatusbar());
 
+    //
+    // Lens zoom levels
+    zoomgrp = new QActionGroup(this);
+    action200->setChecked(true);
+    action200->setData(2.0f);
+    action300->setData(3.0f);
+    action400->setData(4.0f);
+    action800->setData(8.0f);
+    zoomgrp->setExclusive(true);
+    zoomgrp->addAction(action200);
+    zoomgrp->addAction(action300);
+    zoomgrp->addAction(action400);
+    zoomgrp->addAction(action800);
+    connect(zoomgrp, SIGNAL(triggered(QAction *)), this, SLOT(setLensZoom(QAction *)));
+
     setupComicImageView();
 
     //
@@ -352,7 +367,7 @@ void ComicMainWindow::setupComicImageView()
     connect(actionNoRotation, SIGNAL(triggered(bool)), view, SLOT(resetRotation()));
     connect(actionJumpDown, SIGNAL(triggered()), view, SLOT(jumpDown()));
     connect(actionJumpUp, SIGNAL(triggered()), view, SLOT(jumpUp()));
-    connect(actionLens, SIGNAL(triggered(bool)), view, SLOT(showLens(bool)));
+    connect(actionLens, SIGNAL(triggered(bool)), this, SLOT(showLens(bool)));
     
     connect(view, SIGNAL(bottomReached()), this, SLOT(nextPage()));
     connect(view, SIGNAL(topReached()), this, SLOT(prevPageBottom()));
@@ -377,7 +392,7 @@ void ComicMainWindow::setupComicImageView()
          jumpToPage(currpage, true);
     }
 
-    view->showLens(actionLens->isChecked());
+    showLens(actionLens->isChecked());
 }
 
 void ComicMainWindow::applyFullscreenSettings()
@@ -533,6 +548,23 @@ void ComicMainWindow::setPageSize(QAction *action)
     }
     cfg->pageSize(size);
     view->setSize(size);
+}
+
+void ComicMainWindow::setLensZoom(QAction *action)
+{
+	if (view)
+	{
+		view->setLensZoom(action->data().toDouble());
+	}	
+}
+
+void ComicMainWindow::showLens(bool f)
+{
+	QAction *lzoom = zoomgrp->checkedAction();
+	if (view && lzoom)
+	{
+		view->showLens(f, lzoom->data().toDouble());
+	}
 }
 
 void ComicMainWindow::reloadPage()

@@ -12,7 +12,7 @@ mouse or keyboard navigation etc.
 
 2. Requirements
 ---------------
-QComicBook requires Qt library version >=4.5.0 (including moc, uic and lrelease tools)
+QComicBook requires Qt library version >=4.6.0 (including moc, uic and lrelease tools)
 and cmake.
 
 You will also need unzip, rar (or unrar), unace, p7zip and tar (with gzip and

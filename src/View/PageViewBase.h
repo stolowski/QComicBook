@@ -45,7 +45,8 @@ namespace QComicBook
             void pageReady(const Page&, const Page &);
 
         public slots:
-            void showLens(bool f);
+            void showLens(bool f, double ratio);
+	    void setLensZoom(double ratio);
             virtual void setImage(const Page &img1) = 0;
             virtual void setImage(const Page &img1, const Page &img2) = 0;
             virtual void clear() = 0;

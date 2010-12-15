@@ -47,16 +47,28 @@ PageViewBase::~PageViewBase()
 {
 }
 
-void PageViewBase::showLens(bool f)
+void PageViewBase::setLensZoom(double ratio)
+{
+	if (lens)
+	{
+		lens->setZoom(ratio);
+	}
+}
+
+void PageViewBase::showLens(bool f, double ratio)
 {
     if (f)
     {
         if (!lens)
         {
             setMouseTracking(true);
-            lens = new Lens();
+            lens = new Lens(QSize(300, 200), ratio);
             scene->addItem(lens);
         }
+	else
+	{
+	    lens->setZoom(ratio);
+	}
     }
     else
     {

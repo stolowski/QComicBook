@@ -24,6 +24,7 @@ class QMenu;
 class QLabel;
 class QKeyEvent;
 class QAction;
+class QActionGroup;
 class QPrinter;
 
 namespace QComicBook
@@ -59,6 +60,7 @@ namespace QComicBook
 			RecentFilesMenu *menuRecentFiles;
 			QAction *actionToggleThumbnails;
 			QAction *actionExitFullScreen;
+			QActionGroup *zoomgrp;
 			QLabel *pageinfo; //!<page info displayed in right-click context menu
 			QString lastdir; //!<last opened directory for Open File/Directory dialog
 			PageLoaderThread *pageLoader;
@@ -94,6 +96,8 @@ namespace QComicBook
 			void reconfigureDisplay();
 			void currentPageChanged(int n);
 			void setPageSize(QAction *action);
+			void setLensZoom(QAction *action);
+			void showLens(bool f);
 			void changeViewType(QAction *action);
 			void printingFinished();
 			void showAboutQt();
