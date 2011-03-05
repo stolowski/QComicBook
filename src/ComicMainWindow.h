@@ -16,6 +16,8 @@
 #define __COMIC_MAIN_H
 
 #include <QMainWindow>
+#include <QSharedPointer>
+#include <QPointer>
 #include "ui_ComicMainWindow.h"
 
 class QMenu;
@@ -26,7 +28,7 @@ class QPrinter;
 
 namespace QComicBook
 {
-	class ImgDirSink;
+	class ImgSink;
 	class ComicBookSettings;
 	class PageViewBase;
 	class ThumbnailsWindow;
@@ -45,10 +47,10 @@ namespace QComicBook
 		Q_OBJECT
 
 		private:
-			ImgDirSink *sink;
-			PageViewBase *view;
-			ThumbnailsWindow *thumbswin;
-			Bookmarks *bookmarks;
+			QSharedPointer<ImgSink> sink;
+			QPointer<PageViewBase> view;
+			QPointer<ThumbnailsWindow> thumbswin;
+			QSharedPointer<Bookmarks> bookmarks;
 			StatusBar *statusbar;
 			ComicBookSettings *cfg;
 			int currpage; //!<current page number
@@ -61,7 +63,7 @@ namespace QComicBook
 			QString lastdir; //!<last opened directory for Open File/Directory dialog
 			PageLoaderThread *pageLoader;
 			ThumbnailLoaderThread *thumbnailLoader;
-			QPrinter *printer;
+			QSharedPointer<QPrinter> printer;
 			PrinterThread *printThread;
 			FrameDetectThread *frameDetect;
                         		
@@ -75,7 +77,7 @@ namespace QComicBook
 			void enableComicBookActions(bool f=true);
 			void saveSettings();
 
-                        void setupContextMenu();
+			void setupContextMenu();
 			void setupComicImageView();
 			void applyFullscreenSettings();
 

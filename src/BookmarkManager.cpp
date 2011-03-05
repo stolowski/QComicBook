@@ -20,7 +20,7 @@
 
 using namespace QComicBook;
 
-BookmarkManager::BookmarkManager(QWidget *parent, Bookmarks *b): QWidget(parent, Qt::Dialog), bookmarks(b)
+BookmarkManager::BookmarkManager(QWidget *parent, QSharedPointer<Bookmarks> b): QWidget(parent, Qt::Dialog), bookmarks(b)
 {
     setupUi(this);
 

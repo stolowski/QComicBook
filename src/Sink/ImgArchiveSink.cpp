@@ -166,6 +166,7 @@ int ImgArchiveSink::open(const QString &path) //TODO: cleanup if already opened?
 	QFileInfo info(path);
 	archivepath = path;
 	archivename = info.fileName();
+	setComicBookName(archivename, archivepath);
 	if (!info.exists())
 		return SINKERR_NOTFOUND;
 	if (info.isFile())
@@ -184,7 +185,6 @@ int ImgArchiveSink::open(const QString &path) //TODO: cleanup if already opened?
 			}
 			visit(tmppath);
 			emit progress(1, 1);
-			setComicBookName(archivename);
 			return 0;
 		}
 		else
@@ -200,19 +200,6 @@ void ImgArchiveSink::close()
 	ImgDirSink::close();
 	doCleanup();
 	archivename = QString::null;
-}
-
-QString ImgArchiveSink::getName(int maxlen)
-{
-	if (archivename.length() < maxlen)
-		return archivename;
-	QString tmpname = archivename.left(maxlen-3) + "...";
-	return tmpname;
-}
-
-QString ImgArchiveSink::getFullName() const
-{
-	return archivepath;
 }
 
 void ImgArchiveSink::infoExited(int code, QProcess::ExitStatus exitStatus)

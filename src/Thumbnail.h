@@ -23,25 +23,25 @@ namespace QComicBook
 	{
 		private:
 			int num;
-                        QByteArray hash;
+			QByteArray hash;
 			QImage img;
 			static int thwidth, thheight; //default thumbnail width and height
-                        static QByteArray getScrambledName(const QString &in);
+			static QByteArray getScrambledName(const QString &in);
 
 		public:
-                        Thumbnail();
+			Thumbnail();
 			Thumbnail(int n, const QString &comicbookName);
 			Thumbnail(int n, const QImage &i);
-                        Thumbnail(const Thumbnail &t);
+			Thumbnail(const Thumbnail &t);
 			~Thumbnail();
 
 			int page() const;
 			const QImage& image() const;
-                        bool tryLoad();
-                        bool fromOriginalImage(const QString &fname);
+			bool tryLoad();
+			bool fromOriginalImage(const QString &fname);
 			bool save();
 			void setImage(const QImage &i);
-                        QString getFullPath() const;
+			QString getFullPath() const;
 
 			static int maxWidth();
 			static int maxHeight();

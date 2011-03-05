@@ -19,8 +19,8 @@
 #include "SimplePageView.h"
 #include "FrameView.h"
 #include "Archivers/ArchiversConfiguration.h"
-#include "ImgArchiveSink.h"
-#include "ImgSinkFactory.h"
+#include "Sink/ImgDirSink.h"
+#include "Sink/ImgSinkFactory.h"
 #include "AboutDialog.h"
 #include "ui_DonationDialog.h"
 #include "ComicBookSettings.h"
@@ -59,7 +59,7 @@
 using namespace QComicBook;
 using namespace Utility;
 
-ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NULL), sink(NULL), currpage(0)
+ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), currpage(0)
 {
     setupUi(this);
     updateCaption();
@@ -67,14 +67,14 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
     
     cfg = &ComicBookSettings::instance();
     
-    printer = new QPrinter();
+    printer = QSharedPointer<QPrinter>(new QPrinter());
 
     pageLoader = new PageLoaderThread();
     frameDetect = new FrameDetectThread();
 
     //
     // Thumbnails window
-    thumbswin = new ThumbnailsWindow(this);
+    thumbswin = QPointer<ThumbnailsWindow>(new ThumbnailsWindow(this));
     thumbswin->setObjectName("ThumbnailsWindow");
     thumbswin->setAllowedAreas(Qt::AllDockWidgetAreas);
     addDockWidget(Qt::LeftDockWidgetArea, thumbswin);
@@ -160,7 +160,7 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), view(NUL
 
     //
     // Bookmarks menu
-    bookmarks = new Bookmarks(menuBookmarks);
+    bookmarks = QSharedPointer<Bookmarks>(new Bookmarks(menuBookmarks));
     connect(actionSetBookmark, SIGNAL(triggered()), this, SLOT(setBookmark()));
     connect(actionRemoveBookmark, SIGNAL(triggered()), this, SLOT(removeBookmark()));
     connect(menuBookmarks, SIGNAL(triggered(QAction *)), this, SLOT(bookmarkSelected(QAction *)));
@@ -246,21 +246,19 @@ ComicMainWindow::~ComicMainWindow()
 
     saveSettings();        
     
-    delete bookmarks;
-    
     frameDetect->stop();
     pageLoader->stop();
     thumbnailLoader->stop();
     pageLoader->wait();
     thumbnailLoader->wait();
     
-    delete printer;
+    printer.clear();
     delete pageLoader;
     delete thumbnailLoader;
     
     if (sink)
     {
-        delete sink;
+        sink.clear();
     }
 }
 
@@ -312,15 +310,15 @@ void ComicMainWindow::setupComicImageView()
     switch (cfg->viewType())
     {
 	case Continuous:
-	        view = new ContinuousPageView(this, n, props);
+	        view = QPointer<PageViewBase>(new ContinuousPageView(this, n, props));
 		frameDetect->clear();
 		break;
 	case Simple:
-		view = new SimplePageView(this, n, props);
+		view = QPointer<PageViewBase>(new SimplePageView(this, n, props));
 		frameDetect->clear();
 		break;
 	case Frame:
-		view = new FrameView(this, n, props);
+		view = QPointer<PageViewBase>(new FrameView(this, n, props));
 		actionNextFrame->setDisabled(false);
 		actionPreviousFrame->setDisabled(false);
 		actionTwoPages->setDisabled(true);
@@ -640,7 +638,7 @@ void ComicMainWindow::browseDirectory()
 
 void ComicMainWindow::browseArchive()
 {
-    const QString file = QFileDialog::getOpenFileName(this, tr("Choose a file"), lastdir, "Archives (" + ArchiversConfiguration::instance().supportedOpenExtensions().join(" ") + ");;All files (*)");
+    const QString file = QFileDialog::getOpenFileName(this, tr("Choose a file"), lastdir, "Archives (" + ArchiversConfiguration::instance().supportedOpenExtensions().join(" ") + " *.pdf);;All files (*)");
         if (!file.isEmpty())
                 open(file, 0);
 }
@@ -665,7 +663,7 @@ void ComicMainWindow::open(const QString &path, int page)
         thumbnailLoader->setSink(sink);
         thumbnailLoader->setUseCache(cfg->cacheThumbnails());
 
-        connect(sink, SIGNAL(progress(int, int)), statusbar, SLOT(setProgress(int, int)));
+        connect(sink.data(), SIGNAL(progress(int, int)), statusbar, SLOT(setProgress(int, int)));
 
         statusbar->setShown(true); //ensures status bar is visible when opening regardless of user settings
 
@@ -923,11 +921,10 @@ void ComicMainWindow::closeSink()
     {
 	frameDetect->clear();
         pageLoader->cancelAll();
-        pageLoader->setSink(NULL);
+        pageLoader->setSink();
         thumbnailLoader->cancelAll();
-        thumbnailLoader->setSink(NULL);
-        sink->deleteLater();
-        sink = NULL;
+        thumbnailLoader->setSink();
+        sink.clear();
     }
     view->clear();
     thumbswin->view()->clear();
@@ -986,7 +983,7 @@ void ComicMainWindow::savePageAs()
 
 void ComicMainWindow::openPrintDialog()
 {
-    QPrintDialog printdlg(printer, this);
+    QPrintDialog printdlg(printer.data(), this);
     printdlg.setMinMax(1, sink->numOfImages());
     if (printdlg.exec() == QDialog::Accepted)
     {

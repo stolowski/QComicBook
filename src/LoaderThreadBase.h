@@ -17,10 +17,11 @@
 #include <QList>
 #include <QMutex>
 #include <QWaitCondition>
+#include <QSharedPointer>
 
 namespace QComicBook
 {
-    class ImgDirSink;
+    class ImgSink;
     class Page;
     
     struct LoadRequest
@@ -42,7 +43,7 @@ namespace QComicBook
             protected:
                 volatile QThread::Priority prio; //!<thread priority
                 QList<LoadRequest> requests; //!<the list of requested pages
-                ImgDirSink *sink;
+                QSharedPointer<ImgSink> sink;
                 QMutex loaderMutex;
                 QMutex condMutex;
                 QMutex sinkMutex;
@@ -70,7 +71,7 @@ namespace QComicBook
                 //! Sets image source sink.
                 /*! @param sink image sink used for retrieving (loading) images
                  */
-                virtual void setSink(ImgDirSink *sink=NULL);
+                virtual void setSink(QSharedPointer<ImgSink> sink = QSharedPointer<ImgSink>());
                 
                 //! Stops processing requests and exits thread execution.
                 virtual void stop();
