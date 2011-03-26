@@ -39,7 +39,9 @@ SET(qcomicbook_src
 	FrameWidget.cpp
 	History.cpp
 	IconViewThumbnail.cpp
+	Sink/DirTree.cpp
 	Sink/ImgArchiveSink.cpp
+	Sink/ImgLibArchiveSink.cpp
         Sink/ImgPdfSink.cpp
 	Sink/ImgDirSink.cpp
 	Sink/ImgSink.cpp
@@ -120,6 +122,7 @@ ADD_EXECUTABLE(qcomicbook ${qcomicbook_src} ${qcomicbook_moc_src} ${qcomicbook_u
 ADD_DEPENDENCIES(qcomicbook translations)
 TARGET_LINK_LIBRARIES(qcomicbook ${QT_LIBRARIES})
 TARGET_LINK_LIBRARIES(qcomicbook ${POPPLER_LIBRARIES})
+TARGET_LINK_LIBRARIES(qcomicbook ${LIBARCHIVE_LIBRARIES})
 
 INSTALL(TARGETS qcomicbook DESTINATION bin)
 

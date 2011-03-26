@@ -14,6 +14,7 @@
 #include "ImgPdfSink.h"
 #include "ImgDirSink.h"
 #include "ImgArchiveSink.h"
+#include "ImgLibArchiveSink.h"
 #include <QString>
 #include <QFileInfo>
 
@@ -41,7 +42,8 @@ void ImgSinkFactory::deleteLater(ImgSink *sink)
 QSharedPointer<ImgSink> ImgSinkFactory::createImgSink(SinkType s)
 {
 	if (s == ArchiveSink)
-		return QSharedPointer<ImgSink>(new ImgArchiveSink(), ImgSinkFactory::deleteLater);
+		return QSharedPointer<ImgSink>(new ImgLibArchiveSink(), ImgSinkFactory::deleteLater); //TODO configurable
+		//return QSharedPointer<ImgSink>(new ImgArchiveSink(), ImgSinkFactory::deleteLater);
 	if (s == DirSink)
 		return QSharedPointer<ImgSink>(new ImgDirSink(), ImgSinkFactory::deleteLater);
 	if (s == PdfSink)
