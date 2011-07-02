@@ -1,10 +1,10 @@
-QComicBook v0.7.2
-(c)by Pawel Stolowski 2005-2010
+QComicBook v0.8.0
+(c)by Pawel Stolowski 2005-2011
 released under terms of GNU General Public License v2
 
 1. Introduction
 ---------------
-QComicBook is a viewer for comic book archives containing
+QComicBook is a viewer for PDF files and comic book archives containing
 jpeg/png/xpm/gif/bmp images, which aims at convenience and simplicity.
 Features include: automatic unpacking of archive files, full-screen mode, continuous
 scrolling mode, double-pages viewing, manga mode, thumbnails view, page scaling,
@@ -12,8 +12,8 @@ mouse or keyboard navigation etc.
 
 2. Requirements
 ---------------
-QComicBook requires Qt library version >=4.5.0 (including moc, uic and lrelease tools)
-and cmake.
+QComicBook requires Qt library version >=4.5.0 (including moc, uic and
+lrelease tools), poppler-qt4 library and cmake.
 
 You will also need unzip, rar (or unrar), unace, p7zip and tar (with gzip and
 bzip2 support compiled in) somewhere in your PATH to handle archives. If one of
@@ -24,7 +24,8 @@ menu option of QComicBook.
 3. Installation
 ---------------
 To compile QComicBook, you will need Qt4 developement packages (usually named
--devel- in many distros). Compilation includes three steps:
+-devel- in many distros) and libpoppler-qt4 devel package.
+Compilation includes three steps:
 
 $ cmake . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release
 $ make
