@@ -1,3 +1,5 @@
+2011-07-xx:  0.8.0   -- don't report that unrar-free was detected if neither unrar nor unrar-free was installed.
+
 2010-12-11:  0.7.2   -- added German translation.
                      -- added .cb7 (p7zip) to the list of supported file
 					    extensions.
