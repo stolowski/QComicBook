@@ -4,6 +4,7 @@ INCLUDE_DIRECTORIES(
 	${CMAKE_BINARY_DIR}/src
 	${CMAKE_BINARY_DIR}/src/FrameDetect
 	${CMAKE_BINARY_DIR}
+	${POPPLER_INCLUDE_DIRS}
 )
 
 SET(qcomicbook_src
@@ -38,14 +39,16 @@ SET(qcomicbook_src
 	FrameWidget.cpp
 	History.cpp
 	IconViewThumbnail.cpp
-	ImgArchiveSink.cpp
+	Sink/ImgArchiveSink.cpp
+        Sink/ImgPdfSink.cpp
+	Sink/ImgDirSink.cpp
+	Sink/ImgSink.cpp
+	Sink/ImgSinkFactory.cpp
 	ImageFormatsInfo.cpp
 	ImgCache.cpp
-	ImgDirSink.cpp
 	LoaderThreadBase.cpp
 	PageLoaderThread.cpp
         PrintProgressDialog.cpp
-	ImgSinkFactory.cpp
 	GoToPageWidget.cpp
 	ListViewThumbnail.cpp
 	main.cpp
@@ -80,8 +83,8 @@ SET(qcomicbook_moc_hdrs
 	PageViewBase.h 
 	ContinuousPageView.h
 	SimplePageView.h
-	ImgDirSink.h 
-	ImgArchiveSink.h
+	Sink/ImgSink.h 
+	Sink/ImgArchiveSink.h
 	LoaderThreadBase.h 
 	PageLoaderThread.h
 	ThumbnailLoaderThread.h
@@ -116,6 +119,7 @@ QT4_WRAP_UI(qcomicbook_ui_src ${qcomicbook_ui})
 ADD_EXECUTABLE(qcomicbook ${qcomicbook_src} ${qcomicbook_moc_src} ${qcomicbook_ui_src} ${qcomicbook_res})
 ADD_DEPENDENCIES(qcomicbook translations)
 TARGET_LINK_LIBRARIES(qcomicbook ${QT_LIBRARIES})
+TARGET_LINK_LIBRARIES(qcomicbook ${POPPLER_LIBRARIES})
 
 INSTALL(TARGETS qcomicbook DESTINATION bin)
 

@@ -15,6 +15,8 @@
 
 /*! \file imgsinkfactory.h */
 
+#include <QSharedPointer>
+
 class QString;
 	
 namespace QComicBook
@@ -22,10 +24,11 @@ namespace QComicBook
 	enum SinkType
 	{
 		ArchiveSink = 1,
-		DirSink
+		DirSink,
+		PdfSink
 	};
 
-	class ImgDirSink;
+	class ImgSink;
 
 	class ImgSinkFactory
 	{
@@ -35,8 +38,9 @@ namespace QComicBook
 
 		public:
 			static ImgSinkFactory& instance();
-			ImgDirSink* createImgSink(SinkType s);
-			ImgDirSink* createImgSink(const QString &path);
+			static void deleteLater(ImgSink *sink);
+			QSharedPointer<ImgSink> createImgSink(SinkType s);
+			QSharedPointer<ImgSink> createImgSink(const QString &path);
 	};
 }
 
