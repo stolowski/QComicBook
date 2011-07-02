@@ -11,7 +11,6 @@
  */
 
 #include "ImgPdfSink.h"
-#include "Thumbnail.h"
 #include "Page.h"
 #include <QX11Info>
 #include <QFileInfo>
