@@ -11,7 +11,7 @@
  */
 
 #include "ImgPdfSink.h"
-#include "Page.h"
+#include "../Page.h"
 #include <QX11Info>
 #include <QFileInfo>
 #include <QMutexLocker>

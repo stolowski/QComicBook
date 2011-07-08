@@ -22,7 +22,7 @@
 #include <QMutex>
 #include "DirReader.h"
 #include "ImgSink.h"
-#include "Page.h"
+#include "../Page.h"
 
 class QImage;
 

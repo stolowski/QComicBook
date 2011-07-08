@@ -13,7 +13,7 @@
 #include <FrameDetectThread.h>
 #include <FrameDetect.h>
 #include <FrameCache.h>
-#include "Page.h"
+#include "../Page.h"
 #include <QDebug>
 
 using namespace QComicBook;
