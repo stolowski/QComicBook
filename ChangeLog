@@ -1,3 +1,7 @@
+2011-07-08:  0.8.1   -- removed thick border around scroll area widget.
+                     -- fixed compilation errors on some systems (such as Ubuntu) caused by conflict with Page.h 
+                        from libpoppler.
+
 2011-07-02:  0.8.0   -- implemented PDF support; requires libpoppler-qt4.
                      -- don't report that unrar-free was detected if neither unrar nor unrar-free was installed.
 
