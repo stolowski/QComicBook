@@ -1,3 +1,5 @@
+2011-10-10:  0.8.2   -- fixed crash on scroll actions when using Simple View and no comicbook is loaded.
+
 2011-07-08:  0.8.1   -- removed thick border around scroll area widget.
                      -- fixed compilation errors on some systems (such as Ubuntu) caused by conflict with Page.h 
                         from libpoppler.
