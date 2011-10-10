@@ -450,6 +450,6 @@ void PageViewBase::recalculateScrollSpeeds()
 void PageViewBase::resizeEvent(QResizeEvent *e)
 {
     QGraphicsView::resizeEvent(e);
-    setSceneRect(scene->itemsBoundingRect());
+    //setSceneRect(scene->itemsBoundingRect());
     recalculateScrollSpeeds();
 }

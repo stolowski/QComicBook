@@ -45,6 +45,8 @@ SimplePageView::~SimplePageView()
 
 void SimplePageView::recreatePageWidget()
 {
+    qDebug() << "SimplePageView::recreatePageWidget";
+
     delete imgLabel;
     imgLabel = NULL;
 
@@ -78,7 +80,7 @@ void SimplePageView::propsChanged()
         update();
         gotoPage(m_currentPage);
     }
-    setSceneRect(scene->itemsBoundingRect()); //TODO
+    //setSceneRect(scene->itemsBoundingRect()); //TODO
 }
 
 void SimplePageView::scrollContentsBy(int dx, int dy)
@@ -89,12 +91,14 @@ void SimplePageView::scrollContentsBy(int dx, int dy)
 void SimplePageView::setImage(const Page &img1)
 {
     Q_ASSERT(numOfPages() > 0);
+    qDebug() << "SimplePageView::setImage" << img1.getNumber();
     delRequest(img1.getNumber(), false, false);
     if (img1.getNumber() == m_currentPage)
     {
         imgLabel->setImage(img1);
         horizontalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
         verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
+        qDebug() << "scene: " << scene->width();
         emit pageReady(img1);
     }
 }
@@ -102,18 +106,21 @@ void SimplePageView::setImage(const Page &img1)
 void SimplePageView::setImage(const Page &img1, const Page &img2)
 {
     Q_ASSERT(numOfPages() > 0);
+    qDebug() << "SimplePageView::setImage" << img1.getNumber() << "," << img2.getNumber();
     delRequest(img1.getNumber(), true, false);
     if (img1.getNumber() == m_currentPage)
     {
         imgLabel->setImage(img1, img2);
         horizontalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
-        verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);        
+        verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
+        qDebug() << "scene: " << scene->width();
         emit pageReady(img1, img2);
     }
 }
 
 void SimplePageView::gotoPage(int n)
 {
+    qDebug() << "SimplePageView::gotoPage " << n;
     if (n>= 0 && n < numOfPages())
     {
         if (n != m_currentPage)

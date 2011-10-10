@@ -85,7 +85,9 @@ int ComicImageWidget::height() const
 
 void ComicImageWidget::recalcScaledSize()
 {
-	const int viewW(m_view->viewport()->width());
+    qDebug() << "ComicImageWidget::recalcScaledSize";
+
+    const int viewW(m_view->viewport()->width());
     const int viewH(m_view->viewport()->height());
 
     int totalWidth, totalHeight;
@@ -139,6 +141,8 @@ void ComicImageWidget::recalcScaledSize()
     
     xoff = (viewW - pixmapWidth) / 2;
     yoff = props.continuousScrolling() ? 0 : (viewH - pixmapHeight) / 2;
+    
+    prepareGeometryChange();
 
     scaledSize = QSize(pixmapWidth, pixmapHeight);
     
@@ -165,7 +169,6 @@ void ComicImageWidget::recalcScaledSize()
 	//setFixedSize(scaledSize.width() + 2*xoff, scaledSize.height() + 2*yoff);  
 
 	//updateGeometry();
-	prepareGeometryChange();
 	update();
 }
 

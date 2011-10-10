@@ -71,7 +71,7 @@ void ContinuousPageView::propsChanged()
     disposeOrRequestPages();
     update();
 
-    setSceneRect(scene->itemsBoundingRect()); //TODO
+    //setSceneRect(scene->itemsBoundingRect()); //TODO
 }
 
 void ContinuousPageView::scrollbarRangeChanged(int min, int max)
@@ -170,6 +170,8 @@ void ContinuousPageView::disposeOrRequestPages()
     m_firstVisible = -1;
     m_firstVisibleOffset = 0.0f;
 
+    qDebug() << "view rect:" << vy1 << "," << vy2;
+
     for (int i=0; i<imgLabel.size(); i++)
     {
         PageWidget *w = imgLabel[i];
@@ -177,6 +179,7 @@ void ContinuousPageView::disposeOrRequestPages()
         // if page is visible on the screen but not loaded, request it
         if (isInView(m_y1pos[i], m_y2pos[i], vy1, vy2))
         {
+            qDebug() << "in view:" << w->pageNumber();
             if (w->isDisposed())
             {
                 if (!hasRequest(w->pageNumber()))
@@ -198,9 +201,11 @@ void ContinuousPageView::disposeOrRequestPages()
         }
         else // page is not visible
         {
+            qDebug() << "not in view:" << w->pageNumber();
             // if page images are still in memory
             if (!w->isDisposed())
             {
+                qDebug() << "not disposed:" << w->pageNumber();
                 // dispose page only if none of its neighbours are in view
                 if (! ((i>1 && isInView(m_y1pos[i-1], m_y2pos[i-1], vy1, vy2)) || (i<imgLabel.size()-1 && isInView(m_y1pos[i+1], m_y2pos[i+1], vy1, vy2))) )
                 {
@@ -211,10 +216,12 @@ void ContinuousPageView::disposeOrRequestPages()
             }
             else
             {
+                qDebug() << "disposed:" << w->pageNumber();
                 ComicBookSettings &cfg(ComicBookSettings::instance());
                 // if previous page is visible then preload this one
-                if (i>1 && isInView(m_y1pos[i-1], m_y2pos[i-1], vy1, vy2))
+                if (i>0 && isInView(m_y1pos[i-1], m_y2pos[i-1], vy1, vy2))
                 {
+                    qDebug() << "previous page visible";
                     if (cfg.preloadPages())
                     {
                         qDebug() << "preloading" << w->pageNumber();
@@ -288,13 +295,14 @@ void ContinuousPageView::recalculatePageSizes()
 			p->setEstimatedSize(avgw, avgh);
 		}
 		p->setPos(0, y); //??
+                qDebug() << "page: " << i << ", y=" << y;
 		// update positions lookup
 		m_y1pos[i] = y;
 		m_y2pos[i] = y + p->estimatedSize().height();
 		y += p->estimatedSize().height();
 	}
     }
-    setSceneRect(scene->itemsBoundingRect()); //TODO
+    //setSceneRect(scene->itemsBoundingRect()); //TODO
 }
 
 
@@ -318,7 +326,7 @@ void ContinuousPageView::setImage(const Page &img1)
 
     PageWidget *w = findPageWidget(img1.getNumber());
     Q_ASSERT(w != NULL);
-    qDebug() << "setImage:" << img1.getNumber() << "widget page" << w->pageNumber();
+    qDebug() << "ContinuousPageView::setImage" << img1.getNumber();
     w->setImage(img1);
     recalculatePageSizes();
 
