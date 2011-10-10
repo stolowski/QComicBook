@@ -1,3 +1,8 @@
+- autoresume
+- rich command-line interfaced
+- opening single image
+- support for transparent pngs
+- image properties window
 - "split pages into 2" mode
 - smooth scroll
 - individual frame zooming + frames editor
