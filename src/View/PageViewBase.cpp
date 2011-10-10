@@ -31,6 +31,7 @@ PageViewBase::PageViewBase(QWidget *parent, int physicalPages, const ViewPropert
     , smallcursor(0)
     , lens(0)
 {
+    setFrameShape(QFrame::NoFrame);
     context_menu = new QMenu(this);
     connect(&this->props, SIGNAL(changed()), this, SLOT(propsChanged()));
     recalculateScrollSpeeds();

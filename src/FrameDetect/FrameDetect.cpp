@@ -18,7 +18,7 @@
 #include <fstream>
 #include <algorithm>
 #include <QDebug>
-#include "Page.h"
+#include "../Page.h"
 
 using namespace QComicBook;
 

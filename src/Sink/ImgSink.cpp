@@ -12,7 +12,7 @@
 
 #include "ImgSink.h"
 #include "ImgCache.h"
-#include "Page.h"
+#include "../Page.h"
 #include "Thumbnail.h"
 #include <QImage>
 #include <QDebug>

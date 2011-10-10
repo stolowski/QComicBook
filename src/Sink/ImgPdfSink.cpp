@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005-2010 Pawel Stolowski <stolowski@gmail.com>
+ * Copyright (C) 2005-2011 Pawel Stolowski <stolowski@gmail.com>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -11,8 +11,7 @@
  */
 
 #include "ImgPdfSink.h"
-#include "Thumbnail.h"
-#include "Page.h"
+#include "../Page.h"
 #include <QX11Info>
 #include <QFileInfo>
 #include <QMutexLocker>

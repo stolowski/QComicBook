@@ -146,32 +146,35 @@ void SimplePageView::resizeEvent(QResizeEvent *e)
 
 void SimplePageView::wheelEvent(QWheelEvent *e)
 {
-    if (e->delta() > 0) //scrolling up
+    if (imgLabel)
     {
-        if (imgLabel->height() <= height() || (onTop() && ++wheelupcnt > EXTRA_WHEEL_SPIN))
+        if (e->delta() > 0) //scrolling up
         {
-            e->accept();
-            wheelupcnt = 0;
-            gotoPage(previousPage(m_currentPage));
+            if (imgLabel->height() <= height() || (onTop() && ++wheelupcnt > EXTRA_WHEEL_SPIN))
+            {
+                e->accept();
+                wheelupcnt = 0;
+                gotoPage(previousPage(m_currentPage));
+            }
+            else
+            {
+                QGraphicsView::wheelEvent(e);
+                wheeldowncnt = 0; //reset opposite direction counter
+            }
         }
-        else
+        else //scrolling down
         {
-            QGraphicsView::wheelEvent(e);
-            wheeldowncnt = 0; //reset opposite direction counter
-        }
-    }
-    else //scrolling down
-    {
-        if (imgLabel->height() <= height() || (onBottom() && ++wheeldowncnt > EXTRA_WHEEL_SPIN))
-        {
-            e->accept();
-            wheeldowncnt = 0;
-            gotoPage(nextPage(m_currentPage));
-        }
-        else
-        {
-            QGraphicsView::wheelEvent(e);
-            wheelupcnt = 0; //reset opposite direction counter
+            if (imgLabel->height() <= height() || (onBottom() && ++wheeldowncnt > EXTRA_WHEEL_SPIN))
+            {
+                e->accept();
+                wheeldowncnt = 0;
+                gotoPage(nextPage(m_currentPage));
+            }
+            else
+            {
+                QGraphicsView::wheelEvent(e);
+                wheelupcnt = 0; //reset opposite direction counter
+            }
         }
     }
 }
