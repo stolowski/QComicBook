@@ -19,7 +19,7 @@
 #include <QVBoxLayout>
 #include <QPainter>
 #include <QScrollBar>
-#include "Utility.h"
+#include "ComicBookDebug.h"
 
 using namespace QComicBook;
 

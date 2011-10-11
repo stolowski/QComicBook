@@ -13,10 +13,6 @@
 #ifndef __MISCUTIL_H
 #define __MISCUTIL_H
 
-#include <QDebug>
-
-#define _DEBUG qDebug() << Q_FUNC_INFO
-
 class QString;
 
 namespace Utility
