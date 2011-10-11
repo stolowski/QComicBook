@@ -19,7 +19,7 @@
 #include <QVBoxLayout>
 #include <QPainter>
 #include <QScrollBar>
-#include <QDebug>
+#include "Utility.h"
 
 using namespace QComicBook;
 
@@ -53,29 +53,32 @@ FrameView::~FrameView()
 			
 void FrameView::setImage(const Page &img1)
 {
+    _DEBUG << img1.getNumber();
     if (img1.getNumber() == m_currentPage)
-	{
-		m_page = img1;
-	}
+    {
+        m_page = img1;
+    }
 }
 
 void FrameView::setImage(const Page &img1, const Page &img2)
 {   
-	if (img1.getNumber() == m_currentPage)
-	{
-		m_page = img1;
-	}
+    _DEBUG << img1.getNumber();
+    if (img1.getNumber() == m_currentPage)
+    {
+        m_page = img1;
+    }
 }
 
 void FrameView::setFrames(const ComicFrameList &frames)
 {
-	if (frames.pageNumber() == m_currentPage)
-	{
-		m_frames = frames;
-		m_frames.sort(props.mangaMode());
-		m_currentFrame = 0;
-		gotoFrame(m_currentFrame);
-	}
+    _DEBUG << frames.pageNumber() << frames.count();
+    if (frames.pageNumber() == m_currentPage)
+    {
+        m_frames = frames;
+        m_frames.sort(props.mangaMode());
+        m_currentFrame = 0;
+        gotoFrame(m_currentFrame);
+    }
 }
 
 void FrameView::nextFrame()
@@ -111,6 +114,8 @@ void FrameView::gotoFrame(int n)
 		m_currentFrame = n;
 		const ComicFrame f(m_frames[n]);
 		m_frame->setFrame(m_page, f);
+                center(m_frame);
+                setSceneRect(scene->itemsBoundingRect());
 	}
 }
 
@@ -132,7 +137,7 @@ void FrameView::gotoPage(int n)
         if (cfg.preloadPages() && n < numOfPages())
         {   
             ++n;
-            qDebug() << "preloading" << n;            
+            _DEBUG << "preloading" << n;            
             addRequest(n, false);
         }
     }
