@@ -175,6 +175,8 @@ void ContinuousPageView::disposeOrRequestPages()
     for (int i=0; i<imgLabel.size(); i++)
     {
         PageWidget *w = imgLabel[i];
+
+        qDebug() << "page widget:" << i << " page num:" << w->pageNumber() << " y=" << w->y() << " ypos=" << m_y1pos[i];
    
         // if page is visible on the screen but not loaded, request it
         if (isInView(m_y1pos[i], m_y2pos[i], vy1, vy2))
@@ -302,7 +304,7 @@ void ContinuousPageView::recalculatePageSizes()
 		y += p->estimatedSize().height();
 	}
     }
-    //setSceneRect(scene->itemsBoundingRect()); //TODO
+    setSceneRect(scene->itemsBoundingRect());
 }
 
 

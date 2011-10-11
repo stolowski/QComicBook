@@ -96,6 +96,7 @@ void SimplePageView::setImage(const Page &img1)
     if (img1.getNumber() == m_currentPage)
     {
         imgLabel->setImage(img1);
+        setSceneRect(scene->itemsBoundingRect());
         horizontalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
         verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
         qDebug() << "scene: " << scene->width();
@@ -111,6 +112,7 @@ void SimplePageView::setImage(const Page &img1, const Page &img2)
     if (img1.getNumber() == m_currentPage)
     {
         imgLabel->setImage(img1, img2);
+        setSceneRect(scene->itemsBoundingRect());
         horizontalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
         verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
         qDebug() << "scene: " << scene->width();

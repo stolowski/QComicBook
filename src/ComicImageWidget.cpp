@@ -37,7 +37,7 @@ void ComicImageWidget::dispose()
 {
     delete m_pixmap;
     m_pixmap = 0;
-	scaledSize = QSize(0, 0); //?
+//	scaledSize = QSize(0, 0); //?
 }
 
 bool ComicImageWidget::isDisposed() const
