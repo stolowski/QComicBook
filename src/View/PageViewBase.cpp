@@ -11,6 +11,7 @@
  */
 
 #include "PageViewBase.h"
+#include "ComicImageWidget.h"
 #include <QContextMenuEvent>
 #include <QMenu>
 #include <QBitmap>
@@ -41,7 +42,7 @@ PageViewBase::PageViewBase(QWidget *parent, int physicalPages, const ViewPropert
     scene = new QGraphicsScene(this);
     setScene(scene);
    
-    setAlignment(Qt::AlignLeft|Qt::AlignTop);
+    //setAlignment(Qt::AlignLeft|Qt::AlignTop);
 }
 
 PageViewBase::~PageViewBase()
@@ -452,4 +453,11 @@ void PageViewBase::resizeEvent(QResizeEvent *e)
     QGraphicsView::resizeEvent(e);
     //setSceneRect(scene->itemsBoundingRect());
     recalculateScrollSpeeds();
+}
+
+void PageViewBase::center(ComicImageWidget *w, bool horizontal, bool vertical)
+{
+    const int x = horizontal ? (viewport()->width() - w->width()) / 2 : w->x();
+    const int y = vertical ? (viewport()->height() - w->height()) / 2 : w->y();
+    w->setPos(x, y);
 }

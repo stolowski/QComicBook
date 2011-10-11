@@ -296,7 +296,8 @@ void ContinuousPageView::recalculatePageSizes()
 		{
 			p->setEstimatedSize(avgw, avgh);
 		}
-		p->setPos(0, y); //??
+		p->setPos(0, y);
+                center(p, true, false); // center horizontally only, preserve Y
                 qDebug() << "page: " << i << ", y=" << y;
 		// update positions lookup
 		m_y1pos[i] = y;

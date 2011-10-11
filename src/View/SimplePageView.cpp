@@ -80,7 +80,7 @@ void SimplePageView::propsChanged()
         update();
         gotoPage(m_currentPage);
     }
-    //setSceneRect(scene->itemsBoundingRect()); //TODO
+    setSceneRect(scene->itemsBoundingRect());
 }
 
 void SimplePageView::scrollContentsBy(int dx, int dy)
@@ -96,6 +96,7 @@ void SimplePageView::setImage(const Page &img1)
     if (img1.getNumber() == m_currentPage)
     {
         imgLabel->setImage(img1);
+        center(imgLabel);
         setSceneRect(scene->itemsBoundingRect());
         horizontalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
         verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
@@ -112,6 +113,7 @@ void SimplePageView::setImage(const Page &img1, const Page &img2)
     if (img1.getNumber() == m_currentPage)
     {
         imgLabel->setImage(img1, img2);
+        center(imgLabel);
         setSceneRect(scene->itemsBoundingRect());
         horizontalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
         verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);

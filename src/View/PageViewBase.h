@@ -25,6 +25,7 @@ namespace QComicBook
     class PageWidget;
     class Page;
     class Lens;
+    class ComicImageWidget;
 
 	enum Scaling { Smooth, Fast };
 
@@ -105,6 +106,7 @@ namespace QComicBook
             virtual void mousePressEvent(QMouseEvent *e);
             virtual void mouseReleaseEvent(QMouseEvent *e);
             virtual void mouseDoubleClickEvent(QMouseEvent *e);
+            void center(ComicImageWidget *w, bool horizontal=true, bool vertical=true);
             void scrollByDelta(int dx, int dy);
             void recalculateScrollSpeeds();
 
