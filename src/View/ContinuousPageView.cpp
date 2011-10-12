@@ -32,6 +32,8 @@ ContinuousPageView::ContinuousPageView(QWidget *parent, int physicalPages, const
     , m_y1pos(NULL)
     , m_y2pos(NULL)
 {
+    _DEBUG;
+
     recreatePageWidgets();
     recalculatePageSizes();
 
@@ -44,6 +46,7 @@ ContinuousPageView::ContinuousPageView(QWidget *parent, int physicalPages, const
 
 ContinuousPageView::~ContinuousPageView()
 {
+    _DEBUG;
     delete [] m_y1pos;
     delete [] m_y2pos;
 }
@@ -374,6 +377,7 @@ void ContinuousPageView::wheelEvent(QWheelEvent *e)
 
 void ContinuousPageView::gotoPage(int n)
 {
+    _DEBUG << n;
     PageWidget *w = findPageWidget(n);
     if (w)
     {

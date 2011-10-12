@@ -33,6 +33,8 @@ SimplePageView::SimplePageView(QWidget *parent, int physicalPages, const ViewPro
     , m_currentPage(0) //??
     , imgLabel(NULL)
 {
+    _DEBUG;
+
     recreatePageWidget();
     
     setBackground(props.background());
@@ -41,6 +43,7 @@ SimplePageView::SimplePageView(QWidget *parent, int physicalPages, const ViewPro
 
 SimplePageView::~SimplePageView()
 {
+    _DEBUG;
 }
 
 void SimplePageView::recreatePageWidget()

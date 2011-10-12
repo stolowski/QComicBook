@@ -309,9 +309,11 @@ void ComicMainWindow::setupContextMenu()
 
 void ComicMainWindow::setupComicImageView()
 {
+    _DEBUG;
     const int n = (sink != NULL ? sink->numOfImages() : 0);
     if (view)
     {
+        _DEBUG << "disconnecting old view";
         view->disconnect();
         pageLoader->disconnect();
         view->deleteLater();
