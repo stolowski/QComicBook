@@ -18,6 +18,7 @@
 #include <QLayout>
 #include <QFont>
 #include <QDialogButtonBox>
+#include "ComicBookDebug.h"
 
 using namespace QComicBook;
 
@@ -77,5 +78,6 @@ void ComicBookInfo::setupGeneralTab(ImgSink &sink)
 
 ComicBookInfo::~ComicBookInfo()
 {
+    _DEBUG;
 }
 

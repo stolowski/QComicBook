@@ -828,6 +828,7 @@ void ComicMainWindow::backwardPages()
 
 void ComicMainWindow::jumpToPage(int n, bool force)
 {
+    _DEBUG;
 	if (!sink)
         {
 		return;
@@ -853,6 +854,8 @@ void ComicMainWindow::jumpToPage(int n, bool force)
 
 void ComicMainWindow::currentPageChanged(int n)
 {
+    _DEBUG << n;
+
     currpage = n;
     const QString page = tr("Page") + " " + QString::number(n + 1) + "/" + QString::number(sink->numOfImages());
     pageinfo->setText(page);
@@ -957,6 +960,8 @@ void ComicMainWindow::showAboutQt()
 
 void ComicMainWindow::closeSink()
 {
+    _DEBUG;
+
     enableComicBookActions(false);
 
     if (sink)
@@ -976,12 +981,15 @@ void ComicMainWindow::closeSink()
 
 void ComicMainWindow::setBookmark()
 {
+    _DEBUG;
+
         if (sink)
                 bookmarks->set(sink->getFullName(), currpage);
 }
 
 void ComicMainWindow::removeBookmark()
 {
+    _DEBUG;
         if (sink && bookmarks->exists(sink->getFullName()) && QMessageBox::question(this, tr("Removing bookmark"),
                                 tr("Do you really want to remove bookmark\nfor this comic book?"),
                                 QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
@@ -1042,6 +1050,8 @@ void ComicMainWindow::openPrintDialog()
 
 void ComicMainWindow::bookmarkSelected(QAction *action) 
 {
+    _DEBUG;
+
         Bookmark b;
         if (bookmarks->get(action, b))
         {
@@ -1070,6 +1080,8 @@ void ComicMainWindow::bookmarkSelected(QAction *action)
 			
 void ComicMainWindow::changeViewType(QAction *action)
 {
+    _DEBUG;
+
     if (action == actionContinuousView)
     {
 	cfg->viewType(Continuous);
@@ -1087,6 +1099,8 @@ void ComicMainWindow::changeViewType(QAction *action)
 
 void ComicMainWindow::saveSettings()
 {
+    _DEBUG;
+
         cfg->saveGeometry(this);
         cfg->saveDockLayout(this);
         cfg->lastDir(lastdir);
@@ -1099,6 +1113,8 @@ void ComicMainWindow::saveSettings()
 
 void ComicMainWindow::reconfigureDisplay()
 {
+    _DEBUG;
+
     view->setSmallCursor(cfg->smallCursor());
     view->showPageNumbers(cfg->embedPageNumbers());
     view->setBackground(cfg->background());
@@ -1106,5 +1122,7 @@ void ComicMainWindow::reconfigureDisplay()
 
 void ComicMainWindow::printingFinished()
 {
+    _DEBUG;
+
     printThread->deleteLater();
 }
