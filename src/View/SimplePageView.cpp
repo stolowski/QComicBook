@@ -21,7 +21,7 @@
 #include <QtGlobal>
 #include <QResizeEvent>
 #include <QScrollBar>
-#include <QDebug>
+#include "../ComicBookDebug.h"
 
 using namespace QComicBook;
 
@@ -45,7 +45,7 @@ SimplePageView::~SimplePageView()
 
 void SimplePageView::recreatePageWidget()
 {
-    qDebug() << "SimplePageView::recreatePageWidget";
+    _DEBUG;
 
     delete imgLabel;
     imgLabel = NULL;
@@ -69,7 +69,7 @@ void SimplePageView::setNumOfPages(int n)
 
 void SimplePageView::propsChanged()
 {
-    qDebug() << "SimplePageView::propsChanged()";
+    _DEBUG;
     if (imgLabel)
     {
         if ((props.twoPagesMode() && !imgLabel->hasTwoPages()) || (imgLabel->hasTwoPages() && !props.twoPagesMode()))
@@ -91,7 +91,7 @@ void SimplePageView::scrollContentsBy(int dx, int dy)
 void SimplePageView::setImage(const Page &img1)
 {
     Q_ASSERT(numOfPages() > 0);
-    qDebug() << "SimplePageView::setImage" << img1.getNumber();
+    _DEBUG << img1.getNumber();
     delRequest(img1.getNumber(), false, false);
     if (img1.getNumber() == m_currentPage)
     {
@@ -100,7 +100,6 @@ void SimplePageView::setImage(const Page &img1)
         setSceneRect(scene->itemsBoundingRect());
         horizontalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
         verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
-        qDebug() << "scene: " << scene->width();
         emit pageReady(img1);
     }
 }
@@ -108,7 +107,7 @@ void SimplePageView::setImage(const Page &img1)
 void SimplePageView::setImage(const Page &img1, const Page &img2)
 {
     Q_ASSERT(numOfPages() > 0);
-    qDebug() << "SimplePageView::setImage" << img1.getNumber() << "," << img2.getNumber();
+    _DEBUG << img1.getNumber() << "," << img2.getNumber();
     delRequest(img1.getNumber(), true, false);
     if (img1.getNumber() == m_currentPage)
     {
@@ -117,14 +116,13 @@ void SimplePageView::setImage(const Page &img1, const Page &img2)
         setSceneRect(scene->itemsBoundingRect());
         horizontalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
         verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
-        qDebug() << "scene: " << scene->width();
         emit pageReady(img1, img2);
     }
 }
 
 void SimplePageView::gotoPage(int n)
 {
-    qDebug() << "SimplePageView::gotoPage " << n;
+    _DEBUG << n;
     if (n>= 0 && n < numOfPages())
     {
         if (n != m_currentPage)
@@ -140,7 +138,7 @@ void SimplePageView::gotoPage(int n)
         if (cfg.preloadPages())
         {   
             n = nextPage(n);
-            qDebug() << "preloading" << n;            
+            _DEBUG << "preloading" << n;            
             addRequest(n, props.twoPagesMode() && n < numOfPages()); // request two pages if not last page
         }
     }

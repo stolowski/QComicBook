@@ -3,6 +3,6 @@
 
 #include <QDebug>
 
-#define _DEBUG qDebug() << Q_FUNC_INFO
+#define _DEBUG qDebug() << Q_FUNC_INFO << ':'
 
 #endif

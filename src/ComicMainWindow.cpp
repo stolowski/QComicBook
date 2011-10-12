@@ -54,7 +54,7 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QApplication>
-#include <QDebug>
+#include "ComicBookDebug.h"
 
 using namespace QComicBook;
 using namespace Utility;
@@ -597,7 +597,7 @@ void ComicMainWindow::recentSelected(const QString &fname)
 
 void ComicMainWindow::pageLoaded(const Page &page)
 {
-    qDebug() << "page ready " << page.getNumber();
+    _DEBUG << page.getNumber();
     if (currpage == page.getNumber())
     {
         statusbar->setImageInfo(&page);
@@ -606,7 +606,7 @@ void ComicMainWindow::pageLoaded(const Page &page)
 
 void ComicMainWindow::pageLoaded(const Page &page1, const Page &page2)
 {
-    qDebug() << "page ready " << page1.getNumber() << ", " << page2.getNumber();
+    _DEBUG << page1.getNumber() << ", " << page2.getNumber();
     if (currpage == page1.getNumber() || currpage == page2.getNumber())
     {
         statusbar->setImageInfo(&page1, &page2);

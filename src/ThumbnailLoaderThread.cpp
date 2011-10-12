@@ -13,7 +13,7 @@
 #include "ThumbnailLoaderThread.h"
 #include "Sink/ImgDirSink.h"
 #include "Thumbnail.h"
-#include <QDebug>
+#include "ComicBookDebug.h"
  
 using namespace QComicBook;
 
@@ -33,7 +33,7 @@ bool ThumbnailLoaderThread::process(const LoadRequest &req)
     }
     else
     {
-        qDebug() << "thumbnail requested: " << req.pageNumber;
+        _DEBUG << "thumbnail requested: " << req.pageNumber;
         const Thumbnail t = sink->getThumbnail(req.pageNumber, usecache);
         emit thumbnailLoaded(t); //TODO errors
     }

@@ -15,7 +15,7 @@
 #include <QStyleOptionGraphicsItem>
 #include "ComicBookSettings.h"
 #include "View/PageViewBase.h"
-#include <QDebug>
+#include "ComicBookDebug.h"
 
 using namespace QComicBook;
 
@@ -85,7 +85,7 @@ int ComicImageWidget::height() const
 
 void ComicImageWidget::recalcScaledSize()
 {
-    qDebug() << "ComicImageWidget::recalcScaledSize";
+    _DEBUG;
 
     const int viewW(m_view->viewport()->width());
     const int viewH(m_view->viewport()->height());
@@ -183,7 +183,7 @@ void ComicImageWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 
 void ComicImageWidget::redrawScaledImage()
 {
-	qDebug() << "redrawScaledImage";
+    _DEBUG;
 
     ViewProperties &props(m_view->properties());
 

@@ -16,7 +16,7 @@
 #include <QPixmap>
 #include <QTime>
 #include <QGraphicsScene>
-#include <QDebug>
+#include "ComicBookDebug.h"
 
 using namespace QComicBook;
 
@@ -102,15 +102,15 @@ QVariant Lens::itemChange(GraphicsItemChange change, const QVariant &value)
 			// get rect intersection
 			QRectF ins(itbr.intersected(tbr));
 
-			qDebug() << "lens intersect" << itbr << "&" << tbr << "=" << ins;
+			_DEBUG << "lens intersect" << itbr << "&" << tbr << "=" << ins;
 
 			const int xoff(ins.x() - tbr.x());
 			const int yoff(ins.y() - tbr.y());
-			qDebug() << "off" << xoff << yoff;
+			_DEBUG << "off" << xoff << yoff;
 
 			ins.translate(-it->x(), -it->y());
 			so.exposedRect = ins;
-			qDebug() << "exposed" << so.exposedRect;
+			_DEBUG << "exposed" << so.exposedRect;
 		
 			painter.resetTransform();
 			painter.translate(-ins.x() + xoff, -ins.y() + yoff);
