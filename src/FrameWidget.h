@@ -33,7 +33,8 @@ namespace QComicBook
 			void setFrame(const Page &p, const ComicFrame &f);
 			void clear();
 			void redraw(QPainter &p);
-			void propsChanged();
+                        ImageTransformJob *redrawJob();
+                        void propsChanged();
 
 		private:
 			QImage *m_image;

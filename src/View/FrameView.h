@@ -50,6 +50,9 @@ namespace QComicBook
             virtual int currentPage() const;
 			void gotoFrame(int n);
                         
+                protected slots:
+                        void jobCompleted(const ImageJobResult &result);
+
 		protected:
 			int m_currentPage;
 			int m_currentFrame;

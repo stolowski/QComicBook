@@ -19,7 +19,8 @@
 #include <QLocale>
 #include "ComicMainWindow.h"
 #include "ComicBookSettings.h"
-#include <ComicFrameList.h>
+#include "ComicFrameList.h"
+#include "ImageJobResult.h"
 #include "Thumbnail.h"
 #include "Page.h"
 #include "config.h"
@@ -47,7 +48,8 @@ int main(int argc, char *argv[])
 
         qRegisterMetaType<Page>("Page");
         qRegisterMetaType<Thumbnail>("Thumbnail");
-		qRegisterMetaType<ComicFrameList>("ComicFrameList");
+        qRegisterMetaType<ComicFrameList>("ComicFrameList");
+        qRegisterMetaType<ImageJobResult>("ImageJobResult");
 
 	ComicBookSettings::instance().load();
 

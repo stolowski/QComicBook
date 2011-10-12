@@ -18,7 +18,7 @@
 #include <QCursor>
 #include <QScrollBar>
 #include <QPalette>
-#include <QDebug>
+#include "ImageTransformThread.h"
 #include "Lens.h"
 
 using namespace QComicBook;
@@ -32,6 +32,7 @@ PageViewBase::PageViewBase(QWidget *parent, int physicalPages, const ViewPropert
     , smallcursor(0)
     , lens(0)
 {
+
     setFrameShape(QFrame::NoFrame);
     context_menu = new QMenu(this);
     connect(&this->props, SIGNAL(changed()), this, SLOT(propsChanged()));
@@ -43,6 +44,8 @@ PageViewBase::PageViewBase(QWidget *parent, int physicalPages, const ViewPropert
     setScene(scene);
    
     //setAlignment(Qt::AlignLeft|Qt::AlignTop);
+    connect(ImageTransformThread::get(), SIGNAL(jobCompleted(const ImageJobResult &)), this, SLOT(jobCompleted(const ImageJobResult &))); //TODO make sure no jobs are running at this time
+
 }
 
 PageViewBase::~PageViewBase()

@@ -25,6 +25,8 @@ class QPainter;
 namespace QComicBook
 {
 	class PageViewBase;
+        class ImageTransformJob;
+        class ImageJobResult;
 
 	class ComicImageWidget: public QGraphicsItem
 	{
@@ -48,10 +50,12 @@ namespace QComicBook
 			int width() const;
 			int height() const;
 
+                        virtual void jobCompleted(const ImageJobResult &result);
 			virtual void propsChanged() = 0;
 
 		protected:
 			virtual void redraw(QPainter &p) = 0;
+                        virtual ImageTransformJob* redrawJob() = 0;
 
 		private:
 			PageViewBase *m_view;

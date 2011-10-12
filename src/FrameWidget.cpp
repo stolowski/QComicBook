@@ -16,6 +16,7 @@
 #include "Page.h"
 #include <QPainter>
 #include <QImage>
+#include "ComicBookDebug.h"
 
 using namespace QComicBook;
 
@@ -46,6 +47,13 @@ void FrameWidget::redraw(QPainter &p)
 		p.drawImage(0, 0, *m_image, m_frame.x(), m_frame.y(), m_frame.width(), m_frame.height());
 	}
 }
+
+ImageTransformJob* FrameWidget::redrawJob()
+{
+    _DEBUG;
+    return 0;
+}
+
 
 void FrameWidget::clear()
 {

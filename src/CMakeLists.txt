@@ -1,8 +1,10 @@
 INCLUDE_DIRECTORIES(
 	${CMAKE_SOURCE_DIR}/src
 	${CMAKE_SOURCE_DIR}/src/FrameDetect
+        ${CMAKE_SOURCE_DIR}/src/Job
 	${CMAKE_BINARY_DIR}/src
 	${CMAKE_BINARY_DIR}/src/FrameDetect
+        ${CMAKE_BINARY_DIR}/src/Job
 	${CMAKE_BINARY_DIR}
 	${POPPLER_INCLUDE_DIRS}
 )
@@ -34,6 +36,7 @@ SET(qcomicbook_moc_hdrs
 	ThumbnailsWindow.h 
 	ThumbnailsView.h
 	ViewProperties.h
+        Job/ImageTransformThread.h
 )
 
 file (GLOB_RECURSE qcomicbook_hdr *.h *.hpp)

@@ -15,6 +15,9 @@
 #include <QStyleOptionGraphicsItem>
 #include "ComicBookSettings.h"
 #include "View/PageViewBase.h"
+#include "ImageTransformJob.h"
+#include "ImageJobResult.h"
+#include "ImageTransformThread.h"
 #include "ComicBookDebug.h"
 
 using namespace QComicBook;
@@ -192,17 +195,22 @@ void ComicImageWidget::redrawScaledImage()
 		if (m_pixmap == NULL || m_pixmap->width() != scaledSize.width() || m_pixmap->height() != scaledSize.height())
 		{
 			delete m_pixmap;
-			m_pixmap = new QPixmap(scaledSize.width(), scaledSize.height());
+                        m_pixmap = 0;
+			//m_pixmap = new QPixmap(scaledSize.width(), scaledSize.height());
 		}
-		QPainter p(m_pixmap);
-		p.setRenderHint(QPainter::SmoothPixmapTransform, ComicBookSettings::instance().smoothScaling());
 
-		p.setWorldMatrix(rmtx);
-		p.setWorldMatrixEnabled(true);
+		//QPainter p(m_pixmap);
+		//p.setRenderHint(QPainter::SmoothPixmapTransform, ComicBookSettings::instance().smoothScaling());
 
-		redraw(p);
+    //p.setWorldMatrix(rmtx);
+    //p.setWorldMatrixEnabled(true);
 
-		p.end();
+		ImageTransformJob *j = redrawJob();
+                j->setSize(scaledSize.width(), scaledSize.height());
+                j->setMatrix(rmtx);
+                ImageTransformThread::get()->addJob(j);
+
+//		p.end();
 
 		/*  setContentsMargins(xoff, yoff, 0, 0);
 		setFixedSize(scaledSize.width() + 2*xoff, scaledSize.height() + 2*yoff);  
@@ -210,6 +218,14 @@ void ComicImageWidget::redrawScaledImage()
 		updateGeometry();*/
 		update();
 	}
+}
+
+void ComicImageWidget::jobCompleted(const ImageJobResult &result)
+{
+    _DEBUG;
+    delete m_pixmap;
+    m_pixmap = new QPixmap(QPixmap::fromImage(result.image));
+    update();
 }
 
 const QPixmap* ComicImageWidget::pixmap() const

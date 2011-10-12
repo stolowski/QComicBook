@@ -35,6 +35,7 @@ namespace QComicBook
 
                 protected slots:
                         void propsChanged();
+                        void jobCompleted(const ImageJobResult &result);
 
 		public slots:
 			virtual void setImage(const Page &img1);

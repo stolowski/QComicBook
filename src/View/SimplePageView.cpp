@@ -86,6 +86,12 @@ void SimplePageView::propsChanged()
     setSceneRect(scene->itemsBoundingRect());
 }
 
+void SimplePageView::jobCompleted(const ImageJobResult &result)
+{
+    _DEBUG;
+    imgLabel->jobCompleted(result);
+}
+
 void SimplePageView::scrollContentsBy(int dx, int dy)
 {
     PageViewBase::scrollContentsBy(dx, dy);

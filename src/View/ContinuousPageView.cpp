@@ -79,6 +79,11 @@ void ContinuousPageView::propsChanged()
     setSceneRect(scene->itemsBoundingRect());
 }
 
+void ContinuousPageView::jobCompleted(const ImageJobResult &result)
+{
+    _DEBUG;
+}
+
 void ContinuousPageView::scrollbarRangeChanged(int min, int max)
 {
     _DEBUG;

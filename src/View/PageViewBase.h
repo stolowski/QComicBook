@@ -26,6 +26,7 @@ namespace QComicBook
     class Page;
     class Lens;
     class ComicImageWidget;
+    class ImageJobResult;
 
 	enum Scaling { Smooth, Fast };
 
@@ -79,6 +80,9 @@ namespace QComicBook
             virtual void scrollRightFast();
             virtual void scrollLeftFast();
             virtual void propsChanged() = 0;
+
+        protected slots:
+            virtual void jobCompleted(const ImageJobResult &job) = 0;
 
         public:
             PageViewBase(QWidget *parent, int physicalPages, const ViewProperties &props);

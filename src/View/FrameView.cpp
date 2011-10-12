@@ -160,6 +160,11 @@ void FrameView::propsChanged()
 	gotoFrame(m_currentFrame);
 }
 
+void FrameView::jobCompleted(const ImageJobResult &result)
+{
+    _DEBUG;
+}
+
 int FrameView::visiblePages() const
 {
 	return 1;

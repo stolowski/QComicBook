@@ -41,6 +41,8 @@ namespace QComicBook
 
                 protected slots:
                         void propsChanged();
+                        void jobCompleted(const ImageJobResult &result);
+
                         void scrollbarRangeChanged(int min, int max);
                         static bool isInView(int y1, int y2, int vy1, int vy2)
                         {
