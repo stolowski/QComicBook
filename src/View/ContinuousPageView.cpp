@@ -208,11 +208,10 @@ void ContinuousPageView::disposeOrRequestPages()
         }
         else // page is not visible
         {
-            _DEBUG << "not in view:" << w->pageNumber();
             // if page images are still in memory
             if (!w->isDisposed())
             {
-                _DEBUG << "not disposed:" << w->pageNumber();
+                _DEBUG << "not in view & not disposed:" << w->pageNumber();
                 // dispose page only if none of its neighbours are in view
                 if (! ((i>1 && isInView(m_y1pos[i-1], m_y2pos[i-1], vy1, vy2)) || (i<imgLabel.size()-1 && isInView(m_y1pos[i+1], m_y2pos[i+1], vy1, vy2))) )
                 {
@@ -223,7 +222,7 @@ void ContinuousPageView::disposeOrRequestPages()
             }
             else
             {
-                _DEBUG << "disposed:" << w->pageNumber();
+                _DEBUG << "not in view & disposed:" << w->pageNumber();
                 ComicBookSettings &cfg(ComicBookSettings::instance());
                 // if previous page is visible then preload this one
                 if (i>0 && isInView(m_y1pos[i-1], m_y2pos[i-1], vy1, vy2))
@@ -339,8 +338,10 @@ void ContinuousPageView::setImage(const Page &img1)
     recalculatePageSizes();
 
     if (m_requestedPage >= 0) {
-        ensureVisible(w, 0, 0);
-        m_firstVisible = m_requestedPage;
+        _DEBUG << "requested page =" << m_requestedPage << ", scrolling";
+        verticalScrollBar()->setValue(w->y());
+        
+        m_firstVisible = imgLabel.indexOf(findPageWidget(m_requestedPage));
         m_firstVisibleOffset = 0;
         m_requestedPage = -1;
     }
@@ -358,6 +359,13 @@ void ContinuousPageView::setImage(const Page &img1, const Page &img2)
     w->setImage(img1, img2);
     recalculatePageSizes();
 
+    if (m_requestedPage >= 0) {
+        _DEBUG << "requested page =" << m_requestedPage << ", scrolling";
+        verticalScrollBar()->setValue(w->y());
+        m_firstVisible =  imgLabel.indexOf(findPageWidget(m_requestedPage));
+        m_firstVisibleOffset = 0;
+        m_requestedPage = -1;
+    }
     emit pageReady(img1, img2);
 }
 
@@ -396,7 +404,14 @@ void ContinuousPageView::gotoPage(int n)
         {
             verticalScrollBar()->setValue(m_y1pos[idx]);
         }
-        m_requestedPage = n;
+        //
+        // set m_requestedPage only if page is not loaded already,
+        // otherwise it won't be requested and setImage will scroll
+        // to wrong page.
+        if (w->isDisposed())
+        {
+            m_requestedPage = n;
+        }
         disposeOrRequestPages();
         emit currentPageChanged(roundPageNumber(n));
     }

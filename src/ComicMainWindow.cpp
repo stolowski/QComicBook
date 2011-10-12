@@ -617,6 +617,7 @@ void ComicMainWindow::pageLoaded(const Page &page1, const Page &page2)
 
 void ComicMainWindow::sinkReady(const QString &path)
 {
+    _DEBUG;
 	statusbar->setShown(actionToggleStatusbar->isChecked() && !(isFullScreen() && cfg->fullScreenHideStatusbar())); //applies back user's statusbar&toolbar preferences
 	//toolbar->setShown(actiontoggleToolbar->isOn() && !(isFullScreen() && cfg->fullScreenHideToolbar()));
 
@@ -763,6 +764,7 @@ void ComicMainWindow::exitFullscreen()
 
 void ComicMainWindow::nextPage()
 {
+    _DEBUG;
     const int n(view->nextPage(currpage));
     if (n >= 0)
     {
@@ -772,6 +774,7 @@ void ComicMainWindow::nextPage()
 
 void ComicMainWindow::prevPage()
 {
+    _DEBUG;
     const int n(view->previousPage(currpage));
     if (n >= 0)
     {
@@ -781,11 +784,13 @@ void ComicMainWindow::prevPage()
 
 void ComicMainWindow::prevFrame()
 {
+    _DEBUG;
     view->prevFrame();
 }
 
 void ComicMainWindow::nextFrame()
 {
+    _DEBUG;
     view->nextFrame();
 }
 
