@@ -68,6 +68,7 @@ namespace QComicBook
 			QVector<PageWidget*> imgLabel;
                         int *m_y1pos;
                         int *m_y2pos;
+                        int m_requestedPage; //page requested by call to gotoPage
                         int m_firstVisible; //first visible page in the view
                         double m_firstVisibleOffset; //visible portion (%) of first visible page
 	};

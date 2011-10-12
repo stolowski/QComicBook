@@ -31,6 +31,7 @@ ContinuousPageView::ContinuousPageView(QWidget *parent, int physicalPages, const
     , m_firstVisibleOffset(0)
     , m_y1pos(NULL)
     , m_y2pos(NULL)
+    , m_requestedPage(-1)
 {
     _DEBUG;
 
@@ -53,6 +54,7 @@ ContinuousPageView::~ContinuousPageView()
 
 void ContinuousPageView::setNumOfPages(int n)
 {
+    _DEBUG << n;
     PageViewBase::setNumOfPages(n);
     recreatePageWidgets();
     recalculatePageSizes();
@@ -74,7 +76,7 @@ void ContinuousPageView::propsChanged()
     disposeOrRequestPages();
     update();
 
-    //setSceneRect(scene->itemsBoundingRect()); //TODO
+    setSceneRect(scene->itemsBoundingRect());
 }
 
 void ContinuousPageView::scrollbarRangeChanged(int min, int max)
@@ -336,6 +338,12 @@ void ContinuousPageView::setImage(const Page &img1)
     w->setImage(img1);
     recalculatePageSizes();
 
+    if (m_requestedPage >= 0) {
+        ensureVisible(w, 0, 0);
+        m_firstVisible = m_requestedPage;
+        m_firstVisibleOffset = 0;
+        m_requestedPage = -1;
+    }
     emit pageReady(img1);
 }
 
@@ -388,11 +396,9 @@ void ContinuousPageView::gotoPage(int n)
         {
             verticalScrollBar()->setValue(m_y1pos[idx]);
         }
-        else
-        {
-            disposeOrRequestPages();
-            emit currentPageChanged(roundPageNumber(n));
-        }
+        m_requestedPage = n;
+        disposeOrRequestPages();
+        emit currentPageChanged(roundPageNumber(n));
     }
 }
 
