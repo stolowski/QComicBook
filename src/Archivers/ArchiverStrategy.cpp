@@ -12,7 +12,6 @@
 
 #include "ArchiverStrategy.h"
 #include <QFile>
-#include <QDebug>
 
 using namespace QComicBook;
 

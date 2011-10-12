@@ -12,7 +12,6 @@
 
 #include "ViewProperties.h"
 #include "ComicBookSettings.h"
-#include <QDebug>
 
 using namespace QComicBook;
 
