@@ -17,12 +17,14 @@
 #include <QPainter>
 #include <QImage>
 #include "ComicBookDebug.h"
+#include "Job/FrameRedrawJob.h"
+#include "Job/ImageJobResult.h"
 
 using namespace QComicBook;
 
 FrameWidget::FrameWidget(FrameView *parent, int w, int h)
 	: ComicImageWidget(parent)
-	  , m_image(0)
+        , m_image(0), m_framekey(-1)
 {
 }
 
@@ -33,8 +35,10 @@ FrameWidget::~FrameWidget()
 
 void FrameWidget::setFrame(const Page &p, const ComicFrame &f)
 {
+    _DEBUG;
 	m_image = new QImage(p.getImage());
 	m_frame = QRect(f.xPos(), f.yPos(), f.width(), f.height());
+        m_framekey = ((f.xPos() & 0xffff) << 16) | (f.yPos() & 0xffff);
 
 	setSourceSize(f.width(), f.height());
 	redrawScaledImage();
@@ -51,9 +55,29 @@ void FrameWidget::redraw(QPainter &p)
 ImageTransformJob* FrameWidget::redrawJob()
 {
     _DEBUG;
-    return 0;
+    FrameRedrawJob *j = NULL;
+    if (m_image)
+    {
+        j = new FrameRedrawJob();
+        j->setKey(m_framekey);
+        j->setImage(*m_image, m_frame);
+    }
+    return j;
 }
 
+bool FrameWidget::jobCompleted(const ImageJobResult &result)
+{
+    _DEBUG << result.key;
+    if (m_image && result.key == m_framekey)
+    {
+        _DEBUG << "matching job" << m_framekey;
+        if (ComicImageWidget::jobCompleted(result))
+        {
+            return true;
+        }
+    }
+    return false;
+}
 
 void FrameWidget::clear()
 {
@@ -64,4 +88,5 @@ void FrameWidget::clear()
 			
 void FrameWidget::propsChanged()
 {
+    _DEBUG;
 }

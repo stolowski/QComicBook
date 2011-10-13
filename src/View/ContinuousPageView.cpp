@@ -86,6 +86,7 @@ void ContinuousPageView::jobCompleted(const ImageJobResult &result)
     {
         if (p->jobCompleted(result))
         {
+            setSceneRect(scene->itemsBoundingRect());
             break;
         }
     }

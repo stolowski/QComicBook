@@ -10,26 +10,20 @@ namespace QComicBook
     {
     public:
         ImageTransformJob();
-        ~ImageTransformJob();
-
-        void execute();
-
-        void setKey(int k);
-        int key() const;
+        virtual ~ImageTransformJob();
 
         void setSize(int w, int h);
         void setMatrix(const QMatrix &m);
-        void setImage(const QImage &img1);
-        void setImage(const QImage &img1, const QImage &img2);
+        void setKey(int k);
+        int key() const;
 
-        QImage getResult() const;
+        virtual void execute() = 0;
+        virtual QImage getResult() const = 0;
 
-    private:
+    protected:
         int m_key;
         int m_width;
         int m_height;
-        QImage *m_image[2];
-        QImage *m_result;
         QMatrix *m_matrix;
     };
 }

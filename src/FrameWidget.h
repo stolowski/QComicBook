@@ -34,11 +34,13 @@ namespace QComicBook
 			void clear();
 			void redraw(QPainter &p);
                         ImageTransformJob *redrawJob();
+                        bool jobCompleted(const ImageJobResult &result);
                         void propsChanged();
 
 		private:
 			QImage *m_image;
 			QRect m_frame;
+                        int m_framekey;
 	};
 }
 

@@ -163,6 +163,11 @@ void FrameView::propsChanged()
 void FrameView::jobCompleted(const ImageJobResult &result)
 {
     _DEBUG;
+    if (m_frame)
+    {
+        m_frame->jobCompleted(result);
+        setSceneRect(scene->itemsBoundingRect());
+    }
 }
 
 int FrameView::visiblePages() const

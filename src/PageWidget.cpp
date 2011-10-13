@@ -18,7 +18,7 @@
 #include <QPainter>
 #include <QScrollBar>
 #include "ComicBookDebug.h"
-#include "ImageTransformJob.h"
+#include "Job/PageRedrawJob.h"
 #include "Job/ImageJobResult.h"
 #include <stdexcept>
 
@@ -170,10 +170,10 @@ void PageWidget::redraw(QPainter &p)
 ImageTransformJob* PageWidget::redrawJob()
 {
     _DEBUG;
-    ImageTransformJob *j = NULL;
+    PageRedrawJob *j = NULL;
     if (m_image[0])
     {
-        j = new ImageTransformJob();
+        j = new PageRedrawJob();
         j->setKey(m_image[0]->getNumber());
         j->setImage(m_image[0]->getImage());
         //TODO 2 pages
@@ -192,6 +192,7 @@ bool PageWidget::jobCompleted(const ImageJobResult &result)
             return true;
         }
     }
+    return false;
 }
 
 void PageWidget::redrawImages()
