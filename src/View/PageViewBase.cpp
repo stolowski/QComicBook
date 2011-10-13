@@ -32,7 +32,6 @@ PageViewBase::PageViewBase(QWidget *parent, int physicalPages, const ViewPropert
     , smallcursor(0)
     , lens(0)
 {
-
     setFrameShape(QFrame::NoFrame);
     context_menu = new QMenu(this);
     connect(&this->props, SIGNAL(changed()), this, SLOT(propsChanged()));
@@ -44,12 +43,13 @@ PageViewBase::PageViewBase(QWidget *parent, int physicalPages, const ViewPropert
     setScene(scene);
    
     //setAlignment(Qt::AlignLeft|Qt::AlignTop);
-    connect(ImageTransformThread::get(), SIGNAL(jobCompleted(const ImageJobResult &)), this, SLOT(jobCompleted(const ImageJobResult &))); //TODO make sure no jobs are running at this time
+    connect(ImageTransformThread::get(), SIGNAL(jobCompleted(const ImageJobResult &)), this, SLOT(jobCompleted(const ImageJobResult &)));
 
 }
 
 PageViewBase::~PageViewBase()
 {
+    ImageTransformThread::get()->cancel();
 }
 
 void PageViewBase::setLensZoom(double ratio)

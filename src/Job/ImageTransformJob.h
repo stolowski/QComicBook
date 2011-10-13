@@ -14,6 +14,7 @@ namespace QComicBook
 
         void execute();
 
+        void setKey(int k);
         int key() const;
 
         void setSize(int w, int h);
@@ -24,6 +25,7 @@ namespace QComicBook
         QImage getResult() const;
 
     private:
+        int m_key;
         int m_width;
         int m_height;
         QImage *m_image[2];

@@ -58,9 +58,14 @@ void ImageTransformJob::execute()
     p.end();
 }
 
+void ImageTransformJob::setKey(int k)
+{
+    m_key = k;
+}
+
 int ImageTransformJob::key() const
 {
-    return 0;
+    return m_key;
 }
 
 QImage ImageTransformJob::getResult() const

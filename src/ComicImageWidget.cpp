@@ -206,9 +206,12 @@ void ComicImageWidget::redrawScaledImage()
     //p.setWorldMatrixEnabled(true);
 
 		ImageTransformJob *j = redrawJob();
-                j->setSize(scaledSize.width(), scaledSize.height());
-                j->setMatrix(rmtx);
-                ImageTransformThread::get()->addJob(j);
+                if (j)
+                {
+                    j->setSize(scaledSize.width(), scaledSize.height());
+                    j->setMatrix(rmtx);
+                    ImageTransformThread::get()->addJob(j);
+                }
 
 //		p.end();
 
@@ -216,16 +219,16 @@ void ComicImageWidget::redrawScaledImage()
 		setFixedSize(scaledSize.width() + 2*xoff, scaledSize.height() + 2*yoff);  
 
 		updateGeometry();*/
-		update();
 	}
 }
 
-void ComicImageWidget::jobCompleted(const ImageJobResult &result)
+bool ComicImageWidget::jobCompleted(const ImageJobResult &result)
 {
     _DEBUG;
     delete m_pixmap;
     m_pixmap = new QPixmap(QPixmap::fromImage(result.image));
     update();
+    return true;
 }
 
 const QPixmap* ComicImageWidget::pixmap() const

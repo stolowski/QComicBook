@@ -25,6 +25,7 @@ namespace QComicBook
         
     public slots:
         void stop();
+        void cancel();
         void addJob(ImageTransformJob *job);
  
     signals:

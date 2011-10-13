@@ -29,13 +29,14 @@ void ImageTransformThread::addJob(ImageTransformJob *job)
             ImageTransformJob *j = *it;
             if (j->key() == job->key())
             {
-                _DEBUG << "removing duplicated job";
+                _DEBUG << "removing duplicated job" << job->key();
                 delete j;
                 m_jobs.erase(it);
                 break;
             }
         }
         m_jobs.append(job);
+        _DEBUG << "num of jobs" << m_jobs.count();
         m_jobmtx.unlock();
         m_reqCond.wakeOne();
     }
@@ -50,12 +51,16 @@ void ImageTransformThread::run()
         m_reqCond.wait(&m_condMutex);
         m_condMutex.unlock();
 
-        m_jobmtx.lock();
-        if (!m_jobs.isEmpty())
+        for (;;)
         {
-            _DEBUG << "got new job";
-
+            m_jobmtx.lock();
+            if (m_jobs.isEmpty())
+            {
+                m_jobmtx.unlock();
+                break;
+            }
             ImageTransformJob *job = m_jobs.first();
+            _DEBUG << "got new job" << job->key();
             m_jobs.pop_front();
             m_jobmtx.unlock();
 
@@ -63,11 +68,15 @@ void ImageTransformThread::run()
             emit jobCompleted(ImageJobResult(job->key(), job->getResult()));
             delete job;
         }
-        else
-        {
-            m_jobmtx.unlock();
-        }
     }
+}
+
+void ImageTransformThread::cancel()
+{
+    m_jobmtx.lock();
+    m_jobs.clear();
+//TODO remove
+    m_jobmtx.unlock();
 }
 
 void ImageTransformThread::stop()

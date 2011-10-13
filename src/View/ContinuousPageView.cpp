@@ -82,6 +82,13 @@ void ContinuousPageView::propsChanged()
 void ContinuousPageView::jobCompleted(const ImageJobResult &result)
 {
     _DEBUG;
+    foreach (PageWidget *p, imgLabel)
+    {
+        if (p->jobCompleted(result))
+        {
+            break;
+        }
+    }
 }
 
 void ContinuousPageView::scrollbarRangeChanged(int min, int max)

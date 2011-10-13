@@ -44,7 +44,8 @@ namespace QComicBook
         int numOfPages() const;
         QSize estimatedSize() const;
 		
-		virtual void propsChanged();
+        virtual void propsChanged();
+        bool jobCompleted(const ImageJobResult &result);
 
     protected:
         void deletePages();

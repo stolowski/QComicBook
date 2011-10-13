@@ -19,6 +19,7 @@
 #include <QScrollBar>
 #include "ComicBookDebug.h"
 #include "ImageTransformJob.h"
+#include "Job/ImageJobResult.h"
 #include <stdexcept>
 
 using namespace QComicBook;
@@ -169,10 +170,28 @@ void PageWidget::redraw(QPainter &p)
 ImageTransformJob* PageWidget::redrawJob()
 {
     _DEBUG;
-    ImageTransformJob *j = new ImageTransformJob();
-    j->setImage(m_image[0]->getImage());
-    //TODO
+    ImageTransformJob *j = NULL;
+    if (m_image[0])
+    {
+        j = new ImageTransformJob();
+        j->setKey(m_image[0]->getNumber());
+        j->setImage(m_image[0]->getImage());
+        //TODO 2 pages
+    }
     return j;
+}
+
+bool PageWidget::jobCompleted(const ImageJobResult &result)
+{
+    _DEBUG << result.key;
+    if (m_image[0] && result.key == m_image[0]->getNumber())
+    {
+        _DEBUG << "job for page" << m_image[0]->getNumber();
+        if (ComicImageWidget::jobCompleted(result))
+        {
+            return true;
+        }
+    }
 }
 
 void PageWidget::redrawImages()

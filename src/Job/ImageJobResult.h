@@ -11,7 +11,7 @@ namespace QComicBook
         const QImage image;
 
         ImageJobResult(): key(-1) {}
-        ImageJobResult(int key, const QImage &img):key(key), image(img) {}
+        ImageJobResult(int key, const QImage &img): key(key), image(img) {}
     };
 }
 

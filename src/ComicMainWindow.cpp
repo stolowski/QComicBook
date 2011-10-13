@@ -39,6 +39,7 @@
 #include "PrinterThread.h"
 #include <FrameDetectThread.h>
 #include "PrintProgressDialog.h"
+#include "Job/ImageTransformThread.h"
 #include <QMenu>
 #include <QStringList>
 #include <QAction>
@@ -254,6 +255,8 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), currpage
 
 ComicMainWindow::~ComicMainWindow()
 {
+    ImageTransformThread::get()->stop();
+
     if (cfg->cacheThumbnails())
     {
         ImgDirSink::removeThumbnails(cfg->thumbnailsAge());

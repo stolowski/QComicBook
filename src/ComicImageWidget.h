@@ -50,7 +50,7 @@ namespace QComicBook
 			int width() const;
 			int height() const;
 
-                        virtual void jobCompleted(const ImageJobResult &result);
+                        virtual bool jobCompleted(const ImageJobResult &result);
 			virtual void propsChanged() = 0;
 
 		protected:
