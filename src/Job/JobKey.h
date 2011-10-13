@@ -1,19 +1,26 @@
 #ifndef __JOBKEY_H
 #define __JOBKEY_H
 
+#include <QDebug>
+
 namespace QComicBook
 {
     class JobKey
     {
     public:
-        JobKey(int subsystem, int uniqKey): m_subsys(subsystem), m_key(uniqKey) {}
-        int getSubsystem() const { return m_subsys; }
-        int getKey() const { return m_key; }
+        JobKey();
+        JobKey(int subsystem, int uniqKey);
+        int getSubsystem() const;
+        int getKey() const;
    
+        bool operator==(const JobKey &other) const;
+
     private:
-        const int m_subsys;
-        const int m_key;
+        int m_subsys;
+        int m_key;
     };
 }
+
+QDebug operator<<(QDebug dbg, const QComicBook::JobKey &job);
 
 #endif

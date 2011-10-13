@@ -4,7 +4,7 @@
 
 using namespace QComicBook;
 
-ImageTransformJob::ImageTransformJob(): m_key(-1), m_matrix(0)
+ImageTransformJob::ImageTransformJob(): m_matrix(0)
 {
 }
 
@@ -14,12 +14,12 @@ ImageTransformJob::~ImageTransformJob()
     delete m_matrix;
 }
 
-void ImageTransformJob::setKey(int k)
+void ImageTransformJob::setKey(const JobKey &k)
 {
     m_key = k;
 }
 
-int ImageTransformJob::key() const
+const JobKey& ImageTransformJob::key() const
 {
     return m_key;
 }

@@ -20,6 +20,7 @@
 #include "ComicBookDebug.h"
 #include "Job/PageRedrawJob.h"
 #include "Job/ImageJobResult.h"
+#include "Job/JobType.h"
 #include <stdexcept>
 
 using namespace QComicBook;
@@ -174,7 +175,7 @@ ImageTransformJob* PageWidget::redrawJob()
     if (m_image[0])
     {
         j = new PageRedrawJob();
-        j->setKey(m_image[0]->getNumber());
+        j->setKey(JobKey(PAGE_REDRAW, m_image[0]->getNumber()));
         j->setImage(m_image[0]->getImage());
         //TODO 2 pages
     }
@@ -184,7 +185,7 @@ ImageTransformJob* PageWidget::redrawJob()
 bool PageWidget::jobCompleted(const ImageJobResult &result)
 {
     _DEBUG << result.key;
-    if (m_image[0] && result.key == m_image[0]->getNumber())
+    if (m_image[0] && result.key.getKey() == m_image[0]->getNumber())
     {
         _DEBUG << "job for page" << m_image[0]->getNumber();
         if (ComicImageWidget::jobCompleted(result))

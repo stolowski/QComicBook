@@ -19,6 +19,7 @@
 #include "ComicBookDebug.h"
 #include "Job/FrameRedrawJob.h"
 #include "Job/ImageJobResult.h"
+#include "Job/JobType.h"
 
 using namespace QComicBook;
 
@@ -59,7 +60,7 @@ ImageTransformJob* FrameWidget::redrawJob()
     if (m_image)
     {
         j = new FrameRedrawJob();
-        j->setKey(m_framekey);
+        j->setKey(JobKey(FRAME_REDRAW, m_framekey));
         j->setImage(*m_image, m_frame);
     }
     return j;
@@ -68,9 +69,9 @@ ImageTransformJob* FrameWidget::redrawJob()
 bool FrameWidget::jobCompleted(const ImageJobResult &result)
 {
     _DEBUG << result.key;
-    if (m_image && result.key == m_framekey)
+    if (m_image && result.key.getKey() == m_framekey)
     {
-        _DEBUG << "matching job" << m_framekey;
+        _DEBUG << "matching job" << result.key;
         if (ComicImageWidget::jobCompleted(result))
         {
             return true;
