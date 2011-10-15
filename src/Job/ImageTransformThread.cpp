@@ -85,9 +85,13 @@ void ImageTransformThread::run()
 
 void ImageTransformThread::cancel()
 {
+    _DEBUG;
     m_jobmtx.lock();
+    foreach (ImageTransformJob *job, m_jobs)
+    {
+        delete job;
+    }
     m_jobs.clear();
-//TODO remove
     m_jobmtx.unlock();
 }
 
@@ -95,6 +99,7 @@ void ImageTransformThread::stop()
 {
     _DEBUG;
     m_stopped = true;
+    cancel();
     m_reqCond.wakeOne();
 }
 
