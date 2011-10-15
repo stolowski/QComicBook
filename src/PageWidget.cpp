@@ -176,8 +176,17 @@ ImageTransformJob* PageWidget::redrawJob()
     {
         j = new PageRedrawJob();
         j->setKey(JobKey(PAGE_REDRAW, m_image[0]->getNumber()));
-        j->setImage(m_image[0]->getImage());
-        //TODO 2 pages
+        j->setSourceSize(getSourceSize());
+        j->setViewProperties(view()->properties().getProperties());
+
+        if (m_image[1])
+        {
+            j->setImage(m_image[0]->getImage(), m_image[1]->getImage());
+        }
+        else
+        {
+            j->setImage(m_image[0]->getImage());
+        }
     }
     return j;
 }

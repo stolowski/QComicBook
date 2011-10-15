@@ -22,44 +22,46 @@ ViewProperties::ViewProperties()
 
 ViewProperties::ViewProperties(const ViewProperties &props)
 {
+    m_data = props.m_data;
+/*
     m_size = props.m_size;
     m_angle = props.m_angle;
     m_pageNumbers = props.m_pageNumbers;
     m_contScroll = props.m_contScroll;
     m_twoPagesMode = props.m_twoPagesMode;
     m_mangaMode = props.m_mangaMode;
-    m_background = props.m_background;
+    m_background = props.m_background;*/
 }
 
 void ViewProperties::setFromSettings()
 {
     ComicBookSettings &cfg(ComicBookSettings::instance());
-    m_size = cfg.pageSize();
-    m_angle = 0; //?
-    m_pageNumbers = cfg.embedPageNumbers();
-    m_contScroll = cfg.continuousScrolling();
-    m_twoPagesMode = cfg.twoPagesMode();
-    m_mangaMode = cfg.japaneseMode();
-    m_background = cfg.background();
+    m_data.size = cfg.pageSize();
+    m_data.angle = 0; //?
+    m_data.pageNumbers = cfg.embedPageNumbers();
+    m_data.contScroll = cfg.continuousScrolling();
+    m_data.twoPagesMode = cfg.twoPagesMode();
+    m_data.mangaMode = cfg.japaneseMode();
+    m_data.background = cfg.background();
 }
 
 int ViewProperties::angle() const
 {
-    return m_angle;
+    return m_data.angle;
 }
 
 void ViewProperties::setAngle(Rotation r, bool notify)
 {
-    if (r == None && m_angle == 0)
+    if (r == None && m_data.angle == 0)
         return;
     
     if (r == Right)
-        ++m_angle;
+        ++m_data.angle;
     else if (r == Left)
-        --m_angle;
+        --m_data.angle;
     else
-        m_angle = 0; //None
-    m_angle &= 3;
+        m_data.angle = 0; //None
+    m_data.angle &= 3;
     if (notify)
     {
         emit changed();
@@ -69,75 +71,80 @@ void ViewProperties::setAngle(Rotation r, bool notify)
 
 Size ViewProperties::size() const
 {
-    return m_size;
+    return m_data.size;
 }
 
 void ViewProperties::setSize(Size s)
 {
-    if (m_size != s)
+    if (m_data.size != s)
     {
-        m_size = s;
+        m_data.size = s;
         emit changed();
     }
 }
 
 bool ViewProperties::pageNumbers() const
 {
-    return m_pageNumbers;
+    return m_data.pageNumbers;
 }
 
 void ViewProperties::setPageNumbers(bool f)
 {
-    if (m_pageNumbers != f)
+    if (m_data.pageNumbers != f)
     {
-        m_pageNumbers = f;
+        m_data.pageNumbers = f;
         emit changed();
     }
 }
 
 QColor ViewProperties::background() const
 {
-    return m_background;
+    return m_data.background;
 }
 
 void ViewProperties::setBackground(const QColor &c)
 {
-    if (m_background != c)
+    if (m_data.background != c)
     {
-        m_background = c;
+        m_data.background = c;
         emit changed();
     }
 }
 
 bool ViewProperties::continuousScrolling() const
 {
-    return m_contScroll;
+    return m_data.contScroll;
 }
 
 void ViewProperties::setTwoPagesMode(bool f)
 {
-    if (m_twoPagesMode != f)
+    if (m_data.twoPagesMode != f)
     {
-        m_twoPagesMode = f;
+        m_data.twoPagesMode = f;
         emit changed();
     }
 }
 
 bool ViewProperties::twoPagesMode() const
 {
-    return m_twoPagesMode;
+    return m_data.twoPagesMode;
 }
 
 void ViewProperties::setMangaMode(bool f)
 {
-    if (m_mangaMode != f)
+    if (m_data.mangaMode != f)
     {
-        m_mangaMode = f;
+        m_data.mangaMode = f;
         emit changed();
     }
 }
 
 bool ViewProperties::mangaMode() const
 {
-    return m_mangaMode;
+    return m_data.mangaMode;
+}
+
+const ViewPropertiesData& ViewProperties::getProperties() const
+{
+    return m_data;
 }
