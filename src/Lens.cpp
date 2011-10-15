@@ -22,12 +22,11 @@ using namespace QComicBook;
 
 Lens::Lens(const QSize &size, double ratio, int delay): QGraphicsItem()
                                         , m_pixmap(0)
+                                        , m_time(0)
                                         , m_delay(delay)
                                         , m_size(size)
 					, m_ratio(ratio)
 {
-    m_time = new QTime();
-    m_time->start();
     setZValue(1000.0f);
     setFlags(ItemSendsGeometryChanges);
 }
@@ -47,6 +46,7 @@ void Lens::setZoom(double ratio)
 
 void Lens::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt, QWidget *widget)
 {
+    _DEBUG;
     if (m_pixmap)
     {
         painter->drawPixmap(opt->exposedRect, *m_pixmap, QRectF(0, 0, m_pixmap->width(), m_pixmap->height()));
@@ -62,8 +62,9 @@ QRectF Lens::boundingRect() const
 
 QVariant Lens::itemChange(GraphicsItemChange change, const QVariant &value)
 {
-    if (change == ItemPositionChange && scene() && m_time->elapsed() > m_delay)
+    if (change == ItemPositionChange && scene() && (m_time == NULL || m_time->elapsed() > m_delay))
     {
+     
         QPointF newPos = value.toPointF(); //lens global position (scroll area coordinates)
 
 	QList<QGraphicsItem*> items = scene()->collidingItems(this);
@@ -119,7 +120,15 @@ QVariant Lens::itemChange(GraphicsItemChange change, const QVariant &value)
 		}	
 		painter.end();
 
-		m_time->restart();
+                if (m_time)
+                {
+                    m_time->restart();
+                }
+                else
+                {
+                    m_time = new QTime();
+                    m_time->start();
+                }
         }
     }
     return QGraphicsItem::itemChange(change, value);

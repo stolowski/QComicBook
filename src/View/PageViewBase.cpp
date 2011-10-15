@@ -55,10 +55,10 @@ PageViewBase::~PageViewBase()
 
 void PageViewBase::setLensZoom(double ratio)
 {
-	if (lens)
-	{
-		lens->setZoom(ratio);
-	}
+    if (lens)
+    {
+        lens->setZoom(ratio);
+    }
 }
 
 void PageViewBase::showLens(bool f, double ratio)
@@ -70,11 +70,13 @@ void PageViewBase::showLens(bool f, double ratio)
             setMouseTracking(true);
             lens = new Lens(QSize(300, 200), ratio);
             scene->addItem(lens);
+            lens->setPos(mapToScene(mapFromGlobal(QCursor::pos())));
         }
 	else
 	{
 	    lens->setZoom(ratio);
 	}
+        setCursor(Qt::BlankCursor); // hide mouse cursor
     }
     else
     {
@@ -84,6 +86,14 @@ void PageViewBase::showLens(bool f, double ratio)
             scene->removeItem(lens);
             delete lens;
             lens = 0;
+        }
+        if (smallcursor)
+        {
+            setCursor(*smallcursor);
+        }
+        else
+        {
+            unsetCursor();
         }
     }
 }
@@ -140,8 +150,19 @@ void PageViewBase::mouseReleaseEvent(QMouseEvent *e)
 {
         lx = -1;
 	ly = -1;
-        if (!smallcursor)
+        
+        if (lens)
+        {
+            setCursor(Qt::BlankCursor); // hide cursor if lens visible
+        }
+        else
+        {
+            if (!smallcursor)
+            {
                 setCursor(Qt::ArrowCursor);
+            }
+            // smallcursor enabled - do nothing
+        }
 }
 
 void PageViewBase::mouseDoubleClickEvent(QMouseEvent *e)
@@ -341,13 +362,19 @@ void PageViewBase::setSmallCursor(bool f)
         const QBitmap bmp = QBitmap::fromData(QSize(32, 32), bmp_bits, QImage::Format_Mono);
         const QBitmap msk = QBitmap::fromData(QSize(32, 32), msk_bits, QImage::Format_Mono);
         smallcursor = new QCursor(bmp, msk, 0, 0);
-        setCursor(*smallcursor);
+        if (!lens) // don't set if lens are currently enabled
+        {
+            setCursor(*smallcursor);
+        }
     }
     else
     {
         delete smallcursor;
         smallcursor = NULL;
-        unsetCursor();
+        if (!lens) // don't unset if lens are currently enabled
+        {
+            unsetCursor();
+        }
     }
 }
 
