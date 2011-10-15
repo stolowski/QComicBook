@@ -84,8 +84,13 @@ QVariant Lens::itemChange(GraphicsItemChange change, const QVariant &value)
 		if (!m_pixmap)
 		{
 		    m_pixmap = QSharedPointer<QPixmap>(new QPixmap(m_size.width()/m_ratio, m_size.height()/m_ratio));
-		    m_pixmap->fill(m_background);
-		}
+                }
+
+                //
+                // clear lens; this is a bit inefficient, but easy. 
+                // optimal way would be to only clear strips that 
+                // won't be painted.
+                m_pixmap->fill(m_background);
 
 		QPainter painter(m_pixmap.data());
 		
