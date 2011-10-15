@@ -49,6 +49,7 @@ PageViewBase::PageViewBase(QWidget *parent, int physicalPages, const ViewPropert
 
 PageViewBase::~PageViewBase()
 {
+    delete smallcursor;
     ImageTransformThread::get()->cancel();
 }
 
@@ -344,11 +345,8 @@ void PageViewBase::setSmallCursor(bool f)
     }
     else
     {
-        if (smallcursor)
-        {
-            delete smallcursor;
-            smallcursor = NULL;
-        }
+        delete smallcursor;
+        smallcursor = NULL;
         unsetCursor();
     }
 }
