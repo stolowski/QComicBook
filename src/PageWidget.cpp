@@ -181,11 +181,11 @@ ImageTransformJob* PageWidget::redrawJob()
 
         if (m_image[1])
         {
-            j->setImage(m_image[0]->getImage(), m_image[1]->getImage());
+            j->setImage(*m_image[0], *m_image[1]);
         }
         else
         {
-            j->setImage(m_image[0]->getImage());
+            j->setImage(*m_image[0]);
         }
     }
     return j;

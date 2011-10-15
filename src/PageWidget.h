@@ -47,10 +47,11 @@ namespace QComicBook
         virtual void propsChanged();
         bool jobCompleted(const ImageJobResult &result);
 
+        static void drawPageNumber(int page, QPainter &p, int x, int y);
+
     protected:
         void deletePages();
-        void drawPageNumber(int page, QPainter &p, int x, int y);
-
+        
     private:
         int m_pageNum; //number of physical page
         Page *m_image[2];

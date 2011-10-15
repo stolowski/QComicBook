@@ -3,6 +3,8 @@
 #include "../ComicBookDebug.h"
 #include <algorithm>
 #include "PageRedrawJob.h"
+#include "../Page.h"
+#include "PageWidget.h"
 
 using namespace QComicBook;
 
@@ -19,15 +21,19 @@ PageRedrawJob::~PageRedrawJob()
     delete m_image[1];
 }
 
-void PageRedrawJob::setImage(const QImage &img1)
+void PageRedrawJob::setImage(const Page &p1)
 {
-    m_image[0] = new QImage(img1);
+    m_image[0] = new QImage(p1.getImage());
+    m_numbers[0] = p1.getNumber();
 }
 
-void PageRedrawJob::setImage(const QImage &img1, const QImage &img2)
+void PageRedrawJob::setImage(const Page &p1, const Page &p2)
 {
-    m_image[0] = new QImage(img1);
-    m_image[1] = new QImage(img2);
+    m_image[0] = new QImage(p1.getImage());
+    m_image[1] = new QImage(p2.getImage());
+
+    m_numbers[0] = p1.getNumber();
+    m_numbers[1] = p2.getNumber();
 }
 
 void PageRedrawJob::execute()
@@ -62,14 +68,29 @@ void PageRedrawJob::execute()
         if (m_props.pageNumbers)
         {
             p.setWorldMatrixEnabled(false);
-            // drawPageNumber(std::max(m_image[swap]->getNumber(), m_image[1^swap]->getNumber()), p, getScaledSize().width(), getScaledSize().height());
+            drawPageNumber(std::max(m_numbers[swap], m_numbers[1^swap]), p, m_width, m_height);
         }
     }
     else // 1 page mode
     {
         p.drawImage(0, 0, *m_image[0], 0, 0);
+        if (m_props.pageNumbers)
+        {
+            p.setWorldMatrixEnabled(false);
+            drawPageNumber(m_numbers[0], p, m_width, m_height);
+        }
     }
     p.end();
+}
+
+void PageRedrawJob::drawPageNumber(int page, QPainter &p, int x, int y)
+{
+    const QString pagestr(QString::number(page + 1));
+    const QFontMetrics mtr(p.fontMetrics());
+    const int txtw(mtr.width(pagestr));
+    p.setPen(Qt::black);
+    p.fillRect(x - txtw - 5, y - 2 - mtr.height(), txtw + 5, mtr.height() + 4, Qt::white);
+    p.drawText(x - txtw - 4, y - 4, pagestr);
 }
 
 void PageRedrawJob::setViewProperties(const ViewPropertiesData &props)
