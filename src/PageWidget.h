@@ -26,7 +26,6 @@ namespace QComicBook
         PageWidget(PageViewBase *parent, int w, int h, int pageNum, bool twoPages=false);
         virtual ~PageWidget();
 
-        virtual void redraw(QPainter &p);
         ImageTransformJob *redrawJob();
 
         void setImage(const Page &img1);
@@ -34,7 +33,7 @@ namespace QComicBook
         Page getPage(int n);
 
         virtual void dispose();
-		virtual bool isDisposed() const;
+        virtual bool isDisposed() const;
 
         void redrawImages();
         void setEstimatedSize(int w, int h);
@@ -46,8 +45,6 @@ namespace QComicBook
 		
         virtual void propsChanged();
         bool jobCompleted(const ImageJobResult &result);
-
-        static void drawPageNumber(int page, QPainter &p, int x, int y);
 
     protected:
         void deletePages();

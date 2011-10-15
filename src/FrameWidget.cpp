@@ -45,14 +45,6 @@ void FrameWidget::setFrame(const Page &p, const ComicFrame &f)
 	redrawScaledImage();
 }
 
-void FrameWidget::redraw(QPainter &p)
-{
-	if (m_image)
-	{
-		p.drawImage(0, 0, *m_image, m_frame.x(), m_frame.y(), m_frame.width(), m_frame.height());
-	}
-}
-
 ImageTransformJob* FrameWidget::redrawJob()
 {
     _DEBUG;

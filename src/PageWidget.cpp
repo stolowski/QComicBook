@@ -120,54 +120,6 @@ bool PageWidget::hasTwoPages() const
     return m_twoPages;
 }
 
-void PageWidget::drawPageNumber(int page, QPainter &p, int x, int y)
-{
-    const QString pagestr(QString::number(page + 1));
-    const QFontMetrics mtr(p.fontMetrics());
-    const int txtw(mtr.width(pagestr));
-    p.setPen(Qt::black);
-    p.fillRect(x - txtw - 5, y - 2 - mtr.height(), txtw + 5, mtr.height() + 4, Qt::white);
-    p.drawText(x - txtw - 4, y - 4, pagestr);
-}
-
-void PageWidget::redraw(QPainter &p)
-{
-	const int pages = numOfPages();
-	ViewProperties &props = view()->properties();
-
-	if (pages == 1)
-	{
-		p.drawImage(0, 0, m_image[0]->getImage(), 0, 0);
-		if (props.pageNumbers())
-		{
-			p.setWorldMatrixEnabled(false);
-			drawPageNumber(m_image[0]->getNumber(), p, getScaledSize().width(), getScaledSize().height());
-		}
-	}
-	else if (pages == 2)
-	{
-		const int swap(props.mangaMode());
-		// clear areas not covered by page (if pages sizes differ)
-		for (int i=0; i<2; i++)
-		{
-			const int j(i^swap);
-			if (m_image[j]->height() < std::max(m_image[0]->height(), m_image[1]->height()))
-			{
-				p.fillRect(i*m_image[j]->width(), m_image[j]->height(), m_image[j]->width(), getSourceSize().height() - m_image[j]->height(), props.background());
-				break; //only one page may be smaller
-			}
-		}
-
-		p.drawImage(0, 0, m_image[0^swap]->getImage(), 0, 0);
-		p.drawImage(m_image[0^swap]->width(), 0, m_image[1^swap]->getImage(), 0, 0);
-		if (props.pageNumbers())
-		{
-			p.setWorldMatrixEnabled(false);
-			drawPageNumber(std::max(m_image[swap]->getNumber(), m_image[1^swap]->getNumber()), p, getScaledSize().width(), getScaledSize().height());
-		}
-	}
-}
-
 ImageTransformJob* PageWidget::redrawJob()
 {
     _DEBUG;

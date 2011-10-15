@@ -54,7 +54,6 @@ namespace QComicBook
 			virtual void propsChanged() = 0;
 
 		protected:
-			virtual void redraw(QPainter &p) = 0;
                         virtual ImageTransformJob* redrawJob() = 0;
 
 		private:
