@@ -23,14 +23,6 @@ ViewProperties::ViewProperties()
 ViewProperties::ViewProperties(const ViewProperties &props)
 {
     m_data = props.m_data;
-/*
-    m_size = props.m_size;
-    m_angle = props.m_angle;
-    m_pageNumbers = props.m_pageNumbers;
-    m_contScroll = props.m_contScroll;
-    m_twoPagesMode = props.m_twoPagesMode;
-    m_mangaMode = props.m_mangaMode;
-    m_background = props.m_background;*/
 }
 
 void ViewProperties::setFromSettings()
@@ -43,6 +35,7 @@ void ViewProperties::setFromSettings()
     m_data.twoPagesMode = cfg.twoPagesMode();
     m_data.mangaMode = cfg.japaneseMode();
     m_data.background = cfg.background();
+    m_data.smoothScaling = cfg.smoothScaling();
 }
 
 int ViewProperties::angle() const

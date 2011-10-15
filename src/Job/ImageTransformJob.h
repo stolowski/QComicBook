@@ -14,6 +14,7 @@
 #define __IMAGETRANSFORMJOB_H
 
 #include "JobKey.h"
+#include "../ViewPropertiesData.h"
 
 class QImage;
 class QMatrix;
@@ -31,6 +32,8 @@ namespace QComicBook
         void setKey(const JobKey &k);
         const JobKey& key() const;
 
+        void setViewProperties(const ViewPropertiesData &props);
+
         virtual void execute() = 0;
         virtual QImage getResult() const = 0;
 
@@ -38,6 +41,7 @@ namespace QComicBook
         JobKey m_key;
         int m_width;
         int m_height;
+        ViewPropertiesData m_props; //!< view properties
         QMatrix *m_matrix;
     };
 }

@@ -47,3 +47,8 @@ void ImageTransformJob::setMatrix(const QMatrix &m)
     delete m_matrix;
     m_matrix = new QMatrix(m);
 }
+
+void ImageTransformJob::setViewProperties(const ViewPropertiesData &props)
+{
+    m_props = props;
+}

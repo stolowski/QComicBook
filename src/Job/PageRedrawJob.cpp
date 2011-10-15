@@ -56,7 +56,7 @@ void PageRedrawJob::execute()
     m_result = new QImage(m_width, m_height, QImage::Format_RGB32);
 
     QPainter p(m_result);
-    p.setRenderHint(QPainter::SmoothPixmapTransform, true /*ComicBookSettings::instance().smoothScaling()*/);
+    p.setRenderHint(QPainter::SmoothPixmapTransform, m_props.smoothScaling);
 
     p.setWorldMatrix(*m_matrix);
     p.setWorldMatrixEnabled(true);
@@ -103,11 +103,6 @@ void PageRedrawJob::drawPageNumber(int page, QPainter &p, int x, int y)
     p.setPen(Qt::black);
     p.fillRect(x - txtw - 5, y - 2 - mtr.height(), txtw + 5, mtr.height() + 4, Qt::white);
     p.drawText(x - txtw - 4, y - 4, pagestr);
-}
-
-void PageRedrawJob::setViewProperties(const ViewPropertiesData &props)
-{
-    m_props = props;
 }
 
 void PageRedrawJob::setSourceSize(const QSize &size)

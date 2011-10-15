@@ -30,6 +30,7 @@ namespace QComicBook
         bool twoPagesMode;
         bool mangaMode;
         bool contScroll;
+        bool smoothScaling;
     };
 }
 

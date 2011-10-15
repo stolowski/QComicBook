@@ -68,7 +68,7 @@ void PageViewBase::showLens(bool f, double ratio)
         if (!lens)
         {
             setMouseTracking(true);
-            lens = new Lens(QSize(300, 200), ratio);
+            lens = new Lens(QSize(300, 200), props.background(), ratio);
             scene->addItem(lens);
             lens->setPos(mapToScene(mapFromGlobal(QCursor::pos())));
         }
@@ -329,6 +329,10 @@ void PageViewBase::setBackground(const QColor &color)
     palette.setColor(backgroundRole(), color);
     setPalette(palette);
     props.setBackground(color);
+    if (lens)
+    {
+        lens->setBackground(color);
+    }
 }
 
 void PageViewBase::setTwoPagesMode(bool f)

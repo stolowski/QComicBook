@@ -43,7 +43,7 @@ void FrameRedrawJob::execute()
     m_result = new QImage(m_width, m_height, QImage::Format_RGB32);
 
     QPainter p(m_result);
-    p.setRenderHint(QPainter::SmoothPixmapTransform, true /*ComicBookSettings::instance().smoothScaling()*/);
+    p.setRenderHint(QPainter::SmoothPixmapTransform, m_props.smoothScaling);
 
     p.setWorldMatrix(*m_matrix);
     p.setWorldMatrixEnabled(true);

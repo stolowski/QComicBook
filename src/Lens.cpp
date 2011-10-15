@@ -20,11 +20,12 @@
 
 using namespace QComicBook;
 
-Lens::Lens(const QSize &size, double ratio, int delay): QGraphicsItem()
+Lens::Lens(const QSize &size, const QColor &background, double ratio, int delay): QGraphicsItem()
                                         , m_pixmap(0)
                                         , m_time(0)
                                         , m_delay(delay)
                                         , m_size(size)
+                                        , m_background(background)
 					, m_ratio(ratio)
 {
     setZValue(1000.0f);
@@ -35,6 +36,12 @@ Lens::~Lens()
 {
     m_pixmap.clear();
     delete m_time;
+}
+
+void Lens::setBackground(const QColor &bg)
+{
+    m_background = bg;
+    update();
 }
 
 void Lens::setZoom(double ratio)
@@ -77,7 +84,7 @@ QVariant Lens::itemChange(GraphicsItemChange change, const QVariant &value)
 		if (!m_pixmap)
 		{
 		    m_pixmap = QSharedPointer<QPixmap>(new QPixmap(m_size.width()/m_ratio, m_size.height()/m_ratio));
-		    m_pixmap->fill(Qt::black); //TODO bg color?
+		    m_pixmap->fill(m_background);
 		}
 
 		QPainter painter(m_pixmap.data());
