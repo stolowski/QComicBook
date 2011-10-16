@@ -69,15 +69,16 @@ QRectF Lens::boundingRect() const
 
 QVariant Lens::itemChange(GraphicsItemChange change, const QVariant &value)
 {
-    if (change == ItemPositionChange && scene() && (m_time == NULL || m_time->elapsed() > m_delay))
-    {
-     
-        QPointF newPos = value.toPointF(); //lens global position (scroll area coordinates)
+    _DEBUG << change;
 
-	QList<QGraphicsItem*> items = scene()->collidingItems(this);
+    if (scene() && (change == ItemVisibleChange || (change == ItemPositionChange && (m_time == NULL || m_time->elapsed() > m_delay))))
+    {
+        QPointF newPos = (change == ItemVisibleChange) ? pos() : value.toPointF(); //lens global position (scroll area coordinates)
+ 
+	QList<QGraphicsItem*> items = scene()->collidingItems(this, Qt::IntersectsItemBoundingRect);
 	if (items.size() == 0)
 	{
-		m_pixmap.clear();
+             m_pixmap.clear();
 	}
 	else
 	{

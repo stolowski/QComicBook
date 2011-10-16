@@ -83,7 +83,7 @@ void SimplePageView::propsChanged()
         update();
         gotoPage(m_currentPage);
     }
-    setSceneRect(scene->itemsBoundingRect());
+    updateSceneRect();
 }
 
 void SimplePageView::jobCompleted(const ImageJobResult &result)
@@ -92,7 +92,7 @@ void SimplePageView::jobCompleted(const ImageJobResult &result)
     if (imgLabel)
     {
         imgLabel->jobCompleted(result);
-        setSceneRect(scene->itemsBoundingRect());
+        updateSceneRect();
     }
 }
 
@@ -110,7 +110,7 @@ void SimplePageView::setImage(const Page &img1)
     {
         imgLabel->setImage(img1);
         center(imgLabel);
-        setSceneRect(scene->itemsBoundingRect());
+        updateSceneRect();
         horizontalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
         verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
         emit pageReady(img1);
@@ -126,7 +126,7 @@ void SimplePageView::setImage(const Page &img1, const Page &img2)
     {
         imgLabel->setImage(img1, img2);
         center(imgLabel);
-        setSceneRect(scene->itemsBoundingRect());
+        updateSceneRect();
         horizontalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
         verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
         emit pageReady(img1, img2);

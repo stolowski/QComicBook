@@ -113,6 +113,7 @@ namespace QComicBook
             void center(ComicImageWidget *w, bool horizontal=true, bool vertical=true);
             void scrollByDelta(int dx, int dy);
             void recalculateScrollSpeeds();
+            void updateSceneRect();
 
             bool hasRequest(int page) const;
             void addRequest(int page, bool twoPages);
