@@ -18,8 +18,10 @@
 #include <QCursor>
 #include <QScrollBar>
 #include <QPalette>
+#include <limits>
 #include "ImageTransformThread.h"
 #include "Lens.h"
+#include "../ComicBookDebug.h"
 
 using namespace QComicBook;
 
@@ -42,7 +44,7 @@ PageViewBase::PageViewBase(QWidget *parent, int physicalPages, const ViewPropert
     scene = new QGraphicsScene(this);
     setScene(scene);
    
-    //setAlignment(Qt::AlignLeft|Qt::AlignTop);
+//    setAlignment(Qt::AlignHCenter);
     connect(ImageTransformThread::get(), SIGNAL(jobCompleted(const ImageJobResult &)), this, SLOT(jobCompleted(const ImageJobResult &)));
 
 }
@@ -68,7 +70,7 @@ void PageViewBase::showLens(bool f, double ratio)
         if (!lens)
         {
             setMouseTracking(true);
-            lens = new Lens(QSize(300, 200), ratio);
+            lens = new Lens(QSize(300, 200), props.background(), ratio);
             scene->addItem(lens);
             lens->setPos(mapToScene(mapFromGlobal(QCursor::pos())));
         }
@@ -329,6 +331,10 @@ void PageViewBase::setBackground(const QColor &color)
     palette.setColor(backgroundRole(), color);
     setPalette(palette);
     props.setBackground(color);
+    if (lens)
+    {
+        lens->setBackground(color);
+    }
 }
 
 void PageViewBase::setTwoPagesMode(bool f)
@@ -488,4 +494,43 @@ void PageViewBase::center(ComicImageWidget *w, bool horizontal, bool vertical)
     const int x = horizontal ? (viewport()->width() - w->width()) / 2 : w->x();
     const int y = vertical ? (viewport()->height() - w->height()) / 2 : w->y();
     w->setPos(x, y);
+}
+
+void PageViewBase::updateSceneRect()
+{
+    int x1 = std::numeric_limits<int>::max();
+    int x2 = 0;
+    int y1 = x1;
+    int y2 = 0;
+
+    //
+    // find items bounding rect, but skip lens item if present.
+    // this is the same QGraphicsScene::itemsBoundingRect(), except for it skips lens. 
+    foreach (QGraphicsItem *it, items())
+    {
+        if (it != lens)
+        {
+            const QRectF itbr(it->boundingRect());
+                  
+            if (x1 > it->x())
+            {
+                x1 = it->x();
+            }
+            if (y1 > it->y())
+            {
+                y1 = it->y();
+            }
+            if (it->x() + itbr.right() > x2)
+            {
+                x2 = it->x() + itbr.right();
+            }
+            if (it->y() + itbr.bottom() > y2)
+            {
+                y2 = it->y() + itbr.bottom();
+            }
+        }
+    }
+    const QRectF brect(QPointF(x1, y1), QPointF(x2, y2));
+    _DEBUG << "scene rect:" << brect;
+    setSceneRect(brect);
 }

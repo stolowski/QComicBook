@@ -76,7 +76,7 @@ void ContinuousPageView::propsChanged()
     disposeOrRequestPages();
     update();
 
-    setSceneRect(scene->itemsBoundingRect());
+    updateSceneRect();
 }
 
 void ContinuousPageView::jobCompleted(const ImageJobResult &result)
@@ -86,7 +86,7 @@ void ContinuousPageView::jobCompleted(const ImageJobResult &result)
     {
         if (p->jobCompleted(result))
         {
-            setSceneRect(scene->itemsBoundingRect());
+            updateSceneRect();
             break;
         }
     }
@@ -322,7 +322,7 @@ void ContinuousPageView::recalculatePageSizes()
 		y += p->estimatedSize().height();
 	}
     }
-    setSceneRect(scene->itemsBoundingRect());
+    updateSceneRect();
 }
 
 

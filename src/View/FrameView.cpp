@@ -115,7 +115,7 @@ void FrameView::gotoFrame(int n)
 		const ComicFrame f(m_frames[n]);
 		m_frame->setFrame(m_page, f);
                 center(m_frame);
-                setSceneRect(scene->itemsBoundingRect());
+                updateSceneRect();
 	}
 }
 
@@ -166,7 +166,7 @@ void FrameView::jobCompleted(const ImageJobResult &result)
     if (m_frame)
     {
         m_frame->jobCompleted(result);
-        setSceneRect(scene->itemsBoundingRect());
+        updateSceneRect();
     }
 }
 

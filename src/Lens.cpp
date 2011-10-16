@@ -20,11 +20,12 @@
 
 using namespace QComicBook;
 
-Lens::Lens(const QSize &size, double ratio, int delay): QGraphicsItem()
+Lens::Lens(const QSize &size, const QColor &background, double ratio, int delay): QGraphicsItem()
                                         , m_pixmap(0)
                                         , m_time(0)
                                         , m_delay(delay)
                                         , m_size(size)
+                                        , m_background(background)
 					, m_ratio(ratio)
 {
     setZValue(1000.0f);
@@ -35,6 +36,12 @@ Lens::~Lens()
 {
     m_pixmap.clear();
     delete m_time;
+}
+
+void Lens::setBackground(const QColor &bg)
+{
+    m_background = bg;
+    update();
 }
 
 void Lens::setZoom(double ratio)
@@ -62,23 +69,29 @@ QRectF Lens::boundingRect() const
 
 QVariant Lens::itemChange(GraphicsItemChange change, const QVariant &value)
 {
-    if (change == ItemPositionChange && scene() && (m_time == NULL || m_time->elapsed() > m_delay))
-    {
-     
-        QPointF newPos = value.toPointF(); //lens global position (scroll area coordinates)
+    _DEBUG << change;
 
-	QList<QGraphicsItem*> items = scene()->collidingItems(this);
+    if (scene() && (change == ItemVisibleChange || (change == ItemPositionChange && (m_time == NULL || m_time->elapsed() > m_delay))))
+    {
+        QPointF newPos = (change == ItemVisibleChange) ? pos() : value.toPointF(); //lens global position (scroll area coordinates)
+ 
+	QList<QGraphicsItem*> items = scene()->collidingItems(this, Qt::IntersectsItemBoundingRect);
 	if (items.size() == 0)
 	{
-		m_pixmap.clear();
+             m_pixmap.clear();
 	}
 	else
 	{
 		if (!m_pixmap)
 		{
 		    m_pixmap = QSharedPointer<QPixmap>(new QPixmap(m_size.width()/m_ratio, m_size.height()/m_ratio));
-		    m_pixmap->fill(Qt::black); //TODO bg color?
-		}
+                }
+
+                //
+                // clear lens; this is a bit inefficient, but easy. 
+                // optimal way would be to only clear strips that 
+                // won't be painted.
+                m_pixmap->fill(m_background);
 
 		QPainter painter(m_pixmap.data());
 		
