@@ -118,6 +118,7 @@ bool ArchiverStrategy::canOpen(const QString &filename) const
     {
         return canOpen(&file);
     }
+	return false;
 }
 
 QList<ArchiverHint> ArchiverStrategy::getHints() const

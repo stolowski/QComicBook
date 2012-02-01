@@ -96,7 +96,7 @@ namespace QComicBook
 			void saveGeometry(ComicMainWindow *w);
 			void showSplash(bool f);
 			void tmpDir(const QString &dir);
-			bool showDonationDialog(bool f);
+			void showDonationDialog(bool f);
 
 			static ComicBookSettings& instance();
 
