@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005-2006 Pawel Stolowski <pawel.stolowski@wp.pl>
+ * Copyright (C) 2005-2012 Pawel Stolowski <stolowski@gmail.com>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -32,55 +32,55 @@ StatusBar::~StatusBar()
 
 void StatusBar::createInfoElements()
 {
-	if (!page)
-        {
-                page = new QLabel(this);
-                page->setFixedWidth(100);
-                addWidget(page, 0);
-        }
-        if (!imginfo)
-        {
-                imginfo = new QLabel(this);
-                imginfo->setFixedWidth(140);
-                addWidget(imginfo, 1);
-        }
-        if (!name)
-        {
-                name = new QLabel(this);
-                addWidget(name, 2);
-        }
-	page->show();
-	imginfo->show();
-	name->show();
+    if (!page)
+    {
+        page = new QLabel(this);
+        page->setMinimumWidth(120);
+        addWidget(page, 0);
+    }
+    if (!imginfo)
+    {
+        imginfo = new QLabel(this);
+        imginfo->setMinimumWidth(140);
+        addWidget(imginfo, 1);
+    }
+    if (!name)
+    {
+        name = new QLabel(this);
+        addWidget(name, 2);
+    }
+    page->show();
+    imginfo->show();
+    name->show();
 }
 
 void StatusBar::removeInfoElements()
 {
-	if (page)
-	{
-		removeWidget(page);
-		delete page;
-		page = NULL;
+    if (page)
+    {
+        removeWidget(page);
+        delete page;
+        page = NULL;
 	}
-	if (imginfo)
-        {
-                removeWidget(imginfo);
-                delete imginfo;
-                imginfo = NULL;
-        }
-        if (name)
-        {
-                removeWidget(name);
-                delete name;
-                name = NULL;
-        }
+    if (imginfo)
+    {
+        removeWidget(imginfo);
+        delete imginfo;
+        imginfo = NULL;
+    }
+    if (name)
+    {
+        removeWidget(name);
+        delete name;
+        name = NULL;
+    }
 }
 
 void StatusBar::createProgressBar()
 {
-	if (!pbar)
+    if (!pbar)
 	{
-		pbar = new QProgressBar(this);
+        pbar = new QProgressBar(this);
 		//pbar->setPercentageVisible(false);
 		pbar->setFixedHeight(12); //this is a bit ugly... gives chance the
 		addWidget(pbar, 1);
@@ -107,9 +107,9 @@ void StatusBar::clear()
 
 void StatusBar::setPage(int n, int total)
 {
-	if (!page)
-	{
-		removeProgressBar();
+    if (!page)
+    {
+        removeProgressBar();
 		createInfoElements();
 	}
 	page->setText(tr("Page") + " " + QString::number(n) + " / " + QString::number(total));
