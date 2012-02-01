@@ -53,7 +53,8 @@ void PageRedrawJob::execute()
     _DEBUG;
 
     delete m_result;
-    m_result = new QImage(m_width, m_height, QImage::Format_RGB32);
+    m_result = new QImage(m_width, m_height, QImage::Format_ARGB32);
+    m_result->fill(0); // this prevents artifcats/garbage in transparent images
 
     QPainter p(m_result);
     p.setRenderHint(QPainter::SmoothPixmapTransform, m_props.smoothScaling);
@@ -63,7 +64,7 @@ void PageRedrawJob::execute()
 
     if (m_image[1]) // 2 pages mode
     {
-	const int swap(m_props.mangaMode);
+        const int swap(m_props.mangaMode);
         // clear areas not covered by page (if pages sizes differ)
         for (int i=0; i<2; i++)
         {
