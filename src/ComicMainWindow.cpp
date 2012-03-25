@@ -432,6 +432,15 @@ void ComicMainWindow::enableComicBookActions(bool f)
         actionRotateRight->setEnabled(f);
         actionRotateLeft->setEnabled(f);
         actionNoRotation->setEnabled(f);
+        actionLens->setEnabled(f);
+
+        //
+        // lens
+        zoomgrp->setEnabled(f);
+        action200->setEnabled(f);
+        action300->setEnabled(f);
+        action400->setEnabled(f);
+        action800->setEnabled(f);
 
         //
         // navigation menu
