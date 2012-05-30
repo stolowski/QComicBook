@@ -80,456 +80,490 @@
         <translation>&amp;Pohled</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="83"/>
-        <source>&amp;Navigation</source>
-        <translation>&amp;Navedení</translation>
+        <location filename="../src/ComicMainWindow.ui" line="63"/>
+        <location filename="../src/ComicMainWindow.ui" line="647"/>
+        <source>Lens</source>
+        <translation>Čočka</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="103"/>
+        <location filename="../src/ComicMainWindow.ui" line="95"/>
+        <source>&amp;Navigation</source>
+        <translation>Po&amp;hyb</translation>
+    </message>
+    <message>
+        <location filename="../src/ComicMainWindow.ui" line="115"/>
         <source>&amp;Bookmarks</source>
         <translation>&amp;Záložky</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="112"/>
+        <location filename="../src/ComicMainWindow.ui" line="124"/>
         <source>&amp;Settings</source>
         <translation>&amp;Nastavení</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="121"/>
+        <location filename="../src/ComicMainWindow.ui" line="133"/>
         <source>&amp;Help</source>
-        <translation>&amp;Nápověda</translation>
+        <translation>Náp&amp;ověda</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="139"/>
+        <location filename="../src/ComicMainWindow.ui" line="151"/>
         <source>Toolbar</source>
         <translation>Nástrojový pruh</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="179"/>
+        <location filename="../src/ComicMainWindow.ui" line="192"/>
         <source>Open archive</source>
         <translation>Otevřít archiv</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="182"/>
+        <location filename="../src/ComicMainWindow.ui" line="195"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="191"/>
+        <location filename="../src/ComicMainWindow.ui" line="204"/>
         <source>Open directory</source>
         <translation>Otevřít adresář</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="194"/>
+        <location filename="../src/ComicMainWindow.ui" line="207"/>
         <source>Ctrl+D</source>
         <translation>Ctrl+D</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="199"/>
+        <location filename="../src/ComicMainWindow.ui" line="212"/>
         <source>Open next</source>
         <translation>Otevřít další</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="202"/>
+        <location filename="../src/ComicMainWindow.ui" line="215"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="207"/>
+        <location filename="../src/ComicMainWindow.ui" line="220"/>
         <source>Open previous</source>
         <translation>Otevřít předchozí</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="210"/>
+        <location filename="../src/ComicMainWindow.ui" line="223"/>
         <source>Ctrl+P</source>
         <translation>Ctrl+P</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="215"/>
+        <location filename="../src/ComicMainWindow.ui" line="228"/>
         <source>Save page as</source>
         <translation>Uložit stranu jako</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="224"/>
+        <location filename="../src/ComicMainWindow.ui" line="237"/>
         <source>Info</source>
         <translation>Informace</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="227"/>
+        <location filename="../src/ComicMainWindow.ui" line="240"/>
         <source>Alt+I</source>
         <translation>Alt+I</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="232"/>
+        <location filename="../src/ComicMainWindow.ui" line="245"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="237"/>
+        <location filename="../src/ComicMainWindow.ui" line="250"/>
         <source>Quit</source>
         <translation>Ukončit</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="240"/>
+        <location filename="../src/ComicMainWindow.ui" line="253"/>
         <source>Ctrl+Q</source>
         <translation>Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="255"/>
+        <location filename="../src/ComicMainWindow.ui" line="268"/>
         <source>Original size</source>
         <translation>Původní velikost</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="258"/>
+        <location filename="../src/ComicMainWindow.ui" line="271"/>
         <source>Alt+O</source>
         <translation>Alt+O</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="270"/>
+        <location filename="../src/ComicMainWindow.ui" line="283"/>
         <source>Fit width</source>
         <translation>Přizpůsobit šířce okna</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="273"/>
+        <location filename="../src/ComicMainWindow.ui" line="286"/>
         <source>Alt+W</source>
         <translation>Alt+W</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="285"/>
+        <location filename="../src/ComicMainWindow.ui" line="298"/>
         <source>Fit height</source>
         <translation>Přizpůsobit výšce okna</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="288"/>
+        <location filename="../src/ComicMainWindow.ui" line="301"/>
         <source>Alt+H</source>
         <translation>Alt+H</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="300"/>
+        <location filename="../src/ComicMainWindow.ui" line="313"/>
         <source>Whole page</source>
         <translation>Celá strana</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="303"/>
+        <location filename="../src/ComicMainWindow.ui" line="316"/>
         <source>Alt+A</source>
         <translation>Alt+A</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="315"/>
+        <location filename="../src/ComicMainWindow.ui" line="328"/>
         <source>Best fit</source>
         <translation>Nejlepší umístění</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="318"/>
+        <location filename="../src/ComicMainWindow.ui" line="331"/>
         <source>Alt+B</source>
         <translation>Alt+B</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="327"/>
+        <location filename="../src/ComicMainWindow.ui" line="340"/>
         <source>Rotate right</source>
         <translation>Otočit vpravo</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="336"/>
+        <location filename="../src/ComicMainWindow.ui" line="349"/>
         <source>Rotate left</source>
         <translation>Otočit vlevo</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="341"/>
+        <location filename="../src/ComicMainWindow.ui" line="354"/>
         <source>No rotation</source>
         <translation>Žádné otočení</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="349"/>
+        <location filename="../src/ComicMainWindow.ui" line="362"/>
         <source>Preserve rotation</source>
         <translation>Zachovat otočení</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="361"/>
+        <location filename="../src/ComicMainWindow.ui" line="374"/>
         <source>Two pages</source>
         <translation>Dvě strany</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="364"/>
+        <location filename="../src/ComicMainWindow.ui" line="377"/>
         <source>Ctrl+T</source>
         <translation>Ctrl+T</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="376"/>
+        <location filename="../src/ComicMainWindow.ui" line="389"/>
         <source>Japanese mode</source>
         <translation>Japonský režim (manga)</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="379"/>
+        <location filename="../src/ComicMainWindow.ui" line="392"/>
         <source>Ctrl+J</source>
         <translation>Ctrl+J</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="384"/>
+        <location filename="../src/ComicMainWindow.ui" line="397"/>
         <source>Fullscreen</source>
         <translation>Celá obrazovka</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="387"/>
+        <location filename="../src/ComicMainWindow.ui" line="400"/>
         <source>F11</source>
         <translation>F11</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="396"/>
+        <location filename="../src/ComicMainWindow.ui" line="409"/>
         <source>Next page</source>
         <translation>Další strana</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="399"/>
+        <location filename="../src/ComicMainWindow.ui" line="412"/>
         <source>PgDown</source>
         <translation>PgDown</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="408"/>
+        <location filename="../src/ComicMainWindow.ui" line="421"/>
         <source>Previous page</source>
         <translation>Předchozí strana</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="411"/>
+        <location filename="../src/ComicMainWindow.ui" line="424"/>
         <source>PgUp</source>
         <translation>PgUp</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="420"/>
+        <location filename="../src/ComicMainWindow.ui" line="433"/>
         <source>5 pages forward</source>
         <translation>O 5 stran dopředu</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="429"/>
+        <location filename="../src/ComicMainWindow.ui" line="442"/>
         <source>5 pages backward</source>
         <translation>O 5 stran dozadu</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="434"/>
+        <location filename="../src/ComicMainWindow.ui" line="447"/>
         <source>Go to page...</source>
         <translation>Jít na stranu...</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="439"/>
+        <location filename="../src/ComicMainWindow.ui" line="452"/>
         <source>First page</source>
         <translation>První strana</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="442"/>
+        <location filename="../src/ComicMainWindow.ui" line="455"/>
         <source>Ctrl+Home</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="447"/>
+        <location filename="../src/ComicMainWindow.ui" line="460"/>
         <source>Last page</source>
         <translation>Poslední strana</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="450"/>
+        <location filename="../src/ComicMainWindow.ui" line="463"/>
         <source>Ctrl+End</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="459"/>
+        <location filename="../src/ComicMainWindow.ui" line="472"/>
         <source>Page top</source>
         <translation>Začátek strany</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="462"/>
+        <location filename="../src/ComicMainWindow.ui" line="475"/>
         <source>Home</source>
         <translation>Home</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="471"/>
+        <location filename="../src/ComicMainWindow.ui" line="484"/>
         <source>Page bottom</source>
         <translation>Konec strany</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="474"/>
+        <location filename="../src/ComicMainWindow.ui" line="487"/>
         <source>End</source>
         <translation>End</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="482"/>
+        <location filename="../src/ComicMainWindow.ui" line="495"/>
         <source>Continuous view</source>
         <translation>Pokračující pohled</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="627"/>
+        <location filename="../src/ComicMainWindow.ui" line="650"/>
+        <source>L</source>
+        <translation>L</translation>
+    </message>
+    <message>
+        <location filename="../src/ComicMainWindow.ui" line="655"/>
         <source>Print</source>
         <translation>Tisk</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="635"/>
+        <location filename="../src/ComicMainWindow.ui" line="663"/>
         <source>Frame view</source>
         <translation>Rámečkový pohled</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="643"/>
+        <location filename="../src/ComicMainWindow.ui" line="671"/>
         <source>Simple view</source>
         <translation>Jednoduchý pohled</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="652"/>
+        <location filename="../src/ComicMainWindow.ui" line="680"/>
         <source>Next Frame</source>
         <translation>Další rámeček</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="661"/>
+        <location filename="../src/ComicMainWindow.ui" line="689"/>
         <source>Previous Frame</source>
         <translation>Předchozí rámeček</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="666"/>
+        <location filename="../src/ComicMainWindow.ui" line="694"/>
         <source>About Qt</source>
         <translation>O Qt</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="671"/>
+        <location filename="../src/ComicMainWindow.ui" line="699"/>
         <source>About donating</source>
         <translation>Informace o darech</translation>
+    </message>
+    <message>
+        <location filename="../src/ComicMainWindow.ui" line="707"/>
+        <location filename="../src/ComicMainWindow.ui" line="710"/>
+        <source>200 %</source>
+        <translation>200 %</translation>
+    </message>
+    <message>
+        <location filename="../src/ComicMainWindow.ui" line="718"/>
+        <location filename="../src/ComicMainWindow.ui" line="721"/>
+        <source>400 %</source>
+        <translation>400 %</translation>
+    </message>
+    <message>
+        <location filename="../src/ComicMainWindow.ui" line="729"/>
+        <location filename="../src/ComicMainWindow.ui" line="732"/>
+        <source>800 %</source>
+        <translation>800 %</translation>
+    </message>
+    <message>
+        <location filename="../src/ComicMainWindow.ui" line="740"/>
+        <source>300 %</source>
+        <translation>300 %</translation>
     </message>
     <message>
         <source>Continuous scrolling</source>
         <translation type="obsolete">Ciągłe przesuwanie</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="491"/>
+        <location filename="../src/ComicMainWindow.ui" line="504"/>
         <source>Add bookmark</source>
         <translation>Přidat záložku</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="496"/>
+        <location filename="../src/ComicMainWindow.ui" line="509"/>
         <source>Remove bookmark</source>
         <translation>Odstranit záložku</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="501"/>
+        <location filename="../src/ComicMainWindow.ui" line="514"/>
         <source>Manage bookmarks</source>
         <translation>Spravovat záložky</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="509"/>
+        <location filename="../src/ComicMainWindow.ui" line="522"/>
         <source>Scrollbars</source>
         <translation>Posuvníky</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="517"/>
+        <location filename="../src/ComicMainWindow.ui" line="530"/>
         <source>Statusbar</source>
         <translation>Stavový řádek</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="526"/>
+        <location filename="../src/ComicMainWindow.ui" line="539"/>
         <source>Configure QComicBook</source>
         <translation>Nastavit QComicBook</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="534"/>
+        <location filename="../src/ComicMainWindow.ui" line="547"/>
         <source>System information</source>
         <translation>Informace o systému</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="539"/>
+        <location filename="../src/ComicMainWindow.ui" line="552"/>
         <source>About</source>
         <translation>O programu</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="547"/>
+        <location filename="../src/ComicMainWindow.ui" line="560"/>
         <source>Scroll right</source>
         <translation>Projíždět doprava</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="550"/>
+        <location filename="../src/ComicMainWindow.ui" line="563"/>
         <source>Right</source>
         <translation>Vpravo</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="555"/>
+        <location filename="../src/ComicMainWindow.ui" line="568"/>
         <source>Scroll left</source>
         <translation>Projíždět doleva</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="558"/>
+        <location filename="../src/ComicMainWindow.ui" line="571"/>
         <source>Left</source>
         <translation>Vlevo</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="563"/>
+        <location filename="../src/ComicMainWindow.ui" line="576"/>
         <source>Jump down</source>
         <translation>Skočit dolů</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="566"/>
+        <location filename="../src/ComicMainWindow.ui" line="579"/>
         <source>Space</source>
         <translation>Mezerník</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="571"/>
+        <location filename="../src/ComicMainWindow.ui" line="584"/>
         <source>Jump up</source>
         <translation>Skočit nahoru</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="574"/>
+        <location filename="../src/ComicMainWindow.ui" line="587"/>
         <source>Backspace</source>
         <translation>Backspace</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="579"/>
+        <location filename="../src/ComicMainWindow.ui" line="592"/>
         <source>Scroll right fast</source>
         <translation>Projíždět rychle doprava</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="582"/>
+        <location filename="../src/ComicMainWindow.ui" line="595"/>
         <source>Shift+Right</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="587"/>
+        <location filename="../src/ComicMainWindow.ui" line="600"/>
         <source>Scroll left fast</source>
         <translation>Projíždět rychle doleva</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="590"/>
+        <location filename="../src/ComicMainWindow.ui" line="603"/>
         <source>Shift+Left</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="595"/>
+        <location filename="../src/ComicMainWindow.ui" line="608"/>
         <source>Scroll up fast</source>
         <translation>Projíždět rychle nahoru</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="598"/>
+        <location filename="../src/ComicMainWindow.ui" line="611"/>
         <source>Shift+Up</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="603"/>
+        <location filename="../src/ComicMainWindow.ui" line="616"/>
         <source>Scroll down fast</source>
         <translation>Projíždět rychle dolů</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="606"/>
+        <location filename="../src/ComicMainWindow.ui" line="619"/>
         <source>Shift+Down</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="611"/>
+        <location filename="../src/ComicMainWindow.ui" line="624"/>
         <source>Scroll up</source>
         <translation>Projíždět nahoru</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="614"/>
+        <location filename="../src/ComicMainWindow.ui" line="627"/>
         <source>Up</source>
         <translation>Šipka nahoru</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="619"/>
+        <location filename="../src/ComicMainWindow.ui" line="632"/>
         <source>Scroll down</source>
         <translation>Projíždět dolů</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="622"/>
+        <location filename="../src/ComicMainWindow.ui" line="635"/>
         <source>Down</source>
         <translation>Šipka dolů</translation>
     </message>
@@ -572,112 +606,112 @@
         <translation>Barva pozadí</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="96"/>
+        <location filename="../src/ConfigDialog.ui" line="99"/>
         <source>Info text font</source>
         <translation>Písmo textu v informačním okně</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="122"/>
+        <location filename="../src/ConfigDialog.ui" line="125"/>
         <source>Choose</source>
         <translation>Vybrat</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="134"/>
+        <location filename="../src/ConfigDialog.ui" line="137"/>
         <source>Fullscreen mode</source>
         <translation>Režim na celou obrazovku</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="140"/>
+        <location filename="../src/ConfigDialog.ui" line="143"/>
         <source>Hide menubar</source>
         <translation>Skrýt nabídkový pruh</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="147"/>
+        <location filename="../src/ConfigDialog.ui" line="150"/>
         <source>Hide toolbar</source>
         <translation>Skrýt nástrojový pruh</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="154"/>
+        <location filename="../src/ConfigDialog.ui" line="157"/>
         <source>Hide statusbar</source>
         <translation>Skrýt stavový řádek</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="178"/>
+        <location filename="../src/ConfigDialog.ui" line="181"/>
         <source>Performance</source>
         <translation>Provedení</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="184"/>
+        <location filename="../src/ConfigDialog.ui" line="187"/>
         <source>Cache</source>
         <translation>Vyrovnávací paměť</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="192"/>
+        <location filename="../src/ConfigDialog.ui" line="195"/>
         <source>Cache Size</source>
         <translation>Velikost vyrovnávací paměti</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="212"/>
+        <location filename="../src/ConfigDialog.ui" line="215"/>
         <source>Mb</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="230"/>
+        <location filename="../src/ConfigDialog.ui" line="233"/>
         <source>Auto adjust cache size</source>
         <translation>Automaticky přizpůsobit velikost vyrovnávací paměti</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="237"/>
+        <location filename="../src/ConfigDialog.ui" line="240"/>
         <source>Preload next page</source>
         <translation>Nahrát dopředu další stranu</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="247"/>
+        <location filename="../src/ConfigDialog.ui" line="250"/>
         <source>Thumbnails</source>
         <translation>Náhledy</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="253"/>
+        <location filename="../src/ConfigDialog.ui" line="256"/>
         <source>Use disk cache for thumbnails</source>
         <translation>Použít vyrovnávací paměť na náhledy</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="262"/>
+        <location filename="../src/ConfigDialog.ui" line="265"/>
         <source>Thumbnails aging</source>
         <translation>Zachování starých náhledů</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="308"/>
+        <location filename="../src/ConfigDialog.ui" line="311"/>
         <source>Misc</source>
         <translation>Různé</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="314"/>
+        <location filename="../src/ConfigDialog.ui" line="317"/>
         <source>Convenience</source>
         <translation>Informace/Různé</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="320"/>
+        <location filename="../src/ConfigDialog.ui" line="323"/>
         <source>Open info dialog after opening a comicbook</source>
         <translation>Otevřít informační okno po otevření komiksu</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="327"/>
+        <location filename="../src/ConfigDialog.ui" line="330"/>
         <source>Show splashscreen</source>
         <translation>Ukázat uvítací obrazovku</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="334"/>
+        <location filename="../src/ConfigDialog.ui" line="337"/>
         <source>Confirm exit</source>
         <translation>Potvrdit ukončení programu</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="346"/>
+        <location filename="../src/ConfigDialog.ui" line="349"/>
         <source>Temporary directory</source>
         <translation>Dočasný adresář</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="356"/>
+        <location filename="../src/ConfigDialog.ui" line="359"/>
         <source>Browse</source>
         <translation>Procházet</translation>
     </message>
@@ -794,7 +828,7 @@ Poskytnutí daru je jednoduché - stačí klepnout na tlačítko &quot;Flattr&qu
 <context>
     <name>QComicBook::ComicBookCfgDialog</name>
     <message>
-        <location filename="../src/ComicBookCfgDialog.cpp" line="123"/>
+        <location filename="../src/ComicBookCfgDialog.cpp" line="119"/>
         <source>Choose temporary directory</source>
         <translatorcomment>Wybierz katalog tymczasowy</translatorcomment>
         <translation>Vybrat dočasný adresář</translation>
@@ -803,7 +837,7 @@ Poskytnutí daru je jednoduché - stačí klepnout na tlačítko &quot;Flattr&qu
 <context>
     <name>QComicBook::ComicBookInfo</name>
     <message>
-        <location filename="../src/ComicBookInfo.cpp" line="27"/>
+        <location filename="../src/ComicBookInfo.cpp" line="28"/>
         <source>QComicBook info</source>
         <translation>Informace QComicBook</translation>
     </message>
@@ -811,121 +845,121 @@ Poskytnutí daru je jednoduché - stačí klepnout na tlačítko &quot;Flattr&qu
 <context>
     <name>QComicBook::ComicMainWindow</name>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="101"/>
+        <location filename="../src/ComicMainWindow.cpp" line="102"/>
         <source>Escape</source>
         <translation>Odejít</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="106"/>
+        <location filename="../src/ComicMainWindow.cpp" line="107"/>
         <source>Alt+t</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="143"/>
+        <location filename="../src/ComicMainWindow.cpp" line="159"/>
         <source>Recently opened</source>
         <translation>Naposledy otevřeno</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="466"/>
+        <location filename="../src/ComicMainWindow.cpp" line="496"/>
         <source>Leave QComicBook?</source>
         <translation>Opustit QComicBook?</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="466"/>
+        <location filename="../src/ComicMainWindow.cpp" line="496"/>
         <source>Do you really want to quit QComicBook?</source>
         <translation>Opravdu chcete ukončit QComicBook?</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="621"/>
+        <location filename="../src/ComicMainWindow.cpp" line="669"/>
         <source>no images found</source>
         <translation>Nebyly nalezeny žádné obrázky</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="622"/>
+        <location filename="../src/ComicMainWindow.cpp" line="670"/>
         <source>unknown archive</source>
         <translation>Neznámý typ archivu</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="623"/>
+        <location filename="../src/ComicMainWindow.cpp" line="671"/>
         <source>can&apos;t access directory</source>
         <translation>Nelze přistoupit k adresáři</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="624"/>
+        <location filename="../src/ComicMainWindow.cpp" line="672"/>
         <source>file/directory not found</source>
         <translation>Soubor/Adresář nenalezen</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="625"/>
+        <location filename="../src/ComicMainWindow.cpp" line="673"/>
         <source>archive not supported</source>
         <translation>Archiv nepodporován</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="626"/>
+        <location filename="../src/ComicMainWindow.cpp" line="674"/>
         <source>archive extractor exited with error</source>
         <translation>Rozbalovač archivů skončil s chybou</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="629"/>
-        <location filename="../src/ComicMainWindow.cpp" line="977"/>
-        <location filename="../src/main.cpp" line="46"/>
+        <location filename="../src/ComicMainWindow.cpp" line="677"/>
+        <location filename="../src/ComicMainWindow.cpp" line="1039"/>
+        <location filename="../src/main.cpp" line="47"/>
         <source>QComicBook error</source>
         <translation>Chyba QComicBooku</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="629"/>
+        <location filename="../src/ComicMainWindow.cpp" line="677"/>
         <source>Error opening comicbook</source>
         <translation>Chyba při otevírání komiksu</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="636"/>
+        <location filename="../src/ComicMainWindow.cpp" line="684"/>
         <source>Choose a directory</source>
         <translation>Vybrat adresář</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="643"/>
+        <location filename="../src/ComicMainWindow.cpp" line="691"/>
         <source>Choose a file</source>
         <translation>Vybrat soubor</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="817"/>
+        <location filename="../src/ComicMainWindow.cpp" line="872"/>
         <source>Page</source>
         <translation>Strana</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="943"/>
+        <location filename="../src/ComicMainWindow.cpp" line="1005"/>
         <source>Removing bookmark</source>
         <translation>Odstraňuje se záložka</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="944"/>
+        <location filename="../src/ComicMainWindow.cpp" line="1006"/>
         <source>Do you really want to remove bookmark
 for this comic book?</source>
         <translation>Opravdu chcete odstranit záložku
 z tohoto komiksu?</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="959"/>
+        <location filename="../src/ComicMainWindow.cpp" line="1021"/>
         <source>Save image as</source>
         <translation>Uložit obrázek jako</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="966"/>
+        <location filename="../src/ComicMainWindow.cpp" line="1028"/>
         <source>page</source>
         <translation>Strana</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="977"/>
+        <location filename="../src/ComicMainWindow.cpp" line="1039"/>
         <source>Error saving image</source>
         <translation>Chyba při ukládání obrázku</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="1018"/>
+        <location filename="../src/ComicMainWindow.cpp" line="1082"/>
         <source>Comic book not found</source>
         <translation>Komiks nenalezen</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="1019"/>
+        <location filename="../src/ComicMainWindow.cpp" line="1083"/>
         <source>Selected bookmark points to
 non-existing comic book
 Do you want to remove it?</source>
@@ -934,7 +968,7 @@ neexistující komiks.
 Chcete ji odstranit?</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="57"/>
+        <location filename="../src/main.cpp" line="59"/>
         <source>Can&apos;t initialize QComicBook directories</source>
         <translation>Nelze započít adresáře QComicBooku</translation>
     </message>
@@ -942,17 +976,17 @@ Chcete ji odstranit?</translation>
 <context>
     <name>QComicBook::ImgDirSink</name>
     <message>
-        <location filename="../src/ImgDirSink.cpp" line="77"/>
+        <location filename="../src/Sink/ImgDirSink.cpp" line="58"/>
         <source>bytes</source>
         <translation>Bytů</translation>
     </message>
     <message>
-        <location filename="../src/ImgDirSink.cpp" line="82"/>
+        <location filename="../src/Sink/ImgDirSink.cpp" line="63"/>
         <source>Kbytes</source>
         <translation>KiB</translation>
     </message>
     <message>
-        <location filename="../src/ImgDirSink.cpp" line="87"/>
+        <location filename="../src/Sink/ImgDirSink.cpp" line="68"/>
         <source>Mbytes</source>
         <translation>MiB</translation>
     </message>
