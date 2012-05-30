@@ -1,8 +1,8 @@
-2011-xx-xx:  0.9.0   -- dramatic improvement in responsiveness and performance, thanks to delegating
-	                image transformations to separate thread.
-	             -- implemented Zoom Lens.
-	             -- fixed memory leak when using small cursor.
-	             -- various bugfixes related to Continuous view mode.
+2011-05-30:  0.9.0   -- dramatic improvement in responsiveness and performance, thanks to delegating
+	                    image transformations to separate thread.
+	                 -- implemented Zoom Lens.
+	                 -- fixed memory leak when using small cursor.
+	                 -- various bugfixes related to Continuous view mode.
 
 2011-10-10:  0.8.2   -- fixed crash on scroll actions when using Simple View and no comicbook is loaded.
 
