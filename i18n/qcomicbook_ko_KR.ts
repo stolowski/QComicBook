@@ -80,456 +80,490 @@
         <translation>보기(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="83"/>
+        <location filename="../src/ComicMainWindow.ui" line="63"/>
+        <location filename="../src/ComicMainWindow.ui" line="647"/>
+        <source>Lens</source>
+        <translation>확대</translation>
+    </message>
+    <message>
+        <location filename="../src/ComicMainWindow.ui" line="95"/>
         <source>&amp;Navigation</source>
         <translation>탐색(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="103"/>
+        <location filename="../src/ComicMainWindow.ui" line="115"/>
         <source>&amp;Bookmarks</source>
         <translation>북마크(&amp;B)</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="112"/>
+        <location filename="../src/ComicMainWindow.ui" line="124"/>
         <source>&amp;Settings</source>
         <translation>설정(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="121"/>
+        <location filename="../src/ComicMainWindow.ui" line="133"/>
         <source>&amp;Help</source>
         <translation>도움말(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="139"/>
+        <location filename="../src/ComicMainWindow.ui" line="151"/>
         <source>Toolbar</source>
         <translation>도구상자</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="179"/>
+        <location filename="../src/ComicMainWindow.ui" line="192"/>
         <source>Open archive</source>
         <translation>압축파일 열기</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="182"/>
+        <location filename="../src/ComicMainWindow.ui" line="195"/>
         <source>Ctrl+O</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="191"/>
+        <location filename="../src/ComicMainWindow.ui" line="204"/>
         <source>Open directory</source>
         <translation>폴더 열기</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="194"/>
+        <location filename="../src/ComicMainWindow.ui" line="207"/>
         <source>Ctrl+D</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="199"/>
+        <location filename="../src/ComicMainWindow.ui" line="212"/>
         <source>Open next</source>
         <translation>다음 열기</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="202"/>
+        <location filename="../src/ComicMainWindow.ui" line="215"/>
         <source>Ctrl+N</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="207"/>
+        <location filename="../src/ComicMainWindow.ui" line="220"/>
         <source>Open previous</source>
         <translation>이전 열기</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="210"/>
+        <location filename="../src/ComicMainWindow.ui" line="223"/>
         <source>Ctrl+P</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="215"/>
+        <location filename="../src/ComicMainWindow.ui" line="228"/>
         <source>Save page as</source>
         <translation>다음 이름으로 페이지 저장</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="224"/>
+        <location filename="../src/ComicMainWindow.ui" line="237"/>
         <source>Info</source>
         <translation>정보</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="227"/>
+        <location filename="../src/ComicMainWindow.ui" line="240"/>
         <source>Alt+I</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="232"/>
+        <location filename="../src/ComicMainWindow.ui" line="245"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="237"/>
+        <location filename="../src/ComicMainWindow.ui" line="250"/>
         <source>Quit</source>
         <translation>종료</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="240"/>
+        <location filename="../src/ComicMainWindow.ui" line="253"/>
         <source>Ctrl+Q</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="255"/>
+        <location filename="../src/ComicMainWindow.ui" line="268"/>
         <source>Original size</source>
         <translation>기본 크기</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="258"/>
+        <location filename="../src/ComicMainWindow.ui" line="271"/>
         <source>Alt+O</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="270"/>
+        <location filename="../src/ComicMainWindow.ui" line="283"/>
         <source>Fit width</source>
         <translation>너비 맞추기</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="273"/>
+        <location filename="../src/ComicMainWindow.ui" line="286"/>
         <source>Alt+W</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="285"/>
+        <location filename="../src/ComicMainWindow.ui" line="298"/>
         <source>Fit height</source>
         <translation>높이 맞추기</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="288"/>
+        <location filename="../src/ComicMainWindow.ui" line="301"/>
         <source>Alt+H</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="300"/>
+        <location filename="../src/ComicMainWindow.ui" line="313"/>
         <source>Whole page</source>
         <translation>전체 페이지</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="303"/>
+        <location filename="../src/ComicMainWindow.ui" line="316"/>
         <source>Alt+A</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="315"/>
+        <location filename="../src/ComicMainWindow.ui" line="328"/>
         <source>Best fit</source>
         <translation>최적으로 맞추기</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="318"/>
+        <location filename="../src/ComicMainWindow.ui" line="331"/>
         <source>Alt+B</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="327"/>
+        <location filename="../src/ComicMainWindow.ui" line="340"/>
         <source>Rotate right</source>
         <translation>오른쪽 회전</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="336"/>
+        <location filename="../src/ComicMainWindow.ui" line="349"/>
         <source>Rotate left</source>
         <translation>왼쪽 회전</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="341"/>
+        <location filename="../src/ComicMainWindow.ui" line="354"/>
         <source>No rotation</source>
         <translation>회전 없음</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="349"/>
+        <location filename="../src/ComicMainWindow.ui" line="362"/>
         <source>Preserve rotation</source>
         <translation>회전 방지하기</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="361"/>
+        <location filename="../src/ComicMainWindow.ui" line="374"/>
         <source>Two pages</source>
         <translation>2 페이지 나누기</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="364"/>
+        <location filename="../src/ComicMainWindow.ui" line="377"/>
         <source>Ctrl+T</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="376"/>
+        <location filename="../src/ComicMainWindow.ui" line="389"/>
         <source>Japanese mode</source>
-        <translation>일본어 모드</translation>
+        <translation>일본식 모드</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="379"/>
+        <location filename="../src/ComicMainWindow.ui" line="392"/>
         <source>Ctrl+J</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="384"/>
+        <location filename="../src/ComicMainWindow.ui" line="397"/>
         <source>Fullscreen</source>
         <translation>전체화면</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="387"/>
+        <location filename="../src/ComicMainWindow.ui" line="400"/>
         <source>F11</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="396"/>
+        <location filename="../src/ComicMainWindow.ui" line="409"/>
         <source>Next page</source>
         <translation>다음 페이지</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="399"/>
+        <location filename="../src/ComicMainWindow.ui" line="412"/>
         <source>PgDown</source>
         <translation>페이지 아래로</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="408"/>
+        <location filename="../src/ComicMainWindow.ui" line="421"/>
         <source>Previous page</source>
         <translation>이전 페이지</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="411"/>
+        <location filename="../src/ComicMainWindow.ui" line="424"/>
         <source>PgUp</source>
         <translation>페이지 위로</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="420"/>
+        <location filename="../src/ComicMainWindow.ui" line="433"/>
         <source>5 pages forward</source>
         <translation>5 페이지 앞으로</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="429"/>
+        <location filename="../src/ComicMainWindow.ui" line="442"/>
         <source>5 pages backward</source>
         <translation>5 페이지 뒤로</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="434"/>
+        <location filename="../src/ComicMainWindow.ui" line="447"/>
         <source>Go to page...</source>
         <translation>다음 페이지로...</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="439"/>
+        <location filename="../src/ComicMainWindow.ui" line="452"/>
         <source>First page</source>
         <translation>첫번째 페이지</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="442"/>
+        <location filename="../src/ComicMainWindow.ui" line="455"/>
         <source>Ctrl+Home</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="447"/>
+        <location filename="../src/ComicMainWindow.ui" line="460"/>
         <source>Last page</source>
         <translation>마지막 페이지</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="450"/>
+        <location filename="../src/ComicMainWindow.ui" line="463"/>
         <source>Ctrl+End</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="459"/>
+        <location filename="../src/ComicMainWindow.ui" line="472"/>
         <source>Page top</source>
         <translation>페이지 위로</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="462"/>
+        <location filename="../src/ComicMainWindow.ui" line="475"/>
         <source>Home</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="471"/>
+        <location filename="../src/ComicMainWindow.ui" line="484"/>
         <source>Page bottom</source>
         <translation>페이지 아래로</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="474"/>
+        <location filename="../src/ComicMainWindow.ui" line="487"/>
         <source>End</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="482"/>
+        <location filename="../src/ComicMainWindow.ui" line="495"/>
         <source>Continuous view</source>
         <translation>연속으로 보기</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="627"/>
+        <location filename="../src/ComicMainWindow.ui" line="650"/>
+        <source>L</source>
+        <translation>L</translation>
+    </message>
+    <message>
+        <location filename="../src/ComicMainWindow.ui" line="655"/>
         <source>Print</source>
         <translation>출력</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="635"/>
+        <location filename="../src/ComicMainWindow.ui" line="663"/>
         <source>Frame view</source>
         <translation>프레임 보기</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="643"/>
+        <location filename="../src/ComicMainWindow.ui" line="671"/>
         <source>Simple view</source>
         <translation>간단히 보기</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="652"/>
+        <location filename="../src/ComicMainWindow.ui" line="680"/>
         <source>Next Frame</source>
         <translation>다음 프레임</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="661"/>
+        <location filename="../src/ComicMainWindow.ui" line="689"/>
         <source>Previous Frame</source>
         <translation>이전 프레임</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="666"/>
+        <location filename="../src/ComicMainWindow.ui" line="694"/>
         <source>About Qt</source>
         <translation>Qt 정보</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="671"/>
+        <location filename="../src/ComicMainWindow.ui" line="699"/>
         <source>About donating</source>
         <translation>기부 정보</translation>
+    </message>
+    <message>
+        <location filename="../src/ComicMainWindow.ui" line="707"/>
+        <location filename="../src/ComicMainWindow.ui" line="710"/>
+        <source>200 %</source>
+        <translation>200 %</translation>
+    </message>
+    <message>
+        <location filename="../src/ComicMainWindow.ui" line="718"/>
+        <location filename="../src/ComicMainWindow.ui" line="721"/>
+        <source>400 %</source>
+        <translation>400 %</translation>
+    </message>
+    <message>
+        <location filename="../src/ComicMainWindow.ui" line="729"/>
+        <location filename="../src/ComicMainWindow.ui" line="732"/>
+        <source>800 %</source>
+        <translation>800 %</translation>
+    </message>
+    <message>
+        <location filename="../src/ComicMainWindow.ui" line="740"/>
+        <source>300 %</source>
+        <translation>300 %</translation>
     </message>
     <message>
         <source>Continuous scrolling</source>
         <translation type="obsolete">연속적인 스크롤</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="491"/>
+        <location filename="../src/ComicMainWindow.ui" line="504"/>
         <source>Add bookmark</source>
         <translation>북마크 추가하기</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="496"/>
+        <location filename="../src/ComicMainWindow.ui" line="509"/>
         <source>Remove bookmark</source>
         <translation>북마크 제거하기</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="501"/>
+        <location filename="../src/ComicMainWindow.ui" line="514"/>
         <source>Manage bookmarks</source>
         <translation>북마크 관리하기</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="509"/>
+        <location filename="../src/ComicMainWindow.ui" line="522"/>
         <source>Scrollbars</source>
         <translation>스크롤바</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="517"/>
+        <location filename="../src/ComicMainWindow.ui" line="530"/>
         <source>Statusbar</source>
         <translation>상태표시줄</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="526"/>
+        <location filename="../src/ComicMainWindow.ui" line="539"/>
         <source>Configure QComicBook</source>
         <translation>QComicBook 설정</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="534"/>
+        <location filename="../src/ComicMainWindow.ui" line="547"/>
         <source>System information</source>
         <translation>시스템 정보</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="539"/>
+        <location filename="../src/ComicMainWindow.ui" line="552"/>
         <source>About</source>
         <translation>QComicbook 정보</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="547"/>
+        <location filename="../src/ComicMainWindow.ui" line="560"/>
         <source>Scroll right</source>
         <translation>오른쪽으로 스크롤</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="550"/>
+        <location filename="../src/ComicMainWindow.ui" line="563"/>
         <source>Right</source>
         <translation>오른쪽</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="555"/>
+        <location filename="../src/ComicMainWindow.ui" line="568"/>
         <source>Scroll left</source>
         <translation>왼쪽으로 스크롤</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="558"/>
+        <location filename="../src/ComicMainWindow.ui" line="571"/>
         <source>Left</source>
         <translation>왼쪽</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="563"/>
+        <location filename="../src/ComicMainWindow.ui" line="576"/>
         <source>Jump down</source>
         <translation>아래로 점프</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="566"/>
+        <location filename="../src/ComicMainWindow.ui" line="579"/>
         <source>Space</source>
         <translation>공백</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="571"/>
+        <location filename="../src/ComicMainWindow.ui" line="584"/>
         <source>Jump up</source>
         <translation>위로 점프</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="574"/>
+        <location filename="../src/ComicMainWindow.ui" line="587"/>
         <source>Backspace</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="579"/>
+        <location filename="../src/ComicMainWindow.ui" line="592"/>
         <source>Scroll right fast</source>
         <translation>오른쪽으로 빠른 스크롤</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="582"/>
+        <location filename="../src/ComicMainWindow.ui" line="595"/>
         <source>Shift+Right</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="587"/>
+        <location filename="../src/ComicMainWindow.ui" line="600"/>
         <source>Scroll left fast</source>
         <translation>왼쪽으로 빠른 스크롤</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="590"/>
+        <location filename="../src/ComicMainWindow.ui" line="603"/>
         <source>Shift+Left</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="595"/>
+        <location filename="../src/ComicMainWindow.ui" line="608"/>
         <source>Scroll up fast</source>
         <translation>위로 빠른 스크롤</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="598"/>
+        <location filename="../src/ComicMainWindow.ui" line="611"/>
         <source>Shift+Up</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="603"/>
+        <location filename="../src/ComicMainWindow.ui" line="616"/>
         <source>Scroll down fast</source>
         <translation>아래로 빠른 스크롤</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="606"/>
+        <location filename="../src/ComicMainWindow.ui" line="619"/>
         <source>Shift+Down</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="611"/>
+        <location filename="../src/ComicMainWindow.ui" line="624"/>
         <source>Scroll up</source>
         <translation>위로 스크롤</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="614"/>
+        <location filename="../src/ComicMainWindow.ui" line="627"/>
         <source>Up</source>
         <translation>위</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="619"/>
+        <location filename="../src/ComicMainWindow.ui" line="632"/>
         <source>Scroll down</source>
         <translation>아래로 스크롤</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.ui" line="622"/>
+        <location filename="../src/ComicMainWindow.ui" line="635"/>
         <source>Down</source>
         <translation>아래</translation>
     </message>
@@ -572,112 +606,112 @@
         <translation>배경색</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="96"/>
+        <location filename="../src/ConfigDialog.ui" line="99"/>
         <source>Info text font</source>
         <translation>정보 텍스트 글꼴</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="122"/>
+        <location filename="../src/ConfigDialog.ui" line="125"/>
         <source>Choose</source>
         <translation>선택</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="134"/>
+        <location filename="../src/ConfigDialog.ui" line="137"/>
         <source>Fullscreen mode</source>
         <translation>전체화면 모드</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="140"/>
+        <location filename="../src/ConfigDialog.ui" line="143"/>
         <source>Hide menubar</source>
         <translation>메뉴표시줄 숨기기</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="147"/>
+        <location filename="../src/ConfigDialog.ui" line="150"/>
         <source>Hide toolbar</source>
         <translation>도구상자 숨기기</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="154"/>
+        <location filename="../src/ConfigDialog.ui" line="157"/>
         <source>Hide statusbar</source>
         <translation>상태표시줄 숨기기</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="178"/>
+        <location filename="../src/ConfigDialog.ui" line="181"/>
         <source>Performance</source>
         <translation>성능</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="184"/>
+        <location filename="../src/ConfigDialog.ui" line="187"/>
         <source>Cache</source>
         <translation>캐시</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="192"/>
+        <location filename="../src/ConfigDialog.ui" line="195"/>
         <source>Cache Size</source>
         <translation>캐시 크기</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="212"/>
+        <location filename="../src/ConfigDialog.ui" line="215"/>
         <source>Mb</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="230"/>
+        <location filename="../src/ConfigDialog.ui" line="233"/>
         <source>Auto adjust cache size</source>
         <translation>캐시 크기 자동으로 조절하기</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="237"/>
+        <location filename="../src/ConfigDialog.ui" line="240"/>
         <source>Preload next page</source>
         <translation>다음 페이지 미리 불러오기</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="247"/>
+        <location filename="../src/ConfigDialog.ui" line="250"/>
         <source>Thumbnails</source>
         <translation>미리보기</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="253"/>
+        <location filename="../src/ConfigDialog.ui" line="256"/>
         <source>Use disk cache for thumbnails</source>
         <translation>미리보기에 디스크 캐시 사용하기</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="262"/>
+        <location filename="../src/ConfigDialog.ui" line="265"/>
         <source>Thumbnails aging</source>
         <translation>미리보기 저장 기간</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="308"/>
+        <location filename="../src/ConfigDialog.ui" line="311"/>
         <source>Misc</source>
         <translation>기타</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="314"/>
+        <location filename="../src/ConfigDialog.ui" line="317"/>
         <source>Convenience</source>
         <translation>편의 기능</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="320"/>
+        <location filename="../src/ConfigDialog.ui" line="323"/>
         <source>Open info dialog after opening a comicbook</source>
         <translation>만화책을 열은 후에 정보 대화상자 열기</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="327"/>
+        <location filename="../src/ConfigDialog.ui" line="330"/>
         <source>Show splashscreen</source>
         <translation>초기화면 보여주기</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="334"/>
+        <location filename="../src/ConfigDialog.ui" line="337"/>
         <source>Confirm exit</source>
         <translation>종료 확인하기</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="346"/>
+        <location filename="../src/ConfigDialog.ui" line="349"/>
         <source>Temporary directory</source>
         <translation>임시 폴더</translation>
     </message>
     <message>
-        <location filename="../src/ConfigDialog.ui" line="356"/>
+        <location filename="../src/ConfigDialog.ui" line="359"/>
         <source>Browse</source>
         <translation>찾아보기</translation>
     </message>
@@ -824,7 +858,7 @@ Donating is easy - just click the Flattr button below! Note: You can access this
 <context>
     <name>QComicBook::ComicBookCfgDialog</name>
     <message>
-        <location filename="../src/ComicBookCfgDialog.cpp" line="123"/>
+        <location filename="../src/ComicBookCfgDialog.cpp" line="119"/>
         <source>Choose temporary directory</source>
         <translation>임시 폴더 선택하기</translation>
     </message>
@@ -832,7 +866,7 @@ Donating is easy - just click the Flattr button below! Note: You can access this
 <context>
     <name>QComicBook::ComicBookInfo</name>
     <message>
-        <location filename="../src/ComicBookInfo.cpp" line="27"/>
+        <location filename="../src/ComicBookInfo.cpp" line="28"/>
         <source>QComicBook info</source>
         <translation>QComicBook 정보</translation>
     </message>
@@ -840,120 +874,120 @@ Donating is easy - just click the Flattr button below! Note: You can access this
 <context>
     <name>QComicBook::ComicMainWindow</name>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="101"/>
+        <location filename="../src/ComicMainWindow.cpp" line="102"/>
         <source>Escape</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="106"/>
+        <location filename="../src/ComicMainWindow.cpp" line="107"/>
         <source>Alt+t</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="143"/>
+        <location filename="../src/ComicMainWindow.cpp" line="159"/>
         <source>Recently opened</source>
         <translation>최근에 연 파일</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="466"/>
+        <location filename="../src/ComicMainWindow.cpp" line="496"/>
         <source>Leave QComicBook?</source>
         <translation>QComicBook을 떠나시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="466"/>
+        <location filename="../src/ComicMainWindow.cpp" line="496"/>
         <source>Do you really want to quit QComicBook?</source>
         <translation>QComicbook을 정말로 종료하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="621"/>
+        <location filename="../src/ComicMainWindow.cpp" line="669"/>
         <source>no images found</source>
         <translation>그림을 찾을 수 없음</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="622"/>
+        <location filename="../src/ComicMainWindow.cpp" line="670"/>
         <source>unknown archive</source>
         <translation>알려지지 않은 압축파일</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="623"/>
+        <location filename="../src/ComicMainWindow.cpp" line="671"/>
         <source>can&apos;t access directory</source>
         <translation>폴더에 접근할 수 없음</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="624"/>
+        <location filename="../src/ComicMainWindow.cpp" line="672"/>
         <source>file/directory not found</source>
         <translation>파일/폴더를 찾을 수 없음</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="625"/>
+        <location filename="../src/ComicMainWindow.cpp" line="673"/>
         <source>archive not supported</source>
         <translation>지원하지 않는 압축파일</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="626"/>
+        <location filename="../src/ComicMainWindow.cpp" line="674"/>
         <source>archive extractor exited with error</source>
         <translation>압축파일 추출기가 오류로 종료</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="629"/>
-        <location filename="../src/ComicMainWindow.cpp" line="980"/>
-        <location filename="../src/main.cpp" line="46"/>
+        <location filename="../src/ComicMainWindow.cpp" line="677"/>
+        <location filename="../src/ComicMainWindow.cpp" line="1039"/>
+        <location filename="../src/main.cpp" line="47"/>
         <source>QComicBook error</source>
         <translation>QComicBook 오류</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="629"/>
+        <location filename="../src/ComicMainWindow.cpp" line="677"/>
         <source>Error opening comicbook</source>
         <translation>만화책을 여는 중에 오류 발생</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="636"/>
+        <location filename="../src/ComicMainWindow.cpp" line="684"/>
         <source>Choose a directory</source>
         <translation>폴더 선택하기</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="643"/>
+        <location filename="../src/ComicMainWindow.cpp" line="691"/>
         <source>Choose a file</source>
         <translation>파일 선택하기</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="817"/>
+        <location filename="../src/ComicMainWindow.cpp" line="872"/>
         <source>Page</source>
         <translation>페이지</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="946"/>
+        <location filename="../src/ComicMainWindow.cpp" line="1005"/>
         <source>Removing bookmark</source>
         <translation>북마크 제거하기</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="947"/>
+        <location filename="../src/ComicMainWindow.cpp" line="1006"/>
         <source>Do you really want to remove bookmark
 for this comic book?</source>
         <translation>이 만화책의 북마크를 정말로 제거하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="962"/>
+        <location filename="../src/ComicMainWindow.cpp" line="1021"/>
         <source>Save image as</source>
         <translation>다음으로 그림 저장</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="969"/>
+        <location filename="../src/ComicMainWindow.cpp" line="1028"/>
         <source>page</source>
         <translation>페이지</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="980"/>
+        <location filename="../src/ComicMainWindow.cpp" line="1039"/>
         <source>Error saving image</source>
         <translation>그림을 저장하는 중에 오류 발생</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="1021"/>
+        <location filename="../src/ComicMainWindow.cpp" line="1082"/>
         <source>Comic book not found</source>
         <translation>만화책을 찾을 수 없음</translation>
     </message>
     <message>
-        <location filename="../src/ComicMainWindow.cpp" line="1022"/>
+        <location filename="../src/ComicMainWindow.cpp" line="1083"/>
         <source>Selected bookmark points to
 non-existing comic book
 Do you want to remove it?</source>
@@ -962,7 +996,7 @@ Do you want to remove it?</source>
 그것을 제거하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="57"/>
+        <location filename="../src/main.cpp" line="59"/>
         <source>Can&apos;t initialize QComicBook directories</source>
         <translation>QComicBook 폴더를 초기화할 수 없음</translation>
     </message>
@@ -970,17 +1004,17 @@ Do you want to remove it?</source>
 <context>
     <name>QComicBook::ImgDirSink</name>
     <message>
-        <location filename="../src/ImgDirSink.cpp" line="77"/>
+        <location filename="../src/Sink/ImgDirSink.cpp" line="58"/>
         <source>bytes</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ImgDirSink.cpp" line="82"/>
+        <location filename="../src/Sink/ImgDirSink.cpp" line="63"/>
         <source>Kbytes</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ImgDirSink.cpp" line="87"/>
+        <location filename="../src/Sink/ImgDirSink.cpp" line="68"/>
         <source>Mbytes</source>
         <translation></translation>
     </message>
