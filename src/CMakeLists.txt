@@ -15,6 +15,7 @@ SET(qcomicbook_moc_hdrs
 	Archivers/ArchiversConfiguration.h
 	BookmarkManager.h 
 	ComicBookCfgDialog.h 
+	ComicBookInfo.h
 	ComicBookSettings.h 
 	ComicMainWindow.h 
 	View/FrameView.h

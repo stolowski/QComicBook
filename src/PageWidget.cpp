@@ -120,7 +120,7 @@ bool PageWidget::hasTwoPages() const
     return m_twoPages;
 }
 
-ImageTransformJob* PageWidget::redrawJob()
+ImageTransformJob* PageWidget::createRedrawJob()
 {
     _DEBUG;
     PageRedrawJob *j = NULL;
@@ -183,7 +183,7 @@ void PageWidget::redrawImages()
 	setSourceSize(totalWidth, totalHeight);
 	if (!estimated)
 	{
-		redrawScaledImage();
+		requestRedraw();
 	}
 }
 

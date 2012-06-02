@@ -18,6 +18,7 @@
 #include <QMatrix>
 #include <QGraphicsItem>
 #include <QPixmap>
+#include "JobSource.h"
 
 class QPixmap;
 class QPainter;
@@ -25,10 +26,8 @@ class QPainter;
 namespace QComicBook
 {
 	class PageViewBase;
-        class ImageTransformJob;
-        class ImageJobResult;
 
-	class ComicImageWidget: public QGraphicsItem
+	class ComicImageWidget: public QGraphicsItem, public JobSource
 	{
 		public:
 			ComicImageWidget(PageViewBase *parent);
@@ -44,17 +43,14 @@ namespace QComicBook
 			const QPixmap* pixmap() const;
         	QRectF boundingRect() const;
 	        void paint(QPainter *painter, const QStyleOptionGraphicsItem *opt, QWidget *widget = 0);
-			void redrawScaledImage();
+			void requestRedraw();
 			PageViewBase* view() const;
 			void recalcScaledSize();
 			int width() const;
 			int height() const;
 
-                        virtual bool jobCompleted(const ImageJobResult &result);
+            virtual bool jobCompleted(const ImageJobResult &result);
 			virtual void propsChanged() = 0;
-
-		protected:
-                        virtual ImageTransformJob* redrawJob() = 0;
 
 		private:
 			PageViewBase *m_view;

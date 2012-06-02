@@ -26,7 +26,7 @@ namespace QComicBook
         PageWidget(PageViewBase *parent, int w, int h, int pageNum, bool twoPages=false);
         virtual ~PageWidget();
 
-        ImageTransformJob *redrawJob();
+        ImageTransformJob *createRedrawJob();
 
         void setImage(const Page &img1);
         void setImage(const Page &img1, const Page &img2);

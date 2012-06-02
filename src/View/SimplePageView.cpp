@@ -161,7 +161,8 @@ void SimplePageView::resizeEvent(QResizeEvent *e)
 {
     if (imgLabel)
     {
-        imgLabel->redrawImages();
+        imgLabel->recalcScaledSize();
+        imgLabel->requestRedraw();
     }
     PageViewBase::resizeEvent(e);
 }

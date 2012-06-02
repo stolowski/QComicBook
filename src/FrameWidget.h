@@ -32,14 +32,14 @@ namespace QComicBook
 
 			void setFrame(const Page &p, const ComicFrame &f);
 			void clear();
-                        ImageTransformJob *redrawJob();
-                        bool jobCompleted(const ImageJobResult &result);
-                        void propsChanged();
+            ImageTransformJob *createRedrawJob();
+            bool jobCompleted(const ImageJobResult &result);
+            void propsChanged();
 
 		private:
 			QImage *m_image;
 			QRect m_frame;
-                        int m_framekey;
+            int m_framekey;
 	};
 }
 

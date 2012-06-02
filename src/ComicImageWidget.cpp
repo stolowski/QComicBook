@@ -184,7 +184,7 @@ void ComicImageWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     }
 }
 
-void ComicImageWidget::redrawScaledImage()
+void ComicImageWidget::requestRedraw()
 {
     _DEBUG;
 
@@ -195,30 +195,16 @@ void ComicImageWidget::redrawScaledImage()
 		if (m_pixmap == NULL || m_pixmap->width() != scaledSize.width() || m_pixmap->height() != scaledSize.height())
 		{
 			delete m_pixmap;
-                        m_pixmap = 0;
-			//m_pixmap = new QPixmap(scaledSize.width(), scaledSize.height());
+            m_pixmap = 0;
 		}
 
-		//QPainter p(m_pixmap);
-		//p.setRenderHint(QPainter::SmoothPixmapTransform, ComicBookSettings::instance().smoothScaling());
-
-    //p.setWorldMatrix(rmtx);
-    //p.setWorldMatrixEnabled(true);
-
-		ImageTransformJob *j = redrawJob();
-                if (j)
-                {
-                    j->setSize(scaledSize.width(), scaledSize.height());
-                    j->setMatrix(rmtx);
-                    ImageTransformThread::get()->addJob(j);
-                }
-
-//		p.end();
-
-		/*  setContentsMargins(xoff, yoff, 0, 0);
-		setFixedSize(scaledSize.width() + 2*xoff, scaledSize.height() + 2*yoff);  
-
-		updateGeometry();*/
+		ImageTransformJob *j = createRedrawJob();
+        if (j)
+        {
+            j->setSize(scaledSize.width(), scaledSize.height());
+            j->setMatrix(rmtx);
+            ImageTransformThread::get()->addJob(j);
+        }
 	}
 }
 
