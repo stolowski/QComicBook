@@ -110,8 +110,6 @@ namespace QComicBook
 			void prevFrame();
 			void prevPage();
 			void prevPageBottom();
-			void forwardPages();
-			void backwardPages();
 			void jumpToPage(int n, bool force=false);
 			void exitFullscreen();
 			void browseDirectory();

@@ -33,7 +33,7 @@
      <x>0</x>
      <y>0</y>
      <width>1033</width>
-     <height>27</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -100,15 +100,9 @@
     <addaction name="actionNextFrame"/>
     <addaction name="actionPreviousFrame"/>
     <addaction name="separator"/>
-    <addaction name="actionForwardPage"/>
-    <addaction name="actionBackwardPage"/>
-    <addaction name="separator"/>
     <addaction name="actionJumpToPage"/>
     <addaction name="actionFirstPage"/>
     <addaction name="actionLastPage"/>
-    <addaction name="separator"/>
-    <addaction name="actionPageTop"/>
-    <addaction name="actionPageBottom"/>
    </widget>
    <widget class="QMenu" name="menuBookmarks">
     <property name="title">
@@ -157,35 +151,24 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionOpenArchive"/>
-   <addaction name="actionOpenDirectory"/>
-   <addaction name="separator"/>
-   <addaction name="actionShowInfo"/>
    <addaction name="separator"/>
    <addaction name="actionTwoPages"/>
    <addaction name="actionMangaMode"/>
    <addaction name="separator"/>
    <addaction name="actionPreviousPage"/>
    <addaction name="actionNextPage"/>
-   <addaction name="actionBackwardPage"/>
-   <addaction name="actionForwardPage"/>
-   <addaction name="actionPreviousFrame"/>
-   <addaction name="actionNextFrame"/>
-   <addaction name="actionPageTop"/>
-   <addaction name="actionPageBottom"/>
    <addaction name="separator"/>
    <addaction name="actionOriginalSize"/>
    <addaction name="actionFitWidth"/>
    <addaction name="actionFitHeight"/>
    <addaction name="actionWholePage"/>
    <addaction name="actionBestFit"/>
-   <addaction name="actionLens"/>
    <addaction name="separator"/>
-   <addaction name="actionRotateRight"/>
-   <addaction name="actionRotateLeft"/>
+   <addaction name="actionLens"/>
   </widget>
   <action name="actionOpenArchive">
    <property name="icon">
-    <iconset resource="../data/qcomicbook.qrc">
+    <iconset theme="document-open" resource="../data/qcomicbook.qrc">
      <normaloff>:/icons/openarch.png</normaloff>:/icons/openarch.png</iconset>
    </property>
    <property name="text">
@@ -230,7 +213,7 @@
   </action>
   <action name="actionShowInfo">
    <property name="icon">
-    <iconset resource="../data/qcomicbook.qrc">
+    <iconset theme="document-properties" resource="../data/qcomicbook.qrc">
      <normaloff>:/icons/info.png</normaloff>:/icons/info.png</iconset>
    </property>
    <property name="text">
@@ -241,11 +224,21 @@
    </property>
   </action>
   <action name="actionClose">
+   <property name="icon">
+    <iconset theme="window-close">
+     <normaloff/>
+    </iconset>
+   </property>
    <property name="text">
     <string>Close</string>
    </property>
   </action>
   <action name="actionQuit">
+   <property name="icon">
+    <iconset theme="application-exit">
+     <normaloff/>
+    </iconset>
+   </property>
    <property name="text">
     <string>Quit</string>
    </property>
@@ -333,7 +326,7 @@
   </action>
   <action name="actionRotateRight">
    <property name="icon">
-    <iconset resource="../data/qcomicbook.qrc">
+    <iconset theme="object-rotate-right" resource="../data/qcomicbook.qrc">
      <normaloff>:/icons/rright.png</normaloff>:/icons/rright.png</iconset>
    </property>
    <property name="text">
@@ -342,7 +335,7 @@
   </action>
   <action name="actionRotateLeft">
    <property name="icon">
-    <iconset resource="../data/qcomicbook.qrc">
+    <iconset theme="object-rotate-left" resource="../data/qcomicbook.qrc">
      <normaloff>:/icons/rleft.png</normaloff>:/icons/rleft.png</iconset>
    </property>
    <property name="text">
@@ -393,6 +386,11 @@
    </property>
   </action>
   <action name="actionFullscreen">
+   <property name="icon">
+    <iconset theme="view-fullscreen">
+     <normaloff/>
+    </iconset>
+   </property>
    <property name="text">
     <string>Fullscreen</string>
    </property>
@@ -402,7 +400,7 @@
   </action>
   <action name="actionNextPage">
    <property name="icon">
-    <iconset resource="../data/qcomicbook.qrc">
+    <iconset theme="go-next" resource="../data/qcomicbook.qrc">
      <normaloff>:/icons/nextpage.png</normaloff>:/icons/nextpage.png</iconset>
    </property>
    <property name="text">
@@ -414,7 +412,7 @@
   </action>
   <action name="actionPreviousPage">
    <property name="icon">
-    <iconset resource="../data/qcomicbook.qrc">
+    <iconset theme="go-previous" resource="../data/qcomicbook.qrc">
      <normaloff>:/icons/prevpage.png</normaloff>:/icons/prevpage.png</iconset>
    </property>
    <property name="text">
@@ -424,30 +422,22 @@
     <string>PgUp</string>
    </property>
   </action>
-  <action name="actionForwardPage">
-   <property name="icon">
-    <iconset resource="../data/qcomicbook.qrc">
-     <normaloff>:/icons/fforward.png</normaloff>:/icons/fforward.png</iconset>
-   </property>
-   <property name="text">
-    <string>5 pages forward</string>
-   </property>
-  </action>
-  <action name="actionBackwardPage">
-   <property name="icon">
-    <iconset resource="../data/qcomicbook.qrc">
-     <normaloff>:/icons/fbackward.png</normaloff>:/icons/fbackward.png</iconset>
-   </property>
-   <property name="text">
-    <string>5 pages backward</string>
-   </property>
-  </action>
   <action name="actionJumpToPage">
+   <property name="icon">
+    <iconset theme="go-jump">
+     <normaloff/>
+    </iconset>
+   </property>
    <property name="text">
     <string>Go to page...</string>
    </property>
   </action>
   <action name="actionFirstPage">
+   <property name="icon">
+    <iconset theme="go-top">
+     <normaloff/>
+    </iconset>
+   </property>
    <property name="text">
     <string>First page</string>
    </property>
@@ -456,6 +446,11 @@
    </property>
   </action>
   <action name="actionLastPage">
+   <property name="icon">
+    <iconset theme="go-bottom">
+     <normaloff/>
+    </iconset>
+   </property>
    <property name="text">
     <string>Last page</string>
    </property>
@@ -548,6 +543,11 @@
    </property>
   </action>
   <action name="actionShowAbout">
+   <property name="icon">
+    <iconset>
+     <normaloff/>
+    </iconset>
+   </property>
    <property name="text">
     <string>About</string>
    </property>
@@ -651,6 +651,11 @@
    </property>
   </action>
   <action name="actionPrint">
+   <property name="icon">
+    <iconset theme="document-print">
+     <normaloff/>
+    </iconset>
+   </property>
    <property name="text">
     <string>Print</string>
    </property>

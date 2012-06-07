@@ -106,7 +106,6 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), currpage
     actionToggleThumbnails->setIcon(QPixmap(":/icons/thumbnails.png"));
     actionToggleThumbnails->setShortcut(tr("Alt+t"));
     actionToggleThumbnails->setCheckable(true);
-    toolBar->insertAction(actionShowInfo, actionToggleThumbnails);
 
     connect(actionOpenArchive, SIGNAL(triggered(bool)), this, SLOT(browseArchive()));
     connect(actionOpenDirectory, SIGNAL(triggered(bool)), this, SLOT(browseDirectory()));
@@ -117,10 +116,8 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), currpage
     connect(actionShowInfo, SIGNAL(triggered(bool)), this, SLOT(showInfo()));
     connect(actionExitFullScreen, SIGNAL(triggered(bool)), this, SLOT(exitFullscreen()));
     connect(actionNextPage, SIGNAL(triggered(bool)), this, SLOT(nextPage()));
-    connect(actionForwardPage, SIGNAL(triggered(bool)), this, SLOT(forwardPages()));
     connect(actionFirstPage, SIGNAL(triggered(bool)), this, SLOT(firstPage()));
     connect(actionLastPage, SIGNAL(triggered(bool)), this, SLOT(lastPage()));
-    connect(actionBackwardPage, SIGNAL(triggered(bool)), this, SLOT(backwardPages())); 
     connect(actionQuit, SIGNAL(triggered(bool)), this, SLOT(close()));
     connect(actionFullscreen, SIGNAL(triggered(bool)), this, SLOT(toggleFullScreen()));
     connect(actionPreviousPage, SIGNAL(triggered(bool)), this, SLOT(prevPage()));   
@@ -449,8 +446,6 @@ void ComicMainWindow::enableComicBookActions(bool f)
         actionJumpToPage->setEnabled(f);
         actionNextPage->setEnabled(f);
         actionPreviousPage->setEnabled(f);
-        actionBackwardPage->setEnabled(f);
-        actionForwardPage->setEnabled(f);
         actionPageTop->setEnabled(f);
         actionPageBottom->setEnabled(f);
 	actionNextFrame->setEnabled(f && actionFrameView->isChecked());
@@ -828,16 +823,6 @@ void ComicMainWindow::lastPage()
     }
 }
 
-void ComicMainWindow::forwardPages()
-{
-    jumpToPage(currpage + 5 );
-}
-
-void ComicMainWindow::backwardPages()
-{
-    jumpToPage(currpage - 5);
-}
-
 void ComicMainWindow::jumpToPage(int n, bool force)
 {
     _DEBUG;
@@ -878,22 +863,18 @@ void ComicMainWindow::currentPageChanged(int n)
     if (sink == NULL || view->nextPage(n) < 0)
     {
         actionNextPage->setDisabled(true);
-        actionForwardPage->setDisabled(true);
     }
     else
     {
         actionNextPage->setDisabled(false);
-        actionForwardPage->setDisabled(false);
     }
     if (sink == NULL || view->previousPage(n) < 0)
     {
         actionPreviousPage->setDisabled(true);
-        actionBackwardPage->setDisabled(true);
     }
     else
     {
         actionPreviousPage->setDisabled(false);
-        actionBackwardPage->setDisabled(false);
     }
 
     thumbswin->view()->scrollToPage(n);
@@ -918,7 +899,7 @@ void ComicMainWindow::showAbout()
 {
         AboutDialog *win = new AboutDialog(this, "About QComicBook",
                         "QComicBook " VERSION " - comic book viewer for GNU/Linux<br>"
-                        "(c)by Pawel Stolowski 2005-2010<br>"
+                        "(c)by Pawel Stolowski 2005-2012<br>"
                         "released under terms of GNU General Public License<br><br>"
                         "<a href=\"http://www.qcomicbook.org\">http://www.qcomicbook.org</a><br>"
                         "<a href=\"mailto:stolowski@gmail.com\">stolowski@gmail.com</a>", QPixmap(":/images/qcomicbook-splash.png"));
