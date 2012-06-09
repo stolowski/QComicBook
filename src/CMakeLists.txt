@@ -10,6 +10,7 @@ INCLUDE_DIRECTORIES(
 )
 
 SET(qcomicbook_moc_hdrs
+    Debug/ContinuousPageViewDebug.h
 	FrameDetect/FrameCache.h
 	FrameDetect/FrameDetectThread.h
 	Archivers/ArchiversConfiguration.h
@@ -42,7 +43,7 @@ SET(qcomicbook_moc_hdrs
 
 file (GLOB_RECURSE qcomicbook_hdr *.h *.hpp)
 file (GLOB_RECURSE qcomicbook_src *.cpp)
-file (GLOB qcomicbook_ui *.ui)
+file (GLOB_RECURSE qcomicbook_ui *.ui)
 
 SET(FILES_TO_TRANSLATE ${FILES_TO_TRANSLATE} ${qcomicbook_src}
 	${qcomicbook_ui} ${qcomicbook_hdr} PARENT_SCOPE)

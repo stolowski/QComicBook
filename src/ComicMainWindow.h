@@ -41,6 +41,7 @@ namespace QComicBook
 	class RecentFilesMenu;
 	class PrinterThread;
 	class FrameDetectThread;
+	class ContinuousPageViewDebug;
 
 	//! The main window of QComicBook.
 	class ComicMainWindow: public QMainWindow, private Ui::ComicMainWindow
@@ -68,6 +69,10 @@ namespace QComicBook
 			QSharedPointer<QPrinter> printer;
 			PrinterThread *printThread;
 			FrameDetectThread *frameDetect;
+
+#ifdef DEBUG
+			ContinuousPageViewDebug *debugContinuousView;
+#endif
                         		
 		protected:
 			virtual void dragEnterEvent(QDragEnterEvent *e);
@@ -101,6 +106,7 @@ namespace QComicBook
 			void changeViewType(QAction *action);
 			void printingFinished();
 			void showAboutQt();
+			void showDebugContinuousView();
 
 		public slots:
 			void firstPage();

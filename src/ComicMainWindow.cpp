@@ -40,6 +40,7 @@
 #include <FrameDetectThread.h>
 #include "PrintProgressDialog.h"
 #include "Job/ImageTransformThread.h"
+#include "Debug/ContinuousPageViewDebug.h"
 #include <QMenu>
 #include <QStringList>
 #include <QAction>
@@ -61,6 +62,9 @@ using namespace QComicBook;
 using namespace Utility;
 
 ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), currpage(0)
+#ifdef DEBUG
+    , debugContinuousView(NULL)
+#endif
 {
     setupUi(this);
     updateCaption();
@@ -197,6 +201,16 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), currpage
     connect(actionAboutQt, SIGNAL(triggered()),  this, SLOT(showAboutQt()));
     connect(actionAboutDonating, SIGNAL(triggered()),  this, SLOT(showAboutDonating()));
 
+    //
+    // Debug menu
+    QComicBookDebug(
+        QMenu *debugMenu = new QMenu(tr("Debug"), this);
+        QAction *actionDebugContinuousViewAction = new QAction(tr("Continuous View"), this);
+        connect(actionDebugContinuousViewAction, SIGNAL(triggered()), this, SLOT(showDebugContinuousView()));
+        debugMenu->addAction(actionDebugContinuousViewAction);
+        menubar->insertMenu(menuHelp->menuAction(), debugMenu);
+    );
+
     QAction *which = actionOriginalSize;
     switch (cfg->pageSize())
     {
@@ -331,6 +345,11 @@ void ComicMainWindow::setupComicImageView()
     {
 	case Continuous:
 	        view = QPointer<PageViewBase>(new ContinuousPageView(this, n, props));
+	        QComicBookDebug(
+	                if (debugContinuousView) {
+                        debugContinuousView->setView(dynamic_cast<ContinuousPageView *>(view.data()));
+                    }
+            );
 		frameDetect->clear();
 		break;
 	case Simple:
@@ -923,6 +942,16 @@ void ComicMainWindow::showAbout()
                         "<a href=\"http://www.qcomicbook.org\">http://www.qcomicbook.org</a><br>"
                         "<a href=\"mailto:stolowski@gmail.com\">stolowski@gmail.com</a>", QPixmap(":/images/qcomicbook-splash.png"));
         win->show();
+}
+
+void ComicMainWindow::showDebugContinuousView()
+{
+    QComicBookDebug(
+        delete debugContinuousView;
+        debugContinuousView = new ContinuousPageViewDebug();
+        debugContinuousView->setView(dynamic_cast<ContinuousPageView *>(view.data()));
+        debugContinuousView->show();
+    );
 }
 
 void ComicMainWindow::showAboutDonating(bool startup)

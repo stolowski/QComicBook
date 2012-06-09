@@ -73,6 +73,8 @@ namespace QComicBook
             int m_requestedPage; //page requested by call to gotoPage
             int m_firstVisible; //first visible page in the view
             double m_firstVisibleOffset; //visible portion (%) of first visible page
+
+            friend class ContinuousPageViewDebug;
 	};
 }
 

@@ -55,6 +55,8 @@ namespace QComicBook
         QSize pageSize; //size of 1 or 2 pages without scaling
         bool estimated;
         bool m_twoPages; //whether this widget holds one or two pages; this is independent from current two pages mode setting
+
+        friend class ContinuousPageViewDebug;
     };
 }
 
