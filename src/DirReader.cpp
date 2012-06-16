@@ -29,7 +29,7 @@ void DirReader::recurseDir(const QString &path, int curDepth)
         const QStringList files = dir.entryList();
 	foreach (QString f, files)
         {
-                if (f == "." || f == "..")
+            if (f == "." || f == "..") //FIXME: use no-dot and no-dot-dot filter
                         continue;
 
                 QFileInfo finf(dir, f);
