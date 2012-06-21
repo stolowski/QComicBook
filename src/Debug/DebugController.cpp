@@ -92,6 +92,7 @@ void DebugController::autoRefreshEvery30sec()
 
 void DebugController::disableAutoRefresh()
 {
+    m_timer->stop();
 }
     
 void DebugController::timerTimeout()
