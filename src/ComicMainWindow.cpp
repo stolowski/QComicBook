@@ -40,7 +40,7 @@
 #include <FrameDetectThread.h>
 #include "PrintProgressDialog.h"
 #include "Job/ImageTransformThread.h"
-#include "Debug/ContinuousPageViewDebug.h"
+#include "Debug/DebugController.h"
 #include <QMenu>
 #include <QStringList>
 #include <QAction>
@@ -63,7 +63,7 @@ using namespace Utility;
 
 ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), currpage(0)
 #ifdef DEBUG
-    , debugContinuousView(NULL)
+                                                 , debugController(new DebugController(this))
 #endif
 {
     setupUi(this);
@@ -205,9 +205,45 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), currpage
     // Debug menu
     QComicBookDebug(
         QMenu *debugMenu = new QMenu(tr("Debug"), this);
-        QAction *actionDebugContinuousViewAction = new QAction(tr("Continuous View"), this);
-        connect(actionDebugContinuousViewAction, SIGNAL(triggered()), this, SLOT(showDebugContinuousView()));
-        debugMenu->addAction(actionDebugContinuousViewAction);
+        QAction *actionDebugContinuousView = new QAction(tr("Continuous View"), this);
+
+        connect(actionDebugContinuousView, SIGNAL(triggered()), debugController, SLOT(showDebugContinuousView()));
+        debugMenu->addAction(actionDebugContinuousView);
+        menubar->insertMenu(menuHelp->menuAction(), debugMenu);
+
+        QAction *actionDebugMemory = new QAction(tr("Memory"), this);
+        connect(actionDebugMemory, SIGNAL(triggered()), debugController, SLOT(showDebugMemory()));
+        debugMenu->addAction(actionDebugMemory);
+
+        debugMenu->addSeparator();
+        
+        QActionGroup *debugRefreshGroup = new QActionGroup(this);
+
+        QAction *actionDebugDisableRefresh = new QAction(tr("Disable auto-refresh"), this);
+        actionDebugDisableRefresh->setCheckable(true);
+        actionDebugDisableRefresh->setChecked(true);
+        connect(actionDebugDisableRefresh, SIGNAL(triggered()), debugController, SLOT(disableAutoRefresh()));
+        debugMenu->addAction(actionDebugDisableRefresh);
+        debugRefreshGroup->addAction(actionDebugDisableRefresh);
+
+        QAction *actionDebugRefresh1s = new QAction(tr("Refresh every 1s."), this);
+        actionDebugRefresh1s->setCheckable(true);
+        connect(actionDebugRefresh1s, SIGNAL(triggered()), debugController, SLOT(autoRefreshEvery1sec()));
+        debugMenu->addAction(actionDebugRefresh1s);
+        debugRefreshGroup->addAction(actionDebugRefresh1s);
+
+        QAction *actionDebugRefresh5s = new QAction(tr("Refresh every 5s."), this);
+        actionDebugRefresh5s->setCheckable(true);
+        connect(actionDebugRefresh5s, SIGNAL(triggered()), debugController, SLOT(autoRefreshEvery5sec()));
+        debugMenu->addAction(actionDebugRefresh5s);
+        debugRefreshGroup->addAction(actionDebugRefresh5s);
+
+        QAction *actionDebugRefresh30s = new QAction(tr("Refresh every 30s."), this);
+        actionDebugRefresh30s->setCheckable(true);
+        connect(actionDebugRefresh30s, SIGNAL(triggered()), debugController, SLOT(autoRefreshEvery30sec()));
+        debugMenu->addAction(actionDebugRefresh30s);
+        debugRefreshGroup->addAction(actionDebugRefresh30s);
+
         menubar->insertMenu(menuHelp->menuAction(), debugMenu);
     );
 
@@ -346,10 +382,8 @@ void ComicMainWindow::setupComicImageView()
 	case Continuous:
 	        view = QPointer<PageViewBase>(new ContinuousPageView(this, n, props));
 	        QComicBookDebug(
-	                if (debugContinuousView) {
-                        debugContinuousView->setView(dynamic_cast<ContinuousPageView *>(view.data()));
-                    }
-            );
+                    debugController->setView(dynamic_cast<ContinuousPageView *>(view.data()));
+                    );
 		frameDetect->clear();
 		break;
 	case Simple:
@@ -942,16 +976,6 @@ void ComicMainWindow::showAbout()
                         "<a href=\"http://www.qcomicbook.org\">http://www.qcomicbook.org</a><br>"
                         "<a href=\"mailto:stolowski@gmail.com\">stolowski@gmail.com</a>", QPixmap(":/images/qcomicbook-splash.png"));
         win->show();
-}
-
-void ComicMainWindow::showDebugContinuousView()
-{
-    QComicBookDebug(
-        delete debugContinuousView;
-        debugContinuousView = new ContinuousPageViewDebug();
-        debugContinuousView->setView(dynamic_cast<ContinuousPageView *>(view.data()));
-        debugContinuousView->show();
-    );
 }
 
 void ComicMainWindow::showAboutDonating(bool startup)

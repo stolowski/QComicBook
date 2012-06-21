@@ -99,6 +99,7 @@ void ContinuousPageViewDebug::drawPageRectangles()
     for (int i=0; i < m_view->imgLabel.size(); i++) {
         PageWidget *page = m_view->imgLabel[i];
         m_scene->addRect(page->x(), page->y(), page->width(), page->height(), QColor(Qt::blue));
+        m_scene->addRect(page->x(), page->y(), page->width(), page->height(), QColor(Qt::blue));
 
         QString status = QString::number(page->m_pageNum + 1) + "/";
         if (page->isDisposed()) {

@@ -33,13 +33,13 @@ namespace QComicBook
 
         public Q_SLOTS:
             void setView(ContinuousPageView *view);
+            void refresh();
 
         private Q_SLOTS:
             void refreshClicked();
             void setZoomFactor(double v);
 
         private:
-            void refresh();
             void dumpTextData();
             void drawRangeLines();
             void drawPageRectangles();

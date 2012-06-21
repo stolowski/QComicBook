@@ -19,6 +19,7 @@
 #include <QGraphicsItem>
 #include <QPixmap>
 #include "JobSource.h"
+#include "Counted.h"
 
 class QPixmap;
 class QPainter;
@@ -27,7 +28,7 @@ namespace QComicBook
 {
 	class PageViewBase;
 
-	class ComicImageWidget: public QGraphicsItem, public JobSource
+	class ComicImageWidget: public QGraphicsItem, public JobSource, public Counted<ComicImageWidget>
 	{
 		public:
 			ComicImageWidget(PageViewBase *parent);

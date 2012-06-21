@@ -15,13 +15,14 @@
 
 #include "JobKey.h"
 #include "../ViewPropertiesData.h"
+#include "Counted.h"
 
 class QImage;
 class QMatrix;
 
 namespace QComicBook
 {
-    class ImageTransformJob
+    class ImageTransformJob: public Counted<ImageTransformJob>
     {
     public:
         ImageTransformJob();

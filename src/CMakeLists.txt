@@ -10,7 +10,9 @@ INCLUDE_DIRECTORIES(
 )
 
 SET(qcomicbook_moc_hdrs
+    Debug/DebugController.h
     Debug/ContinuousPageViewDebug.h
+    Debug/MemoryDebug.h
 	FrameDetect/FrameCache.h
 	FrameDetect/FrameDetectThread.h
 	Archivers/ArchiversConfiguration.h
