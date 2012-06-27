@@ -63,6 +63,7 @@ void ContinuousPageViewDebug::setView(ContinuousPageView *view)
 void ContinuousPageViewDebug::refresh()
 {
     m_scene->clear();
+    textData->clear();
     if (m_view) {
         dumpTextData();
         drawRangeLines();
