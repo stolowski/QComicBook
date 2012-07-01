@@ -10,10 +10,10 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#ifndef __FRAME_WIDGET_H
-#define __FRAME_WIDGET_H
+#ifndef __COMIC_FRAME_IMAGE_H
+#define __COMIC_FRAME_IMAGE_H
 
-#include "ComicImageWidget.h"
+#include "ComicImage.h"
 #include <QRect>
 
 class QImage;
@@ -24,21 +24,21 @@ namespace QComicBook
 	class ComicFrame;
 	class FrameView;
 
-	class FrameWidget: public ComicImageWidget
+	class ComicFrameImage: public ComicImage
 	{
-		public:
-			FrameWidget(FrameView *parent, int w, int h);
-			virtual ~FrameWidget();
-
-			void setFrame(const Page &p, const ComicFrame &f);
-			void clear();
+        public:
+            ComicFrameImage(FrameView *parent, int w, int h);
+            virtual ~ComicFrameImage();
+            
+            void setFrame(const Page &p, const ComicFrame &f);
+            void clear();
             ImageTransformJob *createRedrawJob();
             bool jobCompleted(const ImageJobResult &result);
             void propsChanged();
-
-		private:
-			QImage *m_image;
-			QRect m_frame;
+            
+        private:
+            QImage *m_image;
+            QRect m_frame;
             int m_framekey;
 	};
 }

@@ -13,14 +13,14 @@
 #ifndef __PAGEWIDGET_H
 #define __PAGEWIDGET_H
 
-#include "ComicImageWidget.h"
+#include "ComicImage.h"
 
 namespace QComicBook
 {
     class Page;
     class PageViewBase;
 
-    class PageWidget: public ComicImageWidget
+    class PageWidget: public ComicImage
     {
     public:
         PageWidget(PageViewBase *parent, int w, int h, int pageNum, bool twoPages=false);

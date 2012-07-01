@@ -11,7 +11,7 @@
  */
 
 #include "PageViewBase.h"
-#include "ComicImageWidget.h"
+#include "ComicImage.h"
 #include <QContextMenuEvent>
 #include <QMenu>
 #include <QBitmap>
@@ -277,11 +277,6 @@ void PageViewBase::jumpDown()
     }
 }
 			
-void PageViewBase::setFrames(int page, const QList<ComicFrame> &frames)
-{
-	// default implementation does nothing
-}
-
 void PageViewBase::nextFrame()
 {
 }
@@ -489,7 +484,7 @@ void PageViewBase::resizeEvent(QResizeEvent *e)
     recalculateScrollSpeeds();
 }
 
-void PageViewBase::center(ComicImageWidget *w, bool horizontal, bool vertical)
+void PageViewBase::center(ComicImage *w, bool horizontal, bool vertical)
 {
     const int x = horizontal ? (viewport()->width() - w->width()) / 2 : w->x();
     const int y = vertical ? (viewport()->height() - w->height()) / 2 : w->y();

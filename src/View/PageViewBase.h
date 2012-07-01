@@ -25,7 +25,7 @@ namespace QComicBook
     class PageWidget;
     class Page;
     class Lens;
-    class ComicImageWidget;
+    class ComicImage;
     class ImageJobResult;
 
 	enum Scaling { Smooth, Fast };
@@ -57,9 +57,8 @@ namespace QComicBook
             virtual void scrollToBottom() = 0;
             virtual void jumpUp();
             virtual void jumpDown();
-			virtual void setFrames(int page, const QList<ComicFrame> &frames);
-			virtual void nextFrame();
-			virtual void prevFrame();
+            virtual void nextFrame();
+            virtual void prevFrame();
 
             virtual void setTwoPagesMode(bool f);
             virtual void setMangaMode(bool f);
@@ -110,7 +109,7 @@ namespace QComicBook
             virtual void mousePressEvent(QMouseEvent *e);
             virtual void mouseReleaseEvent(QMouseEvent *e);
             virtual void mouseDoubleClickEvent(QMouseEvent *e);
-            void center(ComicImageWidget *w, bool horizontal=true, bool vertical=true);
+            void center(ComicImage *w, bool horizontal=true, bool vertical=true);
             void scrollByDelta(int dx, int dy);
             void recalculateScrollSpeeds();
             void updateSceneRect();

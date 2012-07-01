@@ -11,7 +11,7 @@
  */
 
 #include "MemoryDebug.h"
-#include "ComicImageWidget.h"
+#include "ComicImage.h"
  
 namespace QComicBook
 {
@@ -38,7 +38,7 @@ void MemoryDebug::refreshClicked()
 void MemoryDebug::refresh()
 {
     debug_text->clear();
-    appendObjectCount("ComicImageWidget", Counted<ComicImageWidget>::objectCount(), Counted<ComicImageWidget>::objectTotal());
+    appendObjectCount("ComicImage", Counted<ComicImage>::objectCount(), Counted<ComicImage>::objectTotal());
     appendObjectCount("ImageTransformJob", Counted<ImageTransformJob>::objectCount(), Counted<ImageTransformJob>::objectTotal());
 }
 

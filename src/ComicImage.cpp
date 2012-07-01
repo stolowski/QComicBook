@@ -10,7 +10,7 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "ComicImageWidget.h"
+#include "ComicImage.h"
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include "ComicBookSettings.h"
@@ -22,7 +22,7 @@
 
 using namespace QComicBook;
 
-ComicImageWidget::ComicImageWidget(PageViewBase *parent)
+ComicImage::ComicImage(PageViewBase *parent)
 	: QGraphicsItem()
 	  , m_view(parent)
 	  , imageSize(0, 0)
@@ -31,62 +31,62 @@ ComicImageWidget::ComicImageWidget(PageViewBase *parent)
 {
 }
 
-ComicImageWidget::~ComicImageWidget()
+ComicImage::~ComicImage()
 {
 	delete m_pixmap;
 }
 
-void ComicImageWidget::dispose()
+void ComicImage::dispose()
 {
     delete m_pixmap;
     m_pixmap = 0;
 //	scaledSize = QSize(0, 0); //?
 }
 
-bool ComicImageWidget::isDisposed() const
+bool ComicImage::isDisposed() const
 {
     return m_pixmap == NULL;
 }
 
-QRectF ComicImageWidget::boundingRect() const
+QRectF ComicImage::boundingRect() const
 {
     return QRectF(0.0f, 0.0f, scaledSize.width(), scaledSize.height());
 }
 
-bool ComicImageWidget::isInView(int vy1, int vy2) const
+bool ComicImage::isInView(int vy1, int vy2) const
 {
     const int y1 = pos().y();
     return std::min(y1 + scaledSize.height(), vy2) > std::max(y1, vy1);
 }
 
-void ComicImageWidget::setSourceSize(int w, int h)
+void ComicImage::setSourceSize(int w, int h)
 {
 	imageSize = QSize(w, h);
 	recalcScaledSize();
 	//redrawScaledImage();
 }
 
-QSize ComicImageWidget::getSourceSize() const
+QSize ComicImage::getSourceSize() const
 {
 	return imageSize;
 }
 
-QSize ComicImageWidget::getScaledSize() const
+QSize ComicImage::getScaledSize() const
 {
 	return scaledSize;
 }
 
-int ComicImageWidget::width() const
+int ComicImage::width() const
 {
 	return scaledSize.width();
 }
 
-int ComicImageWidget::height() const
+int ComicImage::height() const
 {
 	return scaledSize.height();
 }
 
-void ComicImageWidget::recalcScaledSize()
+void ComicImage::recalcScaledSize()
 {
     _DEBUG;
 
@@ -175,7 +175,7 @@ void ComicImageWidget::recalcScaledSize()
 	update();
 }
 
-void ComicImageWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt, QWidget *widget)
+void ComicImage::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt, QWidget *widget)
 {
     if (m_pixmap)
     {
@@ -184,7 +184,7 @@ void ComicImageWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     }
 }
 
-void ComicImageWidget::requestRedraw()
+void ComicImage::requestRedraw()
 {
     _DEBUG;
 
@@ -208,7 +208,7 @@ void ComicImageWidget::requestRedraw()
 	}
 }
 
-bool ComicImageWidget::jobCompleted(const ImageJobResult &result)
+bool ComicImage::jobCompleted(const ImageJobResult &result)
 {
     _DEBUG;
     delete m_pixmap;
@@ -217,12 +217,12 @@ bool ComicImageWidget::jobCompleted(const ImageJobResult &result)
     return true;
 }
 
-const QPixmap* ComicImageWidget::pixmap() const
+const QPixmap* ComicImage::pixmap() const
 {
     return m_pixmap;
 }
 
-PageViewBase* ComicImageWidget::view() const
+PageViewBase* ComicImage::view() const
 {
 	return m_view;
 }

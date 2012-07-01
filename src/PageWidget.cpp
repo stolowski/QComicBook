@@ -26,7 +26,7 @@
 using namespace QComicBook;
 
 PageWidget::PageWidget(PageViewBase *parent, int w, int h, int pageNum, bool twoPages)
-    : ComicImageWidget(parent)
+    : ComicImage(parent)
     , m_pageNum(pageNum)
     , m_twoPages(twoPages)
     , pageSize(w, h)
@@ -84,13 +84,13 @@ Page PageWidget::getPage(int n)
 
 void PageWidget::dispose()
 {
-	ComicImageWidget::dispose();
+	ComicImage::dispose();
     deletePages();
 }
 		
 bool PageWidget::isDisposed() const
 {
-	return ComicImageWidget::isDisposed() || (m_image[0] == NULL);
+	return ComicImage::isDisposed() || (m_image[0] == NULL);
 }
 
 void PageWidget::setEstimatedSize(int w, int h)
@@ -149,7 +149,7 @@ bool PageWidget::jobCompleted(const ImageJobResult &result)
     if (m_image[0] && result.key.getKey() == m_image[0]->getNumber())
     {
         _DEBUG << "job for page" << m_image[0]->getNumber();
-        if (ComicImageWidget::jobCompleted(result))
+        if (ComicImage::jobCompleted(result))
         {
             return true;
         }

@@ -380,29 +380,31 @@ void ComicMainWindow::setupComicImageView()
     switch (cfg->viewType())
     {
 	case Continuous:
-	        view = QPointer<PageViewBase>(new ContinuousPageView(this, n, props));
-	        QComicBookDebug(
-                    debugController->setView(dynamic_cast<ContinuousPageView *>(view.data()));
-                    );
-		frameDetect->clear();
-		break;
+            view = QPointer<PageViewBase>(new ContinuousPageView(this, n, props));
+            QComicBookDebug(
+                debugController->setView(dynamic_cast<ContinuousPageView *>(view.data()));
+                );
+            frameDetect->clear();
+            break;
 	case Simple:
-		view = QPointer<PageViewBase>(new SimplePageView(this, n, props));
-		frameDetect->clear();
-		break;
-	case Frame:
-		view = QPointer<PageViewBase>(new FrameView(this, n, props));
-		actionNextFrame->setDisabled(false);
-		actionPreviousFrame->setDisabled(false);
-		actionTwoPages->setDisabled(true);
-		actionMangaMode->setDisabled(false);
-		//
-		// connect frame processing thread
-		connect(pageLoader, SIGNAL(pageLoaded(const Page &)), frameDetect, SLOT(process(const Page &)));
-		connect(frameDetect, SIGNAL(framesReady(const ComicFrameList &)), view, SLOT(setFrames(const ComicFrameList &)));
-		break;
-	default:
-		break;
+            view = QPointer<PageViewBase>(new SimplePageView(this, n, props));
+            frameDetect->clear();
+            break;
+        case Frame: {
+            FrameView *frameView = new FrameView(this, n, props);
+            view = QPointer<PageViewBase>(frameView);
+            actionNextFrame->setDisabled(false);
+            actionPreviousFrame->setDisabled(false);
+            actionTwoPages->setDisabled(true);
+            actionMangaMode->setDisabled(false);
+            //
+            // connect frame processing thread
+            connect(pageLoader, SIGNAL(pageLoaded(const Page &)), frameDetect, SLOT(process(const Page &)));
+            connect(frameDetect, SIGNAL(framesReady(const ComicFrameList &)), frameView, SLOT(setFrames(const ComicFrameList &)));
+            }
+            break;
+    default:
+        break;
     }
     
     setCentralWidget(view);

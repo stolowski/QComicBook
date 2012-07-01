@@ -13,7 +13,7 @@
 #include "FrameView.h"
 #include "ComicBookSettings.h"
 #include "Page.h"
-#include "FrameWidget.h"
+#include "ComicFrameImage.h"
 #include <ComicFrameList.h>
 #include <QPixmap>
 #include <QVBoxLayout>
@@ -37,7 +37,7 @@ FrameView::FrameView(QWidget *parent, int physicalPages, const ViewProperties& p
     m_layout->setAlignment(Qt::AlignCenter);
     setWidget(w);*/
 
-	m_frame = new FrameWidget(this, viewport()->width() - 10, viewport()->height() - 10);
+	m_frame = new ComicFrameImage(this, viewport()->width() - 10, viewport()->height() - 10);
 	scene->addItem(m_frame);
 
     ///setWidgetResizable(true);

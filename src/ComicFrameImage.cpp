@@ -10,7 +10,7 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "FrameWidget.h"
+#include "ComicFrameImage.h"
 #include "View/FrameView.h"
 #include <ComicFrame.h>
 #include "Page.h"
@@ -23,18 +23,18 @@
 
 using namespace QComicBook;
 
-FrameWidget::FrameWidget(FrameView *parent, int w, int h)
-	: ComicImageWidget(parent)
+ComicFrameImage::ComicFrameImage(FrameView *parent, int w, int h)
+	: ComicImage(parent)
         , m_image(0), m_framekey(-1)
 {
 }
 
-FrameWidget::~FrameWidget()
+ComicFrameImage::~ComicFrameImage()
 {
 	delete m_image;
 }
 
-void FrameWidget::setFrame(const Page &p, const ComicFrame &f)
+void ComicFrameImage::setFrame(const Page &p, const ComicFrame &f)
 {
     _DEBUG;
 	m_image = new QImage(p.getImage());
@@ -45,7 +45,7 @@ void FrameWidget::setFrame(const Page &p, const ComicFrame &f)
 	requestRedraw();
 }
 
-ImageTransformJob* FrameWidget::createRedrawJob()
+ImageTransformJob* ComicFrameImage::createRedrawJob()
 {
     _DEBUG;
     FrameRedrawJob *j = NULL;
@@ -58,13 +58,13 @@ ImageTransformJob* FrameWidget::createRedrawJob()
     return j;
 }
 
-bool FrameWidget::jobCompleted(const ImageJobResult &result)
+bool ComicFrameImage::jobCompleted(const ImageJobResult &result)
 {
     _DEBUG << result.key;
     if (m_image && result.key.getKey() == m_framekey)
     {
         _DEBUG << "matching job" << result.key;
-        if (ComicImageWidget::jobCompleted(result))
+        if (ComicImage::jobCompleted(result))
         {
             return true;
         }
@@ -72,14 +72,14 @@ bool FrameWidget::jobCompleted(const ImageJobResult &result)
     return false;
 }
 
-void FrameWidget::clear()
+void ComicFrameImage::clear()
 {
 	delete m_image;
 	m_image = 0;
 	dispose();
 }
 			
-void FrameWidget::propsChanged()
+void ComicFrameImage::propsChanged()
 {
     _DEBUG;
 }
