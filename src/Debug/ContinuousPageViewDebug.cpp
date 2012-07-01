@@ -12,7 +12,7 @@
 
 #include "ContinuousPageViewDebug.h"
 #include "View/ContinuousPageView.h"
-#include "PageWidget.h"
+#include "ComicPageImage.h"
 #include <QTextStream>
 
 namespace QComicBook
@@ -77,7 +77,7 @@ void ContinuousPageViewDebug::dumpTextData()
 {
     QString text;
     QTextStream s(&text);
-    s << "Number of PageWidget objs: " << m_view->imgLabel.size() << "\n";
+    s << "Number of ComicPageImage objs: " << m_view->imgLabel.size() << "\n";
     s << "Page description format: " << "d - disposed, e - estimated, pageNumber/estimatedSize; sourceSize; scaledSize / numOfPages" << "\n";
     textData->append(text);
 }
@@ -98,7 +98,7 @@ void ContinuousPageViewDebug::drawPageRectangles()
     font.setPixelSize(200);
 
     for (int i=0; i < m_view->imgLabel.size(); i++) {
-        PageWidget *page = m_view->imgLabel[i];
+        ComicPageImage *page = m_view->imgLabel[i];
         m_scene->addRect(page->x(), page->y(), page->width(), page->height(), QColor(Qt::blue));
         m_scene->addRect(page->x(), page->y(), page->width(), page->height(), QColor(Qt::blue));
 

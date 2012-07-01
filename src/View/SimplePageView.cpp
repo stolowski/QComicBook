@@ -12,7 +12,7 @@
 
 #include "SimplePageView.h"
 #include "Utility.h"
-#include "PageWidget.h"
+#include "ComicPageImage.h"
 #include "ComicBookSettings.h"
 #include <QVBoxLayout>
 #include <QImage>
@@ -35,7 +35,7 @@ SimplePageView::SimplePageView(QWidget *parent, int physicalPages, const ViewPro
 {
     _DEBUG;
 
-    recreatePageWidget();
+    recreateComicPageImage();
     
     setBackground(props.background());
     setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -46,7 +46,7 @@ SimplePageView::~SimplePageView()
     _DEBUG;
 }
 
-void SimplePageView::recreatePageWidget()
+void SimplePageView::recreateComicPageImage()
 {
     _DEBUG;
 
@@ -59,7 +59,7 @@ void SimplePageView::recreatePageWidget()
 
     if (numOfPages())
     {
-        imgLabel = new PageWidget(this, w, h, 0, props.twoPagesMode());
+        imgLabel = new ComicPageImage(this, w, h, 0, props.twoPagesMode());
         scene->addItem(imgLabel);
     }
 }
@@ -67,7 +67,7 @@ void SimplePageView::recreatePageWidget()
 void SimplePageView::setNumOfPages(int n)
 {
     PageViewBase::setNumOfPages(n);
-    recreatePageWidget();
+    recreateComicPageImage();
 }
 
 void SimplePageView::propsChanged()
@@ -77,7 +77,7 @@ void SimplePageView::propsChanged()
     {
         if ((props.twoPagesMode() && !imgLabel->hasTwoPages()) || (imgLabel->hasTwoPages() && !props.twoPagesMode()))
         {
-            recreatePageWidget();
+            recreateComicPageImage();
         }
         imgLabel->redrawImages();
         update();

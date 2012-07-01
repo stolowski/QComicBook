@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005-2009 Pawel Stolowski <stolowski@gmail.com>
+ * Copyright (C) 2005-2012 Pawel Stolowski <stolowski@gmail.com>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -10,7 +10,7 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#include "PageWidget.h"
+#include "ComicPageImage.h"
 #include "Page.h"
 #include "View/PageViewBase.h"
 #include "ComicBookSettings.h"
@@ -25,7 +25,7 @@
 
 using namespace QComicBook;
 
-PageWidget::PageWidget(PageViewBase *parent, int w, int h, int pageNum, bool twoPages)
+ComicPageImage::ComicPageImage(PageViewBase *parent, int w, int h, int pageNum, bool twoPages)
     : ComicImage(parent)
     , m_pageNum(pageNum)
     , m_twoPages(twoPages)
@@ -35,17 +35,17 @@ PageWidget::PageWidget(PageViewBase *parent, int w, int h, int pageNum, bool two
     m_image[0] = m_image[1] = NULL;
 }
 
-PageWidget::~PageWidget()
+ComicPageImage::~ComicPageImage()
 {
 	deletePages();
 }
 
-QSize PageWidget::estimatedSize() const
+QSize ComicPageImage::estimatedSize() const
 {
     return estimated ? pageSize : getScaledSize();
 }
 
-void PageWidget::deletePages()
+void ComicPageImage::deletePages()
 {
     for (int i=0; i<2; i++)
     {
@@ -54,7 +54,7 @@ void PageWidget::deletePages()
     }
 }
 
-void PageWidget::setImage(const Page &img1)
+void ComicPageImage::setImage(const Page &img1)
 {
     deletePages();
     m_image[0] = new Page(img1);
@@ -63,7 +63,7 @@ void PageWidget::setImage(const Page &img1)
     redrawImages();
 }
 
-void PageWidget::setImage(const Page &img1, const Page &img2)
+void ComicPageImage::setImage(const Page &img1, const Page &img2)
 {
     deletePages();
     m_image[0] = new Page(img1);
@@ -73,7 +73,7 @@ void PageWidget::setImage(const Page &img1, const Page &img2)
     redrawImages();
 }
 
-Page PageWidget::getPage(int n)
+Page ComicPageImage::getPage(int n)
 {
     if (n>=0 && n<2 && m_image[n])
     {
@@ -82,18 +82,18 @@ Page PageWidget::getPage(int n)
     throw std::runtime_error("Invalid page index");
 }
 
-void PageWidget::dispose()
+void ComicPageImage::dispose()
 {
 	ComicImage::dispose();
     deletePages();
 }
 		
-bool PageWidget::isDisposed() const
+bool ComicPageImage::isDisposed() const
 {
 	return ComicImage::isDisposed() || (m_image[0] == NULL);
 }
 
-void PageWidget::setEstimatedSize(int w, int h)
+void ComicPageImage::setEstimatedSize(int w, int h)
 {
     if (estimated) // update size only if we have estimated size, otherwise we know last real size
     {
@@ -105,22 +105,22 @@ void PageWidget::setEstimatedSize(int w, int h)
     }
 }
 
-bool PageWidget::isEstimated() const
+bool ComicPageImage::isEstimated() const
 {
     return estimated;
 }
 
-int PageWidget::pageNumber() const
+int ComicPageImage::pageNumber() const
 {
     return m_pageNum;
 }
 
-bool PageWidget::hasTwoPages() const
+bool ComicPageImage::hasTwoPages() const
 {
     return m_twoPages;
 }
 
-ImageTransformJob* PageWidget::createRedrawJob()
+ImageTransformJob* ComicPageImage::createRedrawJob()
 {
     _DEBUG;
     PageRedrawJob *j = NULL;
@@ -143,7 +143,7 @@ ImageTransformJob* PageWidget::createRedrawJob()
     return j;
 }
 
-bool PageWidget::jobCompleted(const ImageJobResult &result)
+bool ComicPageImage::jobCompleted(const ImageJobResult &result)
 {
     _DEBUG << result.key;
     if (m_image[0] && result.key.getKey() == m_image[0]->getNumber())
@@ -157,7 +157,7 @@ bool PageWidget::jobCompleted(const ImageJobResult &result)
     return false;
 }
 
-void PageWidget::redrawImages()
+void ComicPageImage::redrawImages()
 {
     const int pages = numOfPages();
 
@@ -187,7 +187,7 @@ void PageWidget::redrawImages()
 	}
 }
 
-int PageWidget::numOfPages() const
+int ComicPageImage::numOfPages() const
 {
     int n;
     for (n=0; n<2; n++)
@@ -198,7 +198,7 @@ int PageWidget::numOfPages() const
     return n;
 }
 
-void PageWidget::propsChanged()
+void ComicPageImage::propsChanged()
 {
     redrawImages();
 } 

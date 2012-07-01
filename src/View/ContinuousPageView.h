@@ -22,60 +22,60 @@
 
 namespace QComicBook
 {
-    class PageWidget;
+    class ComicPageImage;
 
-	class ContinuousPageView: public PageViewBase
-	{
-		Q_OBJECT
+    class ContinuousPageView: public PageViewBase
+    {
+    Q_OBJECT
 
-		protected:
-			virtual void resizeEvent(QResizeEvent *e);
-			virtual void wheelEvent(QWheelEvent *e);
-            virtual void scrollContentsBy(int dx, int dy);
+    protected:
+        virtual void resizeEvent(QResizeEvent *e);
+        virtual void wheelEvent(QWheelEvent *e);
+        virtual void scrollContentsBy(int dx, int dy);
 
-            void recreatePageWidgets();
-            PageWidget *findPageWidget(int pageNum) const;
-            void recalculatePageSizes();
-            QList<PageWidget *> findPageWidgetsInView() const;
-            void disposeOrRequestPages();
-            PageWidget *currentPageWidget() const;
+        void recreateComicPageImages();
+        ComicPageImage *findComicPageImage(int pageNum) const;
+        void recalculatePageSizes();
+        QList<ComicPageImage *> findComicPageImagesInView() const;
+        void disposeOrRequestPages();
+        ComicPageImage *currentComicPageImage() const;
 
-        protected slots:
-            void propsChanged();
-            void jobCompleted(const ImageJobResult &result);
+    protected slots:
+        void propsChanged();
+        void jobCompleted(const ImageJobResult &result);
 
-            void scrollbarRangeChanged(int min, int max);
-            static bool isInView(int y1, int y2, int vy1, int vy2)
-            {
-                return std::min(y2, vy2) > std::max(y1, vy1);
-            }
+        void scrollbarRangeChanged(int min, int max);
+        static bool isInView(int y1, int y2, int vy1, int vy2)
+        {
+            return std::min(y2, vy2) > std::max(y1, vy1);
+        }
 
-        public slots:
-            virtual void setImage(const Page &img1);
-            virtual void setImage(const Page &img1, const Page &img2);
-            virtual void clear();
-            virtual void gotoPage(int n);
-            virtual void scrollToTop();
-            virtual void scrollToBottom();
-
-		public:
-			ContinuousPageView(QWidget *parent, int physicalPages, const ViewProperties& props);
-			virtual ~ContinuousPageView();
-
-			virtual int visiblePages() const;
-			virtual int viewWidth() const;
-            virtual void setNumOfPages(int n);
-            virtual int currentPage() const;
-
-		private:
-			QVector<PageWidget*> imgLabel;
-            CoordinateRangeList<int> m_ypos;
-            int m_requestedPage; //page requested by call to gotoPage
-            int m_firstVisible; //first visible page in the view
-            double m_firstVisibleOffset; //visible portion (%) of first visible page
-
-            friend class ContinuousPageViewDebug;
-	};
+    public slots:
+        virtual void setImage(const Page &img1);
+        virtual void setImage(const Page &img1, const Page &img2);
+        virtual void clear();
+        virtual void gotoPage(int n);
+        virtual void scrollToTop();
+        virtual void scrollToBottom();
+        
+    public:
+        ContinuousPageView(QWidget *parent, int physicalPages, const ViewProperties& props);
+        virtual ~ContinuousPageView();
+            
+        virtual int visiblePages() const;
+        virtual int viewWidth() const;
+        virtual void setNumOfPages(int n);
+        virtual int currentPage() const;
+        
+    private:
+        QVector<ComicPageImage*> imgLabel;
+        CoordinateRangeList<int> m_ypos;
+        int m_requestedPage; //page requested by call to gotoPage
+        int m_firstVisible; //first visible page in the view
+        double m_firstVisibleOffset; //visible portion (%) of first visible page
+        
+        friend class ContinuousPageViewDebug;
+    };
 }
 
 #endif

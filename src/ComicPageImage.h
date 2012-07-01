@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005-2009 Pawel Stolowski <stolowski@gmail.com>
+ * Copyright (C) 2005-2012 Pawel Stolowski <stolowski@gmail.com>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -10,8 +10,8 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
-#ifndef __PAGEWIDGET_H
-#define __PAGEWIDGET_H
+#ifndef __COMIC_PAGE_IMAGE_H
+#define __COMIC_PAGE_IMAGE_H
 
 #include "ComicImage.h"
 
@@ -20,11 +20,11 @@ namespace QComicBook
     class Page;
     class PageViewBase;
 
-    class PageWidget: public ComicImage
+    class ComicPageImage: public ComicImage
     {
     public:
-        PageWidget(PageViewBase *parent, int w, int h, int pageNum, bool twoPages=false);
-        virtual ~PageWidget();
+        ComicPageImage(PageViewBase *parent, int w, int h, int pageNum, bool twoPages=false);
+        virtual ~ComicPageImage();
 
         ImageTransformJob *createRedrawJob();
 

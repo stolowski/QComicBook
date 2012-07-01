@@ -16,7 +16,7 @@
 #include <algorithm>
 #include "PageRedrawJob.h"
 #include "../Page.h"
-#include "PageWidget.h"
+#include "ComicPageImage.h"
 
 using namespace QComicBook;
 
