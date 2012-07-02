@@ -24,25 +24,24 @@
 using namespace QComicBook;
 
 ComicFrameImage::ComicFrameImage(FrameView *parent, int w, int h)
-	: ComicImage(parent)
-        , m_image(0), m_framekey(-1)
+    : ComicImage(parent)
+    , m_image(0), m_framekey(-1)
 {
 }
 
 ComicFrameImage::~ComicFrameImage()
 {
-	delete m_image;
+    delete m_image;
 }
 
 void ComicFrameImage::setFrame(const Page &p, const ComicFrame &f)
 {
     _DEBUG;
-	m_image = new QImage(p.getImage());
-	m_frame = QRect(f.xPos(), f.yPos(), f.width(), f.height());
+    m_image = new QImage(p.getImage());
+    m_frame = QRect(f.xPos(), f.yPos(), f.width(), f.height());
     m_framekey = ((f.xPos() & 0xffff) << 16) | (f.yPos() & 0xffff);
-
-	setSourceSize(f.width(), f.height());
-	requestRedraw();
+    
+    setSourceSize(f.width(), f.height());
 }
 
 ImageTransformJob* ComicFrameImage::createRedrawJob()
@@ -64,10 +63,8 @@ bool ComicFrameImage::jobCompleted(const ImageJobResult &result)
     if (m_image && result.key.getKey() == m_framekey)
     {
         _DEBUG << "matching job" << result.key;
-        if (ComicImage::jobCompleted(result))
-        {
-            return true;
-        }
+        redraw(result.image);
+        return true;
     }
     return false;
 }

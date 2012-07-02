@@ -1,7 +1,7 @@
 /*
  * This file is a part of QComicBook.
  *
- * Copyright (C) 2005-2010 Pawel Stolowski <stolowski@gmail.com>
+ * Copyright (C) 2005-2012 Pawel Stolowski <stolowski@gmail.com>
  *
  * QComicBook is free software; you can redestribute it and/or modify it
  * under terms of GNU General Public License by Free Software Foundation.
@@ -43,23 +43,27 @@ namespace QComicBook
             QSize getScaledSize() const;
             const QPixmap* pixmap() const;
             QRectF boundingRect() const;
-            void paint(QPainter *painter, const QStyleOptionGraphicsItem *opt, QWidget *widget = 0);
+            
             void requestRedraw();
             PageViewBase* view() const;
             void recalcScaledSize();
             int width() const;
             int height() const;
             
-            virtual bool jobCompleted(const ImageJobResult &result);
             virtual void propsChanged() = 0;
-            
+
+        protected:
+            void paint(QPainter *painter, const QStyleOptionGraphicsItem *opt, QWidget *widget = 0);
+            void redraw(const QImage &img);
+            virtual void requestRedraw(const QSize& requestedSize, const QMatrix &rotationMatrix);
+
         private:
             PageViewBase *m_view;
             QPixmap *m_pixmap;
             int xoff, yoff;
             QMatrix rmtx;
-            QSize imageSize; //image size without scaling
-            QSize scaledSize; //image size with scaling and rotation
+            QSize m_sourceSize; //image size without scaling
+            QSize m_scaledSize; //image size with scaling and rotation
 	};
 }
 

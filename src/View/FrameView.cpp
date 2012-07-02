@@ -191,7 +191,6 @@ void FrameView::resizeEvent(QResizeEvent *e)
     if (m_frame)
     {
         m_frame->recalcScaledSize();
-		m_frame->requestRedraw();
     }
     PageViewBase::resizeEvent(e);
 }

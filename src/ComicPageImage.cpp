@@ -59,7 +59,7 @@ void ComicPageImage::setImage(const Page &img1)
     deletePages();
     m_image[0] = new Page(img1);
     m_twoPages = false;
-	estimated = false;
+    estimated = false;
     redrawImages();
 }
 
@@ -69,7 +69,7 @@ void ComicPageImage::setImage(const Page &img1, const Page &img2)
     m_image[0] = new Page(img1);
     m_image[1] = new Page(img2);
     m_twoPages = true;
-	estimated = false;
+    estimated = false;
     redrawImages();
 }
 
@@ -84,13 +84,13 @@ Page ComicPageImage::getPage(int n)
 
 void ComicPageImage::dispose()
 {
-	ComicImage::dispose();
+    ComicImage::dispose();
     deletePages();
 }
 		
 bool ComicPageImage::isDisposed() const
 {
-	return ComicImage::isDisposed() || (m_image[0] == NULL);
+    return ComicImage::isDisposed() || (m_image[0] == NULL);
 }
 
 void ComicPageImage::setEstimatedSize(int w, int h)
@@ -149,10 +149,8 @@ bool ComicPageImage::jobCompleted(const ImageJobResult &result)
     if (m_image[0] && result.key.getKey() == m_image[0]->getNumber())
     {
         _DEBUG << "job for page" << m_image[0]->getNumber();
-        if (ComicImage::jobCompleted(result))
-        {
-            return true;
-        }
+        redraw(result.image);
+        return true;
     }
     return false;
 }
@@ -166,25 +164,21 @@ void ComicPageImage::redrawImages()
 
     if (pages == 0) // images not set or disposed, use last known or estimated size
     {
-		totalWidth = pageSize.width();
-		totalHeight = pageSize.height();
+        totalWidth = pageSize.width();
+        totalHeight = pageSize.height();
     }
     else if (pages == 1)
     {
-		totalWidth = m_image[0]->width();
-		totalHeight = m_image[0]->height();
+        totalWidth = m_image[0]->width();
+        totalHeight = m_image[0]->height();
     }
     else // 2 pages
     {
-		totalWidth = m_image[0]->width() + m_image[1]->width();
-		totalHeight = std::max(m_image[0]->height(), m_image[1]->height());
+        totalWidth = m_image[0]->width() + m_image[1]->width();
+        totalHeight = std::max(m_image[0]->height(), m_image[1]->height());
     }
     
-	setSourceSize(totalWidth, totalHeight);
-	if (!estimated)
-	{
-		requestRedraw();
-	}
+    setSourceSize(totalWidth, totalHeight);
 }
 
 int ComicPageImage::numOfPages() const
