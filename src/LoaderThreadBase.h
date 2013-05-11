@@ -18,10 +18,10 @@
 #include <QMutex>
 #include <QWaitCondition>
 #include <QSharedPointer>
+#include "Sink/ImgSink.h"
 
 namespace QComicBook
 {
-    class ImgSink;
     class Page;
     
     struct LoadRequest

@@ -17,8 +17,8 @@
 #include <stdexcept>
 #include <fstream>
 #include <algorithm>
-#include <QDebug>
-#include "Page.h"
+#include "../ComicBookDebug.h"
+#include "../Page.h"
 
 using namespace QComicBook;
 
@@ -29,7 +29,7 @@ FrameDetect::FrameDetect(const Page &page)
     bcolor = determineBackground(*bimg);
     ccolor = 255 - bcolor;
 
-    qDebug() << "background is" << bcolor;
+    _DEBUG << "background is" << bcolor;
 
     addWhiteBorders();
 
@@ -104,7 +104,8 @@ ComicFrameList FrameDetect::process(int px, int py, int pw, int ph)
     labelToImage(&ldata).save("labels-" + QString::number(page) + ".jpg");
 #endif
 
-	qDebug() << label-1 << "labels";
+	_DEBUG << label-1 << "labels";
+
 	return frames(&ldata);
 }
 
@@ -157,7 +158,7 @@ void FrameDetect::contourTracking(LabelData *ldata, int x, int y, int initialPos
 		const Point f(tracer(ldata, x, y, d, lbl));
 		if (f.x < 0)
 		{
-			qDebug() << "img boundary";
+			_DEBUG << "img boundary";
 			return;
 		}
 
@@ -221,7 +222,7 @@ int FrameDetect::determineBackground(const BinarizedImage &img)
 {
 	const int stripw(img.width()/100);
 
-	qDebug() << "determineBackground: strip" << stripw;
+	_DEBUG << "determineBackground: strip" << stripw;
 
 	int black = 0;
 	int white = 0;
@@ -302,5 +303,12 @@ ComicFrameList FrameDetect::frames(LabelData *ldata) const
 	delete [] y1;
 	delete [] y2;
 
+        //
+        // if no frames found, create one frame with entire image
+        if (frms.count() == 0)
+        {
+            _DEBUG << "no frames found, use entire image";
+            frms.append(ComicFrame(0, 0, w, h, 0));
+        }
 	return frms;
 }

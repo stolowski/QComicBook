@@ -553,6 +553,30 @@ Voulez-vous le supprimer ?</translation>
         <source>Can&apos;t initialize QComicBook directories</source>
         <translation type="obsolete">Impossible d&apos;initialiser les répertoires utilisés par QComicBook</translation>
     </message>
+    <message>
+        <source>Lens</source>
+        <translation>Loupe</translation>
+    </message>
+    <message>
+        <source>L</source>
+        <translation>L</translation>
+    </message>
+    <message>
+        <source>200 %</source>
+        <translation>200 %</translation>
+    </message>
+    <message>
+        <source>400 %</source>
+        <translation>400%</translation>
+    </message>
+    <message>
+        <source>800 %</source>
+        <translation>800%</translation>
+    </message>
+    <message>
+        <source>300 %</source>
+        <translation>300 %</translation>
+    </message>
 </context>
 <context>
     <name>ConfigDialog</name>

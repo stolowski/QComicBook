@@ -564,7 +564,7 @@ void ComicBookSettings::tmpDir(const QString &dir)
     }
 }
 			
-bool ComicBookSettings::showDonationDialog(bool f)
+void ComicBookSettings::showDonationDialog(bool f)
 {
 	if (f != m_donationdlg)
 	{

@@ -15,9 +15,9 @@
 #include "ComicMainWindow.h"
 #include "Page.h"
 #include "ComicBookInfo.h"
-#include "ContinuousPageView.h"
-#include "SimplePageView.h"
-#include "FrameView.h"
+#include "View/ContinuousPageView.h"
+#include "View/SimplePageView.h"
+#include "View/FrameView.h"
 #include "Archivers/ArchiversConfiguration.h"
 #include "Sink/ImgDirSink.h"
 #include "Sink/ImgSinkFactory.h"
@@ -39,6 +39,8 @@
 #include "PrinterThread.h"
 #include <FrameDetectThread.h>
 #include "PrintProgressDialog.h"
+#include "Job/ImageTransformThread.h"
+#include "Debug/DebugController.h"
 #include <QMenu>
 #include <QStringList>
 #include <QAction>
@@ -54,12 +56,15 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QApplication>
-#include <QDebug>
+#include "ComicBookDebug.h"
 
 using namespace QComicBook;
 using namespace Utility;
 
 ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), currpage(0)
+#ifdef DEBUG
+                                                 , debugController(new DebugController(this))
+#endif
 {
     setupUi(this);
     updateCaption();
@@ -136,6 +141,21 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), currpage
     actionToggleStatusbar->setChecked(cfg->showStatusbar());
     statusbar->setShown(cfg->showStatusbar());
 
+    //
+    // Lens zoom levels
+    zoomgrp = new QActionGroup(this);
+    action200->setChecked(true);
+    action200->setData(2.0f);
+    action300->setData(3.0f);
+    action400->setData(4.0f);
+    action800->setData(8.0f);
+    zoomgrp->setExclusive(true);
+    zoomgrp->addAction(action200);
+    zoomgrp->addAction(action300);
+    zoomgrp->addAction(action400);
+    zoomgrp->addAction(action800);
+    connect(zoomgrp, SIGNAL(triggered(QAction *)), this, SLOT(setLensZoom(QAction *)));
+
     setupComicImageView();
 
     //
@@ -180,6 +200,52 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), currpage
     connect(actionShowAbout, SIGNAL(triggered()), this, SLOT(showAbout()));
     connect(actionAboutQt, SIGNAL(triggered()),  this, SLOT(showAboutQt()));
     connect(actionAboutDonating, SIGNAL(triggered()),  this, SLOT(showAboutDonating()));
+
+    //
+    // Debug menu
+    QComicBookDebug(
+        QMenu *debugMenu = new QMenu(tr("Debug"), this);
+        QAction *actionDebugContinuousView = new QAction(tr("Continuous View"), this);
+
+        connect(actionDebugContinuousView, SIGNAL(triggered()), debugController, SLOT(showDebugContinuousView()));
+        debugMenu->addAction(actionDebugContinuousView);
+        menubar->insertMenu(menuHelp->menuAction(), debugMenu);
+
+        QAction *actionDebugMemory = new QAction(tr("Memory"), this);
+        connect(actionDebugMemory, SIGNAL(triggered()), debugController, SLOT(showDebugMemory()));
+        debugMenu->addAction(actionDebugMemory);
+
+        debugMenu->addSeparator();
+        
+        QActionGroup *debugRefreshGroup = new QActionGroup(this);
+
+        QAction *actionDebugDisableRefresh = new QAction(tr("Disable auto-refresh"), this);
+        actionDebugDisableRefresh->setCheckable(true);
+        actionDebugDisableRefresh->setChecked(true);
+        connect(actionDebugDisableRefresh, SIGNAL(triggered()), debugController, SLOT(disableAutoRefresh()));
+        debugMenu->addAction(actionDebugDisableRefresh);
+        debugRefreshGroup->addAction(actionDebugDisableRefresh);
+
+        QAction *actionDebugRefresh1s = new QAction(tr("Refresh every 1s."), this);
+        actionDebugRefresh1s->setCheckable(true);
+        connect(actionDebugRefresh1s, SIGNAL(triggered()), debugController, SLOT(autoRefreshEvery1sec()));
+        debugMenu->addAction(actionDebugRefresh1s);
+        debugRefreshGroup->addAction(actionDebugRefresh1s);
+
+        QAction *actionDebugRefresh5s = new QAction(tr("Refresh every 5s."), this);
+        actionDebugRefresh5s->setCheckable(true);
+        connect(actionDebugRefresh5s, SIGNAL(triggered()), debugController, SLOT(autoRefreshEvery5sec()));
+        debugMenu->addAction(actionDebugRefresh5s);
+        debugRefreshGroup->addAction(actionDebugRefresh5s);
+
+        QAction *actionDebugRefresh30s = new QAction(tr("Refresh every 30s."), this);
+        actionDebugRefresh30s->setCheckable(true);
+        connect(actionDebugRefresh30s, SIGNAL(triggered()), debugController, SLOT(autoRefreshEvery30sec()));
+        debugMenu->addAction(actionDebugRefresh30s);
+        debugRefreshGroup->addAction(actionDebugRefresh30s);
+
+        menubar->insertMenu(menuHelp->menuAction(), debugMenu);
+    );
 
     QAction *which = actionOriginalSize;
     switch (cfg->pageSize())
@@ -239,6 +305,8 @@ ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), currpage
 
 ComicMainWindow::~ComicMainWindow()
 {
+    ImageTransformThread::get()->stop();
+
     if (cfg->cacheThumbnails())
     {
         ImgDirSink::removeThumbnails(cfg->thumbnailsAge());
@@ -294,9 +362,11 @@ void ComicMainWindow::setupContextMenu()
 
 void ComicMainWindow::setupComicImageView()
 {
+    _DEBUG;
     const int n = (sink != NULL ? sink->numOfImages() : 0);
     if (view)
     {
+        _DEBUG << "disconnecting old view";
         view->disconnect();
         pageLoader->disconnect();
         view->deleteLater();
@@ -310,26 +380,31 @@ void ComicMainWindow::setupComicImageView()
     switch (cfg->viewType())
     {
 	case Continuous:
-	        view = QPointer<PageViewBase>(new ContinuousPageView(this, n, props));
-		frameDetect->clear();
-		break;
+            view = QPointer<PageViewBase>(new ContinuousPageView(this, n, props));
+            QComicBookDebug(
+                debugController->setView(dynamic_cast<ContinuousPageView *>(view.data()));
+                );
+            frameDetect->clear();
+            break;
 	case Simple:
-		view = QPointer<PageViewBase>(new SimplePageView(this, n, props));
-		frameDetect->clear();
-		break;
-	case Frame:
-		view = QPointer<PageViewBase>(new FrameView(this, n, props));
-		actionNextFrame->setDisabled(false);
-		actionPreviousFrame->setDisabled(false);
-		actionTwoPages->setDisabled(true);
-		actionMangaMode->setDisabled(false);
-		//
-		// connect frame processing thread
-		connect(pageLoader, SIGNAL(pageLoaded(const Page &)), frameDetect, SLOT(process(const Page &)));
-		connect(frameDetect, SIGNAL(framesReady(const ComicFrameList &)), view, SLOT(setFrames(const ComicFrameList &)));
-		break;
-	default:
-		break;
+            view = QPointer<PageViewBase>(new SimplePageView(this, n, props));
+            frameDetect->clear();
+            break;
+        case Frame: {
+            FrameView *frameView = new FrameView(this, n, props);
+            view = QPointer<PageViewBase>(frameView);
+            actionNextFrame->setDisabled(false);
+            actionPreviousFrame->setDisabled(false);
+            actionTwoPages->setDisabled(true);
+            actionMangaMode->setDisabled(false);
+            //
+            // connect frame processing thread
+            connect(pageLoader, SIGNAL(pageLoaded(const Page &)), frameDetect, SLOT(process(const Page &)));
+            connect(frameDetect, SIGNAL(framesReady(const ComicFrameList &)), frameView, SLOT(setFrames(const ComicFrameList &)));
+            }
+            break;
+    default:
+        break;
     }
     
     setCentralWidget(view);
@@ -352,6 +427,7 @@ void ComicMainWindow::setupComicImageView()
     connect(actionNoRotation, SIGNAL(triggered(bool)), view, SLOT(resetRotation()));
     connect(actionJumpDown, SIGNAL(triggered()), view, SLOT(jumpDown()));
     connect(actionJumpUp, SIGNAL(triggered()), view, SLOT(jumpUp()));
+    connect(actionLens, SIGNAL(triggered(bool)), this, SLOT(showLens(bool)));
     
     connect(view, SIGNAL(bottomReached()), this, SLOT(nextPage()));
     connect(view, SIGNAL(topReached()), this, SLOT(prevPageBottom()));
@@ -375,6 +451,8 @@ void ComicMainWindow::setupComicImageView()
     {
          jumpToPage(currpage, true);
     }
+
+    showLens(actionLens->isChecked());
 }
 
 void ComicMainWindow::applyFullscreenSettings()
@@ -409,6 +487,15 @@ void ComicMainWindow::enableComicBookActions(bool f)
         actionRotateRight->setEnabled(f);
         actionRotateLeft->setEnabled(f);
         actionNoRotation->setEnabled(f);
+        actionLens->setEnabled(f);
+
+        //
+        // lens
+        zoomgrp->setEnabled(f);
+        action200->setEnabled(f);
+        action300->setEnabled(f);
+        action400->setEnabled(f);
+        action800->setEnabled(f);
 
         //
         // navigation menu
@@ -532,6 +619,23 @@ void ComicMainWindow::setPageSize(QAction *action)
     view->setSize(size);
 }
 
+void ComicMainWindow::setLensZoom(QAction *action)
+{
+	if (view)
+	{
+		view->setLensZoom(action->data().toDouble());
+	}	
+}
+
+void ComicMainWindow::showLens(bool f)
+{
+	QAction *lzoom = zoomgrp->checkedAction();
+	if (view && lzoom)
+	{
+		view->showLens(f, lzoom->data().toDouble());
+	}
+}
+
 void ComicMainWindow::reloadPage()
 {
     if (sink)
@@ -562,7 +666,7 @@ void ComicMainWindow::recentSelected(const QString &fname)
 
 void ComicMainWindow::pageLoaded(const Page &page)
 {
-    qDebug() << "page ready " << page.getNumber();
+    _DEBUG << page.getNumber();
     if (currpage == page.getNumber())
     {
         statusbar->setImageInfo(&page);
@@ -571,7 +675,7 @@ void ComicMainWindow::pageLoaded(const Page &page)
 
 void ComicMainWindow::pageLoaded(const Page &page1, const Page &page2)
 {
-    qDebug() << "page ready " << page1.getNumber() << ", " << page2.getNumber();
+    _DEBUG << page1.getNumber() << ", " << page2.getNumber();
     if (currpage == page1.getNumber() || currpage == page2.getNumber())
     {
         statusbar->setImageInfo(&page1, &page2);
@@ -580,6 +684,7 @@ void ComicMainWindow::pageLoaded(const Page &page1, const Page &page2)
 
 void ComicMainWindow::sinkReady(const QString &path)
 {
+    _DEBUG;
 	statusbar->setShown(actionToggleStatusbar->isChecked() && !(isFullScreen() && cfg->fullScreenHideStatusbar())); //applies back user's statusbar&toolbar preferences
 	//toolbar->setShown(actiontoggleToolbar->isOn() && !(isFullScreen() && cfg->fullScreenHideToolbar()));
 
@@ -726,6 +831,7 @@ void ComicMainWindow::exitFullscreen()
 
 void ComicMainWindow::nextPage()
 {
+    _DEBUG;
     const int n(view->nextPage(currpage));
     if (n >= 0)
     {
@@ -735,6 +841,7 @@ void ComicMainWindow::nextPage()
 
 void ComicMainWindow::prevPage()
 {
+    _DEBUG;
     const int n(view->previousPage(currpage));
     if (n >= 0)
     {
@@ -744,11 +851,13 @@ void ComicMainWindow::prevPage()
 
 void ComicMainWindow::prevFrame()
 {
+    _DEBUG;
     view->prevFrame();
 }
 
 void ComicMainWindow::nextFrame()
 {
+    _DEBUG;
     view->nextFrame();
 }
 
@@ -786,6 +895,7 @@ void ComicMainWindow::backwardPages()
 
 void ComicMainWindow::jumpToPage(int n, bool force)
 {
+    _DEBUG;
 	if (!sink)
         {
 		return;
@@ -811,6 +921,8 @@ void ComicMainWindow::jumpToPage(int n, bool force)
 
 void ComicMainWindow::currentPageChanged(int n)
 {
+    _DEBUG << n;
+
     currpage = n;
     const QString page = tr("Page") + " " + QString::number(n + 1) + "/" + QString::number(sink->numOfImages());
     pageinfo->setText(page);
@@ -863,7 +975,7 @@ void ComicMainWindow::showAbout()
                         "QComicBook " VERSION " - comic book viewer for GNU/Linux<br>"
                         "(c)by Pawel Stolowski 2005-2010<br>"
                         "released under terms of GNU General Public License<br><br>"
-                        "<a href=\"http://qcomicbook.linux-projects.net\">http://qcomicbook.linux-projects.net</a><br>"
+                        "<a href=\"http://www.qcomicbook.org\">http://www.qcomicbook.org</a><br>"
                         "<a href=\"mailto:stolowski@gmail.com\">stolowski@gmail.com</a>", QPixmap(":/images/qcomicbook-splash.png"));
         win->show();
 }
@@ -915,6 +1027,8 @@ void ComicMainWindow::showAboutQt()
 
 void ComicMainWindow::closeSink()
 {
+    _DEBUG;
+
     enableComicBookActions(false);
 
     if (sink)
@@ -934,12 +1048,15 @@ void ComicMainWindow::closeSink()
 
 void ComicMainWindow::setBookmark()
 {
+    _DEBUG;
+
         if (sink)
                 bookmarks->set(sink->getFullName(), currpage);
 }
 
 void ComicMainWindow::removeBookmark()
 {
+    _DEBUG;
         if (sink && bookmarks->exists(sink->getFullName()) && QMessageBox::question(this, tr("Removing bookmark"),
                                 tr("Do you really want to remove bookmark\nfor this comic book?"),
                                 QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
@@ -1000,6 +1117,8 @@ void ComicMainWindow::openPrintDialog()
 
 void ComicMainWindow::bookmarkSelected(QAction *action) 
 {
+    _DEBUG;
+
         Bookmark b;
         if (bookmarks->get(action, b))
         {
@@ -1028,6 +1147,8 @@ void ComicMainWindow::bookmarkSelected(QAction *action)
 			
 void ComicMainWindow::changeViewType(QAction *action)
 {
+    _DEBUG;
+
     if (action == actionContinuousView)
     {
 	cfg->viewType(Continuous);
@@ -1045,6 +1166,8 @@ void ComicMainWindow::changeViewType(QAction *action)
 
 void ComicMainWindow::saveSettings()
 {
+    _DEBUG;
+
         cfg->saveGeometry(this);
         cfg->saveDockLayout(this);
         cfg->lastDir(lastdir);
@@ -1057,6 +1180,8 @@ void ComicMainWindow::saveSettings()
 
 void ComicMainWindow::reconfigureDisplay()
 {
+    _DEBUG;
+
     view->setSmallCursor(cfg->smallCursor());
     view->showPageNumbers(cfg->embedPageNumbers());
     view->setBackground(cfg->background());
@@ -1064,5 +1189,7 @@ void ComicMainWindow::reconfigureDisplay()
 
 void ComicMainWindow::printingFinished()
 {
+    _DEBUG;
+
     printThread->deleteLater();
 }

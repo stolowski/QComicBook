@@ -12,7 +12,6 @@
 
 #include "ArchiverStrategy.h"
 #include <QFile>
-#include <QDebug>
 
 using namespace QComicBook;
 
@@ -119,6 +118,7 @@ bool ArchiverStrategy::canOpen(const QString &filename) const
     {
         return canOpen(&file);
     }
+	return false;
 }
 
 QList<ArchiverHint> ArchiverStrategy::getHints() const

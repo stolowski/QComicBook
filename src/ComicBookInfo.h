@@ -25,6 +25,8 @@ namespace QComicBook
 	
 	class ComicBookInfo: public QDialog
 	{
+	    Q_OBJECT
+
 		private:
 			QTabWidget *tabs;
 

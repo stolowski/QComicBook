@@ -12,7 +12,7 @@
 
 #include "SimplePageView.h"
 #include "Utility.h"
-#include "PageWidget.h"
+#include "ComicPageImage.h"
 #include "ComicBookSettings.h"
 #include <QVBoxLayout>
 #include <QImage>
@@ -21,7 +21,7 @@
 #include <QtGlobal>
 #include <QResizeEvent>
 #include <QScrollBar>
-#include <QDebug>
+#include "../ComicBookDebug.h"
 
 using namespace QComicBook;
 
@@ -33,18 +33,9 @@ SimplePageView::SimplePageView(QWidget *parent, int physicalPages, const ViewPro
     , m_currentPage(0) //??
     , imgLabel(NULL)
 {
-    //setFocusPolicy(QWidget::StrongFocus);
-    QWidget *w = new QWidget(this);
-    w->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
-    m_layout = new QVBoxLayout(w);
-    m_layout->setContentsMargins(0, 0, 0, 0);
-    m_layout->setSpacing(0);
-    m_layout->setAlignment(Qt::AlignCenter);
-    setWidget(w);
+    _DEBUG;
 
-    recreatePageWidget();
-    
-    setWidgetResizable(true);
+    recreateComicPageImage();
     
     setBackground(props.background());
     setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -52,10 +43,13 @@ SimplePageView::SimplePageView(QWidget *parent, int physicalPages, const ViewPro
 
 SimplePageView::~SimplePageView()
 {
+    _DEBUG;
 }
 
-void SimplePageView::recreatePageWidget()
+void SimplePageView::recreateComicPageImage()
 {
+    _DEBUG;
+
     delete imgLabel;
     imgLabel = NULL;
 
@@ -65,30 +59,41 @@ void SimplePageView::recreatePageWidget()
 
     if (numOfPages())
     {
-        imgLabel = new PageWidget(this, w, h, 0, props.twoPagesMode());
-        m_layout->addWidget(imgLabel); 
+        imgLabel = new ComicPageImage(this, w, h, 0, props.twoPagesMode());
+        scene->addItem(imgLabel);
     }
 }
 
 void SimplePageView::setNumOfPages(int n)
 {
     PageViewBase::setNumOfPages(n);
-    recreatePageWidget();
+    recreateComicPageImage();
 }
 
 void SimplePageView::propsChanged()
 {
-    qDebug() << "SimplePageView::propsChanged()";
+    _DEBUG;
     if (imgLabel)
     {
         if ((props.twoPagesMode() && !imgLabel->hasTwoPages()) || (imgLabel->hasTwoPages() && !props.twoPagesMode()))
         {
-            recreatePageWidget();
+            recreateComicPageImage();
         }
         imgLabel->redrawImages();
         update();
         gotoPage(m_currentPage);
-    }    
+    }
+    updateSceneRect();
+}
+
+void SimplePageView::jobCompleted(const ImageJobResult &result)
+{
+    _DEBUG;
+    if (imgLabel)
+    {
+        imgLabel->jobCompleted(result);
+        updateSceneRect();
+    }
 }
 
 void SimplePageView::scrollContentsBy(int dx, int dy)
@@ -99,10 +104,13 @@ void SimplePageView::scrollContentsBy(int dx, int dy)
 void SimplePageView::setImage(const Page &img1)
 {
     Q_ASSERT(numOfPages() > 0);
+    _DEBUG << img1.getNumber();
     delRequest(img1.getNumber(), false, false);
     if (img1.getNumber() == m_currentPage)
     {
         imgLabel->setImage(img1);
+        center(imgLabel);
+        updateSceneRect();
         horizontalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
         verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
         emit pageReady(img1);
@@ -112,18 +120,22 @@ void SimplePageView::setImage(const Page &img1)
 void SimplePageView::setImage(const Page &img1, const Page &img2)
 {
     Q_ASSERT(numOfPages() > 0);
+    _DEBUG << img1.getNumber() << "," << img2.getNumber();
     delRequest(img1.getNumber(), true, false);
     if (img1.getNumber() == m_currentPage)
     {
         imgLabel->setImage(img1, img2);
+        center(imgLabel);
+        updateSceneRect();
         horizontalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
-        verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);        
+        verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMinimum);
         emit pageReady(img1, img2);
     }
 }
 
 void SimplePageView::gotoPage(int n)
 {
+    _DEBUG << n;
     if (n>= 0 && n < numOfPages())
     {
         if (n != m_currentPage)
@@ -139,7 +151,7 @@ void SimplePageView::gotoPage(int n)
         if (cfg.preloadPages())
         {   
             n = nextPage(n);
-            qDebug() << "preloading" << n;            
+            _DEBUG << "preloading" << n;            
             addRequest(n, props.twoPagesMode() && n < numOfPages()); // request two pages if not last page
         }
     }
@@ -149,40 +161,42 @@ void SimplePageView::resizeEvent(QResizeEvent *e)
 {
     if (imgLabel)
     {
-        imgLabel->redrawImages();
+        imgLabel->recalcScaledSize();
     }
     PageViewBase::resizeEvent(e);
 }
 
 void SimplePageView::wheelEvent(QWheelEvent *e)
 {
-    
-    if (e->delta() > 0) //scrolling up
+    if (imgLabel)
     {
-        if (imgLabel->height() <= height() || (onTop() && ++wheelupcnt > EXTRA_WHEEL_SPIN))
+        if (e->delta() > 0) //scrolling up
         {
-            e->accept();
-            wheelupcnt = 0;
-            gotoPage(previousPage(m_currentPage));
+            if (imgLabel->height() <= height() || (onTop() && ++wheelupcnt > EXTRA_WHEEL_SPIN))
+            {
+                e->accept();
+                wheelupcnt = 0;
+                gotoPage(previousPage(m_currentPage));
+            }
+            else
+            {
+                QGraphicsView::wheelEvent(e);
+                wheeldowncnt = 0; //reset opposite direction counter
+            }
         }
-        else
+        else //scrolling down
         {
-            QScrollArea::wheelEvent(e);
-            wheeldowncnt = 0; //reset opposite direction counter
-        }
-    }
-    else //scrolling down
-    {
-        if (imgLabel->height() <= height() || (onBottom() && ++wheeldowncnt > EXTRA_WHEEL_SPIN))
-        {
-            e->accept();
-            wheeldowncnt = 0;
-            gotoPage(nextPage(m_currentPage));
-        }
-        else
-        {
-            QScrollArea::wheelEvent(e);
-            wheelupcnt = 0; //reset opposite direction counter
+            if (imgLabel->height() <= height() || (onBottom() && ++wheeldowncnt > EXTRA_WHEEL_SPIN))
+            {
+                e->accept();
+                wheeldowncnt = 0;
+                gotoPage(nextPage(m_currentPage));
+            }
+            else
+            {
+                QGraphicsView::wheelEvent(e);
+                wheelupcnt = 0; //reset opposite direction counter
+            }
         }
     }
 }

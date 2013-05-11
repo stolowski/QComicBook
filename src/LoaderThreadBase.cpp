@@ -13,7 +13,7 @@
 #include "LoaderThreadBase.h"
 #include "Sink/ImgSink.h"
 #include <QPixmap>
-#include <QtDebug>
+#include "ComicBookDebug.h"
 
 using namespace QComicBook;
 LoaderThreadBase::LoaderThreadBase(): QThread(), prio(QThread::LowPriority), sink(NULL), stopped(false)
@@ -40,13 +40,13 @@ void LoaderThreadBase::setSink(QSharedPointer<ImgSink> sink)
 
 void LoaderThreadBase::request(int page)
 {
-    qDebug() << "requested page" << page;
+    _DEBUG << "requested page" << page;
 
     loaderMutex.lock();
     const LoadRequest req(page, false);
     if (requests.contains(req))
     {
-        qDebug() << "requests queue already has" << page;
+        _DEBUG << "requests queue already has" << page;
         loaderMutex.unlock();
         return;
     }
@@ -57,13 +57,13 @@ void LoaderThreadBase::request(int page)
 
 void LoaderThreadBase::requestTwoPages(int page)
 {
-    qDebug() << "requested 2 pages" << page;
+    _DEBUG << "requested 2 pages" << page;
 
     loaderMutex.lock();
     const LoadRequest req(page, true);
     if (requests.contains(req))
     {
-        qDebug() << "requests queue (2 pages) already has" << page;
+        _DEBUG << "requests queue (2 pages) already has" << page;
         loaderMutex.unlock();
         return;
     }
@@ -84,7 +84,7 @@ void LoaderThreadBase::cancel(int page)
 {
     loaderMutex.lock();
     const LoadRequest req(page, false);
-    qDebug() << "canceled page" << page;
+    _DEBUG << "page" << page;
     requests.removeAll(req);
     loaderMutex.unlock();
 }
@@ -92,7 +92,7 @@ void LoaderThreadBase::cancel(int page)
 void LoaderThreadBase::cancelTwoPages(int page)
 {
     loaderMutex.lock();
-    qDebug() << "canceled 2 pages" << page;
+    _DEBUG << "2 pages" << page;
     const LoadRequest req(page, true);
     requests.removeAll(req);
     loaderMutex.unlock();
@@ -101,7 +101,7 @@ void LoaderThreadBase::cancelTwoPages(int page)
 void LoaderThreadBase::cancelAll()
 {
     loaderMutex.lock();
-    qDebug() << "canceled all pages";
+    _DEBUG << "all pages";
     requests.clear();
     loaderMutex.unlock();
 }
@@ -142,7 +142,7 @@ void LoaderThreadBase::run()
             sinkMutex.lock(); //TODO is it safe to lock when process() may emit signal?
             if (sink)
             {
-                qDebug() << "loading" << req.pageNumber;
+                _DEBUG << "loading" << req.pageNumber;
                 process(req);
             }
             sinkMutex.unlock();

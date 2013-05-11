@@ -19,7 +19,6 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QTextStream>
-#include <QDebug>
 
 using namespace QComicBook;
 

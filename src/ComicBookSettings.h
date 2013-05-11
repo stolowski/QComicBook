@@ -13,7 +13,7 @@
 #ifndef __SETTINGS_H
 #define __SETTINGS_H
 
-#include "PageViewBase.h"
+#include "View/PageViewBase.h"
 #include "EnumMap.h"
 #include <QObject>
 #include <QFont>
@@ -96,7 +96,7 @@ namespace QComicBook
 			void saveGeometry(ComicMainWindow *w);
 			void showSplash(bool f);
 			void tmpDir(const QString &dir);
-			bool showDonationDialog(bool f);
+			void showDonationDialog(bool f);
 
 			static ComicBookSettings& instance();
 

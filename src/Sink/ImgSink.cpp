@@ -12,10 +12,10 @@
 
 #include "ImgSink.h"
 #include "ImgCache.h"
-#include "Page.h"
+#include "../Page.h"
 #include "Thumbnail.h"
 #include <QImage>
-#include <QDebug>
+#include "../ComicBookDebug.h"
 
 using namespace QComicBook;
 
@@ -26,8 +26,8 @@ ImgSink::ImgSink(int cacheSize): cbname(QString::null), cbfullname(QString::null
 
 ImgSink::~ImgSink()
 {
-	qDebug() << "deleting ImgSink";
-	delete cache;
+    _DEBUG;
+    delete cache;
 }
 
 void ImgSink::setCacheSize(int cacheSize, bool autoAdjust)
@@ -41,13 +41,13 @@ Page ImgSink::getImage(unsigned int num, int &result)
 	if (cache->get(num, im))
 	{
 		result = 0;
-		qDebug() << "from cache:" << num;
+		_DEBUG << "from cache:" << num;
 	}
 	else
 	{
 		im = image(num, result); //TODO check result
 		cache->insertImage(num, im);
-		qDebug() << "to cache:" << num;
+		_DEBUG << "to cache:" << num;
 	}
 	const Page page(num, im);
 	return page;
@@ -63,7 +63,7 @@ Thumbnail ImgSink::getThumbnail(unsigned int num, bool thumbcache)
         {
             if (t.tryLoad())
             {
-                qDebug() << "thumbnail" << num << "loaded from disk";
+                _DEBUG << "thumbnail" << num << "loaded from disk";
                 return t;
             }
         }

@@ -13,8 +13,8 @@
 #include <FrameDetectThread.h>
 #include <FrameDetect.h>
 #include <FrameCache.h>
-#include "Page.h"
-#include <QDebug>
+#include "../Page.h"
+#include "../ComicBookDebug.h"
 
 using namespace QComicBook;
 			
@@ -50,19 +50,20 @@ void FrameDetectThread::run()
 			m_pages.pop_front();
 			m_processListMtx.unlock();
 
-			qDebug() << "FrameDetectThread: processing page" << p.getNumber();
+			_DEBUG << "processing page" << p.getNumber();
 
 			FrameCache &fc(FrameCache::instance());
 			if (fc.has(p.getNumber()))
 			{
-				qDebug() << "frames for page" << p.getNumber() << "in cache";
-				emit framesReady(fc.get(p.getNumber()));
+                            _DEBUG << "frames for page" << p.getNumber() << "in cache";
+                            emit framesReady(fc.get(p.getNumber()));
 			}
 			else
 			{
 				FrameDetect fd(p);
 				ComicFrameList frames(fd.process());
 				fc.insert(frames);
+                                _DEBUG << "num of frames for page" << p.getNumber() << "=" << frames.count();
 				emit framesReady(frames);
 			}
 
@@ -87,11 +88,11 @@ void FrameDetectThread::clear()
 
 void FrameDetectThread::process(const Page &p)
 {
-	qDebug() << "FrameDetectThread: requested page" << p.getNumber();
-	m_processListMtx.lock();
-	m_pages.append(p);
-	m_processListMtx.unlock();
-	m_reqCond.wakeOne();
+    _DEBUG << "requested page" << p.getNumber();
+    m_processListMtx.lock();
+    m_pages.append(p);
+    m_processListMtx.unlock();
+    m_reqCond.wakeOne();
 }
 
 void FrameDetectThread::stop()

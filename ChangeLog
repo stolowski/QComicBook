@@ -1,3 +1,19 @@
+2011-05-30:  0.9.0   -- dramatic improvement in responsiveness and performance, thanks to delegating
+	                    image transformations to separate thread.
+	                 -- migrated internally to QGraphicsView
+	                 -- implemented Zoom Lens.
+	                 -- fixed memory leak when using small cursor.
+	                 -- various bugfixes related to Continuous view mode.
+
+2011-10-10:  0.8.2   -- fixed crash on scroll actions when using Simple View and no comicbook is loaded.
+
+2011-07-08:  0.8.1   -- removed thick border around scroll area widget.
+                     -- fixed compilation errors on some systems (such as Ubuntu) caused by conflict with Page.h 
+                        from libpoppler.
+
+2011-07-02:  0.8.0   -- implemented PDF support; requires libpoppler-qt4.
+                     -- don't report that unrar-free was detected if neither unrar nor unrar-free was installed.
+
 2010-12-11:  0.7.2   -- added German translation.
                      -- added .cb7 (p7zip) to the list of supported file
 					    extensions.

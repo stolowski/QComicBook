@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1184</width>
+    <width>1033</width>
     <height>741</height>
    </rect>
   </property>
@@ -32,8 +32,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1184</width>
-     <height>21</height>
+     <width>1033</width>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -58,11 +58,23 @@
     <property name="title">
      <string>&amp;View</string>
     </property>
+    <widget class="QMenu" name="menuLens">
+     <property name="title">
+      <string>Lens</string>
+     </property>
+     <addaction name="actionLens"/>
+     <addaction name="separator"/>
+     <addaction name="action200"/>
+     <addaction name="action300"/>
+     <addaction name="action400"/>
+     <addaction name="action800"/>
+    </widget>
     <addaction name="actionOriginalSize"/>
     <addaction name="actionFitWidth"/>
     <addaction name="actionFitHeight"/>
     <addaction name="actionWholePage"/>
     <addaction name="actionBestFit"/>
+    <addaction name="menuLens"/>
     <addaction name="separator"/>
     <addaction name="actionRotateRight"/>
     <addaction name="actionRotateLeft"/>
@@ -166,6 +178,7 @@
    <addaction name="actionFitHeight"/>
    <addaction name="actionWholePage"/>
    <addaction name="actionBestFit"/>
+   <addaction name="actionLens"/>
    <addaction name="separator"/>
    <addaction name="actionRotateRight"/>
    <addaction name="actionRotateLeft"/>
@@ -622,6 +635,21 @@
     <string>Down</string>
    </property>
   </action>
+  <action name="actionLens">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../data/qcomicbook.qrc">
+     <normaloff>:/icons/lens.png</normaloff>:/icons/lens.png</iconset>
+   </property>
+   <property name="text">
+    <string>Lens</string>
+   </property>
+   <property name="shortcut">
+    <string>L</string>
+   </property>
+  </action>
   <action name="actionPrint">
    <property name="text">
     <string>Print</string>
@@ -669,6 +697,47 @@
   <action name="actionAboutDonating">
    <property name="text">
     <string>About donating</string>
+   </property>
+  </action>
+  <action name="action200">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>200 %</string>
+   </property>
+   <property name="toolTip">
+    <string>200 %</string>
+   </property>
+  </action>
+  <action name="action400">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>400 %</string>
+   </property>
+   <property name="toolTip">
+    <string>400 %</string>
+   </property>
+  </action>
+  <action name="action800">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>800 %</string>
+   </property>
+   <property name="toolTip">
+    <string>800 %</string>
+   </property>
+  </action>
+  <action name="action300">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>300 %</string>
    </property>
   </action>
  </widget>

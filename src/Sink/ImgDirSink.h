@@ -22,7 +22,7 @@
 #include <QMutex>
 #include "DirReader.h"
 #include "ImgSink.h"
-#include "Page.h"
+#include "../Page.h"
 
 class QImage;
 
@@ -35,6 +35,8 @@ namespace QComicBook
 	/*! Allows opening directories containing image files. */
 	class ImgDirSink: public ImgSink, protected DirReader
 	{
+		Q_OBJECT
+
 		protected:
 			class FileStatus
 			{

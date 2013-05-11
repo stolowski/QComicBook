@@ -13,13 +13,13 @@
 #include "FrameView.h"
 #include "ComicBookSettings.h"
 #include "Page.h"
-#include "FrameWidget.h"
+#include "ComicFrameImage.h"
 #include <ComicFrameList.h>
 #include <QPixmap>
 #include <QVBoxLayout>
 #include <QPainter>
 #include <QScrollBar>
-#include <QDebug>
+#include "ComicBookDebug.h"
 
 using namespace QComicBook;
 
@@ -29,18 +29,18 @@ FrameView::FrameView(QWidget *parent, int physicalPages, const ViewProperties& p
 	, m_currentFrame(0)
 	, m_frame(0)
 {
-    QWidget *w = new QWidget(this);
+    /*  QWidget *w = new QWidget(this);
     w->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
     m_layout = new QVBoxLayout(w);
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
     m_layout->setAlignment(Qt::AlignCenter);
-    setWidget(w);
+    setWidget(w);*/
 
-	m_frame = new FrameWidget(this, viewport()->width() - 10, viewport()->height() - 10);
-	m_layout->addWidget(m_frame);
+	m_frame = new ComicFrameImage(this, viewport()->width() - 10, viewport()->height() - 10);
+	scene->addItem(m_frame);
 
-    setWidgetResizable(true);
+    ///setWidgetResizable(true);
     
     setBackground(props.background());
     setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -53,29 +53,32 @@ FrameView::~FrameView()
 			
 void FrameView::setImage(const Page &img1)
 {
+    _DEBUG << img1.getNumber();
     if (img1.getNumber() == m_currentPage)
-	{
-		m_page = img1;
-	}
+    {
+        m_page = img1;
+    }
 }
 
 void FrameView::setImage(const Page &img1, const Page &img2)
 {   
-	if (img1.getNumber() == m_currentPage)
-	{
-		m_page = img1;
-	}
+    _DEBUG << img1.getNumber();
+    if (img1.getNumber() == m_currentPage)
+    {
+        m_page = img1;
+    }
 }
 
 void FrameView::setFrames(const ComicFrameList &frames)
 {
-	if (frames.pageNumber() == m_currentPage)
-	{
-		m_frames = frames;
-		m_frames.sort(props.mangaMode());
-		m_currentFrame = 0;
-		gotoFrame(m_currentFrame);
-	}
+    _DEBUG << frames.pageNumber() << frames.count();
+    if (frames.pageNumber() == m_currentPage)
+    {
+        m_frames = frames;
+        m_frames.sort(props.mangaMode());
+        m_currentFrame = 0;
+        gotoFrame(m_currentFrame);
+    }
 }
 
 void FrameView::nextFrame()
@@ -111,6 +114,8 @@ void FrameView::gotoFrame(int n)
 		m_currentFrame = n;
 		const ComicFrame f(m_frames[n]);
 		m_frame->setFrame(m_page, f);
+                center(m_frame);
+                updateSceneRect();
 	}
 }
 
@@ -132,7 +137,7 @@ void FrameView::gotoPage(int n)
         if (cfg.preloadPages() && n < numOfPages())
         {   
             ++n;
-            qDebug() << "preloading" << n;            
+            _DEBUG << "preloading" << n;            
             addRequest(n, false);
         }
     }
@@ -153,6 +158,16 @@ void FrameView::propsChanged()
 {
 	m_frames.sort(props.mangaMode());
 	gotoFrame(m_currentFrame);
+}
+
+void FrameView::jobCompleted(const ImageJobResult &result)
+{
+    _DEBUG;
+    if (m_frame)
+    {
+        m_frame->jobCompleted(result);
+        updateSceneRect();
+    }
 }
 
 int FrameView::visiblePages() const
@@ -176,7 +191,6 @@ void FrameView::resizeEvent(QResizeEvent *e)
     if (m_frame)
     {
         m_frame->recalcScaledSize();
-		m_frame->redrawScaledImage();
     }
     PageViewBase::resizeEvent(e);
 }

@@ -81,7 +81,7 @@ void RarArchiverStrategy::configure()
 QList<ArchiverHint> RarArchiverStrategy::getHints() const
 {
     QList<ArchiverHint> hints;
-    if (!nonfree_unrar)
+    if (isSupported() && !nonfree_unrar)
     {
         hints.append(ArchiverHint(
                          ArchiversConfiguration::tr("Free (opensource) version of unrar was detected. "
