@@ -19,6 +19,7 @@
 #include <QDebug>
 #include <cassert>
 #include "FileEntry.h"
+#include "Util/ResourceGuard.h"
 #include <archive.h>
 #include <archive_entry.h>
 
@@ -38,7 +39,8 @@ void ImgLibArchiveSink::setCacheSize(int cacheSize, bool autoAdjust)
 
 int ImgLibArchiveSink::open(const QString &path)
 {
-    archive *a = archive_read_new();
+    ResourceGuard<archive*, decltype(archive_read_free)> a(archive_read_new(), archive_read_free);
+
     archive_read_support_compression_all(a);
     archive_read_support_format_all(a);
     
@@ -67,8 +69,6 @@ int ImgLibArchiveSink::open(const QString &path)
             imgfiles.append(fe);
         }
     }
-
-    r = archive_read_free(a);
     
     setComicBookName("TEST", path);
     archivepath = path;
@@ -88,7 +88,7 @@ QImage ImgLibArchiveSink::image(unsigned int num, int &result)
 {
   const QString requested_path = imgfiles[num].getFullFileName();
 
-  archive *a = archive_read_new();
+  ResourceGuard<archive*, decltype(archive_read_free)> a(archive_read_new(), archive_read_free);
 
   archive_read_support_format_all(a);
   archive_read_support_compression_all(a);
@@ -96,6 +96,7 @@ QImage ImgLibArchiveSink::image(unsigned int num, int &result)
   int r = archive_read_open_filename(a, archivepath.toLocal8Bit(), 16384);
   if (r != ARCHIVE_OK) {
       result = SINKERR_LOADERROR;
+      return QImage();
   }
 
   QString tmpfilepath;
@@ -103,7 +104,8 @@ QImage ImgLibArchiveSink::image(unsigned int num, int &result)
   size_t size;
   struct archive_entry *ae;
 
-  archive *ext = archive_write_disk_new();
+  ResourceGuard<archive*, decltype(archive_write_free)> ext(archive_write_disk_new(), archive_write_free);
+
   archive_write_disk_set_standard_lookup(ext);
   archive_write_disk_set_options(ext, 
                                  ARCHIVE_EXTRACT_SECURE_SYMLINKS
@@ -143,9 +145,6 @@ QImage ImgLibArchiveSink::image(unsigned int num, int &result)
                   break;
               }
           }
-          archive_write_close(ext);
-          archive_write_free(ext);
-
           tmpfilepath = imgfiles[num].getFileName();
           break;
       }
@@ -153,8 +152,6 @@ QImage ImgLibArchiveSink::image(unsigned int num, int &result)
 
   if (!tmpfilepath.isEmpty())
       return QImage(tmpfilepath);
-
-  archive_read_finish(a);
 
   return QImage();
 }
