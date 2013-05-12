@@ -92,6 +92,7 @@ QImage ImgLibArchiveSink::image(unsigned int num, int &result)
  
   int r = archive_read_open_filename(a, archivepath.toLocal8Bit(), 16384);
   if (r != ARCHIVE_OK) {
+      qWarning() << archive_error_string(a);
       result = SINKERR_LOADERROR;
       return QImage();
   }
@@ -115,8 +116,7 @@ QImage ImgLibArchiveSink::image(unsigned int num, int &result)
   archive_write_disk_set_standard_lookup(ext);
   archive_write_disk_set_options(ext, 
                                  ARCHIVE_EXTRACT_SECURE_SYMLINKS
-                                 |ARCHIVE_EXTRACT_SECURE_NODOTDOT
-                                 |ARCHIVE_EXTRACT_NO_OVERWRITE);
+                                 |ARCHIVE_EXTRACT_SECURE_NODOTDOT);
 
   while (archive_read_next_header(a, &ae) == ARCHIVE_OK)
   {
@@ -124,6 +124,8 @@ QImage ImgLibArchiveSink::image(unsigned int num, int &result)
       if (archive_entry_filetype(ae) == AE_IFREG && fullpath == requested_path)
       {
           r = archive_write_header(ext, ae);
+          if (r != ARCHIVE_OK)
+              qWarning() << archive_error_string(a);
                     
           for (;;)
           {
@@ -135,15 +137,19 @@ QImage ImgLibArchiveSink::image(unsigned int num, int &result)
                   break;
               
               if (r != ARCHIVE_OK)
-              {
                   qWarning() << archive_error_string(a);
+
+              if (r < ARCHIVE_WARN)
+              {
                   result = SINKERR_LOADERROR;
                   break;
               }
           
               r = archive_write_data_block(ext, buff, size, offset);
-              
               if (r != ARCHIVE_OK)
+                  qWarning() << archive_error_string(a);
+              
+              if (r < ARCHIVE_WARN)
               {
                   qWarning() << archive_error_string(ext);
                   result = SINKERR_LOADERROR;
@@ -156,7 +162,10 @@ QImage ImgLibArchiveSink::image(unsigned int num, int &result)
   }
 
   if (!tmpfilepath.isEmpty())
+  {
+      result = 0;
       return QImage(tmpfilepath);
+  }
 
   result = SINKERR_OTHER;
   return QImage();
