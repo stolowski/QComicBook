@@ -19,6 +19,9 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QTextStream>
+#include <algorithm>
+#include "PageSorter.h"
+#include "FileEntry.h"
 
 using namespace QComicBook;
 
@@ -26,11 +29,11 @@ using namespace QComicBook;
 // maximum size of description file (won't load files larger than that)
 const int ImgDirSink::MAX_TEXTFILE_SIZE = 65535;
                         
-ImgDirSink::ImgDirSink(bool dirs, int cacheSize): ImgSink(cacheSize), dirpath(QString::null), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
+ImgDirSink::ImgDirSink(int cacheSize): ImgSink(cacheSize), dirpath(QString::null), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
 {
 }
 
-ImgDirSink::ImgDirSink(const QString &path, bool dirs, int cacheSize): ImgSink(cacheSize), dirpath(QString::null), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
+ImgDirSink::ImgDirSink(const QString &path, int cacheSize): ImgSink(cacheSize), dirpath(QString::null), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
 {
 	open(path);
 }
@@ -42,7 +45,6 @@ ImgDirSink::ImgDirSink(const ImgDirSink &sink, int cacheSize): ImgSink(cacheSize
 	txtfiles = sink.txtfiles;
 	otherfiles = sink.otherfiles;
 	dirs = sink.dirs;
-	timestamps = sink.timestamps;
 }
 
 ImgDirSink::~ImgDirSink()
@@ -72,20 +74,21 @@ QString ImgDirSink::memPrefix(int &s)
 
 bool ImgDirSink::fileHandler(const QFileInfo &finfo)
 {
-	const QString fname = finfo.fileName();
-	if (knownImageExtension(fname))
-	{
-		imgfiles.append(finfo.absoluteFilePath());
-		timestamps.insert(finfo.absoluteFilePath(), FileStatus(finfo.lastModified()));
-		return true;
-	}
-	if (fname.endsWith(".nfo", Qt::CaseInsensitive) || fname == "file_id.diz")
-	{
-		txtfiles.append(finfo.absoluteFilePath());
-		return true;
-	}
-	otherfiles.append(finfo.absoluteFilePath());
-	return false;
+    FileEntry fe(dirpath, finfo);
+
+    const QString fname = finfo.fileName();
+    if (knownImageExtension(fname))
+    {
+        imgfiles.append(fe);
+        return true;
+    }
+    if (fname.endsWith(".nfo", Qt::CaseInsensitive) || fname == "file_id.diz")
+    {
+        txtfiles.append(fe);
+        return true;
+    }
+    otherfiles.append(fe);
+    return false;
 }
 
 int ImgDirSink::open(const QString &path)
@@ -116,6 +119,11 @@ int ImgDirSink::open(const QString &path)
         return status;
 }
 
+void ImgDirSink::sort(const PageSorter &sorter)
+{
+    std::sort(imgfiles.begin(), imgfiles.end(), sorter);
+}
+
 void ImgDirSink::close()
 {
         listmtx.lock();
@@ -129,28 +137,28 @@ void ImgDirSink::close()
 
 QString ImgDirSink::getFullFileName(int page) const
 {
-	return page < numOfImages() ? imgfiles[page] : QString::null;
+    return page < numOfImages() ? imgfiles[page].getFullFileName () : QString::null;
 }
 
 QStringList ImgDirSink::getDescription() const
 {
 	if (desc.count() == 0) //read files only once
 	{
-		for (QStringList::const_iterator it = txtfiles.begin(); it!=txtfiles.end(); it++)
-		{
-			QFileInfo finfo(*it);
-			QFile f(*it);
-			if (f.open(QIODevice::ReadOnly) && (f.size() < MAX_TEXTFILE_SIZE))
-			{
-				QString cont;
-				QTextStream str(&f);
-				while (!str.atEnd())
-					cont += str.readLine() + "\n";
-				f.close();
-				desc.append(finfo.fileName()); //append file name
-				desc.append(cont); //and contents
-			}
-		}
+            for (auto it = txtfiles.begin(); it!=txtfiles.end(); it++)
+	    {
+                QFileInfo finfo((*it).getFullFileName());
+                QFile f((*it).getFullFileName());
+                if (f.open(QIODevice::ReadOnly) && (f.size() < MAX_TEXTFILE_SIZE))
+                {
+                    QString cont;
+                    QTextStream str(&f);
+                    while (!str.atEnd())
+                        cont += str.readLine() + "\n";
+                    f.close();
+                    desc.append(finfo.fileName()); //append file name
+                    desc.append(cont); //and contents
+                }
+            }
 	}
         return desc;
 }
@@ -165,29 +173,20 @@ QImage ImgDirSink::image(unsigned int num, int &result)
 
 	if (num < imgcnt)
 	{
-		const QString fname = imgfiles[num];
-		listmtx.unlock();
-
-		if (!im.load(fname))
-			result = 1;
-		else
-			result = 0;
-
-		/*const QFileInfo finf(fname);
-
-		f (rimg.load(fname))
-		{
-			result = 0;
-			if (timestamps[fname] != finf.lastModified())
-				timestamps[fname].set(finf.lastModified(), true);
-		}*/
+            const QString fname = imgfiles[num].getFullFileName();
+            listmtx.unlock();
+            
+            if (!im.load(fname))
+                result = 1;
+            else
+                result = 0;
 
 	}
 	else
-	{
-		listmtx.unlock();
-		result = 0;
-	}
+        {
+            listmtx.unlock();
+            result = 0;
+        }
 
 	const Page page(num, im);
 	return page;
@@ -199,51 +198,6 @@ int ImgDirSink::numOfImages() const
         const int n = imgfiles.count();
         listmtx.unlock();
         return n;
-}
-
-QStringList ImgDirSink::getAllfiles() const
-{
-        listmtx.lock();
-        QStringList l = imgfiles + txtfiles + otherfiles;
-        listmtx.unlock();
-        return l;
-}
-
-QStringList ImgDirSink::getAlldirs() const
-{
-        return dirs;
-}
-
-QStringList ImgDirSink::getAllimgfiles() const
-{
-        listmtx.lock();
-        const QStringList l = imgfiles;
-        listmtx.unlock();
-        return l;
-}
-
-bool ImgDirSink::timestampDiffers(int page) const
-{
-	if (page < 0 || page > numOfImages())
-		return false;
-	listmtx.lock();
-	const QString fname = imgfiles[page];
-	listmtx.unlock();
-	QFileInfo f(fname);
-	return f.lastModified() != timestamps[fname];
-}
-			
-bool ImgDirSink::hasModifiedFiles() const
-{
-	//
-	// check timestamps of all files
-	for (QMap<QString, FileStatus>::ConstIterator it = timestamps.begin(); it != timestamps.end(); ++it)
-	{
-		QFileInfo finf(it.key());
-		if ((*it).isModified() || *it != finf.lastModified())
-			return true;
-	}
-	return false;
 }
 
 bool ImgDirSink::supportsNext() const
@@ -270,7 +224,7 @@ void ImgDirSink::removeThumbnails(int days)
         
         QDir dir(ComicBookSettings::instance().thumbnailsDir(), "*.jpg", QDir::Unsorted, QDir::Files|QDir::NoSymLinks);
         const QStringList files = dir.entryList();
-        for (QStringList::const_iterator it = files.begin(); it!=files.end(); it++)
+        for (auto it = files.begin(); it!=files.end(); it++)
         {
                 QFileInfo finfo(dir.absoluteFilePath(*it));
                 if (finfo.lastModified().daysTo(currdate) > days)

@@ -13,6 +13,8 @@
 #include <QString>
 #include "NaturalComparator.h"
 
+using namespace QComicBook;
+
 static unsigned toInt(QString const& s, int *idx)
 {
 	int res = 0;

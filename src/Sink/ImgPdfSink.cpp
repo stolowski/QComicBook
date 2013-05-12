@@ -48,6 +48,10 @@ int ImgPdfSink::open(const QString &path)
 	return 0;
 }
 
+void ImgPdfSink::sort(const PageSorter &sorter)
+{
+}
+
 void ImgPdfSink::close()
 {	
 	delete pdfdoc;

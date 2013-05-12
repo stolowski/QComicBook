@@ -11,16 +11,21 @@
  */
 
 #include <QString>
+#include "PageSorter.h"
 
-class NaturalComparator
+namespace QComicBook
 {
-	private:
-		const bool caseSenitive;
-		bool cmpLetters(QChar l, QChar r) const;
+    class NaturalComparator: PageSorter
+    {
+    private:
+        const bool caseSenitive;
+        bool cmpLetters(QChar l, QChar r) const;
 
-	public:
-		NaturalComparator(bool caseSens = false) : caseSenitive(caseSens)
-		{}
+    public:
+        NaturalComparator(bool caseSens = false) : caseSenitive(caseSens)
+        {}
 
-		bool operator()(QString const& l, QString const& r) const;
-};
+        bool operator()(QString const& l, QString const& r) const;
+    };
+
+}

@@ -22,6 +22,7 @@ namespace QComicBook
 	class Page;
 	class Thumbnail;
 	class ImgCache;
+        class PageSorter;
 
 	//! Possible errors.
 	enum SinkError
@@ -60,6 +61,8 @@ namespace QComicBook
 			/*! @param path comic book location
 			 *  @return value grater than 0 for error; 0 on success */
 			virtual int open(const QString &path) = 0;
+
+                        virtual void sort(const PageSorter &sorter) = 0;
 
 			//! Closes this comic book sink cleaning resources.
 			virtual void close() = 0;
@@ -103,9 +106,6 @@ namespace QComicBook
 
 			/*! @return contents of .nfo and file_id.diz files; file name goes first, then contents. */
 			virtual QStringList getDescription() const = 0;
-
-			virtual bool timestampDiffers(int page) const = 0;
-			virtual bool hasModifiedFiles() const = 0;
 
 			virtual bool supportsNext() const = 0;
 

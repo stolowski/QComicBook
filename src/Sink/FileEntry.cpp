@@ -12,6 +12,7 @@
 
 #include "FileEntry.h"
 #include <QFileInfo>
+#include <QStringList>
 #include <QDebug>
 
 using namespace QComicBook;
@@ -31,7 +32,29 @@ FileEntry::FileEntry(const QString &root, const QFileInfo &finfo):
     qDebug() << "File entry: " << m_fileName << m_relativePath;
 }
 
+FileEntry::FileEntry(const QString &fullpath)
+{
+    QStringList parts = fullpath.split("/"); //FIXME?
+    if (parts.size() > 0)
+    {
+        m_fileName = parts.last();
+        parts.pop_back();
+        m_relativePath = parts.join("/");
+    }
+}
+
+const QString& FileEntry::getFileName() const
+{
+    return m_fileName;
+}
+
 const QString FileEntry::getFullFileName() const
 {
-    return m_root + "/" + m_relativePath + "/" + m_fileName;
+    QStringList path;
+    if (!m_root.isEmpty())
+        path << m_root;
+    if (!m_relativePath.isEmpty())
+        path << m_relativePath;
+    path << m_fileName;
+    return path.join("/");
 }

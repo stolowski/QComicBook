@@ -27,6 +27,7 @@ namespace QComicBook
 			~ImgPdfSink();
 
 			int open(const QString &path);
+                        virtual void sort(const PageSorter &sorter);
 			void close();
 			QImage image(unsigned int num, int &result);
 			int numOfImages() const;

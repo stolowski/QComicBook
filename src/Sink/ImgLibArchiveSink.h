@@ -1,3 +1,15 @@
+/*
+ * This file is a part of QComicBook.
+ *
+ * Copyright (C) 2005-2013 Pawel Stolowski <stolowski@gmail.com>
+ *
+ * QComicBook is free software; you can redestribute it and/or modify it
+ * under terms of GNU General Public License by Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY. See GPL for more details.
+ */
+
 #ifndef __IMGLIBARCHIVESINK_H
 #define __IMGLIBARCHIVESINK_H
 
@@ -6,7 +18,7 @@
 
 namespace QComicBook
 {
-	class DirEntry;
+    class FileEntry;
 
 	//! Comic book archive sink based on libarchive.
 	/*! Allows opening different kind of archives containing image files, without decompressing all files to disk. */
@@ -20,6 +32,7 @@ namespace QComicBook
 				virtual void setCacheSize(int cacheSize, bool autoAdjust);
 
 				virtual int open(const QString &path);
+                                virtual void sort(const PageSorter &sorter);
 
 				virtual void close();
 
@@ -38,19 +51,14 @@ namespace QComicBook
 
 				virtual QStringList getDescription() const;
 
-				virtual bool timestampDiffers(int page) const;
-				virtual bool hasModifiedFiles() const;
-
 				virtual bool supportsNext() const;
 
 				virtual QString getNext() const;
 
 				virtual QString getPrevious() const;
 			private:
-				static QStringList splitPath(const QString &path);
-
 				QString archivepath;
-				DirEntry *root;
+                                QList<FileEntry> imgfiles;
 		};
 }
 

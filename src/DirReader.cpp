@@ -12,7 +12,6 @@
 
 #include <algorithm>
 #include "DirReader.h"
-#include "NaturalComparator.h"
 
 DirReader::DirReader(QDir::SortFlags sortFlags, int maxDepth): flags(sortFlags), maxDirDepth(maxDepth)
 {
@@ -26,17 +25,13 @@ void DirReader::recurseDir(const QString &path, int curDepth)
 {
 	QDir dir(path);
 	dir.setSorting(flags);
-	dir.setFilter(QDir::AllDirs|QDir::Files);
-	QStringList files = dir.entryList();
-	std::sort(files.begin(), files.end(), NaturalComparator());
+	dir.setFilter(QDir::AllDirs|QDir::Files|QDir::NoDotAndDotDot);
+	auto files = dir.entryInfoList();
 
-	foreach (QString f, files)
+	foreach (auto finf, files)
         {
-            if (f == "." || f == "..") //FIXME: use no-dot and no-dot-dot filter
-                continue;
-            QFileInfo finf(dir, f);
             fileHandler(finf);
-            if (finf.isDir()) // && (finf.absoluteFilePath() != path))
+            if (finf.isDir())
             {
                 if (curDepth < maxDirDepth)
                 {

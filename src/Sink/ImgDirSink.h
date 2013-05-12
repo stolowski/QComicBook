@@ -16,7 +16,7 @@
 #define __IMGDIRSINK_H
 
 #include <QString>
-#include <QStringList>
+#include <QList>
 #include <QDateTime>
 #include <QMap>
 #include <QMutex>
@@ -30,6 +30,7 @@ namespace QComicBook
 {
 
 	class Thumbnail;
+        class FileEntry;
 
 	//! Comic book directory sink.
 	/*! Allows opening directories containing image files. */
@@ -38,21 +39,6 @@ namespace QComicBook
 		Q_OBJECT
 
 		protected:
-			class FileStatus
-			{
-				private:
-					bool modified;
-					QDateTime timestamp;
-				public:
-					FileStatus(): modified(false) {}
-					FileStatus(const QDateTime &mtime): modified(false), timestamp(mtime) {}
-					void set(const QDateTime &mtime, bool m) { timestamp = mtime; modified = m; }
-					bool isModified() const { return modified; }
-					bool operator==(const QDateTime &d) const { return d == timestamp; }
-					bool operator!=(const QDateTime &d) const { return d != timestamp; }
-					operator QDateTime() const { return timestamp; }
-			};
-
 			static QString memPrefix(int &s);
 
 			static const int MAX_TEXTFILE_SIZE;
@@ -61,17 +47,16 @@ namespace QComicBook
 		
 		private:
 			mutable QMutex listmtx; //!< mutex for imgfiles
-			QStringList imgfiles; //!< list of images files in directory
-			QStringList txtfiles; //!< text files (.nfo, file_id.diz)
-			QStringList otherfiles; //!< list of other files
+			QList<FileEntry> imgfiles; //!< list of images files in directory
+			QList<FileEntry> txtfiles; //!< text files (.nfo, file_id.diz)
+			QList<FileEntry> otherfiles; //!< list of other files
 			QStringList dirs; //!< directories
 			QString dirpath; //!< path to directory
-			QMap<QString, FileStatus> timestamps; //!< last modifications timestamps for all pages
 			mutable QStringList desc; //txt files
 
 		public:
-			ImgDirSink(bool dirs=false, int cacheSize=0);
-			ImgDirSink(const QString &path, bool dirs=false, int cacheSize=0);
+			ImgDirSink(int cacheSize=0);
+			ImgDirSink(const QString &path, int cacheSize=0);
 			ImgDirSink(const ImgDirSink &sink, int cacheSize=0);
 			virtual ~ImgDirSink();
 
@@ -80,6 +65,7 @@ namespace QComicBook
 			 *  @return value grater than 0 for error; 0 on success */
 			virtual int open(const QString &path);
 
+                        virtual void sort(const PageSorter &sorter);
 
 			//! Closes this comic book sink cleaning resources.
 			virtual void close();
@@ -98,12 +84,6 @@ namespace QComicBook
 
 			/*! @return contents of .nfo and file_id.diz files; file name goes first, then contents. */
 			virtual QStringList getDescription() const;
-
-			virtual QStringList getAllfiles() const;
-			virtual QStringList getAlldirs() const;
-			virtual QStringList getAllimgfiles() const;
-			virtual bool timestampDiffers(int page) const;
-			virtual bool hasModifiedFiles() const;
 
 			virtual bool supportsNext() const;
 

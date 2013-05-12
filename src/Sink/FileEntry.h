@@ -31,7 +31,8 @@ namespace QComicBook
         const QString& getRelativePath() const;
         const QString getFullFileName() const;
 
-        FileEntry (const QString &root, const QFileInfo &finfo);
+        FileEntry(const QString &root, const QFileInfo &finfo);
+        FileEntry(const QString &fullpath);
     };
 }
  
