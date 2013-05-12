@@ -29,33 +29,15 @@ namespace QComicBook
 
 				virtual ~ImgLibArchiveSink();
 
-				virtual void setCacheSize(int cacheSize, bool autoAdjust);
-
-				virtual int open(const QString &path);
-                                virtual void sort(const PageSorter &sorter);
-
-				virtual void close();
-
+				virtual int open(const QString &path) override;
+                                virtual void sort(const PageSorter &sorter) override;
+				virtual void close() override;
 				virtual QImage image(unsigned int num, int &result);
-
-				virtual Thumbnail getThumbnail(unsigned int num, bool thumbcache=true);
-
-				virtual int numOfImages() const;
-				
-				void setComicBookName(const QString &name, const QString &fullName);
-				QString getName(int maxlen = 50) const;
-
-				QString getFullName() const;
-
-				virtual QString getFullFileName(int page) const;
-
-				virtual QStringList getDescription() const;
-
-				virtual bool supportsNext() const;
-
-				virtual QString getNext() const;
-
-				virtual QString getPrevious() const;
+				virtual int numOfImages() const override;
+				virtual QStringList getDescription() const override;
+				virtual bool supportsNext() const override;
+				virtual QString getNext() const override;
+				virtual QString getPrevious() const override;
 			private:
 				QString archivepath;
                                 QList<FileEntry> imgfiles;

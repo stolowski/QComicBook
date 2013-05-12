@@ -63,35 +63,33 @@ namespace QComicBook
 			//! Opens this comic book sink with specifiled path.
 			/*! @param path comic book location
 			 *  @return value grater than 0 for error; 0 on success */
-			virtual int open(const QString &path);
+			virtual int open(const QString &path) override;
 
-                        virtual void sort(const PageSorter &sorter);
+                        virtual void sort(const PageSorter &sorter) override;
 
 			//! Closes this comic book sink cleaning resources.
-			virtual void close();
+			virtual void close() override;
 
 			//! Returns an image for specified page.
 			/*! The cache is first checked for image. If not found, the image is loaded.
 			 *  @param num page number
 			 *  @param result contains 0 on succes or value greater than 0 for error
 			 *  @return an image */
-			virtual QImage image(unsigned int num, int &result);
+			virtual QImage image(unsigned int num, int &result) override;
 
 			/*! @return number of images for this comic book sink */
-			virtual int numOfImages() const;
-			
-			virtual QString getFullFileName(int page) const;
+			virtual int numOfImages() const override;
 
 			/*! @return contents of .nfo and file_id.diz files; file name goes first, then contents. */
-			virtual QStringList getDescription() const;
+			virtual QStringList getDescription() const override;
 
-			virtual bool supportsNext() const;
+			virtual bool supportsNext() const override;
 
 			//! Returns the next filename to open.
 			/* @return next filename or QString::null */
-			virtual QString getNext() const;
+			virtual QString getNext() const override;
 
-			virtual QString getPrevious() const;
+			virtual QString getPrevious() const override;
 
 			//
 			//! Removes old thumbnails.

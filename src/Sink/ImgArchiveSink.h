@@ -62,12 +62,12 @@ namespace QComicBook
 			ImgArchiveSink(const ImgDirSink &sink);
 			virtual ~ImgArchiveSink();
 
-			virtual int open(const QString &path);
-			virtual void close();
+			virtual int open(const QString &path) override;
+			virtual void close() override;
 
-			virtual bool supportsNext() const;
-			virtual QString getNext() const;
-			virtual QString getPrevious() const;
+			virtual bool supportsNext() const override;
+			virtual QString getNext() const override;
+			virtual QString getPrevious() const override;
 
 			static QString makeTempDir(const QString &parent = QDir::tempPath());
 	};

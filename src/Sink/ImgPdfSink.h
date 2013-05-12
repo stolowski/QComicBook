@@ -26,20 +26,15 @@ namespace QComicBook
 			ImgPdfSink(int cacheSize=0);
 			~ImgPdfSink();
 
-			int open(const QString &path);
-                        virtual void sort(const PageSorter &sorter);
-			void close();
-			QImage image(unsigned int num, int &result);
-			int numOfImages() const;
-			QString getName(int maxlen = 50) { return ""; }
-			QString getFullName() const { return ""; }
-			QString getFullFileName(int page) const { return ""; }
+			int open(const QString &path) override;
+                        virtual void sort(const PageSorter &sorter) override;
+			void close() override;
+			QImage image(unsigned int num, int &result) override;
+			int numOfImages() const override;
 			QStringList getDescription() const { return QStringList(); }
-			bool timestampDiffers(int page) const { return false; }
-			bool hasModifiedFiles() const { return false; }
-			bool supportsNext() const { return false; }
-			QString getNext() const { return ""; }
-			QString getPrevious() const { return ""; }
+			bool supportsNext() const override { return false; }
+			QString getNext() const override { return ""; }
+			QString getPrevious() const override { return ""; }
 
 		private:
 			Poppler::Document *pdfdoc;

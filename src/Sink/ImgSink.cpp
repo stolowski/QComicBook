@@ -55,35 +55,39 @@ Page ImgSink::getImage(unsigned int num, int &result)
 
 Thumbnail ImgSink::getThumbnail(unsigned int num, bool thumbcache)
 {
-        Thumbnail t(num, cbname.remove('/'));
+    Thumbnail t(num, cbname.remove('/'));
+    
+    //
+    // try to load cached thumbnail
+    if (thumbcache)
+    {
+        if (t.tryLoad())
+        {
+            _DEBUG << "thumbnail" << num << "loaded from disk";
+            return t;
+        }
+    }
 
+    int result;
+    //
+    // try to load image
+    const Page p(getImage(num, result));
+    if (result == 0)
+    {
+        t.setImage(p.getImage());
         //
-        // try to load cached thumbnail
+        // save thumbnail if caching enabled
         if (thumbcache)
         {
-            if (t.tryLoad())
-            {
-                _DEBUG << "thumbnail" << num << "loaded from disk";
-                return t;
-            }
+            t.save();
         }
-
-		int result;
-        //
-        // try to load image
-        const Page p(getImage(num, result));
-		if (result == 0)
-        {
-			t.setImage(p.getImage());
-            //
-            // save thumbnail if caching enabled
-            if (thumbcache)
-            {
-                t.save();
-            }
-        }
-
-        return t;
+    }
+    else
+    {
+        qWarning() << "Failed to load image for page" << num;
+    }
+    
+    return t;
 }
 
 

@@ -102,8 +102,6 @@ namespace QComicBook
 			 *  @return name of comic book */
 			QString getFullName() const;
 
-			virtual QString getFullFileName(int page) const = 0;
-
 			/*! @return contents of .nfo and file_id.diz files; file name goes first, then contents. */
 			virtual QStringList getDescription() const = 0;
 

@@ -33,10 +33,6 @@ ImgLibArchiveSink::~ImgLibArchiveSink()
 {
 }
 
-void ImgLibArchiveSink::setCacheSize(int cacheSize, bool autoAdjust)
-{
-}
-
 int ImgLibArchiveSink::open(const QString &path)
 {
     ResourceGuard<archive*, decltype(archive_read_free)> a(archive_read_new(), archive_read_free);
@@ -87,6 +83,7 @@ void ImgLibArchiveSink::close()
 QImage ImgLibArchiveSink::image(unsigned int num, int &result)
 {
   const QString requested_path = imgfiles[num].getFullFileName();
+  qDebug() << "requested image" << requested_path;
 
   ResourceGuard<archive*, decltype(archive_read_free)> a(archive_read_new(), archive_read_free);
 
@@ -104,6 +101,15 @@ QImage ImgLibArchiveSink::image(unsigned int num, int &result)
   size_t size;
   struct archive_entry *ae;
 
+  /*  auto write_release = [&result](archive* archive_ptr)
+  {
+      if (archive_write_free(archive_ptr) != ARCHIVE_OK)
+      {
+          qWarning() << archive_error_string(archive_ptr);
+          result = SINKERR_OTHER;
+      }
+      return 0;
+      };*/
   ResourceGuard<archive*, decltype(archive_write_free)> ext(archive_write_disk_new(), archive_write_free);
 
   archive_write_disk_set_standard_lookup(ext);
@@ -111,7 +117,6 @@ QImage ImgLibArchiveSink::image(unsigned int num, int &result)
                                  ARCHIVE_EXTRACT_SECURE_SYMLINKS
                                  |ARCHIVE_EXTRACT_SECURE_NODOTDOT
                                  |ARCHIVE_EXTRACT_NO_OVERWRITE);
-
 
   while (archive_read_next_header(a, &ae) == ARCHIVE_OK)
   {
@@ -153,36 +158,13 @@ QImage ImgLibArchiveSink::image(unsigned int num, int &result)
   if (!tmpfilepath.isEmpty())
       return QImage(tmpfilepath);
 
+  result = SINKERR_OTHER;
   return QImage();
-}
-
-Thumbnail ImgLibArchiveSink::getThumbnail(unsigned int num, bool thumbcache)
-{
-    return Thumbnail();
 }
 
 int ImgLibArchiveSink::numOfImages() const
 {
     return imgfiles.size();
-}
-
-void ImgLibArchiveSink::setComicBookName(const QString &name, const QString &fullName)
-{
-}
-
-QString ImgLibArchiveSink::getName(int maxlen) const
-{
-    return "TEST";
-}
-
-QString ImgLibArchiveSink::getFullName() const
-{
-    return "TEST";
-}
-
-QString ImgLibArchiveSink::getFullFileName(int page) const
-{
-    return "TEST";
 }
 
 QStringList ImgLibArchiveSink::getDescription() const

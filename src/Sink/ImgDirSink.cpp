@@ -135,11 +135,6 @@ void ImgDirSink::close()
         listmtx.unlock();
 }
 
-QString ImgDirSink::getFullFileName(int page) const
-{
-    return page < numOfImages() ? imgfiles[page].getFullFileName () : QString::null;
-}
-
 QStringList ImgDirSink::getDescription() const
 {
 	if (desc.count() == 0) //read files only once
