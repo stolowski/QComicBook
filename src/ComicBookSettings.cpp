@@ -19,7 +19,7 @@
 #include <QColor>
 #include <QDir>
 #include <QTextStream>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <iostream>
 
 #define GRP_VIEW                     "/View"
@@ -104,7 +104,7 @@ ComicBookSettings::~ComicBookSettings()
 bool ComicBookSettings::checkDirs()
 {
 	m_dirsok = false; 
-	m_bkpath = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+	m_bkpath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
 
 	QDir dir(m_bkpath);
 	if (!dir.exists())
@@ -115,7 +115,7 @@ bool ComicBookSettings::checkDirs()
             }
         }
 
-        m_thpath = QDesktopServices::storageLocation(QDesktopServices::CacheLocation) + QDir::separator() + "thumbs";
+        m_thpath = QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "thumbs";
 
         dir.setPath(m_thpath);
 	if (!dir.exists())

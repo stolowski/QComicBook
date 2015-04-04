@@ -63,7 +63,7 @@ QImage ImgPdfSink::image(unsigned int num, int &result)
 		Poppler::Page* pdfpage = pdfdoc->page(num);
 		if (pdfpage)
 		{
-			QImage img = pdfpage->renderToImage(QX11Info::appDpiX(), QX11Info::appDpiY()); //TODO use defaults if not using X11 (e.g. MS Win)
+			QImage img = pdfpage->renderToImage(QX11Info::appDpiX(), QX11Info::appDpiY()); //TODO: use QScreen
 			delete pdfpage;
 			result = 0;
 			return img;

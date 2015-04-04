@@ -98,6 +98,14 @@ void StatusBar::removeProgressBar()
 	}
 }
 
+void StatusBar::setShown(bool v)
+{
+    if(v)
+        show();
+    else
+        hide();
+}
+
 void StatusBar::clear()
 {
 	setPage(0, 0);

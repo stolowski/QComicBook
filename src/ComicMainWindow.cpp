@@ -48,6 +48,7 @@
 #include <QFileInfo>
 #include <QToolBar>
 #include <QMessageBox>
+#include <QMimeData>
 #include <QLabel>
 #include <QKeyEvent>
 #include <QWidgetAction>

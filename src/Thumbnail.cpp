@@ -109,5 +109,5 @@ QString Thumbnail::getFullPath() const
 
 QByteArray Thumbnail::getScrambledName(const QString &in)
 {
-    return QCryptographicHash::hash( in.toAscii(), QCryptographicHash::Sha1 );
+    return QCryptographicHash::hash( in.toLatin1(), QCryptographicHash::Sha1 );
 }

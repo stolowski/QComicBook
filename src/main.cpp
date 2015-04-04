@@ -85,9 +85,9 @@ int main(int argc, char *argv[])
 
 	//
 	// command line argument
-	if (app.argc() > 1)
+	if (app.arguments().size() > 1)
 	{ 
-		win->open(QString::fromLocal8Bit(app.argv()[1]));
+		win->open(app.arguments().at(1));
 	}
 	else
 	{
