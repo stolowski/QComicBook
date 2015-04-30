@@ -37,6 +37,7 @@ namespace QComicBook
 			void setName(const QString &n);
 			void setImageInfo(const Page *img1, const Page *img2 = NULL);
 			void setProgress(int n, int total);
+            void setShown(bool);
 			void clear();
 
 		protected:
