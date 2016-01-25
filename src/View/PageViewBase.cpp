@@ -528,4 +528,5 @@ void PageViewBase::updateSceneRect()
     const QRectF brect(QPointF(x1, y1), QPointF(x2, y2));
     _DEBUG << "scene rect:" << brect;
     setSceneRect(brect);
+    viewport()->update();
 }
