@@ -62,7 +62,7 @@
 using namespace QComicBook;
 using namespace Utility;
 
-ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), currpage(0)
+ComicMainWindow::ComicMainWindow(QWidget *parent): QMainWindow(parent), currpage(0), scrollPageToBottom(false)
 #ifdef DEBUG
                                                  , debugController(new DebugController(this))
 #endif
@@ -668,6 +668,12 @@ void ComicMainWindow::recentSelected(const QString &fname)
 void ComicMainWindow::pageLoaded(const Page &page)
 {
     _DEBUG << page.getNumber();
+
+    if (scrollPageToBottom) {
+        view->scrollToBottom();
+        scrollPageToBottom = false;
+    }
+
     if (currpage == page.getNumber())
     {
         statusbar->setImageInfo(&page);
@@ -677,6 +683,12 @@ void ComicMainWindow::pageLoaded(const Page &page)
 void ComicMainWindow::pageLoaded(const Page &page1, const Page &page2)
 {
     _DEBUG << page1.getNumber() << ", " << page2.getNumber();
+
+    if (scrollPageToBottom) {
+        view->scrollToBottom();
+        scrollPageToBottom = false;
+    }
+
     if (currpage == page1.getNumber() || currpage == page2.getNumber())
     {
         statusbar->setImageInfo(&page1, &page2);
@@ -866,8 +878,8 @@ void ComicMainWindow::prevPageBottom()
 {
     if (currpage > 0)
     {
+        scrollPageToBottom = true;
         jumpToPage(view->previousPage(currpage));
-        view->scrollToBottom();
     }
 }
 
