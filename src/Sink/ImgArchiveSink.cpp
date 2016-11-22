@@ -263,6 +263,7 @@ QString ImgArchiveSink::makeTempDir(const QString &parent)
             return parent + QDir::separator() + tmpd;
         }
     }
+    qFatal("Failed to create temporary directory");
     return QString::null;
 }
 
