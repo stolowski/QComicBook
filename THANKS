@@ -13,6 +13,9 @@ Cork - accurate and useful bugreports
 Alexandre Jodoin - bug reports
 David Lemke - bug report + patch
 Crocket - bug report
+Lana Black - Qt5 port
+Andrey Efremov - fix for drawing glitch.
+Viktor Dahl - support for natural sorting.
 
 * Translations:
 
