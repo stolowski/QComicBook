@@ -38,6 +38,7 @@
 #define OPT_EMBEDPAGENUMBERS         "/EmbedPageNumbers"
 #define OPT_CONTSCROLL               "/ContinuousScroll"
 #define OPT_VIEWTYPE                 "/ViewType"
+#define OPT_GAPSIZE                  "/GapSize"
 
 #define GRP_NAVI                     "/Navigation"
 
@@ -162,6 +163,11 @@ void ComicBookSettings::load()
 		}
 		m_contscroll = m_cfg->value(OPT_CONTSCROLL, true).toBool();
 		m_viewtype = convert(viewtype2string, m_cfg->value(OPT_VIEWTYPE, viewtype2string[0].str).toString());
+        m_gapsize = m_cfg->value(OPT_GAPSIZE, 3).toInt();
+        if (m_gapsize < 0)
+                {
+                    m_gapsize = 0;
+                }
 	m_cfg->endGroup();
 	m_cfg->beginGroup(GRP_RUNTIME);
 		m_lastdir = m_cfg->value(OPT_LASTDIR, QString()).toString();
@@ -260,6 +266,10 @@ int ComicBookSettings::cacheSize() const
     return m_cachesize;
 }
 
+int ComicBookSettings::gapSize() const
+{
+    return m_gapsize;
+}
 bool ComicBookSettings::cacheAutoAdjust() const
 {
     return m_cacheadjust;
@@ -450,6 +460,17 @@ void ComicBookSettings::cacheSize(int s)
             s = 1;
         }
         m_cfg->setValue(GRP_MISC OPT_CACHESIZE, m_cachesize = s);
+    }
+}
+void ComicBookSettings::gapSize(int s)
+{
+    if (s != m_gapsize)
+    {
+        if (s < 0)
+        {
+            s = 0;
+        }
+        m_cfg->setValue(GRP_VIEW OPT_GAPSIZE, m_gapsize = s);
     }
 }
 

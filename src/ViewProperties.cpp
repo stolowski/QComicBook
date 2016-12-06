@@ -36,6 +36,7 @@ void ViewProperties::setFromSettings()
     m_data.mangaMode = cfg.japaneseMode();
     m_data.background = cfg.background();
     m_data.smoothScaling = cfg.smoothScaling();
+    m_data.gapSize = cfg.gapSize();
 }
 
 int ViewProperties::angle() const
@@ -140,4 +141,17 @@ bool ViewProperties::mangaMode() const
 const ViewPropertiesData& ViewProperties::getProperties() const
 {
     return m_data;
+}
+
+void ViewProperties::setGapSize(int f)
+{
+    if (m_data.gapSize != f)
+        {
+            m_data.gapSize = f;
+            emit changed();
+        }
+}
+int ViewProperties::gapSize() const
+{
+    return m_data.gapSize;
 }

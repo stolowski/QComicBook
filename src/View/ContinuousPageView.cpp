@@ -146,6 +146,7 @@ void ContinuousPageView::recreateComicPageImages()
 		_DEBUG << "creating ComicPageImage for one page" << i;
                 imgLabel.append(p);
                 scene->addItem(p);
+                // scene->addText( QString::number(i));
             }
         }
         
@@ -291,7 +292,7 @@ void ContinuousPageView::recalculatePageSizes()
                 ++n;
             }
         }
-        int y = 0;
+    int y = 0;
 	if (n > 0) //if we had at least one real size, calculate and set estimated sizes
 	{
 		avgw /= n;
@@ -312,7 +313,7 @@ void ContinuousPageView::recalculatePageSizes()
 		// update positions lookup
 		m_ypos.startCoordinate(i) = y;
 		m_ypos.endCoordinate(i) = y + p->estimatedSize().height();
-		y += p->estimatedSize().height();
+		y += p->estimatedSize().height()+props.gapSize();//gap
 	}
     }
     updateSceneRect();
