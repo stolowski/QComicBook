@@ -309,7 +309,7 @@ void ContinuousPageView::recalculatePageSizes()
 		}
 		p->setPos(0, y);
                 center(p, true, false); // center horizontally only, preserve Y
-                _DEBUG << "page: " << i << ", y=" << y;
+                _DEBUG << "page: " << i << ", y=" << y << " gap="<<props.gapSize();
 		// update positions lookup
 		m_ypos.startCoordinate(i) = y;
 		m_ypos.endCoordinate(i) = y + p->estimatedSize().height();
@@ -521,4 +521,9 @@ int ContinuousPageView::currentPage() const
     }
     _DEBUG << "current page" << current;
     return current;
+}
+
+void ContinuousPageView::setGapSize(int f)
+{
+    props.setGapSize(f);
 }

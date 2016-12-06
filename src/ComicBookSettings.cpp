@@ -21,6 +21,7 @@
 #include <QTextStream>
 #include <QStandardPaths>
 #include <iostream>
+#include "ComicBookDebug.h"
 
 #define GRP_VIEW                     "/View"
 #define OPT_TWOPAGES                 "/TwoPages"
@@ -471,6 +472,8 @@ void ComicBookSettings::gapSize(int s)
             s = 0;
         }
         m_cfg->setValue(GRP_VIEW OPT_GAPSIZE, m_gapsize = s);
+        emit displaySettingsChanged(OPT_GAPSIZE);
+        _DEBUG << "Gap size"<< m_gapsize;
     }
 }
 

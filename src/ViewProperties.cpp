@@ -12,6 +12,7 @@
 
 #include "ViewProperties.h"
 #include "ComicBookSettings.h"
+#include "ComicBookDebug.h"
 
 using namespace QComicBook;
 
@@ -88,6 +89,7 @@ void ViewProperties::setPageNumbers(bool f)
     {
         m_data.pageNumbers = f;
         emit changed();
+        _DEBUG << "m_data. =" << m_data.gapSize ;
     }
 }
 
@@ -149,6 +151,7 @@ void ViewProperties::setGapSize(int f)
         {
             m_data.gapSize = f;
             emit changed();
+            _DEBUG << "m_data.gapSize =" << m_data.gapSize ;
         }
 }
 int ViewProperties::gapSize() const
