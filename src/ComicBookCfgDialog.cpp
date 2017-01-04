@@ -44,6 +44,7 @@ ComicBookCfgDialog::ComicBookCfgDialog(QWidget *parent, ComicBookSettings *cfg):
     cb_smallcursor->setChecked(cfg->smallCursor());
     cb_embedpagenumbers->setChecked(cfg->embedPageNumbers());
     cb_smoothscaling->setChecked(cfg->smoothScaling());
+    sb_gapsize->setValue(cfg->gapSize());
 
     sb_cachesize->setValue(cfg->cacheSize());
     cb_cacheadjust->setChecked(cfg->cacheAutoAdjust());
@@ -74,6 +75,7 @@ void ComicBookCfgDialog::accept()
 	cfg->embedPageNumbers(cb_embedpagenumbers->isChecked());
 	cfg->smoothScaling(cb_smoothscaling->isChecked());
 	cfg->infoFont(font);
+    cfg->gapSize(sb_gapsize->value());
 
 	//
 	// misc
