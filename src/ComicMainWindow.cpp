@@ -1186,10 +1186,13 @@ void ComicMainWindow::reconfigureDisplay()
     view->setSmallCursor(cfg->smallCursor());
     view->showPageNumbers(cfg->embedPageNumbers());
     view->setBackground(cfg->background());
-    ContinuousPageView* cv = dynamic_cast<ContinuousPageView*>(view.data());
-    if(cv ) {
-        _DEBUG << "ContinuousPageView";
-        cv->setGapSize(cfg->gapSize());
+    if (cfg->viewType() == Continuous)
+    {
+        ContinuousPageView* cv = dynamic_cast<ContinuousPageView*>(view.data());
+        if(cv ) {
+            _DEBUG << "ContinuousPageView";
+            cv->setGapSize(cfg->gapSize());
+        }
     }
 }
 
