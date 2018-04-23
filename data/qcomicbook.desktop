@@ -1,6 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=qcomicbook
+Name=QComicBook
 GenericName=ComicBook Viewer
 GenericName[fi]=Sarjakuvakatselin
 GenericName[pl]=Przeglądarka komiksów
@@ -10,7 +10,7 @@ Comment[fi]=QComicBook on sarjakuva-arkistojen katselin (cbz, cbr ja cbt), jossa
 Comment[tr]=QComicBook cbz, cbr, cbt biçimindeki çizgi roman arşivlerini görüntülemek için kullanılır. Sayfa ön görünümü, sayfa döşeme, yer imi, mangalar için sayfa sırasını ters gösterme gibi çizgi roman okumayı kolaylaştırıcı özellikleri bulunuyor.
 Comment[pl]=Przeglądarka do archiwów z komiksami
 Exec=qcomicbook
-Icon=qcomicbook.png
+Icon=qcomicbook
 Terminal=false
 Type=Application
 StartupNotify=false
