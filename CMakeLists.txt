@@ -32,6 +32,8 @@ include_directories(${Qt5X11Extras_INCLUDE_DIRS})
 add_definitions(${Qt5Widgets_DEFINITIONS})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 
+INCLUDE(GNUInstallDirs)
+
 INCLUDE(FindPkgConfig)
 PKG_CHECK_MODULES(POPPLER poppler-qt5>=0.12.4 REQUIRED)
 
