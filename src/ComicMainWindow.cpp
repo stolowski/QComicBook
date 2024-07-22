@@ -976,7 +976,7 @@ void ComicMainWindow::showAbout()
                         "QComicBook " VERSION " - comic book viewer for GNU/Linux<br>"
                         "(c)by Pawel Stolowski 2005-2016<br>"
                         "released under terms of GNU General Public License<br><br>"
-                        "<a href=\"http://www.qcomicbook.org\">http://www.qcomicbook.org</a><br>"
+                        "<a href=\"https://github.com/stolowski/QComicBook\">https://github.com/stolowski/QComicBook</a><br>"
                         "<a href=\"mailto:stolowski@gmail.com\">stolowski@gmail.com</a>", QPixmap(":/images/qcomicbook-splash.png"));
         win->show();
 }
