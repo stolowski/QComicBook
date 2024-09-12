@@ -22,6 +22,7 @@
 #include <QRegExp>
 #include <QApplication>
 #include <QDir>
+#include <QTemporaryDir>
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -98,23 +99,13 @@ void ImgArchiveSink::init()
 	connect(pinf, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(infoExited(int, QProcess::ExitStatus)));
 	connect(pext, SIGNAL(readyReadStandardOutput()), this, SLOT(extractStdoutReady()));
 	connect(pext, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(extractExited(int, QProcess::ExitStatus)));
+	tmpdir = NULL;
 }
 
 void ImgArchiveSink::doCleanup()
 {
-	if (!tmppath.isEmpty())
-	{
-		QDir dir(tmppath);
-		//
-		// remove temporary files and dirs
-		foreach (const QString f, archfiles)
-			dir.remove(f);
-		foreach (const QString f, archdirs)
-		{
-			dir.rmdir(f);
-		}
-		dir.rmdir(tmppath);
-	}
+	delete tmpdir;
+	tmpdir = NULL;
 }
 
 int ImgArchiveSink::waitForFinished(QProcess *p)
@@ -173,7 +164,7 @@ int ImgArchiveSink::open(const QString &path) //TODO: cleanup if already opened?
 	{
 		if (info.isReadable())
 		{
-                        tmppath = makeTempDir(ComicBookSettings::instance().tmpDir());
+                        const QString tmppath = makeTempDir(ComicBookSettings::instance().tmpDir());
 			archdirs.prepend(tmppath);
                         QStringList extractargs, listargs;
                         ArchiversConfiguration::instance().getExtractArguments(path, extractargs, listargs);
@@ -239,30 +230,9 @@ void ImgArchiveSink::extractStdoutReady()
 
 QString ImgArchiveSink::makeTempDir(const QString &parent)
 {
-    static bool initsrand = false;
-
-    //
-    // make sure srand is called only once
-    if (!initsrand)
-    {
-        srand(time(NULL));
-        initsrand = true;
-    }
-
-    QDir dir(parent);
-    for (;;)
-    {
-        const int n = rand();
-        const QString tmpd = QString("qcomic-") + QString::number(n);
-        if (!dir.exists(tmpd))
-        {
-            if (!dir.mkdir(tmpd))
-            {
-                break;
-            }
-            return parent + QDir::separator() + tmpd;
-        }
-    }
+    tmpdir = new QTemporaryDir(parent + QString("/qcomic-XXXXXX"));
+    if (tmpdir->isValid())
+        return tmpdir->path();
     qFatal("Failed to create temporary directory");
     return QString::null;
 }

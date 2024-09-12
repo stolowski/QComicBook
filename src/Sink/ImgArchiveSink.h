@@ -23,6 +23,7 @@
 #include "ImgDirSink.h"
 
 class QImage;
+class QTemporaryDir;
 
 namespace QComicBook
 {
@@ -37,7 +38,7 @@ namespace QComicBook
 			QProcess *pinf; ///< file list extracing process
 			QString archivename; ///< archive file name, without path
 			QString archivepath; ///< full path, including archive name
-			QString tmppath; ///< path to extracted archive
+			QTemporaryDir *tmpdir; ///< temporary location to extracted archive
 			QStringList archfiles; ///< list of archive files
 			QStringList archdirs; ///< list of archive dirs
 			int filesnum; ///< number of files gathered from parsing archiver output, used for progress bar
@@ -46,6 +47,7 @@ namespace QComicBook
 			static int waitForFinished(QProcess *p);
 			int extract(const QString &filename, const QString &destdir, QStringList extargs, QStringList infargs);
 			void init();
+			QString makeTempDir(const QString &parent);
 			virtual void doCleanup();
 			
 			virtual bool fileHandler(const QFileInfo &finfo);
@@ -68,8 +70,6 @@ namespace QComicBook
 			virtual bool supportsNext() const;
 			virtual QString getNext() const;
 			virtual QString getPrevious() const;
-
-			static QString makeTempDir(const QString &parent = QDir::tempPath());
 	};
 }
 
