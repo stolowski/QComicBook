@@ -33,7 +33,8 @@ ImageFormatsInfo::ImageFormatsInfo()
         //
         // Qt may support more formats, but this is to ensure only the ones that make sense for
         // QComicBook are included.
-        if (b == "jpg" || b == "jpeg" || b == "bmp" || b == "png" || b == "tiff" || b == "gif" || b == "xpm")
+        if (b == "jpg" || b == "jpeg" || b == "bmp" || b == "png" || b == "tiff" || b == "gif" || b == "xpm" ||
+	    b == "heic" || b == "webp" )
         {
             m_extensions.append("." + b);
             m_formats.append(QString(b).toUpper());
