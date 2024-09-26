@@ -24,6 +24,6 @@ SET(DATA_FILES bestfit.png
 	     qcomicbook-splash.png)
 
 #INSTALL(FILES ${DATA_FILES} DESTINATION share/${PACKAGE})
-INSTALL(FILES qcomicbook.png DESTINATION share/pixmaps)
-INSTALL(FILES qcomicbook.desktop DESTINATION share/applications)
+INSTALL(FILES qcomicbook.png DESTINATION ${CMAKE_INSTALL_DATADIR}/pixmaps)
+INSTALL(FILES qcomicbook.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
 
