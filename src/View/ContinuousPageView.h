@@ -57,6 +57,7 @@ namespace QComicBook
         virtual void gotoPage(int n);
         virtual void scrollToTop();
         virtual void scrollToBottom();
+        virtual void setGapSize(int f);
         
     public:
         ContinuousPageView(QWidget *parent, int physicalPages, const ViewProperties& props);

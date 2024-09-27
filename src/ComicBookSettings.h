@@ -51,6 +51,7 @@ namespace QComicBook
 			const QStringList& recentlyOpened() const;
 			QColor background() const;
 			int cacheSize() const;
+			int gapSize() const;
 			bool cacheAutoAdjust() const;
 			bool cacheThumbnails() const;
 			int thumbnailsAge() const;
@@ -81,6 +82,7 @@ namespace QComicBook
 			void recentlyOpened(const QStringList &hist);
 			void background(const QColor &color);
 			void cacheSize(int s);
+			void gapSize(int s);
 			void cacheAutoAdjust(bool f);
 			void cacheThumbnails(bool f);
 			void thumbnailsAge(int n);
@@ -127,6 +129,7 @@ namespace QComicBook
 			QColor m_bgcolor;
 			QStringList m_recent;
 			int m_cachesize;
+			int m_gapsize;
 			int m_thumbsage;
 			bool m_cacheadjust;
 			bool m_cachethumbs;
