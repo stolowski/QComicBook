@@ -58,6 +58,7 @@ namespace QComicBook
 			int currpage; //!<current page number
 					
 			bool savedToolbarState;
+			bool scrollPageToBottom;
 			RecentFilesMenu *menuRecentFiles;
 			QAction *actionToggleThumbnails;
 			QAction *actionExitFullScreen;
