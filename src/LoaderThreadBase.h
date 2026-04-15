@@ -13,88 +13,84 @@
 #ifndef __LOADERTHREADBASE_H
 #define __LOADERTHREADBASE_H
 
-#include <QThread>
+#include "Sink/ImgSink.h"
 #include <QList>
 #include <QMutex>
-#include <QWaitCondition>
 #include <QSharedPointer>
-#include "Sink/ImgSink.h"
+#include <QThread>
+#include <QWaitCondition>
 
-namespace QComicBook
-{
-    class Page;
-    
-    struct LoadRequest
-    {
-        int pageNumber;
-        bool twoPages;
-        
-        LoadRequest(int page, bool twoPages): pageNumber(page), twoPages(twoPages) {}
-        bool operator==(const LoadRequest &r)
-        {
-            return pageNumber == r.pageNumber && twoPages == r.twoPages;
-        }
-    };
-    
-    class LoaderThreadBase: public QThread
-    {
-            Q_OBJECT
+namespace QComicBook {
+class Page;
 
-            protected:
-                volatile QThread::Priority prio; //!<thread priority
-                QList<LoadRequest> requests; //!<the list of requested pages
-                QSharedPointer<ImgSink> sink;
-                QMutex loaderMutex;
-                QMutex condMutex;
-                QMutex sinkMutex;
-                QWaitCondition reqCond;
-                volatile bool stopped;
+struct LoadRequest {
+  int pageNumber;
+  bool twoPages;
 
-                //! Main function of the thread.
-                /*! Preloads requested pages from requests list using sink->getImage().
-                 *  Stop if stopped flag is true.
-                 *  @see ImgDirSink::getImage
-                 */
-                virtual void run();
+  LoadRequest(int page, bool twoPages) : pageNumber(page), twoPages(twoPages) {}
+  bool operator==(const LoadRequest &r) const {
+    return pageNumber == r.pageNumber && twoPages == r.twoPages;
+  }
+};
 
-                virtual bool process(const LoadRequest &req) = 0;
+class LoaderThreadBase : public QThread {
+  Q_OBJECT
 
-           public:
-                LoaderThreadBase();
-                virtual ~LoaderThreadBase();
+protected:
+  volatile QThread::Priority prio; //!< thread priority
+  QList<LoadRequest> requests;     //!< the list of requested pages
+  QSharedPointer<ImgSink> sink;
+  QMutex loaderMutex;
+  QMutex condMutex;
+  QMutex sinkMutex;
+  QWaitCondition reqCond;
+  volatile bool stopped;
 
-                //! Changes priority of the loader thread.
-                /*! @param p new priority
-                 */
-                virtual void setPriority(QThread::Priority p);
+  //! Main function of the thread.
+  /*! Preloads requested pages from requests list using sink->getImage().
+   *  Stop if stopped flag is true.
+   *  @see ImgDirSink::getImage
+   */
+  virtual void run();
 
-                //! Sets image source sink.
-                /*! @param sink image sink used for retrieving (loading) images
-                 */
-                virtual void setSink(QSharedPointer<ImgSink> sink = QSharedPointer<ImgSink>());
-                
-                //! Stops processing requests and exits thread execution.
-                virtual void stop();
-                
-                
-           public slots:
-                //! Appends page to the list of pages to load.
-                /*! @param page page to load
-                 */
-                virtual void request(int page);
-                
-                virtual void requestTwoPages(int page);
-                
-                //! Appends few pages to the list of pages to load.
-                /*! @param first starting page
-                 *  @param n number of pages to load in turn
-                 */
-                virtual void request(int first, int n);
-                
-                virtual void cancel(int page);
-                virtual void cancelTwoPages(int page);
-                virtual void cancelAll();
-    };
-}
+  virtual bool process(const LoadRequest &req) = 0;
+
+public:
+  LoaderThreadBase();
+  virtual ~LoaderThreadBase();
+
+  //! Changes priority of the loader thread.
+  /*! @param p new priority
+   */
+  virtual void setPriority(QThread::Priority p);
+
+  //! Sets image source sink.
+  /*! @param sink image sink used for retrieving (loading) images
+   */
+  virtual void
+  setSink(QSharedPointer<ImgSink> sink = QSharedPointer<ImgSink>());
+
+  //! Stops processing requests and exits thread execution.
+  virtual void stop();
+
+public slots:
+  //! Appends page to the list of pages to load.
+  /*! @param page page to load
+   */
+  virtual void request(int page);
+
+  virtual void requestTwoPages(int page);
+
+  //! Appends few pages to the list of pages to load.
+  /*! @param first starting page
+   *  @param n number of pages to load in turn
+   */
+  virtual void request(int first, int n);
+
+  virtual void cancel(int page);
+  virtual void cancelTwoPages(int page);
+  virtual void cancelAll();
+};
+} // namespace QComicBook
 
 #endif

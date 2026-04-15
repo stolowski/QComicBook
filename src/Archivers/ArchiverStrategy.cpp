@@ -15,124 +15,90 @@
 
 using namespace QComicBook;
 
-ArchiverStrategy::ArchiverStrategy(const QString &name, const FileSignature &sig)
-    : name(name)
-    , supported(false)
-    , signature(sig)
-{
+ArchiverStrategy::ArchiverStrategy(const QString &name,
+                                   const FileSignature &sig)
+    : name(name), supported(false), signature(sig) {}
+
+ArchiverStrategy::~ArchiverStrategy() {}
+
+void ArchiverStrategy::setSupported(bool f) { supported = f; }
+
+void ArchiverStrategy::addExtension(const QString &ext) {
+  if (extensions.indexOf(ext) < 0) {
+    extensions.append(ext);
+  }
 }
 
-ArchiverStrategy::~ArchiverStrategy()
-{
+void ArchiverStrategy::setFileMagic(const FileSignature &sig) {
+  signature = sig;
 }
 
-void ArchiverStrategy::setSupported(bool f)
-{
-    supported = f;
-}
-
-void ArchiverStrategy::addExtension(const QString &ext)
-{
-    if (extensions.indexOf(ext) < 0)
-    {
-        extensions.append(ext);
+QStringList ArchiverStrategy::fillTemplateArguments(const QStringList &inargs,
+                                                    const QString &filename) {
+  QStringList args;
+  foreach (QString s, inargs) {
+    if (s == "@F") {
+      args << filename;
+    } else {
+      args << s;
     }
+  }
+  return args;
 }
 
-void ArchiverStrategy::setFileMagic(const FileSignature &sig)
-{
-    signature = sig;
+void ArchiverStrategy::setExtractArguments(const QString &command) {
+  extractArgs = command.split(" ", Qt::SkipEmptyParts);
 }
 
-QStringList ArchiverStrategy::fillTemplateArguments(const QStringList & inargs, const QString &filename)
-{
-    QStringList args;
-    foreach (QString s, inargs)
-    {
-        if (s == "@F")
-        {
-            args << filename;
-        }
-        else
-        {
-            args << s;
-        }
-    }
-    return args;
+void ArchiverStrategy::setListArguments(const QString &command) {
+  listArgs = command.split(" ", Qt::SkipEmptyParts);
 }
 
-void ArchiverStrategy::setExtractArguments(const QString &command)
-{
-    extractArgs = command.split(" ", QString::SkipEmptyParts);
+void ArchiverStrategy::setExecutables(const QString &exec1,
+                                      const QString &exec2) {
+  executables.clear();
+  executables.append(exec1);
+  if (exec2 != QString{}) {
+    executables.append(exec2);
+  }
 }
 
-void ArchiverStrategy::setListArguments(const QString &command)
-{
-    listArgs = command.split(" ", QString::SkipEmptyParts);
+QStringList
+ArchiverStrategy::getExtractArguments(const QString &filename) const {
+  return fillTemplateArguments(extractArgs, filename);
 }
 
-void ArchiverStrategy::setExecutables(const QString &exec1, const QString &exec2)
-{
-    executables.clear();
-    executables.append(exec1);
-    if (exec2 != QString::null)
-    {
-        executables.append(exec2);
-    }
+QStringList ArchiverStrategy::getExtractArguments() const {
+  return extractArgs;
 }
 
-QStringList ArchiverStrategy::getExtractArguments(const QString &filename) const
-{
-    return fillTemplateArguments(extractArgs, filename);
+QStringList ArchiverStrategy::getListArguments(const QString &filename) const {
+  return fillTemplateArguments(listArgs, filename);
 }
 
-QStringList ArchiverStrategy::getExtractArguments() const
-{
-    return extractArgs;
+QStringList ArchiverStrategy::getListArguments() const { return listArgs; }
+
+QStringList ArchiverStrategy::getExtensions() const { return extensions; }
+
+bool ArchiverStrategy::canOpen(QFile *f) const {
+  return supported && signature.matches(f);
 }
 
-QStringList ArchiverStrategy::getListArguments(const QString &filename) const
-{
-    return fillTemplateArguments(listArgs, filename);
+bool ArchiverStrategy::canOpen(const QString &filename) const {
+  QFile file(filename);
+  if (file.open(QIODevice::ReadOnly)) {
+    return canOpen(&file);
+  }
+  return false;
 }
 
-QStringList ArchiverStrategy::getListArguments() const
-{
-    return listArgs;
+QList<ArchiverHint> ArchiverStrategy::getHints() const {
+  return QList<ArchiverHint>(); // no hints by default
 }
 
-QStringList ArchiverStrategy::getExtensions() const
-{
-    return extensions;
-}
+bool ArchiverStrategy::isSupported() const { return supported; }
 
-bool ArchiverStrategy::canOpen(QFile *f) const
-{
-    return supported && signature.matches(f);
-}
-
-bool ArchiverStrategy::canOpen(const QString &filename) const
-{
-    QFile file(filename);
-    if (file.open(QIODevice::ReadOnly))
-    {
-        return canOpen(&file);
-    }
-	return false;
-}
-
-QList<ArchiverHint> ArchiverStrategy::getHints() const
-{
-    return QList<ArchiverHint>(); // no hints by default
-}
-
-bool ArchiverStrategy::isSupported() const
-{
-    return supported;
-}
-
-ArchiverStrategy::operator ArchiverStatus() const
-{
-    Q_ASSERT(executables.size() > 0);
-    return ArchiverStatus(supported, name, extensions, executables);
+ArchiverStrategy::operator ArchiverStatus() const {
+  Q_ASSERT(executables.size() > 0);
+  return ArchiverStatus(supported, name, extensions, executables);
 }

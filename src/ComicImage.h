@@ -13,58 +13,61 @@
 #ifndef __COMIC_IMAGE_H
 #define __COMIC_IMAGE_H
 
-#include <QWidget>
-#include <QSize>
-#include <QMatrix>
+#include "Counted.h"
+#include "JobSource.h"
 #include <QGraphicsItem>
 #include <QPixmap>
-#include "JobSource.h"
-#include "Counted.h"
+#include <QSize>
+#include <QTransform>
+#include <QWidget>
+#include <qtransform.h>
 
 class QPixmap;
 class QPainter;
 
-namespace QComicBook
-{
-	class PageViewBase;
+namespace QComicBook {
+class PageViewBase;
 
-	class ComicImage: public QGraphicsItem, public JobSource, public Counted<ComicImage>
-	{
-        public:
-            ComicImage(PageViewBase *parent);
-            virtual ~ComicImage();
-            
-            virtual void dispose();
-            virtual bool isDisposed() const;
-            
-            bool isInView(int vy1, int vy2) const;
-            void setSourceSize(int w, int h);
-            QSize getSourceSize() const;
-            QSize getScaledSize() const;
-            const QPixmap* pixmap() const;
-            QRectF boundingRect() const;
-            
-            void requestRedraw();
-            PageViewBase* view() const;
-            void recalcScaledSize();
-            int width() const;
-            int height() const;
-            
-            virtual void propsChanged() = 0;
+class ComicImage : public QGraphicsItem,
+                   public JobSource,
+                   public Counted<ComicImage> {
+public:
+  ComicImage(PageViewBase *parent);
+  virtual ~ComicImage();
 
-        protected:
-            void paint(QPainter *painter, const QStyleOptionGraphicsItem *opt, QWidget *widget = 0);
-            void redraw(const QImage &img);
-            virtual void requestRedraw(const QSize& requestedSize, const QMatrix &rotationMatrix);
+  virtual void dispose();
+  virtual bool isDisposed() const;
 
-        private:
-            PageViewBase *m_view;
-            QPixmap *m_pixmap;
-            int xoff, yoff;
-            QMatrix rmtx;
-            QSize m_sourceSize; //image size without scaling
-            QSize m_scaledSize; //image size with scaling and rotation
-	};
-}
+  bool isInView(int vy1, int vy2) const;
+  void setSourceSize(int w, int h);
+  QSize getSourceSize() const;
+  QSize getScaledSize() const;
+  const QPixmap *pixmap() const;
+  QRectF boundingRect() const;
+
+  void requestRedraw();
+  PageViewBase *view() const;
+  void recalcScaledSize();
+  int width() const;
+  int height() const;
+
+  virtual void propsChanged() = 0;
+
+protected:
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *opt,
+             QWidget *widget = 0);
+  void redraw(const QImage &img);
+  virtual void requestRedraw(const QSize &requestedSize,
+                             const QTransform &rotationMatrix);
+
+private:
+  PageViewBase *m_view;
+  QPixmap *m_pixmap;
+  int xoff, yoff;
+  QTransform rmtx;
+  QSize m_sourceSize; // image size without scaling
+  QSize m_scaledSize; // image size with scaling and rotation
+};
+} // namespace QComicBook
 
 #endif

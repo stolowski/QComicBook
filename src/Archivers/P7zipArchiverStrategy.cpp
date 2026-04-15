@@ -17,31 +17,23 @@ using namespace QComicBook;
 using Utility::which;
 
 P7zipArchiverStrategy::P7zipArchiverStrategy()
-    : ArchiverStrategy("p7zip", FileSignature())
-{
-}
+    : ArchiverStrategy("p7zip", FileSignature()) {}
 
-P7zipArchiverStrategy::~P7zipArchiverStrategy()
-{
-}
+P7zipArchiverStrategy::~P7zipArchiverStrategy() {}
 
-void P7zipArchiverStrategy::configure()
-{
-    addExtension(".7z");
-    addExtension(".cb7");
+void P7zipArchiverStrategy::configure() {
+  addExtension(".7z");
+  addExtension(".cb7");
 
-    setExecutables("7z", "7zr");
+  setExecutables("7z", "7zr");
 
-    if (which("7z") != QString::null)
-    {
-        setExtractArguments("7z x @F");
-        setListArguments("7z l @F");
-        setSupported();
-    }
-    else if (which("7zr") != QString::null)
-    {
-        setExtractArguments("7zr x @F");
-        setListArguments("7zr l @F");
-        setSupported();
-    }
+  if (which("7z") != QString{}) {
+    setExtractArguments("7z x @F");
+    setListArguments("7z l @F");
+    setSupported();
+  } else if (which("7zr") != QString{}) {
+    setExtractArguments("7zr x @F");
+    setListArguments("7zr l @F");
+    setSupported();
+  }
 }

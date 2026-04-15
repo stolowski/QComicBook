@@ -14,49 +14,38 @@
 
 using namespace QComicBook;
 
-ImgCache::ImgCache(int size): maxItemSizeSoFar(0)
-{
-	setSize(size);
+ImgCache::ImgCache(int size) : maxItemSizeSoFar(0) { setSize(size); }
+
+ImgCache::~ImgCache() {}
+
+void ImgCache::setSize(int size, bool autoAdjust) {
+  mtx.lock();
+  if (size < 0)
+    size = 0;
+  cache.setMaxCost(size);
+  this->autoAdjust = autoAdjust;
+  mtx.unlock();
 }
 
-ImgCache::~ImgCache()
-{
+void ImgCache::insertImage(int page, const QImage &img) {
+  mtx.lock();
+  if (autoAdjust && (img.sizeInBytes() + maxItemSizeSoFar > cache.maxCost())) {
+    cache.setMaxCost(img.sizeInBytes() + maxItemSizeSoFar);
+    if (img.sizeInBytes() > maxItemSizeSoFar)
+      maxItemSizeSoFar = img.sizeInBytes();
+  }
+  cache.insert(page, new QImage(img), img.sizeInBytes());
+  mtx.unlock();
 }
 
-void ImgCache::setSize(int size, bool autoAdjust)
-{
-	mtx.lock();
-	if (size < 0)
-		size = 0;
-	cache.setMaxCost(size);
-	this->autoAdjust = autoAdjust;
-	mtx.unlock();
+bool ImgCache::get(int num, QImage &img) {
+  mtx.lock();
+  bool status = false;
+  QImage *cimg = cache.object(num);
+  if (cimg) {
+    img = QImage(*cimg);
+    status = true;
+  }
+  mtx.unlock();
+  return status;
 }
-
-void ImgCache::insertImage(int page, const QImage &img)
-{
-	mtx.lock();
-	if (autoAdjust && (img.byteCount() + maxItemSizeSoFar > cache.maxCost()))
-	{
-		cache.setMaxCost(img.byteCount() + maxItemSizeSoFar);
-		if (img.byteCount() > maxItemSizeSoFar)
-			maxItemSizeSoFar = img.byteCount();
-	}
-	cache.insert(page, new QImage(img), img.byteCount());
-	mtx.unlock();
-}
-
-bool ImgCache::get(int num, QImage &img)
-{
-	mtx.lock();
-	bool status = false;
-	QImage *cimg = cache.object(num);
-	if (cimg)
-	{
-		img = QImage(*cimg);
-		status = true;
-	}
-	mtx.unlock();
-	return status;
-}
-
