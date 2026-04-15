@@ -15,37 +15,34 @@
 
 #include <QMenu>
 
-class QStringList;
 class QAction;
 
-namespace QComicBook
-{
-    class RecentFilesMenu: public QMenu
-    {
-    Q_OBJECT
-    public:
-        RecentFilesMenu(const QString &title, QWidget *parent, int size=0);
-        ~RecentFilesMenu();
+namespace QComicBook {
+class RecentFilesMenu : public QMenu {
+  Q_OBJECT
+public:
+  RecentFilesMenu(const QString &title, QWidget *parent, int size = 0);
+  ~RecentFilesMenu();
 
-    public slots:
-        void set(const QStringList &files);
-        QStringList get() const;
-        void add(const QString &fname);
-        void remove(const QString &fname);
-        void removeAll();
+public slots:
+  void set(const QStringList &files);
+  QStringList get() const;
+  void add(const QString &fname);
+  void remove(const QString &fname);
+  void removeAll();
 
-    protected slots:
-        void recentSelected(QAction *a);
- 
-    signals:
-        void selected(const QString &fileName);
-        void cleanupRequest();
+protected slots:
+  void recentSelected(QAction *a);
 
-    private:
-        QAction *clearRecent;
-        QAction *separator;
-        int maxSize;
-    };
-}
+signals:
+  void selected(const QString &fileName);
+  void cleanupRequest();
+
+private:
+  QAction *clearRecent;
+  QAction *separator;
+  int maxSize;
+};
+} // namespace QComicBook
 
 #endif

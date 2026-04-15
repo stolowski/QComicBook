@@ -128,7 +128,7 @@ namespace QComicBook
 			void showInfo();
 			void showSysInfo();
 			void showConfigDialog();
-			void showJumpToPage(const QString &number=QString::null);
+			void showJumpToPage(const QString &number=QString{});
 			void closeSink();
 			void setBookmark();
 			void removeBookmark();

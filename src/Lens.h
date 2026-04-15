@@ -13,37 +13,37 @@
 #ifndef __LENS_H
 #define __LENS_H
 
+#include <QColor>
 #include <QGraphicsItem>
 #include <QSharedPointer>
-#include <QColor>
 
 class QPixmap;
-class QTime;
+class QElapsedTimer;
 
-namespace QComicBook
-{
-    class Lens: public QGraphicsItem
-    {
-    public:
-        Lens(const QSize &size, const QColor &background, double ratio=2.0f, int delay=25);
-        ~Lens();
+namespace QComicBook {
+class Lens : public QGraphicsItem {
+public:
+  Lens(const QSize &size, const QColor &background, double ratio = 2.0f,
+       int delay = 25);
+  ~Lens();
 
-        void setBackground(const QColor &background);
-	void setZoom(double ratio);
-        QRectF boundingRect() const;
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *opt, QWidget *widget = 0);
+  void setBackground(const QColor &background);
+  void setZoom(double ratio);
+  QRectF boundingRect() const;
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *opt,
+             QWidget *widget = 0);
 
-    protected:
-        QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+protected:
+  QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
-    private:
-        QSharedPointer<QPixmap> m_pixmap;
-        QTime *m_time;
-        QSize m_size;
-        QColor m_background;
-	double m_ratio;
-        int m_delay;
-    };
-}
+private:
+  QSharedPointer<QPixmap> m_pixmap;
+  QElapsedTimer *m_time;
+  QSize m_size;
+  QColor m_background;
+  double m_ratio;
+  qint64 m_delay;
+};
+} // namespace QComicBook
 
 #endif

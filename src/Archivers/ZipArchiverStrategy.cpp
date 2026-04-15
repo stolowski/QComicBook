@@ -17,25 +17,19 @@ using namespace QComicBook;
 using Utility::which;
 
 ZipArchiverStrategy::ZipArchiverStrategy()
-    : ArchiverStrategy("zip", FileSignature(0, "\x50\x4b\x03\x04", 4))
-{
-}
+    : ArchiverStrategy("zip", FileSignature(0, "\x50\x4b\x03\x04", 4)) {}
 
-ZipArchiverStrategy::~ZipArchiverStrategy()
-{
-}
+ZipArchiverStrategy::~ZipArchiverStrategy() {}
 
-void ZipArchiverStrategy::configure()
-{
-    addExtension(".zip");
-    addExtension(".cbz");
-    addExtension(".cbr");
-    setExecutables("unzip");
+void ZipArchiverStrategy::configure() {
+  addExtension(".zip");
+  addExtension(".cbz");
+  addExtension(".cbr");
+  setExecutables("unzip");
 
-    if (which("unzip") != QString::null)
-    {
-        setExtractArguments("unzip @F");
-        setListArguments("unzip -l @F");
-        setSupported();
-    }
+  if (which("unzip") != QString{}) {
+    setExtractArguments("unzip @F");
+    setListArguments("unzip -l @F");
+    setSupported();
+  }
 }

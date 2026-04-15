@@ -14,36 +14,35 @@
 #define __IMGPDFSINK_H
 
 #include "ImgSink.h"
-#include <QStringList>
 #include <QMutex>
-#include <poppler-qt5.h>
+#include <QStringList>
+#include <memory>
+#include <poppler-qt6.h>
 
-namespace QComicBook
-{
-	class ImgPdfSink: public ImgSink
-	{
-		public:
-			ImgPdfSink(int cacheSize=0);
-			~ImgPdfSink();
+namespace QComicBook {
+class ImgPdfSink : public ImgSink {
+public:
+  ImgPdfSink(int cacheSize = 0);
+  ~ImgPdfSink() = default;
 
-			int open(const QString &path);
-			void close();
-			QImage image(unsigned int num, int &result);
-			int numOfImages() const;
-			QString getName(int maxlen = 50) { return ""; }
-			QString getFullName() const { return ""; }
-			QString getFullFileName(int page) const { return ""; }
-			QStringList getDescription() const { return QStringList(); }
-			bool timestampDiffers(int page) const { return false; }
-			bool hasModifiedFiles() const { return false; }
-			bool supportsNext() const { return false; }
-			QString getNext() const { return ""; }
-			QString getPrevious() const { return ""; }
+  int open(const QString &path);
+  void close();
+  QImage image(unsigned int num, int &result);
+  int numOfImages() const;
+  QString getName(int maxlen = 50) { return ""; }
+  QString getFullName() const { return ""; }
+  QString getFullFileName(int page) const { return ""; }
+  QStringList getDescription() const { return QStringList(); }
+  bool timestampDiffers(int page) const { return false; }
+  bool hasModifiedFiles() const { return false; }
+  bool supportsNext() const { return false; }
+  QString getNext() const { return ""; }
+  QString getPrevious() const { return ""; }
 
-		private:
-			Poppler::Document *pdfdoc;
-			mutable QMutex docmtx; //!< mutex for pdf document
-	};
-}
+private:
+  std::unique_ptr<Poppler::Document> pdfdoc;
+  mutable QMutex docmtx; //!< mutex for pdf document
+};
+} // namespace QComicBook
 
 #endif

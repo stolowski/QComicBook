@@ -10,93 +10,96 @@
  * WITHOUT ANY WARRANTY. See GPL for more details.
  */
 
+#include "ComicBookSettings.h"
+#include "ComicFrameList.h"
+#include "ComicMainWindow.h"
+#include "ImageJobResult.h"
+#include "Page.h"
+#include "Thumbnail.h"
+#include "config.h"
 #include <QApplication>
+#include <QLibraryInfo>
+#include <QLocale>
 #include <QMessageBox>
 #include <QSplashScreen>
 #include <QTimer>
-#include <QLibraryInfo>
 #include <QTranslator>
-#include <QLocale>
-#include "ComicMainWindow.h"
-#include "ComicBookSettings.h"
-#include "ComicFrameList.h"
-#include "ImageJobResult.h"
-#include "Thumbnail.h"
-#include "Page.h"
-#include "config.h"
 
-int main(int argc, char *argv[])
-{
-	using namespace QComicBook;
+int main(int argc, char *argv[]) {
+  using namespace QComicBook;
 
-	QApplication app(argc, argv);
-        app.setApplicationName("QComicBook");
-        app.setOrganizationName("PawelStolowski");
-        app.setOrganizationDomain("linux-projects.net");
+  QApplication app(argc, argv);
+  app.setApplicationName("QComicBook");
+  app.setOrganizationName("PawelStolowski");
+  app.setOrganizationDomain("linux-projects.net");
 
-        //
-        // load translation
-        QTranslator qtTrans;
-        qtTrans.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-        app.installTranslator(&qtTrans);
+  //
+  // load translation
+  QTranslator qtTrans;
+  bool loadTranslation =
+      qtTrans.load("qt_" + QLocale::system().name(),
+                   QLibraryInfo::path(QLibraryInfo::TranslationsPath));
+  if (!loadTranslation) {
+    qDebug() << "No translation for locale" << QLocale::system().name();
+    app.installTranslator(&qtTrans);
+  }
 
-        QTranslator qcomicbookTrans;
-        qcomicbookTrans.load("qcomicbook_" + QLocale::system().name(), DATADIR "/i18n");
-        app.installTranslator(&qcomicbookTrans);
+  QTranslator qcomicbookTrans;
+  loadTranslation = qcomicbookTrans.load(
+      "qcomicbook_" + QLocale::system().name(), DATADIR "/i18n");
+  if (!loadTranslation) {
+    qDebug() << "No translation for locale" << QLocale::system().name()
+             << "in i18n directory";
 
-	const QString errcaption = ComicMainWindow::tr("QComicBook error");
+    app.installTranslator(&qcomicbookTrans);
+  }
+  const QString errcaption = ComicMainWindow::tr("QComicBook error");
 
-        qRegisterMetaType<Page>("Page");
-        qRegisterMetaType<Thumbnail>("Thumbnail");
-        qRegisterMetaType<ComicFrameList>("ComicFrameList");
-        qRegisterMetaType<ImageJobResult>("ImageJobResult");
+  qRegisterMetaType<Page>("Page");
+  qRegisterMetaType<Thumbnail>("Thumbnail");
+  qRegisterMetaType<ComicFrameList>("ComicFrameList");
+  qRegisterMetaType<ImageJobResult>("ImageJobResult");
 
-	ComicBookSettings::instance().load();
+  ComicBookSettings::instance().load();
 
-	
-	if (!ComicBookSettings::instance().checkDirs())
-        {
-		QMessageBox::critical(NULL, errcaption, ComicMainWindow::tr("Can't initialize QComicBook directories"),
-				QMessageBox::Ok, QMessageBox::NoButton);
-        }
-	
-	ComicMainWindow *win = new ComicMainWindow(NULL);
-	//app.setMainWidget(win);
-	win->show();
+  if (!ComicBookSettings::instance().checkDirs()) {
+    QMessageBox::critical(
+        NULL, errcaption,
+        ComicMainWindow::tr("Can't initialize QComicBook directories"),
+        QMessageBox::Ok, QMessageBox::NoButton);
+  }
 
-	//
-	// show splashscreen
-	if (ComicBookSettings::instance().showSplash())
-	{
-		QPixmap splashpix(":/images/qcomicbook-splash.png");
-		if (!splashpix.isNull())
-		{
-                    QSplashScreen *splash = new QSplashScreen(splashpix, Qt::WindowStaysOnTopHint);
-                    splash->show();
+  ComicMainWindow *win = new ComicMainWindow(NULL);
+  // app.setMainWidget(win);
+  win->show();
 
-                    //
-                    // close splashscreen after a few seconds
-                    QTimer *timer = new QTimer(win);
-                    QObject::connect(timer, SIGNAL(timeout()), splash, SLOT(close()));
-                    timer->setSingleShot(true);
-                    timer->start(2*1000);
-		}
-	}
+  //
+  // show splashscreen
+  if (ComicBookSettings::instance().showSplash()) {
+    QPixmap splashpix(":/images/qcomicbook-splash.png");
+    if (!splashpix.isNull()) {
+      QSplashScreen *splash =
+          new QSplashScreen(splashpix, Qt::WindowStaysOnTopHint);
+      splash->show();
 
-	//
-	// command line argument
-	if (app.arguments().size() > 1)
-	{ 
-		win->open(app.arguments().at(1));
-	}
-	else
-	{
-		if (ComicBookSettings::instance().showDonationDialog())
-		{
-			win->showAboutDonating(true);
-		}
-	}
+      //
+      // close splashscreen after a few seconds
+      QTimer *timer = new QTimer(win);
+      QObject::connect(timer, SIGNAL(timeout()), splash, SLOT(close()));
+      timer->setSingleShot(true);
+      timer->start(2 * 1000);
+    }
+  }
 
-	return app.exec();
+  //
+  // command line argument
+  if (app.arguments().size() > 1) {
+    win->open(app.arguments().at(1));
+  } else {
+    if (ComicBookSettings::instance().showDonationDialog()) {
+      win->showAboutDonating(true);
+    }
+  }
+
+  return app.exec();
 }
-

@@ -16,31 +16,27 @@
 #include <QDialog>
 #include <QFont>
 
-class QStringList;
 class QTabWidget;
 
-namespace QComicBook
-{
-	class ImgSink;
-	
-	class ComicBookInfo: public QDialog
-	{
-	    Q_OBJECT
+namespace QComicBook {
+class ImgSink;
 
-		private:
-			QTabWidget *tabs;
+class ComicBookInfo : public QDialog {
+  Q_OBJECT
 
-		protected:
-			QFont font;
+private:
+  QTabWidget *tabs;
 
-			void setupGeneralTab(ImgSink &sink);
-			void setupDescriptionTabs(const ImgSink &sink);
+protected:
+  QFont font;
 
-		public:
-			ComicBookInfo(QWidget *parent, ImgSink &sink, const QFont& f);
-			virtual ~ComicBookInfo();
-	};
-}
+  void setupGeneralTab(ImgSink &sink);
+  void setupDescriptionTabs(const ImgSink &sink);
+
+public:
+  ComicBookInfo(QWidget *parent, ImgSink &sink, const QFont &f);
+  virtual ~ComicBookInfo();
+};
+} // namespace QComicBook
 
 #endif
-

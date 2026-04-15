@@ -36,7 +36,7 @@ QString Utility::which(const QString &command)
 		if (finfo.isExecutable())
 			return finfo.absoluteFilePath();
 	}
-	return QString::null;
+	return QString{};
 }
 
 void Utility::touch(const QString &fname)

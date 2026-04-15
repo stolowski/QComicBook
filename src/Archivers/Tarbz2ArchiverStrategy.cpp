@@ -17,24 +17,18 @@ using namespace QComicBook;
 using Utility::which;
 
 Tarbz2ArchiverStrategy::Tarbz2ArchiverStrategy()
-    : ArchiverStrategy("tar.bz2", FileSignature())
-{
-}
+    : ArchiverStrategy("tar.bz2", FileSignature()) {}
 
-Tarbz2ArchiverStrategy::~Tarbz2ArchiverStrategy()
-{
-}
+Tarbz2ArchiverStrategy::~Tarbz2ArchiverStrategy() {}
 
-void Tarbz2ArchiverStrategy::configure()
-{
-    addExtension(".tar.bz2");
-    addExtension(".cbb");
-    setExecutables("tar");
+void Tarbz2ArchiverStrategy::configure() {
+  addExtension(".tar.bz2");
+  addExtension(".cbb");
+  setExecutables("tar");
 
-    if (which("tar") != QString::null)
-    {
-        setExtractArguments("tar -xvjf @F");
-        setListArguments("tar -tjf @F");
-        setSupported();
-    }
+  if (which("tar") != QString{}) {
+    setExtractArguments("tar -xvjf @F");
+    setListArguments("tar -tjf @F");
+    setSupported();
+  }
 }

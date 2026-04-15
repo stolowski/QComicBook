@@ -18,26 +18,24 @@
 #include <QCache>
 #include <QImage>
 #include <QMutex>
+#include <qtypes.h>
 
-namespace QComicBook
-{
-	class ImgCache
-	{
-		private:
-			QCache<int, QImage> cache;
-			bool autoAdjust;
-			int maxItemSizeSoFar;
-			QMutex mtx;
+namespace QComicBook {
+class ImgCache {
+private:
+  QCache<int, QImage> cache;
+  bool autoAdjust;
+  qsizetype maxItemSizeSoFar;
+  QMutex mtx;
 
-		public:
-			ImgCache(int size=1);
-			virtual ~ImgCache();
+public:
+  ImgCache(int size = 1);
+  virtual ~ImgCache();
 
-			virtual void setSize(int size, bool autoAdjust=false);
-			void insertImage(int page, const QImage &img);
-			bool get(int num, QImage &img);
-	};
-}
+  virtual void setSize(int size, bool autoAdjust = false);
+  void insertImage(int page, const QImage &img);
+  bool get(int num, QImage &img);
+};
+} // namespace QComicBook
 
 #endif
-

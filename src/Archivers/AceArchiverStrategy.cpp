@@ -17,24 +17,18 @@ using namespace QComicBook;
 using Utility::which;
 
 AceArchiverStrategy::AceArchiverStrategy()
-    : ArchiverStrategy("ace", FileSignature(8, "\x2a\x41\x43\x45", 4))
-{
-}
+    : ArchiverStrategy("ace", FileSignature(8, "\x2a\x41\x43\x45", 4)) {}
 
-AceArchiverStrategy::~AceArchiverStrategy()
-{
-}
+AceArchiverStrategy::~AceArchiverStrategy() {}
 
-void AceArchiverStrategy::configure()
-{
-    addExtension(".ace");
-    addExtension(".cba");
-    setExecutables("unace");
+void AceArchiverStrategy::configure() {
+  addExtension(".ace");
+  addExtension(".cba");
+  setExecutables("unace");
 
-    if (which("unace") != QString::null)
-    {
-        setExtractArguments("unace x -y -c- @F");
-        setListArguments("unace l -y -c- @F");
-        setSupported();
-    }
+  if (which("unace") != QString{}) {
+    setExtractArguments("unace x -y -c- @F");
+    setListArguments("unace l -y -c- @F");
+    setSupported();
+  }
 }

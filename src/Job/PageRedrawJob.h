@@ -14,35 +14,35 @@
 #define __PAGEREDRAWJOB_H
 
 #include "ImageTransformJob.h"
+#include <QSize>
 
 class QImage;
+class QPainter;
 
-namespace QComicBook
-{
-    class Page;
+namespace QComicBook {
+class Page;
 
-    class PageRedrawJob: public ImageTransformJob
-    {
-    public:
-        PageRedrawJob();
-        ~PageRedrawJob();
+class PageRedrawJob : public ImageTransformJob {
+public:
+  PageRedrawJob();
+  ~PageRedrawJob();
 
-        void setImage(const Page &p1);
-        void setImage(const Page &p1, const Page &p2);
-        void setSourceSize(const QSize &size);
+  void setImage(const Page &p1);
+  void setImage(const Page &p1, const Page &p2);
+  void setSourceSize(const QSize &size);
 
-        void execute();
-        QImage getResult() const;
+  void execute();
+  QImage getResult() const;
 
-    protected:
-        void drawPageNumber(int page, QPainter &p, int x, int y);
+protected:
+  void drawPageNumber(int page, QPainter &p, int x, int y);
 
-    private:
-        QImage *m_image[2];
-        int m_numbers[2];  //!< page numbers
-        QImage *m_result; //!< resulting image
-        QSize m_sourceSize;
-    };
-}
+private:
+  QImage *m_image[2];
+  int m_numbers[2]; //!< page numbers
+  QImage *m_result; //!< resulting image
+  QSize m_sourceSize;
+};
+} // namespace QComicBook
 
 #endif
