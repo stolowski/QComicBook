@@ -44,7 +44,7 @@ void PrinterThread::run()
     QPainter painter;
 
     painter.begin(m_printer.data());
-    QRectF pageRect(m_printer->pageRect());
+    QRectF pageRect(m_printer->pageRect(QPrinter::DevicePixel));
 
     for (int i=m_from-1; i<m_to; i++)
     {

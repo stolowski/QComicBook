@@ -14,8 +14,8 @@
 #define __RECENT_FILES_MENU_H
 
 #include <QMenu>
+#include <QStringList>
 
-class QStringList;
 class QAction;
 
 namespace QComicBook

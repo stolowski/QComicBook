@@ -31,7 +31,7 @@ void AceArchiverStrategy::configure()
     addExtension(".cba");
     setExecutables("unace");
 
-    if (which("unace") != QString::null)
+    if (!which("unace").isNull())
     {
         setExtractArguments("unace x -y -c- @F");
         setListArguments("unace l -y -c- @F");

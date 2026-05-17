@@ -32,7 +32,7 @@ void TargzArchiverStrategy::configure()
     addExtension(".cbg");
     setExecutables("tar");
 
-    if (which("tar") != QString::null)
+    if (!which("tar").isNull())
     {
         setExtractArguments("tar -xvzf @F");
         setListArguments("tar -tzf @F");

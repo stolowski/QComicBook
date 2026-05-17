@@ -23,7 +23,7 @@ namespace QComicBook
     class ArchiverStatus
     {
     public:
-        ArchiverStatus(bool supported, const QString &name, const QStringList &extensions, const QString &exec1, const QString &exec2=QString::null);
+        ArchiverStatus(bool supported, const QString &name, const QStringList &extensions, const QString &exec1, const QString &exec2={});
         ArchiverStatus(bool supported, const QString &name, const QStringList &extensions, const QStringList &execlist);
         ~ArchiverStatus();
 

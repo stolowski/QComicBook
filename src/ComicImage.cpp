@@ -153,24 +153,24 @@ void ComicImage::recalcScaledSize()
     if (yoff < 0)
         yoff = 0;
 	
-    rmtx.reset();   
+    rot.reset();   
     if (props.angle() > 0)
     {
         if (props.angle() == 1)
-            rmtx.translate(m_scaledSize.width(), 0);
+            rot.translate(m_scaledSize.width(), 0);
         else if (props.angle() == 3)
-            rmtx.translate(0, m_scaledSize.height());
+            rot.translate(0, m_scaledSize.height());
         else
-            rmtx.translate(m_scaledSize.width(), m_scaledSize.height());
-        rmtx.rotate(static_cast<double>(props.angle()) * 90.0f);
+            rot.translate(m_scaledSize.width(), m_scaledSize.height());
+        rot.rotate(static_cast<double>(props.angle()) * 90.0f);
     }
     
-    rmtx.scale(static_cast<double>(pixmapWidth)/totalWidth, static_cast<double>(pixmapHeight)/totalHeight);
+    rot.scale(static_cast<double>(pixmapWidth)/totalWidth, static_cast<double>(pixmapHeight)/totalHeight);
 	
     //setContentsMargins(xoff, yoff, 0, 0);
     //setFixedSize(m_scaledSize.width() + 2*xoff, m_scaledSize.height() + 2*yoff);  
 
-    requestRedraw(m_scaledSize, rmtx);
+    requestRedraw(m_scaledSize, rot);
 
     //updateGeometry();
     update();
@@ -185,7 +185,7 @@ void ComicImage::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt, Q
     }
 }
 
-void ComicImage::requestRedraw(const QSize& requestedSize, const QMatrix &rotationMatrix)
+void ComicImage::requestRedraw(const QSize& requestedSize, const QTransform &rotationTransform)
 {
     ViewProperties &props(m_view->properties());
 
@@ -193,7 +193,7 @@ void ComicImage::requestRedraw(const QSize& requestedSize, const QMatrix &rotati
     if (j)
     {
         j->setSize(requestedSize.width(), requestedSize.height());
-        j->setMatrix(rotationMatrix);
+        j->setTransform(rotationTransform);
         ImageTransformThread::get()->addJob(j);
     }
 }

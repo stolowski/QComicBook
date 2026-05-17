@@ -19,7 +19,7 @@
 
 using namespace QComicBook;
 
-ImgSink::ImgSink(int cacheSize): cbname(QString::null), cbfullname(QString::null), QObject()
+ImgSink::ImgSink(int cacheSize): cbname(QString()), cbfullname(QString()), QObject()
 {
 	cache = new ImgCache(cacheSize);
 }

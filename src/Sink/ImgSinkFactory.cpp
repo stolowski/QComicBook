@@ -38,25 +38,25 @@ void ImgSinkFactory::deleteLater(ImgSink *sink)
 	sink->deleteLater();
 }
 
-QSharedPointer<ImgSink> ImgSinkFactory::createImgSink(SinkType s)
+QSharedPointer<ImgSink> ImgSinkFactory::createImgSink(SinkType s, QWidget *parent)
 {
 	if (s == ArchiveSink)
 		return QSharedPointer<ImgSink>(new ImgArchiveSink(), ImgSinkFactory::deleteLater);
 	if (s == DirSink)
 		return QSharedPointer<ImgSink>(new ImgDirSink(), ImgSinkFactory::deleteLater);
 	if (s == PdfSink)
-		return QSharedPointer<ImgSink>(new ImgPdfSink(), ImgSinkFactory::deleteLater);
+		return QSharedPointer<ImgSink>(new ImgPdfSink(parent), ImgSinkFactory::deleteLater);
 	return QSharedPointer<ImgSink>();
 }
 
-QSharedPointer<ImgSink> ImgSinkFactory::createImgSink(const QString &path)
+QSharedPointer<ImgSink> ImgSinkFactory::createImgSink(const QString &path, QWidget *parent)
 {
 	const QFileInfo finfo(path);
 	if (finfo.isDir())
-		return createImgSink(DirSink);
+		return createImgSink(DirSink, parent);
 	else if (path.endsWith("pdf")) //FIXME
-		return createImgSink(PdfSink);
+		return createImgSink(PdfSink, parent);
 	else
-		return createImgSink(ArchiveSink);
+		return createImgSink(ArchiveSink, parent);
 }
 

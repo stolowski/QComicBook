@@ -110,7 +110,7 @@ void StatusBar::clear()
 {
 	setPage(0, 0);
 	setImageInfo(NULL, NULL);
-	setName(QString::null);
+	setName(QString());
 }
 
 void StatusBar::setPage(int n, int total)

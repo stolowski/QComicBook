@@ -46,7 +46,7 @@ void FrameRedrawJob::execute()
     QPainter p(m_result);
     p.setRenderHint(QPainter::SmoothPixmapTransform, m_props.smoothScaling);
 
-    p.setWorldMatrix(*m_matrix);
+    p.setWorldTransform(*m_transform);
     p.setWorldMatrixEnabled(true);
 
     p.drawImage(0, 0, *m_img, m_rect.x(), m_rect.y(), m_rect.width(), m_rect.height());

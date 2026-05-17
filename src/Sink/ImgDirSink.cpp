@@ -26,11 +26,11 @@ using namespace QComicBook;
 // maximum size of description file (won't load files larger than that)
 const int ImgDirSink::MAX_TEXTFILE_SIZE = 65535;
                         
-ImgDirSink::ImgDirSink(bool dirs, int cacheSize): ImgSink(cacheSize), dirpath(QString::null), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
+ImgDirSink::ImgDirSink(bool dirs, int cacheSize): ImgSink(cacheSize), dirpath(QString()), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
 {
 }
 
-ImgDirSink::ImgDirSink(const QString &path, bool dirs, int cacheSize): ImgSink(cacheSize), dirpath(QString::null), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
+ImgDirSink::ImgDirSink(const QString &path, bool dirs, int cacheSize): ImgSink(cacheSize), dirpath(QString()), DirReader(QDir::DirsLast|QDir::Name|QDir::IgnoreCase, 6)
 {
 	open(path);
 }
@@ -119,7 +119,7 @@ int ImgDirSink::open(const QString &path)
 void ImgDirSink::close()
 {
         listmtx.lock();
-        dirpath = QString::null;
+        dirpath = QString();
         imgfiles.clear();
         txtfiles.clear();
         otherfiles.clear();
@@ -129,7 +129,7 @@ void ImgDirSink::close()
 
 QString ImgDirSink::getFullFileName(int page) const
 {
-	return page < numOfImages() ? imgfiles[page] : QString::null;
+	return page < numOfImages() ? imgfiles[page] : QString();
 }
 
 QStringList ImgDirSink::getDescription() const
@@ -253,12 +253,12 @@ bool ImgDirSink::supportsNext() const
 
 QString ImgDirSink::getNext() const
 {
-	return QString::null;
+	return QString();
 }
 
 QString ImgDirSink::getPrevious() const
 {
-	return QString::null;
+	return QString();
 }
 
 void ImgDirSink::removeThumbnails(int days)
@@ -297,7 +297,7 @@ QString ImgDirSink::getKnownImageExtension(const QString &path)
         if (path.endsWith(ext, Qt::CaseInsensitive))
             return ext;
     }
-    return QString::null;
+    return QString();
 }
 
 QStringList ImgDirSink::getKnownImageExtensionsList()

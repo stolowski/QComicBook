@@ -94,7 +94,7 @@ namespace QComicBook
         void setExtractArguments(const QString &command);
         void setListArguments(const QString &command);
         void setSupported(bool f=true);
-        void setExecutables(const QString &exec1, const QString &exec2=QString::null);
+        void setExecutables(const QString &exec1, const QString &exec2={});
         void addExtension(const QString &ext);
 
     private:

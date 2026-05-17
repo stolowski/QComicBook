@@ -18,6 +18,7 @@
 #include <QSharedPointer>
 
 class QString;
+class QWidget;
 	
 namespace QComicBook
 {
@@ -39,8 +40,8 @@ namespace QComicBook
 		public:
 			static ImgSinkFactory& instance();
 			static void deleteLater(ImgSink *sink);
-			QSharedPointer<ImgSink> createImgSink(SinkType s);
-			QSharedPointer<ImgSink> createImgSink(const QString &path);
+			QSharedPointer<ImgSink> createImgSink(SinkType s, QWidget*);
+			QSharedPointer<ImgSink> createImgSink(const QString &path, QWidget*);
 	};
 }
 

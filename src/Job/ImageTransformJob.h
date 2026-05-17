@@ -13,12 +13,13 @@
 #ifndef __IMAGETRANSFORMJOB_H
 #define __IMAGETRANSFORMJOB_H
 
+#include <QTransform>
+
 #include "JobKey.h"
 #include "../ViewPropertiesData.h"
 #include "Counted.h"
 
 class QImage;
-class QMatrix;
 
 namespace QComicBook
 {
@@ -29,7 +30,7 @@ namespace QComicBook
         virtual ~ImageTransformJob();
 
         void setSize(int w, int h);
-        void setMatrix(const QMatrix &m);
+        void setTransform(const QTransform &t);
         void setKey(const JobKey &k);
         const JobKey& key() const;
 
@@ -43,7 +44,7 @@ namespace QComicBook
         int m_width;
         int m_height;
         ViewPropertiesData m_props; //!< view properties
-        QMatrix *m_matrix;
+        QTransform *m_transform;
     };
 }
 

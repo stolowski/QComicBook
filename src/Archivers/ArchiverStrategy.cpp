@@ -63,19 +63,19 @@ QStringList ArchiverStrategy::fillTemplateArguments(const QStringList & inargs, 
 
 void ArchiverStrategy::setExtractArguments(const QString &command)
 {
-    extractArgs = command.split(" ", QString::SkipEmptyParts);
+    extractArgs = command.split(" ", Qt::SkipEmptyParts);
 }
 
 void ArchiverStrategy::setListArguments(const QString &command)
 {
-    listArgs = command.split(" ", QString::SkipEmptyParts);
+    listArgs = command.split(" ", Qt::SkipEmptyParts);
 }
 
 void ArchiverStrategy::setExecutables(const QString &exec1, const QString &exec2)
 {
     executables.clear();
     executables.append(exec1);
-    if (exec2 != QString::null)
+    if (!exec2.isNull())
     {
         executables.append(exec2);
     }

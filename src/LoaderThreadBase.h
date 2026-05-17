@@ -30,7 +30,7 @@ namespace QComicBook
         bool twoPages;
         
         LoadRequest(int page, bool twoPages): pageNumber(page), twoPages(twoPages) {}
-        bool operator==(const LoadRequest &r)
+        bool operator==(const LoadRequest &r) const
         {
             return pageNumber == r.pageNumber && twoPages == r.twoPages;
         }

@@ -15,6 +15,7 @@
 #ifndef __COMIC_MAIN_H
 #define __COMIC_MAIN_H
 
+#include <QActionGroup>
 #include <QMainWindow>
 #include <QSharedPointer>
 #include <QPointer>
@@ -24,7 +25,6 @@ class QMenu;
 class QLabel;
 class QKeyEvent;
 class QAction;
-class QActionGroup;
 class QPrinter;
 
 namespace QComicBook
@@ -128,7 +128,7 @@ namespace QComicBook
 			void showInfo();
 			void showSysInfo();
 			void showConfigDialog();
-			void showJumpToPage(const QString &number=QString::null);
+			void showJumpToPage(const QString &number=QString());
 			void closeSink();
 			void setBookmark();
 			void removeBookmark();

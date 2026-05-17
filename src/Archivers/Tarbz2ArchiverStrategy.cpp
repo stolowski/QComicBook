@@ -31,7 +31,7 @@ void Tarbz2ArchiverStrategy::configure()
     addExtension(".cbb");
     setExecutables("tar");
 
-    if (which("tar") != QString::null)
+    if (!which("tar").isNull())
     {
         setExtractArguments("tar -xvjf @F");
         setListArguments("tar -tjf @F");

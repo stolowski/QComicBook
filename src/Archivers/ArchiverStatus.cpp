@@ -20,7 +20,7 @@ ArchiverStatus::ArchiverStatus(bool supported, const QString &name, const QStrin
       m_extensions(extensions)
 {
     m_executables.append(exec1);
-    if (exec2 != QString::null)
+    if (!exec2.isNull())
     {
         m_executables.append(exec2);
     }

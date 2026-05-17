@@ -13,6 +13,7 @@
 #include "RarArchiverStrategy.h"
 #include "ArchiversConfiguration.h"
 #include "Utility.h"
+#include <QRegExp>
 #include <QTextStream>
 #include <QString>
 
@@ -34,13 +35,13 @@ void RarArchiverStrategy::configure()
     addExtension(".cbr");
     setExecutables("rar", "unrar");
 
-    if (which("rar") != QString::null)
+    if (!which("rar").isNull())
     {
         setExtractArguments("rar x @F");
         setListArguments("rar lb @F");
         setSupported();
     }
-    else if (which("unrar") != QString::null)
+    else if (!which("unrar").isNull())
     {
         FILE *f;
         //
@@ -70,7 +71,7 @@ void RarArchiverStrategy::configure()
             setSupported();
         }
     }
-    else if (which("unrar-free") != QString::null) //some distros rename free unrar like this
+    else if (!which("unrar-free").isNull()) //some distros rename free unrar like this
     {
         setExtractArguments("unrar-free -x @F");
         setListArguments("unrar-free -t @F");

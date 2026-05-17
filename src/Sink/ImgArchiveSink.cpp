@@ -199,7 +199,7 @@ void ImgArchiveSink::close()
 {
 	ImgDirSink::close();
 	doCleanup();
-	archivename = QString::null;
+	archivename = QString();
 }
 
 void ImgArchiveSink::infoExited(int code, QProcess::ExitStatus exitStatus)
@@ -264,7 +264,7 @@ QString ImgArchiveSink::makeTempDir(const QString &parent)
         }
     }
     qFatal("Failed to create temporary directory");
-    return QString::null;
+    return QString();
 }
 
 bool ImgArchiveSink::supportsNext() const
@@ -280,7 +280,7 @@ QString ImgArchiveSink::getNext() const
 	int i = files.indexOf(finfo.fileName()); //find current cb
 	if ((i >= 0) && (i < files.size()-1))
 		return dir.absoluteFilePath(files.at(i+1));  //get next file name
-	return QString::null;
+	return QString();
 }
 
 QString ImgArchiveSink::getPrevious() const
@@ -291,6 +291,6 @@ QString ImgArchiveSink::getPrevious() const
 	int i = files.indexOf(finfo.fileName()); //find current cb
 	if (i > 0)
 		return dir.absoluteFilePath(files.at(i-1));
-	return QString::null;
+	return QString();
 }
 

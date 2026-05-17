@@ -14,7 +14,7 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <QPixmap>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QGraphicsScene>
 #include "ComicBookDebug.h"
 
@@ -22,7 +22,7 @@ using namespace QComicBook;
 
 Lens::Lens(const QSize &size, const QColor &background, double ratio, int delay): QGraphicsItem()
                                         , m_pixmap(0)
-                                        , m_time(0)
+                                        , m_timer(0)
                                         , m_delay(delay)
                                         , m_size(size)
                                         , m_background(background)
@@ -35,7 +35,7 @@ Lens::Lens(const QSize &size, const QColor &background, double ratio, int delay)
 Lens::~Lens()
 {
     m_pixmap.clear();
-    delete m_time;
+    delete m_timer;
 }
 
 void Lens::setBackground(const QColor &bg)
@@ -69,80 +69,80 @@ QRectF Lens::boundingRect() const
 
 QVariant Lens::itemChange(GraphicsItemChange change, const QVariant &value)
 {
-    _DEBUG << change;
+  _DEBUG << change;
 
-    if (scene() && (change == ItemVisibleChange || (change == ItemPositionChange && (m_time == NULL || m_time->elapsed() > m_delay))))
-    {
-        QPointF newPos = (change == ItemVisibleChange) ? pos() : value.toPointF(); //lens global position (scroll area coordinates)
- 
-	QList<QGraphicsItem*> items = scene()->collidingItems(this, Qt::IntersectsItemBoundingRect);
-	if (items.size() == 0)
-	{
-             m_pixmap.clear();
-	}
-	else
-	{
-		if (!m_pixmap)
-		{
-		    m_pixmap = QSharedPointer<QPixmap>(new QPixmap(m_size.width()/m_ratio, m_size.height()/m_ratio));
-                }
+  if (scene() && (change == ItemVisibleChange ||
+                  (change == ItemPositionChange &&
+                   (m_timer == NULL || m_timer->elapsed() > m_delay)))) {
+    QPointF newPos =
+        (change == ItemVisibleChange)
+            ? pos()
+            : value
+                  .toPointF(); // lens global position (scroll area coordinates)
 
-                //
-                // clear lens; this is a bit inefficient, but easy. 
-                // optimal way would be to only clear strips that 
-                // won't be painted.
-                m_pixmap->fill(m_background);
+    QList<QGraphicsItem *> items =
+        scene()->collidingItems(this, Qt::IntersectsItemBoundingRect);
+    if (items.size() == 0) {
+      m_pixmap.clear();
+    } else {
+      if (!m_pixmap) {
+        m_pixmap = QSharedPointer<QPixmap>(
+            new QPixmap(m_size.width() / m_ratio, m_size.height() / m_ratio));
+      }
 
-		QPainter painter(m_pixmap.data());
-		
-		QStyleOptionGraphicsItem so;
-			
-		QRectF tbr(boundingRect());
-		//
-		// translate bounding rect coordinates to global coords
-		tbr.translate(newPos.x(), newPos.y());
-		tbr.translate((tbr.width()-(tbr.width()/m_ratio))/2, (tbr.height() - (tbr.height()/m_ratio))/2);
-		tbr.setWidth(tbr.width()/m_ratio);
-		tbr.setHeight(tbr.height()/m_ratio);
+      //
+      // clear lens; this is a bit inefficient, but easy.
+      // optimal way would be to only clear strips that
+      // won't be painted.
+      m_pixmap->fill(m_background);
 
-		foreach (QGraphicsItem *it, items)
-		{
-			//
-			// translate item rect to global coords
-			QRectF itbr(it->boundingRect());
-			itbr.translate(it->x(), it->y());
+      QPainter painter(m_pixmap.data());
 
-			//
-			// get rect intersection
-			QRectF ins(itbr.intersected(tbr));
+      QStyleOptionGraphicsItem so;
 
-			_DEBUG << "lens intersect" << itbr << "&" << tbr << "=" << ins;
+      QRectF tbr(boundingRect());
+      //
+      // translate bounding rect coordinates to global coords
+      tbr.translate(newPos.x(), newPos.y());
+      tbr.translate((tbr.width() - (tbr.width() / m_ratio)) / 2,
+                    (tbr.height() - (tbr.height() / m_ratio)) / 2);
+      tbr.setWidth(tbr.width() / m_ratio);
+      tbr.setHeight(tbr.height() / m_ratio);
 
-			const int xoff(ins.x() - tbr.x());
-			const int yoff(ins.y() - tbr.y());
-			_DEBUG << "off" << xoff << yoff;
+      foreach (QGraphicsItem *it, items) {
+        //
+        // translate item rect to global coords
+        QRectF itbr(it->boundingRect());
+        itbr.translate(it->x(), it->y());
 
-			ins.translate(-it->x(), -it->y());
-			so.exposedRect = ins;
-			_DEBUG << "exposed" << so.exposedRect;
-		
-			painter.resetTransform();
-			painter.translate(-ins.x() + xoff, -ins.y() + yoff);
+        //
+        // get rect intersection
+        QRectF ins(itbr.intersected(tbr));
 
-			it->paint(&painter, &so);
-		}	
-		painter.end();
+        _DEBUG << "lens intersect" << itbr << "&" << tbr << "=" << ins;
 
-                if (m_time)
-                {
-                    m_time->restart();
-                }
-                else
-                {
-                    m_time = new QTime();
-                    m_time->start();
-                }
-        }
+        const int xoff(ins.x() - tbr.x());
+        const int yoff(ins.y() - tbr.y());
+        _DEBUG << "off" << xoff << yoff;
+
+        ins.translate(-it->x(), -it->y());
+        so.exposedRect = ins;
+        _DEBUG << "exposed" << so.exposedRect;
+
+        painter.resetTransform();
+        painter.translate(-ins.x() + xoff, -ins.y() + yoff);
+
+        it->paint(&painter, &so);
+      }
+      painter.end();
+
+      if (!m_timer) {
+        m_timer = new QElapsedTimer();
+        m_timer->start();
+      } else {
+        m_timer->restart();
+      }
     }
-    return QGraphicsItem::itemChange(change, value);
+  }
+  return QGraphicsItem::itemChange(change, value);
 }

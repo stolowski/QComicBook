@@ -69,14 +69,14 @@ const EnumMap<Size> ComicBookSettings::size2string[] = {
 	{"fitheight", FitHeight},
 	{"wholepage", WholePage},
 	{"bestfit",   BestFit},
-	{QString::null}
+	{QString()}
 };
 
 const EnumMap<ViewType> ComicBookSettings::viewtype2string[] = {
 	{"simple",  Simple},
 	{"continuous", Continuous},
 	{"frame", Frame},
-	{QString::null}
+	{QString()}
 };
 
 ComicBookSettings& ComicBookSettings::instance()
@@ -86,8 +86,8 @@ ComicBookSettings& ComicBookSettings::instance()
 }
 
 ComicBookSettings::ComicBookSettings(): QObject()
-                                      , m_bkpath(QString::null)
-                                      , m_thpath(QString::null)
+                                      , m_bkpath(QString())
+                                      , m_thpath(QString())
                                       , m_dirsok(false)
 {
 	m_cfg = new QSettings();
@@ -104,7 +104,7 @@ ComicBookSettings::~ComicBookSettings()
 bool ComicBookSettings::checkDirs()
 {
 	m_dirsok = false; 
-	m_bkpath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+	m_bkpath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 
 	QDir dir(m_bkpath);
 	if (!dir.exists())

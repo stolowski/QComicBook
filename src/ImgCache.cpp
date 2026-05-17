@@ -36,13 +36,13 @@ void ImgCache::setSize(int size, bool autoAdjust)
 void ImgCache::insertImage(int page, const QImage &img)
 {
 	mtx.lock();
-	if (autoAdjust && (img.byteCount() + maxItemSizeSoFar > cache.maxCost()))
+	if (autoAdjust && (img.sizeInBytes() + maxItemSizeSoFar > cache.maxCost()))
 	{
-		cache.setMaxCost(img.byteCount() + maxItemSizeSoFar);
-		if (img.byteCount() > maxItemSizeSoFar)
-			maxItemSizeSoFar = img.byteCount();
+		cache.setMaxCost(img.sizeInBytes() + maxItemSizeSoFar);
+		if (img.sizeInBytes() > maxItemSizeSoFar)
+			maxItemSizeSoFar = img.sizeInBytes();
 	}
-	cache.insert(page, new QImage(img), img.byteCount());
+	cache.insert(page, new QImage(img), img.sizeInBytes());
 	mtx.unlock();
 }
 

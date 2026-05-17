@@ -12,19 +12,19 @@
 
 #include "ImgPdfSink.h"
 #include "../Page.h"
-#include <QX11Info>
 #include <QFileInfo>
 #include <QMutexLocker>
+#include <QScreen>
+#include <QWidget>
 
 using namespace QComicBook;
 
-ImgPdfSink::ImgPdfSink(int cacheSize): ImgSink(cacheSize), pdfdoc(0)
+ImgPdfSink::ImgPdfSink(QWidget *parent, int cacheSize): ImgSink(cacheSize), parent_(parent)
 {
 }
 
 ImgPdfSink::~ImgPdfSink()
 {
-	delete pdfdoc;
 }
 
 int ImgPdfSink::open(const QString &path)
@@ -33,8 +33,7 @@ int ImgPdfSink::open(const QString &path)
 	pdfdoc = Poppler::Document::load(path);
 	if (!pdfdoc || pdfdoc->isLocked())
 	{
-		delete pdfdoc;
-		pdfdoc = 0;
+		pdfdoc.reset();
 		return SINKERR_NOTFOUND;
 	}
 
@@ -50,8 +49,7 @@ int ImgPdfSink::open(const QString &path)
 
 void ImgPdfSink::close()
 {	
-	delete pdfdoc;
-	pdfdoc = 0;
+	pdfdoc.reset();
 }
 
 QImage ImgPdfSink::image(unsigned int num, int &result)
@@ -60,11 +58,11 @@ QImage ImgPdfSink::image(unsigned int num, int &result)
 	QMutexLocker lock(&docmtx);
 	if (pdfdoc)
 	{
-		Poppler::Page* pdfpage = pdfdoc->page(num);
+		std::unique_ptr<Poppler::Page> pdfpage = pdfdoc->page(num);
 		if (pdfpage)
 		{
-			QImage img = pdfpage->renderToImage(QX11Info::appDpiX(), QX11Info::appDpiY()); //TODO: use QScreen
-			delete pdfpage;
+            QScreen *screen = parent_->screen();
+			QImage img = pdfpage->renderToImage(screen->logicalDotsPerInchX(), screen->logicalDotsPerInchY());
 			result = 0;
 			return img;
 		}

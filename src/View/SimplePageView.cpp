@@ -170,7 +170,8 @@ void SimplePageView::wheelEvent(QWheelEvent *e)
 {
     if (imgLabel)
     {
-        if (e->delta() > 0) //scrolling up
+        auto d = e->angleDelta();
+        if (d.y() > 0) //scrolling up
         {
             if (imgLabel->height() <= height() || (onTop() && ++wheelupcnt > EXTRA_WHEEL_SPIN))
             {
@@ -184,7 +185,7 @@ void SimplePageView::wheelEvent(QWheelEvent *e)
                 wheeldowncnt = 0; //reset opposite direction counter
             }
         }
-        else //scrolling down
+        else if (d.y() < 0) //scrolling down
         {
             if (imgLabel->height() <= height() || (onBottom() && ++wheeldowncnt > EXTRA_WHEEL_SPIN))
             {
@@ -198,6 +199,7 @@ void SimplePageView::wheelEvent(QWheelEvent *e)
                 wheelupcnt = 0; //reset opposite direction counter
             }
         }
+        // else do nothing
     }
 }
 

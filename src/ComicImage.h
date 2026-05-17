@@ -13,11 +13,11 @@
 #ifndef __COMIC_IMAGE_H
 #define __COMIC_IMAGE_H
 
-#include <QWidget>
-#include <QSize>
-#include <QMatrix>
 #include <QGraphicsItem>
 #include <QPixmap>
+#include <QSize>
+#include <QTransform>
+#include <QWidget>
 #include "JobSource.h"
 #include "Counted.h"
 
@@ -55,13 +55,13 @@ namespace QComicBook
         protected:
             void paint(QPainter *painter, const QStyleOptionGraphicsItem *opt, QWidget *widget = 0);
             void redraw(const QImage &img);
-            virtual void requestRedraw(const QSize& requestedSize, const QMatrix &rotationMatrix);
+            virtual void requestRedraw(const QSize& requestedSize, const QTransform &rotationTransform);
 
         private:
             PageViewBase *m_view;
             QPixmap *m_pixmap;
             int xoff, yoff;
-            QMatrix rmtx;
+            QTransform rot;
             QSize m_sourceSize; //image size without scaling
             QSize m_scaledSize; //image size with scaling and rotation
 	};

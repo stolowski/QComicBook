@@ -12,6 +12,7 @@
 
 #include "Bookmarks.h"
 #include "ComicBookSettings.h"
+#include <Qt>
 #include <QMenu>
 #include <QFile>
 #include <QDir>
@@ -61,7 +62,7 @@ bool Bookmarks::save()
 	{
 		QTextStream str(&f);
 		foreach (Bookmark *b, blist)
-			str << b->getName() << endl << b->getPage() << endl;
+			str << b->getName() << Qt::endl << b->getPage() << Qt::endl;
 		f.close();
                 changed = false;
 		return true;
